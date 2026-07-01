@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL面试必备知识点</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #5eead4; --theme-rgb: 94,234,212; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(94,234,212,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH23 / SQL</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">SQL靠刷题是学不会的。这一章用鲜食记的真实业务场景，让你理解<strong>面试官为什么问这些SQL题，他们真正想考察的是什么。</strong></p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>场景一 · 留存率</div>
+    <div class="card-title">产品负责人问："新用户次日打卡率从45%跌到33%，帮我看看数据。"</div>
+    <div class="card-body">
+      <p>这个需求拆成SQL是两步：</p>
+      <p><strong>Step 1：找出每个新用户次日有没有打卡。</strong> 用户表有注册时间，打卡表有打卡时间。LEFT JOIN两表，条件是打卡时间 = 注册时间 + 1天。</p>
+      <p><strong>Step 2：按注册日期分组，计算留存率。</strong> 分组后，COUNT(打卡用户) / COUNT(全部新用户)。</p>
+    </div>
+    <div class="card-body" style="margin-top:16px">
+      <p><strong>核心陷阱</strong>：很多人用INNER JOIN——结果只保留了"打卡了的用户"，分母里没有"没打卡的用户"，算出来的留存率会比真实值高一截。面试官看你选了INNER JOIN就知道你概念不清。</p>
+      <p><strong>面试回答</strong>："我会用LEFT JOIN，保留所有新用户。没有打卡行为的用户在打卡表里是NULL，用COUNT(CASE WHEN 打卡时间 IS NOT NULL THEN 1 END)来计数分子。"</p>
+    </div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>场景二 · 窗口函数</div>
+    <div class="card-title">运营团队问："每个用户从注册到第一次订阅，平均要多少天？"</div>
+    <div class="card-body">
+      <p>这道题考的是<strong>ROW_NUMBER()取首次行为</strong>：</p>
+      <p>先给每个用户的订阅记录按时间排序（ROW_NUMBER() OVER PARTITION BY user_id ORDER BY subscribe_time），取第一条。然后计算注册时间和首次订阅时间的差值。</p>
+      <p><strong>进阶追问</strong>："如果产品改版后转化周期缩短了，你怎么验证？"——按注册月份分组，看每组平均转化周期的趋势变化。</p>
+      <p><strong>跨场景迁移</strong>：这个逻辑同样适用于"用户从注册到首次打卡需要多久"、"用户从激活到流失经历了多少天"、"用户从看到广告到下载APP需要几次曝光"——核心都是<strong>"取每个用户的首次行为，计算时间差"</strong>。</p>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>场景三 · 多表关联</div>
+    <div class="card-title">市场团队问："小红书渠道来的用户，付费转化率和抖音渠道比，差异到底有多大？"</div>
+    <div class="card-body">
+    <div class="data-row"><span class="data-label">小红书渠道付费转化率</span><span class="data-value">6.8%</span></div>
+    <div class="data-row"><span class="data-label">抖音渠道付费转化率</span><span class="data-value">4.2%</span></div>
+    <div class="data-row"><span class="data-label">应用商店付费转化率</span><span class="data-value">3.9%</span></div>
+    <div class="card-body" style="margin-top:8px">
+      <p>这道题需要关联三张表：用户注册表（渠道来源）、订阅表（付费记录）、用户行为表（活跃数据）。</p>
+      <p><strong>面试官想看的不是你会JOIN三个表，而是——</strong></p>
+      <p>你会不会在回答之前先问：<strong>"转化率的定义是什么？是按注册后30天内有订阅行为，还是注册当日转化的？渠道归因是用首次触点还是末次触点？"</strong></p>
+      <p>能在写SQL之前把口径问清楚，比把SQL写对了更有说服力。因为真实工作中，70%的时间花在"确定到底要算什么"上，只有30%的时间花在写SQL上。</p>
+    </div>
+    </div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>SQL面试的本质</div>
+    <div class="card-title">不是你写对SQL，是你理解数据</div>
+    <div class="card-body">
+      <p><strong>面试官不关心你会不会背语法。</strong> 他关心的是：</p>
+      <p>① 你会不会在写之前先确认口径？（说明你做过真实的数据工作）</p>
+      <p>② 你知道什么时候用LEFT JOIN而不是INNER JOIN吗？（说明你理解数据含义）</p>
+      <p>③ 你能不能在写完之后解释每一步的逻辑？（说明你不是背答案的）</p>
+      <p>④ 如果面试官追问"换个场景怎么做"，你能举一反三吗？</p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">SQL从来不是"学完就完了"的东西。每遇到一个新的业务问题，都是加深理解的机会。留存率让你学会LEFT JOIN，转化周期让你学会窗口函数，漏斗分析让你学会子查询——场景驱动学习，比刷100道题更有效。</span></p>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch22.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 策略评估案例</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch24.html" class="next-link">第二十四章 · 行业认知与职业规划 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch23";
+initTypewriter('typewriter', ["SQL面试", "高频考点与常见陷阱"]);
+</script>
+</body>
+</html>

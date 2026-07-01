@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>因果推断入门</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #5eead4; --theme-rgb: 94,234,212; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(94,234,212,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH12 / 因果推断</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">AB实验告诉你"新引导流程比旧的好"。但如果你想知道<strong>"小红书投放预算增加30%能不能带来更多订阅"</strong>，你不能随机给用户分配预算——这时候就需要因果推断。</p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>核心问题</div>
+    <div class="card-title">做不了实验的时候，怎么判断因果关系？</div>
+    <div class="card-body">
+      <p>在鲜食记，有很多问题不能做AB实验：</p>
+      <p><strong>问题1</strong>：市场团队在小红书投入了一波新的种草内容（D-7上线），怎么判断这波投放<strong>直接导致</strong>了多少新用户注册？不能用AB实验，因为不能"随机不投广告"。</p>
+      <p><strong>问题2</strong>：iOS版本更新了首页推荐算法，怎么判断这个改动<strong>直接导致</strong>了打卡率变化？不能同时发布两个iOS版本。</p>
+      <p>因果推断的核心就是：<strong>在没有随机实验的条件下，用数据和统计方法逼近因果结论。</strong></p>
+    </div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>三种常用方法</div>
+    <div class="step"><span class="step-num">01</span><div class="step-desc"><strong>双重差分法（DID）</strong>：找一个"没有受影响的地区/时段"作为对照组。比如小红书只在部分城市投放了种草内容，对比投放城市和非投放城市在投放前后的打卡率变化差异。DID = (投放城市变化) - (非投放城市变化)。</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-desc"><strong>断点回归（RDD）</strong>：利用自然的断点。比如鲜食记会员到期日是精确的日期，比较"刚刚到期"和"即将到期"的用户续费行为差异——这两类人在其他方面几乎一模一样，只有到期这个"断点"不同。</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-desc"><strong>倾向性得分匹配（PSM）</strong>：给每个"受影响的用户"找一个"背景相似但没受影响"的虚拟对照用户。比如在评估优惠券效果时，给每个领了券的用户匹配一个"有相同购买历史、但这次没领券"的用户，对比他们的购买行为差异。</div></div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>鲜食记实战：DID验证小红书投放效果</div>
+    <div class="card-body">
+      <p>市场团队在小红书投入种草内容后，整体新用户注册量从2,847/天涨到4,100/天（涨了44%）。但你不能说"因为小红书投了，所以注册涨了"——可能有其他因素（比如刚好是健康饮食话题热搜）。</p>
+      <p>用DID来验证：选择一批没有投放小红书广告的城市作为对照组。</p>
+    </div>
+    <div class="data-row"><span class="data-label">投放城市注册量变化</span><span class="data-value">2,500 → 3,800（+52%）</span></div>
+    <div class="data-row"><span class="data-label">非投放城市注册量变化</span><span class="data-value">2,400 → 2,600（+8%）</span></div>
+    <div class="data-row"><span class="data-label">投放的净效果 DID</span><span class="data-value">52% - 8% = +44%</span></div>
+    <div class="card-body" style="margin-top:12px">
+      <p><strong>结论：小红书投放确实带来了约44%的增量注册。这44%是剔除了"原本就在涨的自然增长"之后的净效果。</strong></p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">因果推断在互联网公司中应用极广：运营活动效果评估（DID）、促销定价策略（RDD）、广告投放归因（PSM）、产品改版影响（DID）、新功能上线效果（DID）。核心逻辑都一样——找一个天然对照组，用"差分"来剔除其他干扰因素。面试时能讲出DID、RDD、PSM这三个缩写，并给出鲜食记的实际应用场景，说明你已经从"描述型分析师"进入了"推断型分析师"的阶段。</span></p>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch11.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · P值与样本量</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch13.html" class="next-link">第十三章 · AI辅助数据分析 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch12";
+initTypewriter('typewriter', ["因果推断", "不能做实验怎么办"]);
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>没有项目经历怎么办</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #a78bfa; --theme-rgb: 167,139,250; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(167,139,250,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH20 / 项目实战</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>面试官真正关心的</div>
+    <div class="card-title">不是你有没有"项目经验"这四个字</div>
+    <div class="card-body">
+      <p>面试官要看的是：<strong>给你一个业务问题，你能不能证明自己有能力用数据说清楚。</strong></p>
+      <p>所以，你不一定需要一个公司里的"官方项目"。你完全可以用公开数据集做一个自己的分析项目，关键是：</p>
+      <p><strong>不能做"泰坦尼克号生存预测"这种烂大街的项目。</strong> 面试官每天看10份简历有8份都是这个，一眼就知道你是在套模板。</p>
+    </div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>怎么做一个有含金量的项目</div>
+    <div class="card-title">三步法</div>
+    <div class="step"><span class="step-num">01</span><div class="step-desc"><strong>选题</strong>：找有"业务背景"的数据集，不是纯建模竞赛。比如Kaggle上的电商用户行为数据、Airbnb的房价数据、共享单车的使用数据。选有分析空间的题目，不是纯预测。</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-desc"><strong>带着问题去分析</strong>：不要一上来就画图。先设定一个业务问题——"什么因素最影响用户的复购行为？""不同季节的单车使用模式有什么区别？"然后围绕这个问题展开分析。</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-desc"><strong>产出可落地的结论</strong>：不是"数据显示X和Y正相关"。而是"基于分析，建议将营销预算从渠道A转移到渠道B，预计可以降低获客成本12%"。<strong>给出具体的、可执行的建议。</strong></div></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>怎么写进简历</div>
+    <div class="card-title">用STAR结构描述项目</div>
+    <div class="card-body">
+      <p><strong>Situation</strong>：什么业务背景？鲜食记APP面临新用户留存下降的问题。</p>
+      <p><strong>Task</strong>：你的任务是什么？分析次日打卡率下降的原因并提出优化方案。</p>
+      <p><strong>Action</strong>：你做了什么？用AARRR框架搭建指标体系，按时间、渠道、用户行为三维拆解异动，定位到小红书种草内容的根因，设计并执行AB实验验证新引导流程。</p>
+      <p><strong>Result</strong>：结果如何？实验组次日打卡率从28%提升到36.2%，推动产品全量上线。</p>
+      <p><strong>这个案例本身就是你简历上的一个项目。</strong></p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>从鲜食记开始<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">你已经有了一个完整的项目经历</span></p>
+  </div>
+
+  <div class="glow-box reveal" style="border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);background:linear-gradient(135deg, rgba(167,139,250,0.03) 0%, rgba(96,165,250,0.03) 100%)">
+    <p>迁移点拨：鲜食记案例怎么包装进简历<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5);line-height:2">项目名称：鲜食记APP — 新用户留存分析专项<br>成果：发现小红书渠道次日打卡率异常下跌12个百分点 → 通过三维拆解（时间+渠道+行为）定位到种草内容预期落差问题 → 设计AB实验验证新引导流程 → 实验组打卡率从28%提升至36.2% → 推动产品全量上线。<br>量化产出：每月多留住约1,500个用户，预计年增付费会员收入约42万元。<br>涉及技能：指标体系搭建（AARRR）、异动分析（四步法）、AB实验设计（样本量+指标体系+灰度发布）、因果推断（DID验证）、跨部门协作（推动市场部调整种草内容、推动产品部改版引导流程）。<br><strong>这一个案例就覆盖了数据分析师80%的核心能力——面试官一定会追问这个项目，而你已经在本书里把每个环节都走了一遍。</strong></span></p>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch19.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 费米估算</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch21.html" class="next-link">第二十一章 · 大厂面试录音精选 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch20";
+initTypewriter('typewriter', ["没有项目经历", "从鲜食记开始"]);
+</script>
+</body>
+</html>

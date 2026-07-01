@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鲜食记 · 进入场景</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #fbbf24; --theme-rgb: 251,191,36; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(251,191,36,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH02 / 实战</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">这是你入职鲜食记的第二周。公司做健康饮食APP——用户在上面浏览食谱、设定饮食计划、每天打卡记录，还可以订阅会员解锁个性化推荐。业务刚起步，新用户增长不错，但产品负责人一直在盯留存数据。</p>
+  <p class="p reveal">今天早上你刚坐到工位，她就走过来了：</p>
+
+  <div class="dialogue reveal">"新用户的次日打卡率一直在掉，上周还有45%，这周只剩33%了。下午两点跟我过一下数据，你先看看。"</div>
+
+  <p class="p reveal">你打开数据看板，面前是这样的：</p>
+
+  <div class="card reveal">
+    <div class="card-label"><span class="dot"></span>新用户核心指标 · 近7天 <span style="color:#ef4444;margin-left:8px">⚠ 异常</span></div>
+    <div class="data-row"><span class="data-label">新用户注册数</span><span class="data-value">2,847/天</span></div>
+    <div class="data-row"><span class="data-label">次日打卡率</span><span class="data-value down">33% ↓ (上周45%)</span></div>
+    <div class="data-row"><span class="data-label">首次课程完成率</span><span class="data-value down">18% ↓ (上周28%)</span></div>
+    <div class="data-row"><span class="data-label">食谱浏览数/人</span><span class="data-value">6.2</span></div>
+    <div class="data-row"><span class="data-label">课程收藏率</span><span class="data-value">32%</span></div>
+    <div class="data-row"><span class="data-label">会员转化率</span><span class="data-value">4.1%</span></div>
+    <div class="data-row"><span class="data-label">小红书渠道占比</span><span class="data-value">68%</span></div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>你要做的事</div>
+    <div class="card-body"><p>下午两点跟产品负责人过数据。你需要回答三个问题：</p></div>
+    <div class="step"><span class="step-num">01</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">这12个百分点的下降，是真实业务变化，还是数据本身出了问题？</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">如果是真实的，问题出在哪个环节？哪个渠道？哪类用户？</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">你能提出什么可验证的解决方案？</div></div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>先想想</div>
+    <div class="card-title">看到这些数据，你的第一步是什么？</div>
+    <div class="card-body"><p>花30秒想一想，再往下翻。</p></div>
+    <div style="margin-top:16px">
+      <div class="option"><span class="option-label">A</span><span class="option-text">先确认"次日打卡率"的计算口径最近有没有改过</span></div>
+      <div class="option"><span class="option-label">B</span><span class="option-text">按渠道拆开看，是不是小红书来的用户出了问题</span></div>
+      <div class="option"><span class="option-label">C</span><span class="option-text">按时间拉趋势，看是从哪天开始跌的</span></div>
+      <div class="option"><span class="option-label">D</span><span class="option-text">先看首次课程完成率也跌了，可能是同一个原因</span></div>
+    </div>
+  </div>
+
+  <p class="p reveal" style="font-size:14px;color:rgba(255,255,255,0.35)">选好了？在上一章我们讲过，遇到数据异动的第一步永远是——先确认数据本身有没有问题。下一章我们开始排查。</p>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="../index.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 学习指南</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch03.html" class="next-link">第三章 · 该盯哪些指标 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch02";
+initTypewriter('typewriter', ["次日打卡率", "从45%跌到33%"]);
+</script>
+</body>
+</html>

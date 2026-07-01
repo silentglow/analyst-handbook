@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据分析面试速通课</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(94,234,212,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links"><a href="#">笔记</a></div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <h1 class="ch-title" style="min-height:auto;background:linear-gradient(135deg,#fff 0%,#5eead4 50%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">数据分析面试速通课</h1>
+    <p class="ch-subtitle" style="opacity:0;animation:fadeUp 1s ease-out 0.5s forwards">跟着鲜食记APP的真实业务案例，走完从发现问题到解决问题的完整链路。</p>
+  </header>
+  <div class="space-y-4">
+    <a href="index.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">01</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">学习指南</h3>
+          <p class="text-white/40 text-sm leading-relaxed">面试官到底在考什么？怎么学才有效？建立正确的分析思维。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch02.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">02</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">进入鲜食记场景</h3>
+          <p class="text-white/40 text-sm leading-relaxed">产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch03.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">03</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">该盯哪些指标</h3>
+          <p class="text-white/40 text-sm leading-relaxed">用AARRR框架拆解用户旅程，建立指标体系。先搭体系再找原因。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch04.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">04</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">排查异动</h3>
+          <p class="text-white/40 text-sm leading-relaxed">按时间、渠道、用户行为逐步缩小范围，定位到小红书种草内容的根因。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch05.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-blue font-bold shrink-0">05</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-blue transition-colors">AB实验设计</h3>
+          <p class="text-white/40 text-sm leading-relaxed">设计新用户引导流程的AB实验，计算样本量、定义指标、规划实验周期。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-blue group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch06.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">06</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">落地策略</h3>
+          <p class="text-white/40 text-sm leading-relaxed">灰度发布、持续监控、回退方案。从分析到决策到执行的完整闭环。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch07.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">07</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">用户画像与分层运营</h3>
+          <p class="text-white/40 text-sm leading-relaxed">从三层穿透到RFM，不只是给用户贴标签，而是找到不同群体对策略的反应差异。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch08.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">08</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">留存分析与生命周期</h3>
+          <p class="text-white/40 text-sm leading-relaxed">留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch09.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">09</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">数据预测与目标拆解</h3>
+          <p class="text-white/40 text-sm leading-relaxed">订阅收入=流量×转化率×客单价。拆解目标，给出多个路径，考虑不确定性。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch10.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">10</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">辛普森悖论</h3>
+          <p class="text-white/40 text-sm leading-relaxed">为什么整体趋势和分组趋势完全相反？拆维度时一定要看各组的占比变化。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch11.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-blue font-bold shrink-0">11</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-blue transition-colors">P值与样本量</h3>
+          <p class="text-white/40 text-sm leading-relaxed">P值到底是什么？样本量怎么算？常见面试陷阱：偷看P值、多重检验、不显著≠没效果。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-blue group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch12.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">12</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">因果推断入门</h3>
+          <p class="text-white/40 text-sm leading-relaxed">相关不等于因果。DID、RDD、PSM三种准实验方法的简明介绍和面试回答模板。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch13.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">13</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">AI辅助数据分析</h3>
+          <p class="text-white/40 text-sm leading-relaxed">AI不能替代分析师下结论。四层架构：指标口径→异常检测→归因下钻→AI总结。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch14.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">14</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">商业模式拆解</h3>
+          <p class="text-white/40 text-sm leading-relaxed">广告、订阅、抽成、增值，四种互联网商业模式。鲜食记的订阅模式拆解。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch15.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">15</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">自我介绍与简历</h3>
+          <p class="text-white/40 text-sm leading-relaxed">四段式自我介绍模板。简历不要列职责要写成果。STAR法则描述项目经历。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch16.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">16</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">一面vs二面</h3>
+          <p class="text-white/40 text-sm leading-relaxed">一面考技术（SQL+统计学+分析思路），二面考业务（方案+落地+跨部门协作）。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch17.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-blue font-bold shrink-0">17</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-blue transition-colors">面试真题·指标体系</h3>
+          <p class="text-white/40 text-sm leading-relaxed">鲜食记直播业务健康度指标体系。OSM模型+反向指标+三级指标分级。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-blue group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch18.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">18</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">面试真题·异动分析</h3>
+          <p class="text-white/40 text-sm leading-relaxed">某内容社区DAU下跌15%怎么分析？四步流程+内容社区的特殊性+加分项。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch19.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">19</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">费米估算</h3>
+          <p class="text-white/40 text-sm leading-relaxed">鲜食记首月有多少付费用户？拆解+假设+估算+敏感性分析。费米估算考的是过程不是结果。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch20.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">20</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">从零做项目</h3>
+          <p class="text-white/40 text-sm leading-relaxed">三步做一个有含金量的项目。STAR法则写进简历。鲜食记案例本身就是你的项目。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch21.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">21</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">面试录音（上）</h3>
+          <p class="text-white/40 text-sm leading-relaxed">还原真实数据分析师面试对话，看面试官怎么追问、候选人怎么应对。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch22.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">22</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">策略评估案例</h3>
+          <p class="text-white/40 text-sm leading-relaxed">腾讯视频打击账号共享的面试真题拆解。三层分析：算账→看行为→生态影响。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch23.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">23</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">SQL面试必备</h3>
+          <p class="text-white/40 text-sm leading-relaxed">留存率计算、JOIN选择、窗口函数。SQL面试中的高频考点和常见错误。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+    <a href="articles/ch24.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
+      <div class="flex items-center gap-5">
+        <span class="font-mono text-2xl text-accent-blue font-bold shrink-0">24</span>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-blue transition-colors">行业与职业</h3>
+          <p class="text-white/40 text-sm leading-relaxed">不同行业数据分析师的差异、入行建议、职业发展三大方向。</p>
+        </div>
+        <span class="text-white/20 group-hover:text-accent-blue group-hover:translate-x-1 transition-all shrink-0">→</span>
+      </div>
+    </a>
+  </div>
+  <div class="reveal" style="margin-top:64px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center">
+    <p style="color:rgba(255,255,255,0.3);font-size:14px">建议按顺序阅读，每一章都建立在前一章的基础上。</p>
+  </div>
+</main>
+<script src="assets/main.js"></script>
+</body>
+</html>

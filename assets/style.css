@@ -1,0 +1,490 @@
+/* ========================================
+   共用样式 · 数据分析面试速通课
+   每章HTML引用此文件，不需要重复写
+   ======================================== */
+
+:root {
+  /* 默认主题色（青色），每章可覆盖 */
+  --theme: #5eead4;
+  --theme-rgb: 94,234,212;
+}
+
+/* ========== 基础 ========== */
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  background: #06070a;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.7;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ========== 动态背景 ========== */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  animation: orbFloat 10s ease-in-out infinite;
+}
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(30px,-30px) scale(1.05); }
+  50% { transform: translate(-20px,20px) scale(0.95); }
+  75% { transform: translate(10px,-10px) scale(1.02); }
+}
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 70%);
+}
+
+/* ========== 导航 ========== */
+.topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: linear-gradient(to bottom, rgba(6,7,10,0.9), transparent);
+  backdrop-filter: blur(12px);
+}
+.topnav-logo {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 14px;
+  color: var(--theme);
+  letter-spacing: 2px;
+  text-decoration: none;
+}
+.topnav-links {
+  display: flex;
+  gap: 28px;
+}
+.topnav-links a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  position: relative;
+  padding: 4px 0;
+  transition: color 0.3s;
+}
+.topnav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1px;
+  background: var(--theme);
+  transition: width 0.3s;
+}
+.topnav-links a:hover { color: rgba(255,255,255,0.9); }
+.topnav-links a:hover::after { width: 100%; }
+
+/* ========== 主内容区 ========== */
+.page {
+  position: relative;
+  z-index: 10;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 112px 32px 128px;
+}
+
+/* ========== 章节标签 ========== */
+.ch-badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+  background: rgba(var(--theme-rgb), 0.08);
+  border: 1px solid rgba(var(--theme-rgb), 0.15);
+  color: var(--theme);
+}
+
+/* ========== 标题 ========== */
+.ch-title {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  min-height: 110px;
+}
+.ch-subtitle {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.45);
+  max-width: 560px;
+  margin-bottom: 48px;
+}
+
+/* ========== 打字机 ========== */
+.char-reveal {
+  display: inline-block;
+  opacity: 0;
+  animation: charReveal 0.5s ease forwards;
+}
+@keyframes charReveal {
+  from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.gradient-text {
+  background: linear-gradient(135deg, #fff 0%, var(--theme) 50%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== 正文段落 ========== */
+.p {
+  font-size: 16px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 24px;
+}
+.p strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+
+/* ========== 毛玻璃卡片 ========== */
+.card {
+  position: relative;
+  padding: 28px 32px;
+  margin: 24px 0;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.03) inset, 0 8px 32px rgba(0,0,0,0.3);
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.card:hover {
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.05) inset, 0 12px 40px rgba(0,0,0,0.4), 0 0 30px rgba(var(--theme-rgb),0.08);
+  transform: translateY(-2px);
+}
+.card-accent { border-left: 3px solid var(--theme); }
+.card-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.card-label .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--theme);
+  box-shadow: 0 0 8px rgba(var(--theme-rgb),0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 12px;
+}
+.card-body {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.5);
+}
+.card-body p { margin-bottom: 8px; }
+.card-body p:last-child { margin-bottom: 0; }
+.card-body strong { color: rgba(255,255,255,0.8); }
+
+/* 特殊卡片变体 */
+.card-amber { border-left-color: #fbbf24; }
+.card-amber .dot { background: #fbbf24; box-shadow: 0 0 8px rgba(251,191,36,0.5); }
+.card-purple { border-left-color: #a78bfa; }
+.card-purple .dot { background: #a78bfa; box-shadow: 0 0 8px rgba(167,139,250,0.5); }
+.card-blue { border-left-color: #60a5fa; }
+.card-blue .dot { background: #60a5fa; box-shadow: 0 0 8px rgba(96,165,250,0.5); }
+
+/* ========== 发光金句 ========== */
+.glow-box {
+  position: relative;
+  margin: 40px 0;
+  padding: 40px 32px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(135deg, rgba(var(--theme-rgb),0.03) 0%, rgba(167,139,250,0.03) 100%);
+  overflow: hidden;
+}
+.glow-box::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--theme-rgb),0.12), transparent 60%);
+  filter: blur(40px);
+}
+.glow-box p {
+  position: relative;
+  z-index: 1;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(var(--theme-rgb),0.2);
+}
+
+/* ========== 选择题 ========== */
+.option {
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 10px;
+}
+.option:hover {
+  border-color: rgba(var(--theme-rgb),0.3);
+  background: rgba(var(--theme-rgb),0.03);
+}
+.option-label {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 12px;
+  color: var(--theme);
+  margin-right: 12px;
+}
+.option-text {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+}
+
+/* ========== 数据表格 ========== */
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.data-row:last-child { border-bottom: none; }
+.data-label { color: rgba(255,255,255,0.4); font-size: 14px; }
+.data-value {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+}
+.data-value.down { color: #ef4444; }
+.data-value.up { color: #22c55e; }
+
+/* ========== 步骤列表 ========== */
+.step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.step-num {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 12px;
+  color: var(--theme);
+  margin-top: 2px;
+  shrink: 0;
+}
+.step-title {
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 4px;
+}
+.step-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+}
+
+/* ========== 对话框 ========== */
+.dialogue {
+  padding: 28px 32px;
+  margin: 24px 0;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-left: 3px solid #fbbf24;
+  border-radius: 18px;
+  font-size: 17px;
+  font-style: italic;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+}
+
+/* ========== 下一章链接 ========== */
+.next-ch {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.next-label {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 12px;
+}
+.next-link {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s;
+}
+.next-link:hover {
+  color: var(--theme);
+  gap: 16px;
+}
+.next-link .arr {
+  color: rgba(255,255,255,0.25);
+  transition: all 0.3s;
+}
+.next-link:hover .arr {
+  color: var(--theme);
+  transform: translateX(4px);
+}
+
+/* ========== 滚动渐显 ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 640px) {
+  .page { padding: 80px 20px 60px; }
+  .ch-title { font-size: 32px; min-height: auto; }
+  .card { padding: 20px 22px; }
+  .glow-box { padding: 32px 20px; }
+  .glow-box p { font-size: 18px; }
+  .dialogue { padding: 20px 22px; font-size: 15px; }
+}
+
+/* ========== 悬浮侧边栏 ========== */
+.toc-toggle {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  padding: 14px 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  writing-mode: vertical-rl;
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.5);
+}
+.toc-toggle:hover {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.8);
+  border-color: var(--theme);
+}
+
+.toc-panel {
+  position: fixed;
+  right: -320px;
+  top: 0;
+  bottom: 0;
+  width: 280px;
+  z-index: 199;
+  background: rgba(6,7,10,0.95);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  padding: 24px 20px;
+  overflow-y: auto;
+  transition: right 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.toc-panel.open {
+  right: 0;
+}
+.toc-panel h3 {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.toc-item {
+  display: block;
+  padding: 8px 12px;
+  margin-bottom: 2px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.toc-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.8);
+}
+.toc-item.active {
+  background: rgba(var(--theme-rgb),0.08);
+  color: var(--theme);
+  font-weight: 600;
+}
+.toc-num {
+  font-family: "SF Mono", "Fira Code", monospace;
+  font-size: 11px;
+  margin-right: 8px;
+  opacity: 0.5;
+}
+.toc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 198;
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.toc-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 640px) {
+  .toc-panel { width: 260px; }
+}

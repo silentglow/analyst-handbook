@@ -1,0 +1,48 @@
+  <p class="p reveal">AB实验跑了8天，结果出来了：实验组次日打卡率36.2%，对照组28.1%，P值小于0.01，置信区间[5.3%, 10.9%]。护栏指标稳定，没有恶化。</p>
+  <p class="p reveal">产品负责人说：<strong>效果不错，全量上线吧。</strong></p>
+  <p class="p reveal">但"全量上线"不是按一个按钮就完了。你需要考虑几件事：</p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>灰度发布</div>
+    <div class="card-title">不要一次性全量</div>
+    <div class="card-body"><p>实验环境和真实环境有差异。实验期间只有小红书渠道的新用户参与，全量后所有渠道的用户都会看到新引导流程。</p></div>
+    <div class="step"><span class="step-num" style="color:#5eead4">10%</span><div class="step-desc">先开放10%流量，观察24小时，确认没有技术问题</div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">50%</span><div class="step-desc">没问题后扩到50%，再观察48小时，确认业务指标稳定</div></div>
+    <div class="step"><span class="step-num" style="color:#a78bfa">100%</span><div class="step-desc">全部放开，持续监控一周</div></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>持续监控</div>
+    <div class="card-title">上线不是终点</div>
+    <div class="card-body">
+      <p><strong>每日监控</strong>：次日打卡率、首次课程完成率、卸载率。设置阈值报警，如果次日打卡率连续3天低于33%，自动触发告警。</p>
+      <p><strong>每周复盘</strong>：对比上线前后的7日留存率、会员转化率、LTV。短期指标提升不等于长期价值提升。</p>
+      <p><strong>渠道分层</strong>：分别监控各渠道的效果。小红书渠道的提升可能不会复制到其他渠道。</p>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>回退方案</div>
+    <div class="card-title">如果上线后效果不好怎么办？</div>
+    <div class="card-body">
+      <p><strong>技术问题</strong>：页面加载时长超过3秒、崩溃率上升、埋点丢失。立即回退。</p>
+      <p><strong>业务问题</strong>：会员转化率连续5天低于上线前基线、卸载率上升超过2个百分点。暂停全量，排查原因。</p>
+      <p><strong>回退操作</strong>：保留代码分支，配置开关可秒级切换。不要等到出了问题才去改代码。</p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>从发现问题到解决问题<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">完整走了一遍数据分析的全链路</span></p>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>完整链路回顾</div>
+    <div class="step"><span class="step-num" style="color:#5eead4">01</span><div class="step-desc"><strong>学习指南</strong> — 面试官考的是拆解问题的能力，不是工具</div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">02</span><div class="step-desc"><strong>进入场景</strong> — 鲜食记APP，打卡率崩了，面对真实数据</div></div>
+    <div class="step"><span class="step-num" style="color:#a78bfa">03</span><div class="step-desc"><strong>搭指标</strong> — 用AARRR框架拆解用户旅程，建立指标体系</div></div>
+    <div class="step"><span class="step-num" style="color:#60a5fa">04</span><div class="step-desc"><strong>找异动</strong> — 按时间、渠道、用户行为逐步缩小范围，定位根因</div></div>
+    <div class="step"><span class="step-num" style="color:#5eead4">05</span><div class="step-desc"><strong>做实验</strong> — 设计AB实验验证方案，计算样本量和实验周期</div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">06</span><div class="step-desc"><strong>落策略</strong> — 灰度发布、持续监控、回退方案</div></div>
+  </div>
+
+  <p class="p reveal" style="color:rgba(255,255,255,0.35)">这个案例覆盖了数据分析面试中最常考的几个核心能力。每个环节都有固定的拆解套路，掌握了这套思路，面试官问什么业务问题你都能从容应对。</p>

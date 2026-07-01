@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI辅助数据分析</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #a78bfa; --theme-rgb: 167,139,250; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(167,139,250,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH13 / AI+数据</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">产品负责人找你：<strong>"能不能做一个系统，每天自动检查鲜食记的核心指标，一旦发现异常就自动报警、自动下钻、自动出一份初步分析报告？"</strong></p>
+  <p class="p reveal">这个问题考的不是你会不会训练大模型——<strong>考的是你能不能把数据分析流程产品化。</strong></p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>四层架构设计</div>
+    <div class="card-title">鲜食记的AI异动监控系统</div>
+    <div class="step"><span class="step-num">L1</span><div class="step-desc"><strong>指标口径层——先把地基打牢。</strong> 系统不能凭空分析。第一件事：整理鲜食记所有核心指标的定义、数据源、更新频率、责任人。比如"次日打卡率"的分母是"当天注册的新用户"，分子是"其中次日有打卡记录的用户"——这个定义必须写死，AI才能正确调用。</div></div>
+    <div class="step"><span class="step-num">L2</span><div class="step-desc"><strong>异常检测层——自动发现异常。</strong> 设定规则：打卡率环比下跌超过5个百分点触发告警。同时加入同比对照（上周同期）、节假日校准（法定假日数据不准）、工作日/周末分拆（避免"周末效应"误判）。鲜食记案例：D-7开始持续下跌触发告警，但D-7之前的小幅波动（±2个百分点）不会被误触发。</div></div>
+    <div class="step"><span class="step-num">L3</span><div class="step-desc"><strong>归因下钻层——自动拆解维度。</strong> 检测到异常后，系统自动按预设路径下钻：先按渠道拆（小红书/抖音/应用商店），再按用户类型拆（新老用户），再按时间段拆（关键时间节点）。计算每个维度的贡献度百分比。鲜食记案例：系统自动算出小红书渠道贡献了异常的87%，并在报告中标红。</div></div>
+    <div class="step"><span class="step-num">L4</span><div class="step-desc"><strong>AI总结层——生成初步报告。</strong> 基于前三层的结构化数据，AI生成一段可读的总结："本日异常：次日打卡率33%（环比-12pp），主要贡献来自小红书渠道（贡献度87%）。该渠道注册占比从30%升至68%，但打卡率从42%降至28%。建议重点排查小红书种草内容的用户预期匹配度。"——但AI的结论必须标注"待分析师审核"，不直接推送给业务方。</div></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>落地分三期</div>
+    <div class="card-body">
+      <p><strong>第一期（规则监控）</strong>：只做L1+L2，用固定规则发现异常，通知分析师。</p>
+      <p><strong>第二期（半自动归因）</strong>：加入L3，系统自动拆解维度并计算贡献度。</p>
+      <p><strong>第三期（AI辅助总结）</strong>：加入L4，AI基于结构化数据生成总结。</p>
+      <p>关键原则：<strong>AI永远只做"辅助"，不做"决策"。</strong>最终的判断和策略建议必须由分析师审核和签字。</p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">AI+数据分析的面试高频考点：①分层设计（不是你直接说"用大模型分析数据"）②AI的边界（只能做发现异常+生成假设+整理证据，不能直接下结论）③落地分期（先规则→再半自动→最后AI）。这套逻辑适用于任何"AI+垂类场景"的产品设计面试——AI+客服、AI+翻译、AI+设计，核心都是"哪些环节可以自动化，哪些必须有人的判断"。</span></p>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch12.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 因果推断入门</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch14.html" class="next-link">第十四章 · 互联网商业模式拆解 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch13";
+initTypewriter('typewriter', ["AI辅助数据分析", "四层架构设计"]);
+</script>
+</body>
+</html>

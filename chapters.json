@@ -1,0 +1,438 @@
+[
+  {
+    "slug": "guide",
+    "num": "01",
+    "title": "数据分析面试速通课 · 学习指南",
+    "short_title": "学习指南",
+    "badge": "CH01 / 学习指南",
+    "theme": "#5eead4",
+    "theme_rgb": "94,234,212",
+    "typewriter": [
+      "数据分析",
+      "面试速通"
+    ],
+    "description": "面试官到底在考什么？怎么学才有效？建立正确的分析思维。",
+    "is_root": true,
+    "next": {
+      "label": "准备好了？",
+      "link": "articles/ch02.html",
+      "text": "第二章 · 进入鲜食记的业务场景"
+    }
+  },
+  {
+    "slug": "ch02",
+    "num": "02",
+    "title": "鲜食记 · 进入场景",
+    "short_title": "进入鲜食记场景",
+    "badge": "CH02 / 实战",
+    "theme": "#fbbf24",
+    "theme_rgb": "251,191,36",
+    "typewriter": [
+      "次日打卡率",
+      "从45%跌到33%"
+    ],
+    "description": "产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。",
+    "next": {
+      "link": "ch03.html",
+      "text": "第三章 · 该盯哪些指标"
+    }
+  },
+  {
+    "slug": "ch03",
+    "num": "03",
+    "title": "鲜食记 · 该盯哪些指标",
+    "short_title": "该盯哪些指标",
+    "badge": "CH03 / 指标体系",
+    "theme": "#5eead4",
+    "theme_rgb": "94,234,212",
+    "typewriter": [
+      "该盯哪些指标",
+      "先搭体系再找原因"
+    ],
+    "description": "用AARRR框架拆解用户旅程，建立指标体系。先搭体系再找原因。",
+    "next": {
+      "link": "ch04.html",
+      "text": "第四章 · 开始排查异动"
+    }
+  },
+  {
+    "slug": "ch04",
+    "num": "04",
+    "title": "鲜食记 · 排查异动",
+    "short_title": "排查异动",
+    "badge": "CH04 / 异动排查",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "typewriter": [
+      "哪个环节出了问题",
+      "一步步缩小范围"
+    ],
+    "description": "按时间、渠道、用户行为逐步缩小范围，定位到小红书种草内容的根因。",
+    "next": {
+      "link": "ch05.html",
+      "text": "第五章 · 设计AB实验验证方案"
+    }
+  },
+  {
+    "slug": "ch05",
+    "num": "05",
+    "title": "鲜食记 · 设计AB实验",
+    "short_title": "AB实验设计",
+    "badge": "CH05 / AB实验",
+    "theme": "#60a5fa",
+    "theme_rgb": "96,165,250",
+    "typewriter": [
+      "AB实验设计",
+      "验证方案是否有效"
+    ],
+    "description": "设计新用户引导流程的AB实验，计算样本量、定义指标、规划实验周期。",
+    "next": {
+      "link": "ch06.html",
+      "text": "第六章 · 落地策略"
+    }
+  },
+  {
+    "slug": "ch06",
+    "num": "06",
+    "title": "鲜食记 · 落地策略",
+    "short_title": "落地策略",
+    "badge": "CH06 / 落地策略",
+    "theme": "#fbbf24",
+    "theme_rgb": "251,191,36",
+    "typewriter": [
+      "落地策略",
+      "上线不是终点"
+    ],
+    "description": "灰度发布、持续监控、回退方案。从分析到决策到执行的完整闭环。",
+    "next": {
+      "label": "回到起点",
+      "link": "../home.html",
+      "text": "回到首页，继续深造"
+    }
+  },
+  {
+    "slug": "ch07",
+    "num": "07",
+    "title": "用户画像与分层运营",
+    "short_title": "用户画像与分层运营",
+    "badge": "CH07 / 用户画像",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "typewriter": [
+      "用户画像与分层",
+      "找到真正的差异"
+    ],
+    "description": "从三层穿透到RFM，不只是给用户贴标签，而是找到不同群体对策略的反应差异。",
+    "next": {
+      "link": "ch08.html",
+      "text": "第八章 · 留存分析与生命周期"
+    }
+  },
+  {
+    "slug": "ch08",
+    "num": "08",
+    "title": "留存分析与生命周期",
+    "short_title": "留存分析与生命周期",
+    "badge": "CH08 / 留存分析",
+    "theme": "#5eead4",
+    "theme_rgb": "94,234,212",
+    "typewriter": [
+      "留存分析",
+      "怎么算怎么看怎么用"
+    ],
+    "description": "留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。",
+    "next": {
+      "link": "ch09.html",
+      "text": "第九章 · 数据预测与目标拆解"
+    }
+  },
+  {
+    "slug": "ch09",
+    "num": "09",
+    "title": "数据预测与目标拆解",
+    "short_title": "数据预测与目标拆解",
+    "badge": "CH09 / 目标拆解",
+    "theme": "#fbbf24",
+    "theme_rgb": "251,191,36",
+    "typewriter": [
+      "目标拆解",
+      "把大目标变成小指标"
+    ],
+    "description": "订阅收入=流量×转化率×客单价。拆解目标，给出多个路径，考虑不确定性。",
+    "next": {
+      "link": "ch10.html",
+      "text": "第十章 · 辛普森悖论"
+    }
+  },
+  {
+    "slug": "ch10",
+    "num": "10",
+    "title": "辛普森悖论",
+    "short_title": "辛普森悖论",
+    "badge": "CH10 / 统计学陷阱",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "typewriter": [
+      "辛普森悖论",
+      "整体跌但每个渠道都涨"
+    ],
+    "description": "为什么整体趋势和分组趋势完全相反？拆维度时一定要看各组的占比变化。",
+    "next": {
+      "link": "ch11.html",
+      "text": "第十一章 · P值与样本量"
+    }
+  },
+  {
+    "slug": "ch11",
+    "num": "11",
+    "title": "P值与最小样本量",
+    "short_title": "P值与样本量",
+    "badge": "CH11 / AB实验进阶",
+    "theme": "#60a5fa",
+    "theme_rgb": "96,165,250",
+    "typewriter": [
+      "P值与样本量",
+      "AB实验的统计学基础"
+    ],
+    "description": "P值到底是什么？样本量怎么算？常见面试陷阱：偷看P值、多重检验、不显著≠没效果。",
+    "next": {
+      "link": "ch12.html",
+      "text": "第十二章 · 因果推断入门"
+    }
+  },
+  {
+    "slug": "ch12",
+    "num": "12",
+    "title": "因果推断入门",
+    "short_title": "因果推断入门",
+    "badge": "CH12 / 因果推断",
+    "theme": "#5eead4",
+    "theme_rgb": "94,234,212",
+    "typewriter": [
+      "因果推断",
+      "不能做实验怎么办"
+    ],
+    "description": "相关不等于因果。DID、RDD、PSM三种准实验方法的简明介绍和面试回答模板。",
+    "next": {
+      "link": "ch13.html",
+      "text": "第十三章 · AI辅助数据分析"
+    }
+  },
+  {
+    "slug": "ch13",
+    "num": "13",
+    "title": "AI辅助数据分析",
+    "short_title": "AI辅助数据分析",
+    "badge": "CH13 / AI+数据",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "typewriter": [
+      "AI辅助数据分析",
+      "四层架构设计"
+    ],
+    "description": "AI不能替代分析师下结论。四层架构：指标口径→异常检测→归因下钻→AI总结。",
+    "next": {
+      "link": "ch14.html",
+      "text": "第十四章 · 互联网商业模式拆解"
+    }
+  },
+  {
+    "slug": "ch14",
+    "num": "14",
+    "title": "互联网商业模式拆解",
+    "short_title": "商业模式拆解",
+    "badge": "CH14 / 商业思维",
+    "theme": "#fbbf24",
+    "theme_rgb": "251,191,36",
+    "typewriter": [
+      "商业模式拆解",
+      "产品靠什么赚钱"
+    ],
+    "description": "广告、订阅、抽成、增值，四种互联网商业模式。鲜食记的订阅模式拆解。",
+    "next": {
+      "link": "ch15.html",
+      "text": "第十五章 · 自我介绍与简历"
+    }
+  },
+  {
+    "slug": "ch15",
+    "num": "15",
+    "title": "自我介绍与简历包装",
+    "short_title": "自我介绍与简历",
+    "badge": "CH15 / 面试技巧",
+    "theme": "#5eead4",
+    "theme_rgb": "94,234,212",
+    "typewriter": [
+      "自我介绍与简历",
+      "60秒让面试官记住你"
+    ],
+    "description": "四段式自我介绍模板。简历不要列职责要写成果。STAR法则描述项目经历。",
+    "next": {
+      "link": "ch16.html",
+      "text": "第十六章 · 一面与二面的差异"
+    }
+  },
+  {
+    "slug": "ch16",
+    "num": "16",
+    "title": "一面与二面的差异",
+    "short_title": "一面vs二面",
+    "badge": "CH16 / 面试策略",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "typewriter": [
+      "一面与二面",
+      "完全不同的考察重点"
+    ],
+    "description": "一面考技术（SQL+统计学+分析思路），二面考业务（方案+落地+跨部门协作）。",
+    "next": {
+      "link": "ch17.html",
+      "text": "第十七章 · 面试真题：指标体系"
+    }
+  },
+  {
+    "slug": "ch17",
+    "num": "17",
+    "title": "面试真题：指标体系搭建",
+    "short_title": "面试真题·指标体系",
+    "badge": "CH17 / 面试真题",
+    "theme": "#60a5fa",
+    "theme_rgb": "96,165,250",
+    "typewriter": [
+      "面试真题实战",
+      "指标体系搭建"
+    ],
+    "description": "鲜食记直播业务健康度指标体系。OSM模型+反向指标+三级指标分级。",
+    "next": {
+      "link": "ch18.html",
+      "text": "第十八章 · 面试真题：异动分析"
+    }
+  },
+  {
+    "slug": "ch18",
+    "num": "18",
+    "title": "面试真题：异动分析",
+    "short_title": "面试真题·异动分析",
+    "badge": "CH18 / 面试真题",
+    "theme": "#fbbf24",
+    "theme_rgb": "251,191,36",
+    "typewriter": [
+      "面试真题实战",
+      "异动分析"
+    ],
+    "description": "某内容社区DAU下跌15%怎么分析？四步流程+内容社区的特殊性+加分项。",
+    "next": {
+      "link": "ch19.html",
+      "text": "第十九章 · 费米估算"
+    }
+  },
+  {
+    "slug": "ch19",
+    "num": "19",
+    "title": "费米估算",
+    "short_title": "费米估算",
+    "badge": "CH19 / 思维训练",
+    "theme": "#5eead4",
+    "theme_rgb": "94,234,212",
+    "typewriter": [
+      "费米估算",
+      "不考结果考过程"
+    ],
+    "description": "鲜食记首月有多少付费用户？拆解+假设+估算+敏感性分析。费米估算考的是过程不是结果。",
+    "next": {
+      "link": "ch20.html",
+      "text": "第二十章 · 没有项目经历怎么办"
+    }
+  },
+  {
+    "slug": "ch20",
+    "num": "20",
+    "title": "没有项目经历怎么办",
+    "short_title": "从零做项目",
+    "badge": "CH20 / 项目实战",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "typewriter": [
+      "没有项目经历",
+      "从鲜食记开始"
+    ],
+    "description": "三步做一个有含金量的项目。STAR法则写进简历。鲜食记案例本身就是你的项目。",
+    "next": {
+      "link": "ch21.html",
+      "text": "第二十一章 · 大厂面试录音精选"
+    }
+  },
+  {
+    "slug": "ch21",
+    "num": "21",
+    "title": "大厂面试录音精选（上）",
+    "short_title": "面试录音（上）",
+    "badge": "CH21 / 面试实战",
+    "theme": "#fbbf24",
+    "theme_rgb": "251,191,36",
+    "typewriter": [
+      "大厂面试录音",
+      "还原真实面试对话"
+    ],
+    "description": "还原真实数据分析师面试对话，看面试官怎么追问、候选人怎么应对。",
+    "next": {
+      "link": "ch22.html",
+      "text": "第二十二章 · 策略评估案例分析"
+    }
+  },
+  {
+    "slug": "ch22",
+    "num": "22",
+    "title": "面试案例分析：策略评估",
+    "short_title": "策略评估案例",
+    "badge": "CH22 / 案例分析",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "typewriter": [
+      "策略效果评估",
+      "三层拆解框架"
+    ],
+    "description": "腾讯视频打击账号共享的面试真题拆解。三层分析：算账→看行为→生态影响。",
+    "next": {
+      "link": "ch23.html",
+      "text": "第二十三章 · SQL面试必备"
+    }
+  },
+  {
+    "slug": "ch23",
+    "num": "23",
+    "title": "SQL面试必备知识点",
+    "short_title": "SQL面试必备",
+    "badge": "CH23 / SQL",
+    "theme": "#5eead4",
+    "theme_rgb": "94,234,212",
+    "typewriter": [
+      "SQL面试",
+      "高频考点与常见陷阱"
+    ],
+    "description": "留存率计算、JOIN选择、窗口函数。SQL面试中的高频考点和常见错误。",
+    "next": {
+      "link": "ch24.html",
+      "text": "第二十四章 · 行业认知与职业规划"
+    }
+  },
+  {
+    "slug": "ch24",
+    "num": "24",
+    "title": "行业认知与职业规划",
+    "short_title": "行业与职业",
+    "badge": "CH24 / 职业发展",
+    "theme": "#60a5fa",
+    "theme_rgb": "96,165,250",
+    "typewriter": [
+      "行业认知",
+      "从入行到深耕"
+    ],
+    "description": "不同行业数据分析师的差异、入行建议、职业发展三大方向。",
+    "next": {
+      "label": "回到起点",
+      "link": "../home.html",
+      "text": "回到首页"
+    }
+  }
+]

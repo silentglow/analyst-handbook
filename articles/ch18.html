@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>面试真题：异动分析</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #fbbf24; --theme-rgb: 251,191,36; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(251,191,36,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH18 / 面试真题</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">面试官：<strong>"鲜食记的整体打卡率从45%跌到了33%，跌了12个百分点。请分析可能的原因，并给出你的分析框架。"</strong></p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>答题框架</div>
+    <div class="card-title">四步分析流程</div>
+    <div class="step"><span class="step-num">01</span><div class="step-desc"><strong>确认数据本身有没有问题。</strong> 计算任务有没有正常跑？埋点有没有异常？打卡率的定义（分母分子口径）有没有变更？</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-desc"><strong>看时间维度。</strong> 是某一天突然跌，还是持续多天下滑？突然跌可能是技术问题，持续下滑更像是业务变化。拉出D-14到D-1的每日趋势图。</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-desc"><strong>拆用户维度。</strong> 新用户跌了还是老用户跌了？按渠道拆分——应用商店（48%→46%）、抖音（44%→42%）、小红书（42%→28%）。问题集中在小红书渠道，暴跌了14个百分点。</div></div>
+    <div class="step"><span class="step-num">04</span><div class="step-desc"><strong>看用户行为找根因。</strong> 小红书用户注册后的行为数据：食谱收藏率反而上升（75%→80%），课程浏览数也上升（8.1→9.3），但首次课程完成率暴跌（24%→11%）。<strong>典型的预期落差</strong>——用户对内容感兴趣，但没有完成首次课程。结合D-7小红书上线的新种草内容，定位根因：种草内容主打"7天练出马甲线"，带来大量健身预期的用户，但产品是饮食记录，预期完全对不上。</div></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>面试怎么展开讲</div>
+    <div class="card-body">
+      <p>这道题面试官不是要你30秒说结论，而是想看你怎么一步步推导。每一个步骤都不要漏掉：先确认数据→再看趋势→再拆维度→再用行为数据验证假设。</p>
+      <p>如果你的回答只有"小红书渠道的问题"，没有前面三步的推导过程，面试官会觉得你是猜对的，不是分析出来的。</p>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>加分项</div>
+    <div class="card-body">
+      <p><strong>提到辛普森悖论</strong>：如果整体打卡率降了，但拆开看各个渠道都在涨，那说明流量结构变了——低打卡率渠道占比增加了。在鲜食记案例中，小红书渠道占比从30%飙升到68%，但它本身的打卡率就低于其他渠道，所以把整体拉了下来。</p>
+      <p><strong>给出假设优先级</strong>：不是所有假设同时验证，先查数据产出和口径（0成本），再查大流量渠道的变化（小红书占68%），最后排查长尾因素。</p>
+      <p><strong>从分析到行动</strong>：不要说"建议优化"，要说具体怎么优化——"建议市场团队调整小红书种草内容方向，从效果承诺改为产品价值介绍。同时产品侧优化新用户引导流程，通过AB实验验证效果。"</p>
+    </div>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch17.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 面试真题·指标体系</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch19.html" class="next-link">第十九章 · 费米估算 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch18";
+initTypewriter('typewriter', ["面试真题实战", "异动分析"]);
+</script>
+</body>
+</html>

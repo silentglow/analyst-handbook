@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行业认知与职业规划</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #60a5fa; --theme-rgb: 96,165,250; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(96,165,250,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH24 / 职业发展</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">面试通常以一个问题收尾：<strong>"你有什么想问我的吗？"</strong> 这一章帮你理解不同行业的分析师到底在做什么，以及怎么规划自己的职业路径。</p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>同一个岗位，不同行业天差地别</div>
+    <div class="card-title">用鲜食记的工作日常，对比其他行业</div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>鲜食记式的分析师</div>
+    <div class="card-title">在线教育/内容付费行业</div>
+    <div class="card-body">
+      <p><strong>日常工作</strong>：监控打卡率、课程完成率、会员转化漏斗。每周做异动排查，每月做AB实验复盘。</p>
+      <p><strong>核心指标</strong>：<strong>LTV/CAC。</strong> 获取一个用户的成本是多少，这个用户一生能贡献多少收入？如果LTV/CAC小于3，商业模式不可持续。</p>
+      <p><strong>最常被问的问题</strong>："新用户为什么不续费？""什么因素最影响用户从免费转付费？""课程内容应该怎么定价？"</p>
+    </div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-title">电商行业对比</div>
+    <div class="card-body">
+      <p><strong>日常工作</strong>：监控GMV、转化率、客单价。大促期间做实时数据大盘，日常做商品推荐效果评估。</p>
+      <p><strong>核心指标</strong>：<strong>GMV和履约率。</strong> 卖了多少，退了多少，毛利率多少。</p>
+      <p><strong>和鲜食记的差异</strong>：电商的用户行为路径短（浏览→下单→收货），但商品SKU极多，分析师需要花大量时间在<strong>品类分析</strong>上——什么品类贡献最多GMV？什么品类毛利率最高？</p>
+    </div>
+    <div class="card-body" style="margin-top:12px">
+      <p><strong>迁移思考</strong>：鲜食记的AARRR框架在电商里同样适用。不同之处在于，电商的变现环节比鲜食记复杂得多——包括促销、满减、优惠券叠加、退货退款等，需要更精细的归因分析。</p>
+    </div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-title">内容社区行业对比</div>
+    <div class="card-body">
+      <p><strong>日常工作</strong>：监控DAU、用户停留时长、内容供给量和消费量。分析什么类型的内容能留住用户。</p>
+      <p><strong>核心指标</strong>：<strong>内容消费深度和UGC参与率。</strong> 用户不只是来看的，还要愿意发内容。</p>
+      <p><strong>和鲜食记的差异</strong>：内容社区有<strong>双边市场</strong>——创作者和消费者。分析工作需要同时关注供给侧和需求侧，平衡两者是核心挑战。</p>
+    </div>
+    <div class="card-body" style="margin-top:12px">
+      <p><strong>迁移思考</strong>：鲜食记的用户分层方法（三层穿透）在内容社区里同样有效。不同之处是分层维度不同——不是按付费分，而是按"内容生产/内容消费/内容互动"来分。</p>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>职业发展的三条路径</div>
+    <div class="card-title">三年后，你想成为什么样？</div>
+    <div class="step"><span class="step-num" style="color:#5eead4">技术线</span><div class="step-desc"><strong>分析师 → 资深分析师 → 数据科学家。</strong> 这条路需要补充机器学习、因果推断、实验设计。面试时会被追问："你做的分析模型是什么？特征怎么选的？怎么验证的？"</div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">业务线</span><div class="step-desc"><strong>分析师 → 数据产品经理/策略运营。</strong> 这条路需要补充产品思维和业务理解。面试时会被追问："你推进的策略对业务产生了多少增量价值？你怎么说服业务方采纳你的建议？"</div></div>
+    <div class="step"><span class="step-num" style="color:#a78bfa">管理线</span><div class="step-desc"><strong>分析师 → 分析团队负责人。</strong> 这条路需要补充项目管理和团队建设能力。面试时会被追问："你怎么给团队分配分析任务？怎么培养新人？"</div></div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>鲜食记案例已经帮你覆盖了这三条线的核心能力<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">技术线（AB实验+因果推断）、业务线（指标体系+策略落地）、管理线（项目全链路推动）。不管走哪条路，这个案例都是你面试时的核心弹药。</span></p>
+  </div>
+
+  <div class="glow-box reveal" style="border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);background:linear-gradient(135deg, rgba(167,139,250,0.03) 0%, rgba(96,165,250,0.03) 100%)">
+    <p>迁移点拨：不同行业的分析师面试准备策略<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5);line-height:2">面试电商公司 → 重点准备"GMV拆解+促销ROI分析+用户复购分析"。<br>面试内容社区 → 重点准备"DAU异动分析+内容消费漏斗+创作者生态指标"。<br>面试SaaS公司 → 重点准备"ARR拆解+续约率分析+客户分群"。<br>面试金融/保险 → 重点准备"风控指标+漏斗分析+用户生命周期价值"。<br>不管面试哪个行业，面试官真正想看的不是你知道多少行业术语，而是你<strong>拿到一个不熟悉的业务问题，能不能用分析框架快速拆解</strong>。鲜食记的案例已经帮你建立了一套通用框架——搭指标、找异动、做实验、落策略。这套框架可以用在任何一个行业。</span></p>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch23.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · SQL面试必备</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">回到起点</div>
+    <a href="../home.html" class="next-link">回到首页 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch24";
+initTypewriter('typewriter', ["行业认知", "从入行到深耕"]);
+</script>
+</body>
+</html>

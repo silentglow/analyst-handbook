@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鲜食记 · 落地策略</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #fbbf24; --theme-rgb: 251,191,36; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(251,191,36,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH06 / 落地策略</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">AB实验跑了8天，结果出来了：实验组次日打卡率36.2%，对照组28.1%，P值小于0.01，置信区间[5.3%, 10.9%]。护栏指标稳定，没有恶化。</p>
+  <p class="p reveal">产品负责人说：<strong>效果不错，全量上线吧。</strong></p>
+  <p class="p reveal">但"全量上线"不是按一个按钮就完了。你需要考虑几件事：</p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>灰度发布</div>
+    <div class="card-title">不要一次性全量</div>
+    <div class="card-body"><p>实验环境和真实环境有差异。实验期间只有小红书渠道的新用户参与，全量后所有渠道的用户都会看到新引导流程。</p></div>
+    <div class="step"><span class="step-num" style="color:#5eead4">10%</span><div class="step-desc">先开放10%流量，观察24小时，确认没有技术问题</div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">50%</span><div class="step-desc">没问题后扩到50%，再观察48小时，确认业务指标稳定</div></div>
+    <div class="step"><span class="step-num" style="color:#a78bfa">100%</span><div class="step-desc">全部放开，持续监控一周</div></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>持续监控</div>
+    <div class="card-title">上线不是终点</div>
+    <div class="card-body">
+      <p><strong>每日监控</strong>：次日打卡率、首次课程完成率、卸载率。设置阈值报警，如果次日打卡率连续3天低于33%，自动触发告警。</p>
+      <p><strong>每周复盘</strong>：对比上线前后的7日留存率、会员转化率、LTV。短期指标提升不等于长期价值提升。</p>
+      <p><strong>渠道分层</strong>：分别监控各渠道的效果。小红书渠道的提升可能不会复制到其他渠道。</p>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>回退方案</div>
+    <div class="card-title">如果上线后效果不好怎么办？</div>
+    <div class="card-body">
+      <p><strong>技术问题</strong>：页面加载时长超过3秒、崩溃率上升、埋点丢失。立即回退。</p>
+      <p><strong>业务问题</strong>：会员转化率连续5天低于上线前基线、卸载率上升超过2个百分点。暂停全量，排查原因。</p>
+      <p><strong>回退操作</strong>：保留代码分支，配置开关可秒级切换。不要等到出了问题才去改代码。</p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>从发现问题到解决问题<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">完整走了一遍数据分析的全链路</span></p>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>完整链路回顾</div>
+    <div class="step"><span class="step-num" style="color:#5eead4">01</span><div class="step-desc"><strong>学习指南</strong> — 面试官考的是拆解问题的能力，不是工具</div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">02</span><div class="step-desc"><strong>进入场景</strong> — 鲜食记APP，打卡率崩了，面对真实数据</div></div>
+    <div class="step"><span class="step-num" style="color:#a78bfa">03</span><div class="step-desc"><strong>搭指标</strong> — 用AARRR框架拆解用户旅程，建立指标体系</div></div>
+    <div class="step"><span class="step-num" style="color:#60a5fa">04</span><div class="step-desc"><strong>找异动</strong> — 按时间、渠道、用户行为逐步缩小范围，定位根因</div></div>
+    <div class="step"><span class="step-num" style="color:#5eead4">05</span><div class="step-desc"><strong>做实验</strong> — 设计AB实验验证方案，计算样本量和实验周期</div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">06</span><div class="step-desc"><strong>落策略</strong> — 灰度发布、持续监控、回退方案</div></div>
+  </div>
+
+  <p class="p reveal" style="color:rgba(255,255,255,0.35)">这个案例覆盖了数据分析面试中最常考的几个核心能力。每个环节都有固定的拆解套路，掌握了这套思路，面试官问什么业务问题你都能从容应对。</p>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch05.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · AB实验设计</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">回到起点</div>
+    <a href="../home.html" class="next-link">回到首页，继续深造 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch06";
+initTypewriter('typewriter', ["落地策略", "上线不是终点"]);
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>辛普森悖论</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #a78bfa; --theme-rgb: 167,139,250; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(167,139,250,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH10 / 统计学陷阱</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">在做鲜食记的异动分析时，你发现了一个让人困惑的现象：<strong>三个渠道的打卡率分别都在上升，但整体打卡率却在下降。</strong>这怎么可能？</p>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>经典陷阱</div>
+    <div class="card-title">辛普森悖论</div>
+    <div class="card-body">
+      <p>当数据按不同维度分组后，每个组的趋势和整体趋势<strong>完全相反</strong>，这就是辛普森悖论。</p>
+      <p>不是数据错了，而是<strong>各组的占比发生了变化</strong>，导致整体被低质量的组拖下水。</p>
+    </div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>鲜食记的辛普森悖论</div>
+    <div class="card-title">每个渠道都在涨，整体却在跌</div>
+    <p style="color:rgba(255,255,255,0.55);margin-bottom:12px">假设你只看了各渠道的打卡率变化（没看占比）：</p>
+    <div class="data-row"><span class="data-label">小红书渠道打卡率</span><span class="data-value">42% → 44%（涨了2个百分点）</span></div>
+    <div class="data-row"><span class="data-label">抖音渠道打卡率</span><span class="data-value">44% → 46%（涨了2个百分点）</span></div>
+    <div class="data-row"><span class="data-label">应用商店打卡率</span><span class="data-value">48% → 50%（涨了2个百分点）</span></div>
+    <div class="data-row"><span class="data-label">整体打卡率</span><span class="data-value down">45% → 38%（却跌了7个百分点！）</span></div>
+    <div class="card-body" style="margin-top:16px">
+      <p>秘密在于<strong>渠道占比发生了巨变</strong>：</p>
+    </div>
+    <div class="data-row"><span class="data-label">小红书渠道注册占比</span><span class="data-value down">30% → 78%（暴增）</span></div>
+    <div class="data-row"><span class="data-label">抖音渠道注册占比</span><span class="data-value">40% → 15%（萎缩）</span></div>
+    <div class="data-row"><span class="data-label">应用商店注册占比</span><span class="data-value">30% → 7%（萎缩）</span></div>
+    <div class="card-body" style="margin-top:16px">
+      <p>虽然每个渠道的打卡率都涨了2个百分点，但小红书的打卡率（44%）本身就远低于应用商店（50%）。当小红书占比从30%暴涨到78%时，大量低打卡率用户涌入，把整体平均值拖了下来。</p>
+      <p><strong>结论：问题的根源不是"各渠道打卡质量在恶化"（它们都在改善），而是"流量结构在劣化"（低质量渠道占比暴增）。</strong></p>
+    </div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>面试怎么用</div>
+    <div class="card-body">
+      <p>当面试官问你某个指标下降的原因时，如果你回答说"拆开看各渠道都在涨"，面试官会立刻警惕——这是典型的辛普森悖论前兆。能主动说出"我需要同时看各组的绝对值变化和占比变化"，说明你有数据分析的陷阱意识。</p>
+      <p><strong>应对公式</strong>："整体趋势和分组趋势不一致时，第一时间检查<strong>各组占比是否发生了结构性变化</strong>。"</p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">辛普森悖论无处不在：电商的客单价可能每个品类都在涨但整体在跌（因为低价品类占比暴增），内容平台的人均时长可能每个用户群都在涨但整体在跌（因为新用户占比暴增拉低均值），SaaS的ARR可能每个客户层都在涨但整体在跌（因为低端客户占比暴增）。核心应对都一样：<strong>永远同时关注"各组绝对值"和"各组占比"两个维度。</strong></span></p>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch09.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 数据预测与目标拆解</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch11.html" class="next-link">第十一章 · P值与样本量 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch10";
+initTypewriter('typewriter', ["辛普森悖论", "整体跌但每个渠道都涨"]);
+</script>
+</body>
+</html>

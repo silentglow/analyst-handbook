@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P值与最小样本量</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #60a5fa; --theme-rgb: 96,165,250; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(96,165,250,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH11 / AB实验进阶</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">在CH05我们设计了AB实验，计算了样本量。但你知道<strong>为什么要算样本量</strong>吗？P值到底是什么意思？</p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>P值的本质</div>
+    <div class="card-title">P值是"原假设成立时，观察到这个结果的概率"</div>
+    <div class="card-body">
+      <p>翻译成人话：<strong>假设新方案完全没有效果，你看到的这个数据差异有多大概率是纯运气？</strong></p>
+      <p>P值越小，说明"纯运气"的可能性越小，实验效果越可信。</p>
+      <p>P值小于0.05 = 如果新方案没效果，你只有不到5%的概率看到这个结果 → 拒绝原假设，认为新方案有效。</p>
+    </div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>一个直观例子</div>
+    <div class="card-title">抛硬币</div>
+    <div class="card-body">
+      <p>假设硬币是公平的（正反各50%）。连续抛5次都是正面，概率是多少？</p>
+      <p>0.5^5 = 0.031 = <strong>3.1%</strong></p>
+      <p>这个3.1%就是P值。因为太小了，你宁愿相信<strong>硬币本身有问题</strong>，也不愿相信"运气这么差连续5次正面"。</p>
+      <p>这就是假设检验的逻辑：<strong>P值太小 → 原假设（没效果）不成立 → 新方案有效。</strong></p>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>样本量计算</div>
+    <div class="card-title">需要多少人才能得出结论？</div>
+    <div class="card-body">
+      <p>样本量取决于四个参数：</p>
+    </div>
+    <div class="data-row"><span class="data-label">基线转换率</span><span class="data-value">当前的指标水平</span></div>
+    <div class="data-row"><span class="data-label">MDE（最小检测效果）</span><span class="data-value">你想检测多小的变化</span></div>
+    <div class="data-row"><span class="data-label">显著性水平 α</span><span class="data-value">通常0.05</span></div>
+    <div class="data-row"><span class="data-label">检验功效 1-β</span><span class="data-value">通常0.80</span></div>
+    <div class="card-body" style="margin-top:12px">
+      <p><strong>MDE不能随便拍。</strong> 如果设得太小（比如0.1%），需要的样本量巨大，做不了。如果设得太大（比如10%），可能错过真实的小提升。</p>
+      <p>MDE应该由业务决定：<strong>提升多少才值得上线？</strong> 如果能覆盖开发和运营成本，这个提升幅度就是MDE。</p>
+    </div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>常见误区</div>
+    <div class="card-title">面试官可能问的陷阱问题</div>
+    <div class="card-body">
+      <p><strong>"P值大于0.05说明没效果吗？"</strong> 不一定。可能只是样本量不够，没有检测到效果。看置信区间，如果很宽说明样本不足。</p>
+      <p><strong>"看到P值显著就能提前结束实验吗？"</strong> 不能。每多看一眼P值就多了一次碰巧显著的机会，会抬高误判概率。除非设计了序贯检验。</p>
+      <p><strong>"实验组不显著，能不能只看显著的用户分群？"</strong> 不能。这是多重检验问题，拆越多子群越容易碰到假阳性。</p>
+    </div>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch10.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 辛普森悖论</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch12.html" class="next-link">第十二章 · 因果推断入门 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch11";
+initTypewriter('typewriter', ["P值与样本量", "AB实验的统计学基础"]);
+</script>
+</body>
+</html>

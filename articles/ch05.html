@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鲜食记 · 设计AB实验</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #60a5fa; --theme-rgb: 96,165,250; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(96,165,250,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH05 / AB实验</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">上一章我们定位到了根因：小红书新种草内容带来的用户，对产品有错误预期。他们期望的是健身教程，拿到的是饮食记录。</p>
+  <p class="p reveal">市场团队说可以调整种草内容的方向，但产品负责人更关心：<strong>能不能在APP里做点什么，把这批用户留住？</strong></p>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>你的方案</div>
+    <div class="card-title">优化新用户引导流程</div>
+    <div class="card-body">
+      <p>你提出一个假设：如果在新用户注册后，增加一个"7天饮食挑战"的引导流程——让用户先完成一个简单的3天饮食记录任务，体验到产品的核心价值，再逐步解锁高级功能——留存率可能会提升。</p>
+      <p>产品负责人说：<strong>听起来有道理，但你怎么证明这个方案真的有效？</strong></p>
+    </div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>AB实验设计</div>
+    <div class="card-title">用AB实验验证</div>
+    <div style="margin-top:16px">
+      <div class="step"><span class="step-num">假设</span><div class="step-desc">新版引导流程能把小红书渠道新用户的次日打卡率从28%提升到35%</div></div>
+    </div>
+    <div style="margin-top:20px">
+      <p class="card-title" style="font-size:15px">指标设计</p>
+      <div class="step"><span class="step-num" style="color:#5eead4">北极星</span><div class="step-desc">小红书新用户次日打卡率</div></div>
+      <div class="step"><span class="step-num" style="color:#fbbf24">辅助</span><div class="step-desc">首次课程完成率、食谱浏览数、3日留存率</div></div>
+      <div class="step"><span class="step-num" style="color:#ef4444">护栏</span><div class="step-desc">会员转化率、页面加载时长、卸载率</div></div>
+    </div>
+    <div style="margin-top:20px">
+      <p class="card-title" style="font-size:15px">分流设计</p>
+      <div class="data-row"><span class="data-label">实验对象</span><span class="data-value">小红书渠道新注册用户</span></div>
+      <div class="data-row"><span class="data-label">分流方式</span><span class="data-value">按用户ID哈希</span></div>
+      <div class="data-row"><span class="data-label">分流比例</span><span class="data-value">50%对照 / 50%实验</span></div>
+      <div class="data-row"><span class="data-label">对照组</span><span class="data-value">原有引导流程</span></div>
+      <div class="data-row"><span class="data-label">实验组</span><span class="data-value">新增7天饮食挑战引导</span></div>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>样本量计算</div>
+    <div class="card-title">需要多少用户才能得出结论？</div>
+    <div class="data-row"><span class="data-label">基线（当前次日打卡率）</span><span class="data-value">28%</span></div>
+    <div class="data-row"><span class="data-label">期望检测的最小效果MDE</span><span class="data-value">28% → 35%</span></div>
+    <div class="data-row"><span class="data-label">显著性水平 α</span><span class="data-value">0.05</span></div>
+    <div class="data-row"><span class="data-label">检验功效 1-β</span><span class="data-value">0.80</span></div>
+    <div class="data-row"><span class="data-label">每组所需样本量</span><span class="data-value">约2,450人</span></div>
+    <div class="data-row"><span class="data-label">两组合计</span><span class="data-value">约4,900人</span></div>
+    <div class="card-body" style="margin-top:12px"><p>小红书渠道每天新注册约1,900人，50/50分流后每组每天950人。理论上约3天就能达到样本量，但建议至少跑满7天，覆盖完整的星期周期。完整实验周期：7天入组 + 1天观察 = 8天。</p></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>上线后盯什么</div>
+    <div class="card-body">
+      <p><strong>SRM检查</strong> — 两组人数比例是否接近50/50。如果偏差太大，说明分流有问题。</p>
+      <p><strong>护栏指标</strong> — 会员转化率有没有跌？页面加载有没有变慢？卸载率有没有涨？</p>
+      <p><strong>不要偷看</strong> — 不要每天去看P值，看到显著就提前停止。按预设周期跑完再看结论。</p>
+    </div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>面试考点</div>
+    <div class="card-title">面试官问你怎么设计AB实验</div>
+    <div class="step"><span class="step-num" style="color:#5eead4">第一步</span><div class="step-desc"><strong>明确假设。</strong> 我要验证什么？预期效果是多少？</div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">第二步</span><div class="step-desc"><strong>设计指标体系。</strong> 北极星指标负责决策，辅助指标解释路径，护栏指标防止副作用。</div></div>
+    <div class="step"><span class="step-num" style="color:#a78bfa">第三步</span><div class="step-desc"><strong>计算样本量。</strong> 根据基线、MDE、显著性水平和检验功效，算出需要多少用户、跑多久。</div></div>
+    <div class="step"><span class="step-num">第四步</span><div class="step-desc"><strong>上线监控。</strong> 检查SRM、盯护栏指标、不要偷看P值。按预设周期跑完再做决策。</div></div>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch04.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 排查异动</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch06.html" class="next-link">第六章 · 落地策略 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch05";
+initTypewriter('typewriter', ["AB实验设计", "验证方案是否有效"]);
+</script>
+</body>
+</html>

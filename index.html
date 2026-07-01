@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据分析面试速通课 · 学习指南</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #5eead4; --theme-rgb: 94,234,212; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(94,234,212,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH01 / 学习指南</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">你可能已经看过很多数据分析的教程，学过SQL、Python，也背过一些概念。但面试的时候，面试官问你一个业务问题，你还是会卡住。</p>
+  <p class="p reveal">不是因为你不会工具，而是因为你没有一套<strong>稳定的分析思路</strong>。遇到问题不知道从哪里切入，拆到一半不知道下一步该干嘛，最后给不出一个让人信服的结论。</p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>核心问题</div>
+    <div class="card-title">面试官到底在考什么？</div>
+    <div class="card-body"><p>不是考你会不会写SQL，不是考你背了多少定义，更不是考你会几个框架的名字。他考的是：<strong>给你一个真实的业务问题，你能不能拆清楚、讲明白、给方案。</strong></p></div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>怎么学</div>
+    <div class="card-title">我们不讲概念，我们做案例。</div>
+    <div class="card-body">
+      <p>接下来的内容会把你扔进一个真实的业务场景——鲜食记APP，一家健康饮食公司。你会作为数据分析师，从零开始处理一个真实的业务问题。</p>
+      <p>整个过程会覆盖数据分析面试中最常考的几个核心能力：</p>
+    </div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>学习路径</div>
+    <div class="step"><span class="step-num">01</span><div><div class="step-title">搭指标体系</div><div class="step-desc">拿到一个业务问题，该盯哪些数字？怎么搭建一套有用的指标体系？</div></div></div>
+    <div class="step"><span class="step-num">02</span><div><div class="step-title">做异动分析</div><div class="step-desc">数据出了问题，怎么一步步排查？先验证数据、再拆维度、最后定位根因。</div></div></div>
+    <div class="step"><span class="step-num">03</span><div><div class="step-title">设计AB实验</div><div class="step-desc">找到原因了，怎么验证你的方案有没有用？样本量、实验周期、指标设计。</div></div></div>
+    <div class="step"><span class="step-num">04</span><div><div class="step-title">落地策略</div><div class="step-desc">实验通过了，怎么上线？怎么监控？怎么防止回退？</div></div></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>学习建议</div>
+    <div class="card-body">
+      <p><strong>不要跳着看。</strong>每一章的内容都是建立在前一章基础上的。</p>
+      <p><strong>先自己想，再看答案。</strong>每个环节都会给你一个选择题或思考题。先花30秒想一想，再往下翻。</p>
+      <p><strong>关注思路，不是结论。</strong>面试官不关心你最后说了什么，他关心你是怎么一步步推导出来的。</p>
+    </div>
+  </div>
+    <div class="next-ch reveal">
+    <div class="next-label">准备好了？</div>
+    <a href="articles/ch02.html" class="next-link">第二章 · 进入鲜食记的业务场景 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "guide";
+initTypewriter('typewriter', ["数据分析", "面试速通"]);
+</script>
+</body>
+</html>

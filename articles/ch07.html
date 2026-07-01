@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用户画像与分层运营</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          surface: { 900: '#06070a', 800: '#0c0d12' },
+          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
+        }
+      }
+    }
+  }
+</script>
+<style>:root { --theme: #a78bfa; --theme-rgb: 167,139,250; }</style>
+</head>
+<body>
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(167,139,250,0.12),transparent 70%);top:-200px;left:-100px"></div>
+  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links">
+    <a href="../home.html">目录</a>
+    <a href="#">笔记</a>
+  </div>
+</nav>
+<main class="page">
+  <header style="margin-bottom:48px">
+    <div class="ch-badge">CH07 / 用户画像</div>
+    <h1 class="ch-title" id="typewriter"></h1>
+    
+  </header>
+    <p class="p reveal">鲜食记运营团队来找你：<strong>"我们有45万月活用户，但运营只给所有人推同样的内容。能不能帮我们做用户分层，针对不同人群推不同的策略？"</strong></p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>三层穿透模型</div>
+    <div class="card-title">不只是贴标签，是理解需求</div>
+    <div class="step"><span class="step-num" style="color:#5eead4">L1</span><div><div class="step-title">基础属性层 — 用户是谁</div><div class="step-desc">年龄、性别、城市、设备。鲜食记数据：一线城市用户占63%，女性占78%，25-35岁占55%。这些标签帮我们做投放定向，但回答不了"这个用户会不会付费"。</div></div></div>
+    <div class="step"><span class="step-num" style="color:#fbbf24">L2</span><div><div class="step-title">行为特征层 — 用户做了什么</div><div class="step-desc">实际拉鲜食记数据：<strong>两个用户都订阅了3次，但一个是每月固定复购的习惯型用户，一个只在双十一大促才买的促销驱动型用户。</strong>如果你给这两人发同样的优惠券，前者本来就会买（浪费），后者刚好需要（有效）。只有行为数据才能做精准策略。</div></div></div>
+    <div class="step"><span class="step-num" style="color:#a78bfa">L3</span><div><div class="step-title">价值动机层 — 用户为什么这么做</div><div class="step-desc">行为相同，动机不同，策略相反。同样是高打卡用户，有人把打卡当社交（晒食谱），有人把打卡当工具（个人减肥记录）。给前者推社交功能，给后者推数据报告。</div></div></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>鲜食记四层分层策略</div>
+    <div class="data-row"><span class="data-label">高活跃付费 · 占比8%</span><span class="data-value">周打卡5次+，已订阅，月均消费152元</span></div>
+    <div class="data-row"><span class="data-label">高活跃免费 · 占比22%</span><span class="data-value">周打卡5次+，未订阅，高转化潜力的核心人群</span></div>
+    <div class="data-row"><span class="data-label">低活跃新 · 占比35%</span><span class="data-value">注册7天内，打卡<3次，需要激活引导</span></div>
+    <div class="data-row"><span class="data-label">沉默流失 · 占比35%</span><span class="data-value">14天未打卡，需评估是否值得召回</span></div>
+    <div class="card-body" style="margin-top:16px">
+      <p><strong>策略核心</strong>：不是给四类人发同样的内容，而是——高活跃付费推高级课程、高活跃免费发会员体验券、低活跃新加强引导流程、沉默流失用限时优惠召回。</p>
+      <p>关键认知：<strong>策略的ROI取决于你分得多细，分完层给所有人上一样的策略等于没分。</strong></p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">三层穿透法可以迁移到任何产品：电商把RFM升级为"购买动机分析"（囤货型vs冲动型vs刚需型），内容平台把DAU升级为"内容消费动机分析"（消磨时间vs学东西vs追热点），SaaS把活跃度升级为"使用深度分析"（轻量用户vs重度用户vs管理员用户）。分层不是目的，找到"对同一策略反应不同的群体"才是。</span></p>
+  </div>
+    <div class="prev-ch reveal" style="margin-bottom:48px">
+    <a href="ch06.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 落地策略</a>
+  </div>
+  <div class="next-ch reveal">
+    <div class="next-label">下一章</div>
+    <a href="ch08.html" class="next-link">第八章 · 留存分析与生命周期 <span class="arr">→</span></a>
+  </div>
+</main>
+<div id="toc-toggle" class="toc-toggle">目录</div>
+<div id="toc-panel" class="toc-panel"></div>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
+const TOC_CURRENT = "ch07";
+initTypewriter('typewriter', ["用户画像与分层", "找到真正的差异"]);
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+  <p class="p reveal">面试官：<strong>"鲜食记的整体打卡率从45%跌到了33%，跌了12个百分点。请分析可能的原因，并给出你的分析框架。"</strong></p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>答题框架</div>
+    <div class="card-title">四步分析流程</div>
+    <div class="step"><span class="step-num">01</span><div class="step-desc"><strong>确认数据本身有没有问题。</strong> 计算任务有没有正常跑？埋点有没有异常？打卡率的定义（分母分子口径）有没有变更？</div></div>
+    <div class="step"><span class="step-num">02</span><div class="step-desc"><strong>看时间维度。</strong> 是某一天突然跌，还是持续多天下滑？突然跌可能是技术问题，持续下滑更像是业务变化。拉出D-14到D-1的每日趋势图。</div></div>
+    <div class="step"><span class="step-num">03</span><div class="step-desc"><strong>拆用户维度。</strong> 新用户跌了还是老用户跌了？按渠道拆分——应用商店（48%→46%）、抖音（44%→42%）、小红书（42%→28%）。问题集中在小红书渠道，暴跌了14个百分点。</div></div>
+    <div class="step"><span class="step-num">04</span><div class="step-desc"><strong>看用户行为找根因。</strong> 小红书用户注册后的行为数据：食谱收藏率反而上升（75%→80%），课程浏览数也上升（8.1→9.3），但首次课程完成率暴跌（24%→11%）。<strong>典型的预期落差</strong>——用户对内容感兴趣，但没有完成首次课程。结合D-7小红书上线的新种草内容，定位根因：种草内容主打"7天练出马甲线"，带来大量健身预期的用户，但产品是饮食记录，预期完全对不上。</div></div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>面试怎么展开讲</div>
+    <div class="card-body">
+      <p>这道题面试官不是要你30秒说结论，而是想看你怎么一步步推导。每一个步骤都不要漏掉：先确认数据→再看趋势→再拆维度→再用行为数据验证假设。</p>
+      <p>如果你的回答只有"小红书渠道的问题"，没有前面三步的推导过程，面试官会觉得你是猜对的，不是分析出来的。</p>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>加分项</div>
+    <div class="card-body">
+      <p><strong>提到辛普森悖论</strong>：如果整体打卡率降了，但拆开看各个渠道都在涨，那说明流量结构变了——低打卡率渠道占比增加了。在鲜食记案例中，小红书渠道占比从30%飙升到68%，但它本身的打卡率就低于其他渠道，所以把整体拉了下来。</p>
+      <p><strong>给出假设优先级</strong>：不是所有假设同时验证，先查数据产出和口径（0成本），再查大流量渠道的变化（小红书占68%），最后排查长尾因素。</p>
+      <p><strong>从分析到行动</strong>：不要说"建议优化"，要说具体怎么优化——"建议市场团队调整小红书种草内容方向，从效果承诺改为产品价值介绍。同时产品侧优化新用户引导流程，通过AB实验验证效果。"</p>
+    </div>
+  </div>

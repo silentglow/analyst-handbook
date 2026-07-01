@@ -1,0 +1,48 @@
+  <p class="p reveal">在CH05我们设计了AB实验，计算了样本量。但你知道<strong>为什么要算样本量</strong>吗？P值到底是什么意思？</p>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>P值的本质</div>
+    <div class="card-title">P值是"原假设成立时，观察到这个结果的概率"</div>
+    <div class="card-body">
+      <p>翻译成人话：<strong>假设新方案完全没有效果，你看到的这个数据差异有多大概率是纯运气？</strong></p>
+      <p>P值越小，说明"纯运气"的可能性越小，实验效果越可信。</p>
+      <p>P值小于0.05 = 如果新方案没效果，你只有不到5%的概率看到这个结果 → 拒绝原假设，认为新方案有效。</p>
+    </div>
+  </div>
+
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>一个直观例子</div>
+    <div class="card-title">抛硬币</div>
+    <div class="card-body">
+      <p>假设硬币是公平的（正反各50%）。连续抛5次都是正面，概率是多少？</p>
+      <p>0.5^5 = 0.031 = <strong>3.1%</strong></p>
+      <p>这个3.1%就是P值。因为太小了，你宁愿相信<strong>硬币本身有问题</strong>，也不愿相信"运气这么差连续5次正面"。</p>
+      <p>这就是假设检验的逻辑：<strong>P值太小 → 原假设（没效果）不成立 → 新方案有效。</strong></p>
+    </div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>样本量计算</div>
+    <div class="card-title">需要多少人才能得出结论？</div>
+    <div class="card-body">
+      <p>样本量取决于四个参数：</p>
+    </div>
+    <div class="data-row"><span class="data-label">基线转换率</span><span class="data-value">当前的指标水平</span></div>
+    <div class="data-row"><span class="data-label">MDE（最小检测效果）</span><span class="data-value">你想检测多小的变化</span></div>
+    <div class="data-row"><span class="data-label">显著性水平 α</span><span class="data-value">通常0.05</span></div>
+    <div class="data-row"><span class="data-label">检验功效 1-β</span><span class="data-value">通常0.80</span></div>
+    <div class="card-body" style="margin-top:12px">
+      <p><strong>MDE不能随便拍。</strong> 如果设得太小（比如0.1%），需要的样本量巨大，做不了。如果设得太大（比如10%），可能错过真实的小提升。</p>
+      <p>MDE应该由业务决定：<strong>提升多少才值得上线？</strong> 如果能覆盖开发和运营成本，这个提升幅度就是MDE。</p>
+    </div>
+  </div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>常见误区</div>
+    <div class="card-title">面试官可能问的陷阱问题</div>
+    <div class="card-body">
+      <p><strong>"P值大于0.05说明没效果吗？"</strong> 不一定。可能只是样本量不够，没有检测到效果。看置信区间，如果很宽说明样本不足。</p>
+      <p><strong>"看到P值显著就能提前结束实验吗？"</strong> 不能。每多看一眼P值就多了一次碰巧显著的机会，会抬高误判概率。除非设计了序贯检验。</p>
+      <p><strong>"实验组不显著，能不能只看显著的用户分群？"</strong> 不能。这是多重检验问题，拆越多子群越容易碰到假阳性。</p>
+    </div>
+  </div>
