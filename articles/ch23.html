@@ -40,63 +40,42 @@
     <h1 class="ch-title" id="typewriter"></h1>
     
   </header>
-    <p class="p reveal">SQL靠刷题是学不会的。这一章用鲜食记的真实业务场景，让你理解<strong>面试官为什么问这些SQL题，他们真正想考察的是什么。</strong></p>
+    <p class="p reveal">陈总在复盘会上提了一个需求：<strong>"帮我把新用户的次日打卡率按周拉出来，我要看趋势。"</strong> 你打开SQL编辑器，手停在键盘上。这个问题看似简单，但一个细节没处理好，数据就完全不可信。</p>
 
   <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>场景一 · 留存率</div>
-    <div class="card-title">产品负责人问："新用户次日打卡率从45%跌到33%，帮我看看数据。"</div>
+    <div class="card-label"><span class="dot"></span>第一个坑：用错JOIN</div>
     <div class="card-body">
-      <p>这个需求拆成SQL是两步：</p>
-      <p><strong>Step 1：找出每个新用户次日有没有打卡。</strong> 用户表有注册时间，打卡表有打卡时间。LEFT JOIN两表，条件是打卡时间 = 注册时间 + 1天。</p>
-      <p><strong>Step 2：按注册日期分组，计算留存率。</strong> 分组后，COUNT(打卡用户) / COUNT(全部新用户)。</p>
-    </div>
-    <div class="card-body" style="margin-top:16px">
-      <p><strong>核心陷阱</strong>：很多人用INNER JOIN——结果只保留了"打卡了的用户"，分母里没有"没打卡的用户"，算出来的留存率会比真实值高一截。面试官看你选了INNER JOIN就知道你概念不清。</p>
-      <p><strong>面试回答</strong>："我会用LEFT JOIN，保留所有新用户。没有打卡行为的用户在打卡表里是NULL，用COUNT(CASE WHEN 打卡时间 IS NOT NULL THEN 1 END)来计数分子。"</p>
+      <p>你写了个INNER JOIN把用户表和打卡表连起来，跑出来留存率58%。<strong>太高了。</strong>实际是33%。</p>
+      <p>问题在哪？<strong>INNER JOIN只保留了"有打卡记录的用户"</strong>——没打卡的用户被过滤掉了，分母变小了，留存率虚高。</p>
+      <p>"正确做法是LEFT JOIN——保留所有新用户。没打卡的人在打卡表里是NULL，用COUNT(CASE WHEN 打卡时间 IS NOT NULL THEN 1 END)来计数打卡人数，用COUNT(*)来计数全部新用户。"</p>
     </div>
   </div>
 
   <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>场景二 · 窗口函数</div>
-    <div class="card-title">运营团队问："每个用户从注册到第一次订阅，平均要多少天？"</div>
+    <div class="card-label"><span class="dot"></span>第二个坑：不会用窗口函数</div>
     <div class="card-body">
-      <p>这道题考的是<strong>ROW_NUMBER()取首次行为</strong>：</p>
-      <p>先给每个用户的订阅记录按时间排序（ROW_NUMBER() OVER PARTITION BY user_id ORDER BY subscribe_time），取第一条。然后计算注册时间和首次订阅时间的差值。</p>
-      <p><strong>进阶追问</strong>："如果产品改版后转化周期缩短了，你怎么验证？"——按注册月份分组，看每组平均转化周期的趋势变化。</p>
-      <p><strong>跨场景迁移</strong>：这个逻辑同样适用于"用户从注册到首次打卡需要多久"、"用户从激活到流失经历了多少天"、"用户从看到广告到下载APP需要几次曝光"——核心都是<strong>"取每个用户的首次行为，计算时间差"</strong>。</p>
+      <p>运营团队问你："每个用户从注册到第一次订阅，平均要多少天？"</p>
+      <p>这道题用ROW_NUMBER()最简洁：给每个用户的订阅记录按时间排序，取第一条，算和注册时间的差值。如果用子查询也能做，但窗口函数一行代码就解决了。</p>
+      <p><strong>产品改版后这个数字缩短了怎么办？</strong> 按注册月份分组，看每组平均转化周期的趋势变化——用SUM OVER做累计。</p>
     </div>
   </div>
 
   <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>场景三 · 多表关联</div>
-    <div class="card-title">市场团队问："小红书渠道来的用户，付费转化率和抖音渠道比，差异到底有多大？"</div>
+    <div class="card-label"><span class="dot"></span>第三个坑：不问口径就写SQL</div>
     <div class="card-body">
-    <div class="data-row"><span class="data-label">小红书渠道付费转化率</span><span class="data-value">6.8%</span></div>
-    <div class="data-row"><span class="data-label">抖音渠道付费转化率</span><span class="data-value">4.2%</span></div>
-    <div class="data-row"><span class="data-label">应用商店付费转化率</span><span class="data-value">3.9%</span></div>
-    <div class="card-body" style="margin-top:8px">
-      <p>这道题需要关联三张表：用户注册表（渠道来源）、订阅表（付费记录）、用户行为表（活跃数据）。</p>
-      <p><strong>面试官想看的不是你会JOIN三个表，而是——</strong></p>
-      <p>你会不会在回答之前先问：<strong>"转化率的定义是什么？是按注册后30天内有订阅行为，还是注册当日转化的？渠道归因是用首次触点还是末次触点？"</strong></p>
-      <p>能在写SQL之前把口径问清楚，比把SQL写对了更有说服力。因为真实工作中，70%的时间花在"确定到底要算什么"上，只有30%的时间花在写SQL上。</p>
+      <p>市场团队让你对比三个渠道的付费转化率。</p>
     </div>
-    </div>
-  </div>
-
-  <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>SQL面试的本质</div>
-    <div class="card-title">不是你写对SQL，是你理解数据</div>
-    <div class="card-body">
-      <p><strong>面试官不关心你会不会背语法。</strong> 他关心的是：</p>
-      <p>① 你会不会在写之前先确认口径？（说明你做过真实的数据工作）</p>
-      <p>② 你知道什么时候用LEFT JOIN而不是INNER JOIN吗？（说明你理解数据含义）</p>
-      <p>③ 你能不能在写完之后解释每一步的逻辑？（说明你不是背答案的）</p>
-      <p>④ 如果面试官追问"换个场景怎么做"，你能举一反三吗？</p>
+    <div class="data-row"><span class="data-label">小红书渠道</span><span class="data-value">6.8%</span></div>
+    <div class="data-row"><span class="data-label">抖音渠道</span><span class="data-value">4.2%</span></div>
+    <div class="data-row"><span class="data-label">应用商店</span><span class="data-value">3.9%</span></div>
+    <div class="card-body" style="margin-top:12px">
+      <p>但在写SQL之前，你先停下来问了三个问题：<strong>"转化率的定义是什么？是注册后30天内有付费行为，还是注册当日？渠道归因用首次触点还是末次触点？退款用户算不算付费用户？"</strong></p>
+      <p>这三个问题一问，市场团队才发现他们每个人心里对"转化率"的定义都不一样。如果直接写SQL，跑出来的数据谁都不信。真实工作中，<strong>70%的时间花在确定口径上，只有30%时间在写SQL。</strong></p>
     </div>
   </div>
 
   <div class="glow-box reveal">
-    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">SQL从来不是"学完就完了"的东西。每遇到一个新的业务问题，都是加深理解的机会。留存率让你学会LEFT JOIN，转化周期让你学会窗口函数，漏斗分析让你学会子查询——场景驱动学习，比刷100道题更有效。</span></p>
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">SQL面试不是在考你会不会背语法——是在考你理不理解数据含义。LEFT JOIN vs INNER JOIN = 你懂不懂"分母不能丢"。窗口函数 vs 子查询 = 你知不知道什么场景用什么工具。写之前先问口径 = 你有没有做过真实数据工作。这三个信号面试官一眼就能分辨出你是"刷过题"还是"做过事"。</span></p>
   </div>
     <div class="prev-ch reveal" style="margin-bottom:48px">
     <a href="ch22.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 策略评估案例</a>

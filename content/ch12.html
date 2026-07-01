@@ -1,37 +1,40 @@
-  <p class="p reveal">AB实验告诉你"新引导流程比旧的好"。但如果你想知道<strong>"小红书投放预算增加30%能不能带来更多订阅"</strong>，你不能随机给用户分配预算——这时候就需要因果推断。</p>
+  <p class="p reveal">AB实验做完，新引导流程效果确认了，打卡率从28%提到36%。但市场团队找到你：<strong>"小红书投放预算这季度增加了30%，能不能帮我们算一下，这波多投的钱到底带来了多少增量注册？"</strong></p>
+
+  <p class="p reveal">"这个不能做AB实验，"你说，"不能让一半用户看到广告、一半看不到——投放是面向所有人的。"</p>
+
+  <div class="dialogue reveal">市场总监急了："那我们怎么证明这30%的预算花得值？"</div>
 
   <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>核心问题</div>
-    <div class="card-title">做不了实验的时候，怎么判断因果关系？</div>
+    <div class="card-label"><span class="dot"></span>用DID验证</div>
+    <div class="card-title">找"没有受影响的地区"当对照组</div>
     <div class="card-body">
-      <p>在鲜食记，有很多问题不能做AB实验：</p>
-      <p><strong>问题1</strong>：市场团队在小红书投入了一波新的种草内容（D-7上线），怎么判断这波投放<strong>直接导致</strong>了多少新用户注册？不能用AB实验，因为不能"随机不投广告"。</p>
-      <p><strong>问题2</strong>：iOS版本更新了首页推荐算法，怎么判断这个改动<strong>直接导致</strong>了打卡率变化？不能同时发布两个iOS版本。</p>
-      <p>因果推断的核心就是：<strong>在没有随机实验的条件下，用数据和统计方法逼近因果结论。</strong></p>
+      <p>"虽然不能做随机实验，但可以<strong>找一个天然的对照组</strong>。这波增投的小红书种草内容，只投放了一二线城市，三线及以下城市没投。那么三线城市就是天然的对照组。"</p>
+    </div>
+    <div class="data-row"><span class="data-label">一二线注册量变化</span><span class="data-value">2,500/天 → 3,800/天（+52%）</span></div>
+    <div class="data-row"><span class="data-label">三线注册量变化</span><span class="data-value">2,400/天 → 2,600/天（+8%）</span></div>
+    <div class="data-row"><span class="data-label">增量效果 DID</span><span class="data-value">52% - 8% = +44%</span></div>
+    <div class="card-body" style="margin-top:12px">
+      <p>"DID的逻辑是：三线城市的8%增长代表了<strong>'不做增投本来也会有的自然增长'</strong>。一二线的52%里减去这8%，剩下44%才是增投带来的真实效果。不是整个52%都是投放功劳。"</p>
     </div>
   </div>
 
   <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>三种常用方法</div>
-    <div class="step"><span class="step-num">01</span><div class="step-desc"><strong>双重差分法（DID）</strong>：找一个"没有受影响的地区/时段"作为对照组。比如小红书只在部分城市投放了种草内容，对比投放城市和非投放城市在投放前后的打卡率变化差异。DID = (投放城市变化) - (非投放城市变化)。</div></div>
-    <div class="step"><span class="step-num">02</span><div class="step-desc"><strong>断点回归（RDD）</strong>：利用自然的断点。比如鲜食记会员到期日是精确的日期，比较"刚刚到期"和"即将到期"的用户续费行为差异——这两类人在其他方面几乎一模一样，只有到期这个"断点"不同。</div></div>
-    <div class="step"><span class="step-num">03</span><div class="step-desc"><strong>倾向性得分匹配（PSM）</strong>：给每个"受影响的用户"找一个"背景相似但没受影响"的虚拟对照用户。比如在评估优惠券效果时，给每个领了券的用户匹配一个"有相同购买历史、但这次没领券"的用户，对比他们的购买行为差异。</div></div>
+    <div class="card-label"><span class="dot"></span>两个前提条件必须验证</div>
+    <div class="card-body">
+      <p><strong>条件一：平行趋势。</strong> 在增投之前，一二线和三线的注册量增长趋势必须是一致的。如果投放前一二线已经在暴涨、三线在跌，那DID就不可信。你拉了投放前六周的数据，两条线几乎平行——条件通过。</p>
+      <p><strong>条件二：没有其他干扰。</strong> 投放期间有没有其他因素只影响一二线、不影响三线？比如一二线刚好有健康饮食主题的线下活动。你确认了同期没有其他事件——条件通过。</p>
+    </div>
   </div>
 
   <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>鲜食记实战：DID验证小红书投放效果</div>
+    <div class="card-label"><span class="dot"></span>三种常用方法对比</div>
     <div class="card-body">
-      <p>市场团队在小红书投入种草内容后，整体新用户注册量从2,847/天涨到4,100/天（涨了44%）。但你不能说"因为小红书投了，所以注册涨了"——可能有其他因素（比如刚好是健康饮食话题热搜）。</p>
-      <p>用DID来验证：选择一批没有投放小红书广告的城市作为对照组。</p>
-    </div>
-    <div class="data-row"><span class="data-label">投放城市注册量变化</span><span class="data-value">2,500 → 3,800（+52%）</span></div>
-    <div class="data-row"><span class="data-label">非投放城市注册量变化</span><span class="data-value">2,400 → 2,600（+8%）</span></div>
-    <div class="data-row"><span class="data-label">投放的净效果 DID</span><span class="data-value">52% - 8% = +44%</span></div>
-    <div class="card-body" style="margin-top:12px">
-      <p><strong>结论：小红书投放确实带来了约44%的增量注册。这44%是剔除了"原本就在涨的自然增长"之后的净效果。</strong></p>
+      <p>"DID只是其中一种方法。做不了实验的时候还有两个常用工具——"</p>
+      <p><strong>断点回归（RDD）</strong>：利用自然的断点。鲜食记的会员到期日是精确的日期——比较"刚好到期"和"即将到期"的用户续费行为。这两类人在其他维度几乎一模一样，唯一的区别就在"到期日"这个断点附近。</p>
+      <p><strong>倾向性得分匹配（PSM）</strong>：给每个受影响的用户，找一个"背景相似但没受影响"的虚拟对照。比如在评估优惠券效果时，给每个领了券的用户匹配一个"同样历史、但这次没领券"的用户。CH21的邀请激励案例就用了这套方法。</p>
     </div>
   </div>
 
   <div class="glow-box reveal">
-    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">因果推断在互联网公司中应用极广：运营活动效果评估（DID）、促销定价策略（RDD）、广告投放归因（PSM）、产品改版影响（DID）、新功能上线效果（DID）。核心逻辑都一样——找一个天然对照组，用"差分"来剔除其他干扰因素。面试时能讲出DID、RDD、PSM这三个缩写，并给出鲜食记的实际应用场景，说明你已经从"描述型分析师"进入了"推断型分析师"的阶段。</span></p>
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">能讲出DID、RDD、PSM这三个缩写只是入门。真正有用的是<strong>知道什么时候用哪个</strong>：有自然地理/时间对照组 → DID。有精确断点 → RDD。有大量相似用户但分配不随机 → PSM。面试时能给出鲜食记的实际应用场景，说明你从"描述型分析师"进入了"推断型分析师"的阶段。</span></p>
   </div>

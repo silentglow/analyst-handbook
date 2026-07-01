@@ -40,47 +40,43 @@
     <h1 class="ch-title" id="typewriter"></h1>
     
   </header>
-    <p class="p reveal">在做鲜食记的异动分析时，你发现了一个让人困惑的现象：<strong>三个渠道的打卡率分别都在上升，但整体打卡率却在下降。</strong>这怎么可能？</p>
+    <p class="p reveal">你在给陈总做异动分析汇报。PPT翻到渠道拆分那一页，数据让在座的人都愣住了。</p>
 
-  <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>经典陷阱</div>
-    <div class="card-title">辛普森悖论</div>
-    <div class="card-body">
-      <p>当数据按不同维度分组后，每个组的趋势和整体趋势<strong>完全相反</strong>，这就是辛普森悖论。</p>
-      <p>不是数据错了，而是<strong>各组的占比发生了变化</strong>，导致整体被低质量的组拖下水。</p>
-    </div>
+  <div class="card reveal">
+    <div class="card-label"><span class="dot"></span>各渠道打卡率变化</div>
+    <div class="data-row"><span class="data-label">小红书渠道</span><span class="data-value">42% → 44%（涨了2pp）</span></div>
+    <div class="data-row"><span class="data-label">抖音渠道</span><span class="data-value">44% → 46%（涨了2pp）</span></div>
+    <div class="data-row"><span class="data-label">应用商店</span><span class="data-value">48% → 50%（涨了2pp）</span></div>
   </div>
 
+  <div class="dialogue reveal">李姐困惑了："每个渠道都在涨，那整体不应该也在涨吗？为什么我们看到的整体打卡率是45%掉到38%？你是不是算错了？"</div>
+
+  <p class="p reveal">"没算错。因为发生了<strong>结构性变化</strong>——每个渠道的占比变了。"你翻到下一页。</p>
+
   <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>鲜食记的辛普森悖论</div>
-    <div class="card-title">每个渠道都在涨，整体却在跌</div>
-    <p style="color:rgba(255,255,255,0.55);margin-bottom:12px">假设你只看了各渠道的打卡率变化（没看占比）：</p>
-    <div class="data-row"><span class="data-label">小红书渠道打卡率</span><span class="data-value">42% → 44%（涨了2个百分点）</span></div>
-    <div class="data-row"><span class="data-label">抖音渠道打卡率</span><span class="data-value">44% → 46%（涨了2个百分点）</span></div>
-    <div class="data-row"><span class="data-label">应用商店打卡率</span><span class="data-value">48% → 50%（涨了2个百分点）</span></div>
-    <div class="data-row"><span class="data-label">整体打卡率</span><span class="data-value down">45% → 38%（却跌了7个百分点！）</span></div>
-    <div class="card-body" style="margin-top:16px">
-      <p>秘密在于<strong>渠道占比发生了巨变</strong>：</p>
-    </div>
+    <div class="card-label"><span class="dot"></span>渠道占比变化</div>
     <div class="data-row"><span class="data-label">小红书渠道注册占比</span><span class="data-value down">30% → 78%（暴增）</span></div>
     <div class="data-row"><span class="data-label">抖音渠道注册占比</span><span class="data-value">40% → 15%（萎缩）</span></div>
     <div class="data-row"><span class="data-label">应用商店注册占比</span><span class="data-value">30% → 7%（萎缩）</span></div>
-    <div class="card-body" style="margin-top:16px">
-      <p>虽然每个渠道的打卡率都涨了2个百分点，但小红书的打卡率（44%）本身就远低于应用商店（50%）。当小红书占比从30%暴涨到78%时，大量低打卡率用户涌入，把整体平均值拖了下来。</p>
-      <p><strong>结论：问题的根源不是"各渠道打卡质量在恶化"（它们都在改善），而是"流量结构在劣化"（低质量渠道占比暴增）。</strong></p>
+    <div class="card-body" style="margin-top:12px">
+      <p>"看这个占比变化。小红书渠道的打卡率虽然是44%，但比应用商店的50%低很多。而它在总注册量中的占比从30%暴涨到78%。大量低打卡率的用户涌入，把整体平均值拖了下来。"</p>
+      <p>"就像一杯50度的温水加了一杯80度的热水，混合后应该是55度。但你加了整整一桶50度的水，这桶水虽然温度在升（42%→44%），但因为量太大了，混合后的温度反而被它拉低了。"</p>
     </div>
   </div>
 
-  <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>面试怎么用</div>
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>这就是辛普森悖论</div>
+    <div class="card-title">每个组都在变好，整体却在变差</div>
     <div class="card-body">
-      <p>当面试官问你某个指标下降的原因时，如果你回答说"拆开看各渠道都在涨"，面试官会立刻警惕——这是典型的辛普森悖论前兆。能主动说出"我需要同时看各组的绝对值变化和占比变化"，说明你有数据分析的陷阱意识。</p>
-      <p><strong>应对公式</strong>："整体趋势和分组趋势不一致时，第一时间检查<strong>各组占比是否发生了结构性变化</strong>。"</p>
+      <p><strong>"这个问题提醒我们：以后看数据，永远不要只看平均值。每次都要问——这个平均值背后，各组的结构有没有变？"</strong></p>
+      <p>"在鲜食记的案例里，小红书渠道的打卡率本身就在改善（42%→44%），说明市场团队的工作是有效的。问题不是'小红书渠道质量在恶化'，而是<strong>'小红书渠道的占比增长太快了'</strong>，快到来不及消化。解方不是砍掉小红书投放，而是——"</p>
+      <p>① 让市场团队调整种草内容方向，提高用户预期匹配度</p>
+      <p>② 让产品团队优化新用户引导流程，帮这批用户更快找到核心价值</p>
     </div>
   </div>
 
   <div class="glow-box reveal">
-    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">辛普森悖论无处不在：电商的客单价可能每个品类都在涨但整体在跌（因为低价品类占比暴增），内容平台的人均时长可能每个用户群都在涨但整体在跌（因为新用户占比暴增拉低均值），SaaS的ARR可能每个客户层都在涨但整体在跌（因为低端客户占比暴增）。核心应对都一样：<strong>永远同时关注"各组绝对值"和"各组占比"两个维度。</strong></span></p>
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">辛普森悖论在数据分析里无处不在。电商的客单价可能每个品类都在涨、但整体在跌（低价品类占比暴增）。内容平台的人均时长可能每个用户群都在涨、但整体在跌（新用户占比暴增）。SaaS的ARR可能每个客户层都在涨、但整体在跌（小客户占比暴增）。<strong>应对公式都一样：先看各组绝对值，再看各组占比。只要两者都看了，辛普森悖论就不会骗到你。</strong></span></p>
   </div>
     <div class="prev-ch reveal" style="margin-bottom:48px">
     <a href="ch09.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 数据预测与目标拆解</a>

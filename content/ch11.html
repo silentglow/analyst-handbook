@@ -1,48 +1,59 @@
-  <p class="p reveal">在CH05我们设计了AB实验，计算了样本量。但你知道<strong>为什么要算样本量</strong>吗？P值到底是什么意思？</p>
+  <p class="p reveal">AB实验的设计方案你已经做好了——50/50分流，小红书渠道新用户，对照旧引导流程，实验新引导流程。样本量算出来每组2,450人，跑7天。但产品负责人陈总皱着眉翻你的方案：<strong>"这些数字是怎么来的？为什么是2,450人？为什么是7天？你给我讲清楚。"</strong></p>
 
   <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>P值的本质</div>
-    <div class="card-title">P值是"原假设成立时，观察到这个结果的概率"</div>
+    <div class="card-label"><span class="dot"></span>从抛硬币讲起</div>
+    <div class="card-title">P值到底是什么？</div>
     <div class="card-body">
-      <p>翻译成人话：<strong>假设新方案完全没有效果，你看到的这个数据差异有多大概率是纯运气？</strong></p>
-      <p>P值越小，说明"纯运气"的可能性越小，实验效果越可信。</p>
-      <p>P值小于0.05 = 如果新方案没效果，你只有不到5%的概率看到这个结果 → 拒绝原假设，认为新方案有效。</p>
+      <p>你从兜里掏出一枚硬币。"假设这枚硬币是公平的——正反各50%。我抛5次，全是正面。这事儿有多大概率？"</p>
+      <p>0.5 × 0.5 × 0.5 × 0.5 × 0.5 = <strong>3.1%</strong></p>
+      <p>"如果硬币真的公平，连续5次正面的概率只有3.1%。这么小概率的事件发生了，我更愿意相信这枚硬币本来就不公平——它可能被动了手脚，正面朝上的概率不是50%。"</p>
     </div>
   </div>
 
   <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>一个直观例子</div>
-    <div class="card-title">抛硬币</div>
+    <div class="card-label"><span class="dot"></span>套到实验上</div>
     <div class="card-body">
-      <p>假设硬币是公平的（正反各50%）。连续抛5次都是正面，概率是多少？</p>
-      <p>0.5^5 = 0.031 = <strong>3.1%</strong></p>
-      <p>这个3.1%就是P值。因为太小了，你宁愿相信<strong>硬币本身有问题</strong>，也不愿相信"运气这么差连续5次正面"。</p>
-      <p>这就是假设检验的逻辑：<strong>P值太小 → 原假设（没效果）不成立 → 新方案有效。</strong></p>
+      <p><strong>"P值的本质就是：假设新方案完全没效果，你看到的数据差异有多大可能是纯运气。"</strong></p>
+      <p>回到鲜食记的实验：对照组打卡率28.1%，实验组36.2%，差了8.1个百分点。如果新引导流程真的没效果（原假设），两组之间出现8.1个百分点差异的概率是P值。</p>
+      <p>如果P值小于0.05——"纯运气碰出来的"概率不到5%——我们就拒绝原假设，认为新方案确实有效。</p>
+      <p><strong>P值越小，随机碰巧的可能性越小，实验结论越可信。</strong></p>
     </div>
   </div>
+
+  <div class="dialogue reveal">陈总追问："那2,450这个数呢？为什么不是100人或者10,000人？"</div>
 
   <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>样本量计算</div>
-    <div class="card-title">需要多少人才能得出结论？</div>
-    <div class="card-body">
-      <p>样本量取决于四个参数：</p>
-    </div>
-    <div class="data-row"><span class="data-label">基线转换率</span><span class="data-value">当前的指标水平</span></div>
-    <div class="data-row"><span class="data-label">MDE（最小检测效果）</span><span class="data-value">你想检测多小的变化</span></div>
-    <div class="data-row"><span class="data-label">显著性水平 α</span><span class="data-value">通常0.05</span></div>
-    <div class="data-row"><span class="data-label">检验功效 1-β</span><span class="data-value">通常0.80</span></div>
-    <div class="card-body" style="margin-top:12px">
-      <p><strong>MDE不能随便拍。</strong> 如果设得太小（比如0.1%），需要的样本量巨大，做不了。如果设得太大（比如10%），可能错过真实的小提升。</p>
-      <p>MDE应该由业务决定：<strong>提升多少才值得上线？</strong> 如果能覆盖开发和运营成本，这个提升幅度就是MDE。</p>
+    <div class="card-label"><span class="dot"></span>样本量由四个参数决定</div>
+    <div class="data-row"><span class="data-label">参数1 · 基线</span><span class="data-value">当前小红书渠道打卡率：28%</span></div>
+    <div class="data-row"><span class="data-label">参数2 · MDE</span><span class="data-value">我想检测的最小效果：28% → 35% (+7pp)</span></div>
+    <div class="data-row"><span class="data-label">参数3 · α</span><span class="data-value">我容忍"看错"的概率：5%（显著性水平）</span></div>
+    <div class="data-row"><span class="data-label">参数4 · 1-β</span><span class="data-value">我"看对"的把握：80%（检验功效）</span></div>
+    <div class="card-body" style="margin-top:16px">
+      <p>"这四个参数一锁定，样本量就用公式算出来了——每组约2,450人。"</p>
+      <p><strong>"MDE最关键——提升多少才值得上线？"</strong>MDE设太小（比如0.1%），需要几十万样本，做不了。MDE设太大（比如20%），可能检测不出真实的10%提升。7个百分点的MDE是你和产品负责人一起定的：如果打卡率能提升7个点以上，值得推动全量上线；低于7个点，不值得动开发资源。</p>
     </div>
   </div>
 
-  <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>常见误区</div>
-    <div class="card-title">面试官可能问的陷阱问题</div>
+  <div class="card card-amber reveal">
+    <div class="card-label"><span class="dot"></span>实验周期为什么是7天？</div>
     <div class="card-body">
-      <p><strong>"P值大于0.05说明没效果吗？"</strong> 不一定。可能只是样本量不够，没有检测到效果。看置信区间，如果很宽说明样本不足。</p>
-      <p><strong>"看到P值显著就能提前结束实验吗？"</strong> 不能。每多看一眼P值就多了一次碰巧显著的机会，会抬高误判概率。除非设计了序贯检验。</p>
-      <p><strong>"实验组不显著，能不能只看显著的用户分群？"</strong> 不能。这是多重检验问题，拆越多子群越容易碰到假阳性。</p>
+      <p>"小红书每天新注册约1,900人，50/50分流后每组950人。2,450 ÷ 950 ≈ 2.6天。但2.6天只是入组时间，你还得留出一天看次日打卡率。而且——"</p>
+      <p><strong>"周几注册的用户，行为模式完全不同。"</strong>周六注册的用户和周三注册的用户，打卡习惯不一样。只跑2.6天可能碰巧包含了行为模式特殊的日子。跑满7天覆盖一个完整星期周期，才能消除"星期效应"。</p>
+      <p>"完整周期：7天入组 + 1天观察 = <strong>8天。</strong>"</p>
     </div>
+  </div>
+
+  <div class="dialogue reveal">陈总："懂了。那我还有一个问题——实验过程中，能不能每天都看一眼数据？看到第三天就P值显著了，能不能提前结束？"</div>
+
+  <div class="card card-accent reveal">
+    <div class="card-label"><span class="dot"></span>陷阱：不要偷看P值</div>
+    <div class="card-body">
+      <p>"不能。你每多看一眼数据，就多了一次'碰巧碰到P值<0.05'的机会。假设你每天看一眼，连看7天——实际犯第一类错误的概率会从5%飙升到大概<strong>30%</strong>。你以为你用的是0.05的显著性水平，实际远高于这个数。"</p>
+      <p>"正确做法：实验前定好周期（8天），跑完之后<strong>一次性分析</strong>。除非你提前设计了序贯检验——但那套方法比标准检验复杂得多，需要校正边界值。"</p>
+      <p>"同理，如果实验不显著，也不能'只看某个用户分群'——那是多重检验问题，拆越多子群越容易碰到假阳性。"</p>
+    </div>
+  </div>
+
+  <div class="glow-box reveal">
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">P值和样本量是AB实验的统计学基石。面试官最爱追问三个陷阱题：①"P>0.05就是没效果吗？"（可能只是样本不够）②"P值显著能提前停吗？"（偷看问题）③"整体不显著，能只看显著子群吗？"（多重检验）。这三个问题都能从鲜食记的实验场景里找到答案。不管你面试什么公司，只要涉及AB实验，这三个坑必考。</span></p>
   </div>

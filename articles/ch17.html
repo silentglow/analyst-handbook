@@ -40,41 +40,41 @@
     <h1 class="ch-title" id="typewriter"></h1>
     
   </header>
-    <p class="p reveal">面试官：<strong>"鲜食记准备上线直播业务，请你设计一套直播业务的健康度指标体系。"</strong></p>
+    <p class="p reveal">产品负责人陈总拿过来一份PRD：<strong>"我们准备启动直播业务，让营养师和健身教练在APP里直播带课。你帮我想想，直播业务该盯哪些指标？怎么判断它健康还是不健康？"</strong></p>
 
   <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>不要直接列指标</div>
-    <div class="card-title">先反问业务阶段</div>
+    <div class="card-label"><span class="dot"></span>先问阶段，再搭指标</div>
     <div class="card-body">
-      <p>不同的业务阶段需要不同的指标。如果是初创期，核心是拉新（直播观看数、新增粉丝数）。如果是成熟期，核心是变现效率（订阅收入、转化率）。</p>
-      <p>面试时先确认<strong>业务阶段和北极星指标</strong>，再展开指标体系，说明你懂业务不是只会套框架。</p>
+      <p>"在搭指标之前——"你打断陈总，"<strong>直播业务现在是什么阶段？</strong>"</p>
+      <p>"如果刚上线，核心是拉主播和拉观众，我盯直播场次、观看人数、主播入驻数。如果已经跑了一段时间，核心是变现效率和内容质量，我盯订阅转化率、客单价、用户停留时长。"</p>
     </div>
   </div>
 
+  <div class="dialogue reveal">陈总："刚启动，先搭一套框架。"</div>
+
   <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>用OSM模型拆解</div>
-    <div class="card-title">目标 → 策略 → 度量</div>
-    <div class="step"><span class="step-num">O</span><div class="step-desc"><strong>目标（Objective）</strong>：直播业务的健康增长，平衡订阅收入和用户体验。</div></div>
-    <div class="step"><span class="step-num">S</span><div class="step-desc"><strong>策略（Strategy）</strong>：①提升直播观看量和停留时长 ②提升商品点击和订阅转化 ③控制退款率和用户负反馈。</div></div>
-    <div class="step"><span class="step-num">M</span><div class="step-desc"><strong>度量（Measurement）</strong>：对应每个策略，设置一级指标（直播订阅收入、退款率）、二级指标（观看人数、停留时长、点击率、转化率）、三级指标（单场直播的数据）。</div></div>
+    <div class="card-label"><span class="dot"></span>OSM模型拆解</div>
+    <div class="step"><span class="step-num">O</span><div class="step-desc"><strong>目标（Objective）</strong>：直播业务健康增长，用户通过直播产生订阅意愿。</div></div>
+    <div class="step"><span class="step-num">S</span><div class="step-desc"><strong>策略1 · 提升直播观看量</strong> → 指标：直播观看人数、场均停留时长、直播预约率。</div></div>
+    <div class="step"><span class="step-num">S</span><div class="step-desc"><strong>策略2 · 提升订阅转化</strong> → 指标：直播间点击课程率、点击后订阅转化率、人均订阅金额。</div></div>
+    <div class="step"><span class="step-num">S</span><div class="step-desc"><strong>策略3 · 控制风险</strong> → 指标：退款率、直播负反馈率、非补贴品的订阅占比。</div></div>
   </div>
 
   <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>必杀技</div>
-    <div class="card-title">加入"反向指标"</div>
+    <div class="card-label"><span class="dot"></span>反向指标：防止虚假繁荣</div>
     <div class="card-body">
-      <p>面试官说"订阅收入同比增长了50%，但健康度评分下降"。你会关注什么？</p>
+      <p>"三个月后，直播订阅收入涨了50%，乍看很漂亮。但如果你只看这一个数字——"</p>
     </div>
-    <div class="data-row"><span class="data-label">退款率变化</span><span class="data-value down">3.2% → 8.7%（飙升）</span></div>
+    <div class="data-row"><span class="data-label">退款率</span><span class="data-value down">3.2% → 8.7%（飙升）</span></div>
     <div class="data-row"><span class="data-label">非补贴品订阅占比</span><span class="data-value down">65% → 38%（腰斩）</span></div>
-    <div class="data-row"><span class="data-label">复购率</span><span class="data-value down">41% → 29%（下跌）</span></div>
+    <div class="data-row"><span class="data-label">用户复购率</span><span class="data-value down">41% → 29%（下滑）</span></div>
     <div class="card-body" style="margin-top:12px">
-      <p>收入涨了50%是因为大量低价补贴冲量，但用户只买促销品、退款率飙升、不会复购。这种增长是"虚假繁荣"——<strong>健康度下降才是真实信号。</strong></p>
+      <p>"收入涨了50%是因为主播疯狂发低价补贴券冲量。用户只买促销品、退款率飙升、不会复购。这种增长是虚假繁荣——<strong>健康度下降才是真实信号。</strong>"</p>
     </div>
   </div>
 
   <div class="glow-box reveal">
-    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">"反向指标"是高级分析师的核心武器。任何场景都可以设置：电商GMV涨了但退货率涨了→虚假繁荣。内容平台DAU涨了但人均时长跌了→低质用户涌入。SaaS客户数涨了但续约率跌了→低质客户在充数。面试时能主动提出反向指标，说明你不仅会看表面数据，还会看数据背后的业务健康度。</span></p>
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">反向指标是高级分析师的核心武器。电商GMV涨但退货率涨→虚假繁荣。内容平台DAU涨但人均时长跌→低质用户涌入。SaaS客户数涨但续约率跌→低质客户充数。面试时主动提出反向指标，说明你不只看表面数字，更看数字背后的健康度。</span></p>
   </div>
     <div class="prev-ch reveal" style="margin-bottom:48px">
     <a href="ch16.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 一面vs二面</a>
