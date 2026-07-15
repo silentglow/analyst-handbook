@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>故事20：会员日活动的增长密码</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg-deep: #0D0D0D;
+  --bg-primary: #111111;
+  --bg-secondary: #1A1A1A;
+  --bg-card: rgba(20, 20, 20, 0.7);
+  --neon-green: #00FF88;
+  --neon-blue: #00BFFF;
+  --hot-pink: #FF0066;
+  --bright-yellow: #FFD700;
+  --text-primary: #E8E8E8;
+  --text-secondary: rgba(232,232,232,0.75);
+  --text-muted: rgba(232,232,232,0.45);
+  --glass-bg: rgba(13,13,13,0.75);
+  --glass-border: rgba(0,255,136,0.15);
+  --card-bg: rgba(20,20,20,0.6);
+  --primary-light: #00FF88;
+  --danger: #FF0066;
+  --warning: #FFD700;
+  --success: #00FF88;
+  --info: #00BFFF;
+  --font-serif: 'Noto Serif SC', serif;
+  --font-sans: 'Noto Sans SC', sans-serif;
+  --max-width: 960px;
+  --section-padding: 100px 0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon-green) var(--bg-deep);
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-green), var(--neon-blue));
+  border-radius: 3px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ===== Circuit Board Background ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(0,255,136,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(0,191,255,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255,0,102,0.02) 0%, transparent 50%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.025;
+  background-image:
+    linear-gradient(rgba(0,255,136,0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ===== Reading Progress Bar ===== */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-green));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px var(--neon-green), 0 0 20px rgba(0,255,136,0.4);
+}
+
+/* ===== Right Navigation Dots ===== */
+#nav-dots {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0,255,136,0.15);
+  border: 1px solid rgba(0,255,136,0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-dot:hover, .nav-dot.active {
+  background: var(--neon-green);
+  border-color: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green), 0 0 16px rgba(0,255,136,0.3);
+  transform: scale(1.3);
+}
+
+.nav-dot .dot-label {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--glass-bg);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--glass-border);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.nav-dot:hover .dot-label { opacity: 1; }
+
+/* ===== Container ===== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== Section Base ===== */
+.story-section {
+  padding: var(--section-padding);
+  position: relative;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.story-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+  border-radius: 2px;
+  box-shadow: 0 0 8px var(--neon-green);
+}
+
+.sub-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--bright-yellow);
+  margin: 36px 0 20px;
+  text-shadow: 0 0 20px rgba(255,215,0,0.3);
+}
+
+/* ===== Hero Section ===== */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px 24px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(0,255,136,0.12) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 50%, rgba(0,191,255,0.12) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(255,0,102,0.08) 0%, transparent 50%);
+  animation: heroFloat 15s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(2%, -2%) rotate(1deg); }
+  66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
+}
+
+.hero-spotlight {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spotlightPulse 4s ease-in-out infinite;
+}
+
+@keyframes spotlightPulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 6px 20px;
+  border: 1px solid var(--neon-green);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--neon-green);
+  margin-bottom: 24px;
+  background: rgba(0,255,136,0.06);
+  box-shadow: 0 0 15px rgba(0,255,136,0.15);
+  letter-spacing: 2px;
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: 3.2rem;
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 20px;
+  text-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,191,255,0.2);
+}
+
+.hero-title .highlight {
+  background: linear-gradient(135deg, var(--hot-pink), var(--bright-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.9;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.meta-icon { font-size: 1rem; }
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  animation: scrollHint 2s ease-in-out infinite;
+}
+
+@keyframes scrollHint {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+  50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+}
+
+.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid var(--neon-green);
+  border-bottom: 2px solid var(--neon-green);
+  transform: rotate(45deg);
+}
+
+/* ===== Callout Cards ===== */
+.callout {
+  padding: 20px 24px;
+  border-radius: 12px;
+  margin: 24px 0;
+  border-left: 4px solid;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.callout-success {
+  border-color: var(--success);
+  background: rgba(0,255,136,0.06);
+}
+
+.callout-warning {
+  border-color: var(--warning);
+  background: rgba(255,215,0,0.06);
+}
+
+.callout-danger {
+  border-color: var(--danger);
+  background: rgba(255,0,102,0.06);
+}
+
+.callout-info {
+  border-color: var(--info);
+  background: rgba(0,191,255,0.06);
+}
+
+.callout-tip {
+  border-color: var(--neon-green);
+  background: rgba(0,255,136,0.06);
+}
+
+.callout-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.callout-success .callout-label { color: var(--success); }
+.callout-warning .callout-label { color: var(--warning); }
+.callout-danger .callout-label { color: var(--danger); }
+.callout-info .callout-label { color: var(--info); }
+.callout-tip .callout-label { color: var(--neon-green); }
+
+.callout-body {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.callout-body ul {
+  margin: 8px 0 0 20px;
+  list-style: none;
+}
+
+.callout-body ul li {
+  position: relative;
+  padding-left: 16px;
+  margin-bottom: 4px;
+}
+
+.callout-body ul li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: var(--neon-green);
+  font-weight: 700;
+}
+
+/* ===== Data Cards ===== */
+.data-card {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.data-card:hover {
+  border-color: rgba(0,255,136,0.4);
+  box-shadow: 0 0 20px rgba(0,255,136,0.08);
+}
+
+/* ===== Growth Metric Component ===== */
+.growth-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.growth-metric {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.growth-metric::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.growth-metric:hover::before { opacity: 1; }
+
+.growth-metric:hover {
+  border-color: rgba(0,255,136,0.4);
+  box-shadow: 0 0 30px rgba(0,255,136,0.1);
+  transform: translateY(-4px);
+}
+
+.metric-value {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--neon-green);
+  text-shadow: 0 0 20px rgba(0,255,136,0.4);
+  line-height: 1.2;
+}
+
+.metric-value .arrow {
+  display: inline-block;
+  animation: arrowBounce 1.5s ease-in-out infinite;
+  margin-left: 4px;
+  font-size: 1.4rem;
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.metric-tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tag-green {
+  background: rgba(0,255,136,0.12);
+  color: var(--neon-green);
+  border: 1px solid rgba(0,255,136,0.25);
+}
+
+.tag-blue {
+  background: rgba(0,191,255,0.12);
+  color: var(--neon-blue);
+  border: 1px solid rgba(0,191,255,0.25);
+}
+
+.tag-pink {
+  background: rgba(255,0,102,0.12);
+  color: var(--hot-pink);
+  border: 1px solid rgba(255,0,102,0.25);
+}
+
+.tag-yellow {
+  background: rgba(255,215,0,0.12);
+  color: var(--bright-yellow);
+  border: 1px solid rgba(255,215,0,0.25);
+}
+
+/* ===== Tables ===== */
+.data-table-wrapper {
+  overflow-x: auto;
+  margin: 24px 0;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table thead th {
+  background: rgba(0,255,136,0.08);
+  color: var(--neon-green);
+  font-weight: 600;
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+  white-space: nowrap;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.data-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+}
+
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+.data-table tbody tr:hover {
+  background: rgba(0,255,136,0.04);
+}
+
+.data-table .trend-up {
+  color: var(--neon-green);
+  font-weight: 600;
+}
+
+.data-table .trend-warn {
+  color: var(--bright-yellow);
+  font-weight: 600;
+}
+
+.data-table .highlight-cell {
+  color: var(--neon-green);
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(0,255,136,0.3);
+}
+
+/* ===== Highlight Term ===== */
+.highlight-term {
+  color: var(--neon-green);
+  text-decoration: underline;
+  text-decoration-color: rgba(0,255,136,0.5);
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+/* ===== Strong ===== */
+strong {
+  color: var(--primary-light);
+  font-weight: 600;
+}
+
+/* ===== Chart Container ===== */
+.chart-container {
+  width: 100%;
+  height: 400px;
+  margin: 24px 0;
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.chart-container.tall { height: 480px; }
+
+/* ===== Formula Block ===== */
+.formula-block {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin: 24px 0;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--neon-blue);
+  text-shadow: 0 0 10px rgba(0,191,255,0.2);
+  letter-spacing: 1px;
+}
+
+.formula-block .formula-sub {
+  font-size: 1rem;
+  margin-top: 12px;
+  color: var(--text-secondary);
+  text-shadow: none;
+  font-family: var(--font-sans);
+}
+
+/* ===== TOC ===== */
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.toc-item {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-decoration: none;
+  display: block;
+}
+
+.toc-item:hover {
+  border-color: rgba(0,255,136,0.4);
+  box-shadow: 0 0 20px rgba(0,255,136,0.08);
+  transform: translateY(-2px);
+}
+
+.toc-number {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--neon-green);
+  text-shadow: 0 0 10px rgba(0,255,136,0.3);
+}
+
+.toc-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+.toc-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ===== Methodology Box ===== */
+.method-box {
+  background: var(--card-bg);
+  border: 1px solid rgba(0,191,255,0.2);
+  border-radius: 12px;
+  padding: 28px;
+  margin: 24px 0;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.method-box::before {
+  content: 'METHOD';
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: var(--bg-deep);
+  padding: 2px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--neon-blue);
+  border: 1px solid rgba(0,191,255,0.3);
+  border-radius: 4px;
+}
+
+.method-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--neon-blue);
+  margin-bottom: 12px;
+}
+
+.method-content {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+/* ===== Checklist ===== */
+.checklist {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.checklist li {
+  padding: 10px 16px 10px 40px;
+  position: relative;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.checklist li:last-child { border-bottom: none; }
+
+.checklist li::before {
+  content: '[x]';
+  position: absolute;
+  left: 8px;
+  color: var(--neon-green);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* ===== Exercise Block ===== */
+.exercise-block {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  backdrop-filter: blur(10px);
+}
+
+.exercise-block .q-label {
+  color: var(--bright-yellow);
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.exercise-block .q-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* ===== Summary Section ===== */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.summary-card {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+  border-color: rgba(0,255,136,0.4);
+  box-shadow: 0 0 20px rgba(0,255,136,0.08);
+}
+
+.summary-card .sc-icon {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+.summary-card .sc-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--neon-green);
+  margin-bottom: 8px;
+}
+
+.summary-card .sc-body {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* ===== Divider ===== */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+  margin: 0;
+}
+
+/* ===== Paragraph ===== */
+.story-section p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  line-height: 1.9;
+}
+
+/* ===== Footer ===== */
+.story-footer {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.story-footer a {
+  color: var(--neon-blue);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.story-footer a:hover {
+  color: var(--neon-green);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.2rem; }
+  .section-title { font-size: 1.6rem; }
+  .sub-title { font-size: 1.2rem; }
+  .growth-metrics { grid-template-columns: 1fr 1fr; }
+  .metric-value { font-size: 1.6rem; }
+  #nav-dots { right: 10px; gap: 8px; }
+  .nav-dot { width: 8px; height: 8px; }
+  .chart-container { height: 320px; }
+  .chart-container.tall { height: 380px; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 1.8rem; }
+  .growth-metrics { grid-template-columns: 1fr; }
+  .hero-meta { flex-direction: column; align-items: center; }
+  .toc-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Reading Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Right Navigation Dots -->
+<nav id="nav-dots">
+  <div class="nav-dot" data-target="hero"><span class="dot-label">顶部</span></div>
+  <div class="nav-dot" data-target="toc"><span class="dot-label">目录</span></div>
+  <div class="nav-dot" data-target="sec-background"><span class="dot-label">故事背景</span></div>
+  <div class="nav-dot" data-target="sec-decompose"><span class="dot-label">增长拆解</span></div>
+  <div class="nav-dot" data-target="sec-traffic"><span class="dot-label">流量来源</span></div>
+  <div class="nav-dot" data-target="sec-behavior"><span class="dot-label">用户行为</span></div>
+  <div class="nav-dot" data-target="sec-factors"><span class="dot-label">成功因素</span></div>
+  <div class="nav-dot" data-target="sec-findings"><span class="dot-label">关键发现</span></div>
+  <div class="nav-dot" data-target="sec-suggestions"><span class="dot-label">业务建议</span></div>
+  <div class="nav-dot" data-target="sec-method"><span class="dot-label">方法论</span></div>
+  <div class="nav-dot" data-target="sec-exercises"><span class="dot-label">思考练习</span></div>
+  <div class="nav-dot" data-target="sec-summary"><span class="dot-label">总结</span></div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-spotlight"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">STORY 20 // 第五篇 · 活动分析</div>
+    <h1 class="hero-title">
+      会员日活动的<br><span class="highlight">增长密码</span>
+    </h1>
+    <p class="hero-subtitle">
+      GMV增长50%的背后，是流量、转化率、客单价的协同驱动。<br>
+      用增长拆解法，找到增长引擎，复制成功经验。
+    </p>
+    <div class="hero-meta">
+      <div class="meta-item"><span class="meta-icon">&#x1F3AF;</span> 增长拆解 / 归因分析</div>
+      <div class="meta-item"><span class="meta-icon">&#x1F4CA;</span> 难度 &#x2B50;&#x2B50;&#x2B50;&#x2606;&#x2606;</div>
+      <div class="meta-item"><span class="meta-icon">&#x23F1;</span> 阅读约 7 分钟</div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>向下滚动</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ===== TOC ===== -->
+<section id="toc" class="story-section">
+  <div class="container">
+    <h2 class="section-title">内容导航</h2>
+    <div class="toc-grid">
+      <a class="toc-item" href="#sec-background">
+        <div class="toc-number">01</div>
+        <div class="toc-label">故事背景</div>
+        <div class="toc-desc">会员日GMV增长50%，原因何在？</div>
+      </a>
+      <a class="toc-item" href="#sec-decompose">
+        <div class="toc-number">02</div>
+        <div class="toc-label">增长拆解</div>
+        <div class="toc-desc">GMV = 流量 x 转化率 x 客单价</div>
+      </a>
+      <a class="toc-item" href="#sec-traffic">
+        <div class="toc-number">03</div>
+        <div class="toc-label">流量来源分析</div>
+        <div class="toc-desc">推送通知贡献50%流量增长</div>
+      </a>
+      <a class="toc-item" href="#sec-behavior">
+        <div class="toc-number">04</div>
+        <div class="toc-label">用户行为分析</div>
+        <div class="toc-desc">会员vs非会员多维对比</div>
+      </a>
+      <a class="toc-item" href="#sec-factors">
+        <div class="toc-number">05</div>
+        <div class="toc-label">成功因素总结</div>
+        <div class="toc-desc">精准触达 + 专属权益 + 社交传播</div>
+      </a>
+      <a class="toc-item" href="#sec-findings">
+        <div class="toc-number">06</div>
+        <div class="toc-label">关键发现</div>
+        <div class="toc-desc">三大核心发现与洞察</div>
+      </a>
+      <a class="toc-item" href="#sec-suggestions">
+        <div class="toc-number">07</div>
+        <div class="toc-label">业务建议</div>
+        <div class="toc-desc">短期策略与长期规划</div>
+      </a>
+      <a class="toc-item" href="#sec-method">
+        <div class="toc-number">08</div>
+        <div class="toc-label">方法论总结</div>
+        <div class="toc-desc">增长拆解的核心公式与步骤</div>
+      </a>
+      <a class="toc-item" href="#sec-exercises">
+        <div class="toc-number">09</div>
+        <div class="toc-label">思考练习</div>
+        <div class="toc-desc">三个延伸思考题</div>
+      </a>
+      <a class="toc-item" href="#sec-summary">
+        <div class="toc-number">10</div>
+        <div class="toc-label">全篇总结</div>
+        <div class="toc-desc">核心要点回顾</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 1: Background ===== -->
+<section id="sec-background" class="story-section">
+  <div class="container">
+    <h2 class="section-title">故事背景</h2>
+    <p>
+      公司每月举办会员日活动，最近一次会员日GMV增长了<strong>50%</strong>，运营团队非常兴奋，但兴奋之余，一个关键问题浮出水面：
+    </p>
+    <div class="callout callout-success">
+      <div class="callout-label">&#x2705; 运营团队反馈</div>
+      <div class="callout-body">"这次会员日GMV增长了50%，效果非常好！"</div>
+    </div>
+    <div class="callout callout-info">
+      <div class="callout-label">&#x2753; 核心问题</div>
+      <div class="callout-body">会员日增长的原因是什么？如何持续增长？</div>
+    </div>
+    <p>
+      为了回答这个问题，数据分析团队决定采用<strong>增长拆解法</strong>，将GMV增长分解为多个驱动因素，逐一分析各因素对增长的贡献度，从而找到增长的<span class="highlight-term">主要驱动因素</span>和优化方向。
+    </p>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 2: Growth Decomposition ===== -->
+<section id="sec-decompose" class="story-section">
+  <div class="container">
+    <h2 class="section-title">第一步：增长拆解</h2>
+    <p>
+      首先，我们需要将GMV拆解为三个核心驱动因素：
+    </p>
+    <div class="formula-block">
+      GMV = <span style="color:var(--neon-green)">流量</span> &times; <span style="color:var(--neon-blue)">转化率</span> &times; <span style="color:var(--bright-yellow)">客单价</span>
+      <div class="formula-sub">增长50% &approx; 流量增长30% &times; 转化率增长10% &times; 客单价增长7%</div>
+    </div>
+
+    <h3 class="sub-title">各因素贡献分析</h3>
+
+    <div class="growth-metrics">
+      <div class="growth-metric">
+        <div class="metric-value">+30%<span class="arrow">&#x2191;</span></div>
+        <div class="metric-label">流量增长</div>
+        <div class="metric-tag tag-green">贡献 60%</div>
+      </div>
+      <div class="growth-metric">
+        <div class="metric-value">+10%<span class="arrow">&#x2191;</span></div>
+        <div class="metric-label">转化率增长</div>
+        <div class="metric-tag tag-blue">贡献 20%</div>
+      </div>
+      <div class="growth-metric">
+        <div class="metric-value">+7%<span class="arrow">&#x2191;</span></div>
+        <div class="metric-label">客单价增长</div>
+        <div class="metric-tag tag-yellow">贡献 20%</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>因素</th><th>增长率</th><th>贡献占比</th><th>判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>流量</td><td class="highlight-cell">+30%</td><td class="highlight-cell">60%</td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>转化率</td><td class="highlight-cell">+10%</td><td class="highlight-cell">20%</td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>客单价</td><td class="highlight-cell">+7%</td><td class="highlight-cell">20%</td><td class="trend-up">&#x1F4C8;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-label">&#x1F4A1; 关键发现</div>
+      <div class="callout-body"><span class="highlight-term">流量增长</span>是主要贡献因素，占总增长的60%。</div>
+    </div>
+
+    <!-- Chart 1: GMV Growth Waterfall -->
+    <h3 class="sub-title">GMV增长拆解瀑布图</h3>
+    <div id="chart-waterfall" class="chart-container"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 3: Traffic Source ===== -->
+<section id="sec-traffic" class="story-section">
+  <div class="container">
+    <h2 class="section-title">第二步：流量来源分析</h2>
+    <p>
+      既然流量增长是主要贡献因素，我们需要进一步分析流量从哪里来。通过对比上月和本月的各渠道流量数据，我们发现：
+    </p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>渠道</th><th>上月流量</th><th>本月流量</th><th>增长</th><th>贡献</th><th>判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>推送通知</td><td>5万</td><td class="highlight-cell">10万</td><td class="trend-up">+100%</td><td class="highlight-cell">50%</td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>短信</td><td>3万</td><td class="highlight-cell">5万</td><td class="trend-up">+67%</td><td class="highlight-cell">20%</td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>公众号</td><td>2万</td><td class="highlight-cell">3万</td><td class="trend-up">+50%</td><td class="highlight-cell">10%</td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>自然流量</td><td>10万</td><td class="highlight-cell">12万</td><td class="trend-warn">+20%</td><td class="highlight-cell">20%</td><td class="trend-warn">&#x26A0;&#xFE0F;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-label">&#x1F4A1; 关键发现</div>
+      <div class="callout-body"><span class="highlight-term">推送通知</span>是流量增长的主要来源，贡献了50%的流量增长，流量翻倍。</div>
+    </div>
+
+    <!-- Chart 2: Traffic Source Comparison -->
+    <h3 class="sub-title">各渠道流量对比图</h3>
+    <div id="chart-traffic" class="chart-container"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 4: User Behavior ===== -->
+<section id="sec-behavior" class="story-section">
+  <div class="container">
+    <h2 class="section-title">第三步：用户行为分析</h2>
+    <p>
+      接下来，我们对比会员与非会员的行为差异，了解会员运营的价值。
+    </p>
+
+    <h3 class="sub-title">会员 vs 非会员对比</h3>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>指标</th><th>会员</th><th>非会员</th><th>差异</th><th>判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>转化率</td><td class="highlight-cell">8%</td><td>2%</td><td class="trend-up">+300%</td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>客单价</td><td class="highlight-cell">580元</td><td>320元</td><td class="trend-up">+81%</td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>复购率</td><td class="highlight-cell">45%</td><td>15%</td><td class="trend-up">+200%</td><td class="trend-up">&#x1F4C8;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-danger">
+      <div class="callout-label">&#x1F6A8; 关键发现</div>
+      <div class="callout-body">会员各项指标<span class="highlight-term">显著优于</span>非会员，会员转化率是非会员的4倍，客单价高出81%，复购率高出200%。</div>
+    </div>
+
+    <!-- Chart 3: Radar Chart -->
+    <h3 class="sub-title">会员 vs 非会员雷达图</h3>
+    <div id="chart-radar" class="chart-container"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 5: Success Factors ===== -->
+<section id="sec-factors" class="story-section">
+  <div class="container">
+    <h2 class="section-title">第四步：成功因素总结</h2>
+    <p>
+      综合以上分析，我们总结出会员日活动的三大成功因素：
+    </p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>因素</th><th>具体做法</th><th>效果</th><th>判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>精准触达</td><td>会员专属推送</td><td>打开率提升 <strong>50%</strong></td><td>&#x2705;</td></tr>
+          <tr><td>专属权益</td><td>会员专属折扣</td><td>转化率提升</td><td>&#x2705;</td></tr>
+          <tr><td>社交传播</td><td>会员邀请有礼</td><td>新增会员 <strong>+20%</strong></td><td>&#x2705;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chart 4: Success Factors Bar Chart -->
+    <h3 class="sub-title">成功因素贡献度分析</h3>
+    <div id="chart-factors" class="chart-container"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 6: Key Findings ===== -->
+<section id="sec-findings" class="story-section">
+  <div class="container">
+    <h2 class="section-title">关键发现</h2>
+
+    <div class="callout callout-tip">
+      <div class="callout-label">&#x1F4A1; 发现1：会员价值显著</div>
+      <div class="callout-body">
+        <ul>
+          <li>会员转化率、客单价、复购率均高于非会员</li>
+          <li>会员运营是增长的关键</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-label">&#x1F4A1; 发现2：精准触达有效</div>
+      <div class="callout-body">
+        <ul>
+          <li>会员专属推送打开率高</li>
+          <li>精准触达比广撒网更有效</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">&#x26A0;&#xFE0F; 发现3：权益驱动增长</div>
+      <div class="callout-body">
+        <ul>
+          <li>会员专属权益提升参与度</li>
+          <li>社交传播带来新用户</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 7: Business Suggestions ===== -->
+<section id="sec-suggestions" class="story-section">
+  <div class="container">
+    <h2 class="section-title">业务建议</h2>
+
+    <h3 class="sub-title">短期策略</h3>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>策略</th><th>具体措施</th><th>预期效果</th><th>判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>扩大会员规模</td><td>降低会员门槛、邀请奖励</td><td>会员数 <strong>+30%</strong></td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>提升会员活跃</td><td>会员专属活动、积分体系</td><td>活跃度 <strong>+20%</strong></td><td class="trend-up">&#x1F4C8;</td></tr>
+          <tr><td>优化触达策略</td><td>个性化推送、最佳时机</td><td>打开率 <strong>+30%</strong></td><td class="trend-up">&#x1F4C8;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-title">长期规划</h3>
+    <div class="callout callout-info">
+      <div class="callout-label">&#x1F4CB; 长期建议</div>
+      <div class="callout-body">
+        <ul>
+          <li>建立会员分层运营体系（普通/银卡/金卡/钻石）</li>
+          <li>搭建会员数据看板，实时监控会员健康度</li>
+          <li>探索会员生态，引入异业合作权益</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">&#x26A0;&#xFE0F; 注意事项</div>
+      <div class="callout-body">
+        <ul>
+          <li>会员权益要有差异化，避免与非会员价格差距过大</li>
+          <li>推送频率要控制，避免过度打扰导致用户反感</li>
+          <li>社交传播机制要设计好防刷规则</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Chart 5: Strategy Prediction -->
+    <h3 class="sub-title">增长策略效果预测</h3>
+    <div id="chart-prediction" class="chart-container tall"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 8: Methodology ===== -->
+<section id="sec-method" class="story-section">
+  <div class="container">
+    <h2 class="section-title">方法论总结</h2>
+
+    <div class="method-box">
+      <div class="method-title">核心方法：增长拆解</div>
+      <div class="method-content">
+        <p><strong>定义</strong>：增长拆解是将业务增长指标分解为多个驱动因素，分析各因素对增长的贡献度，从而找到增长的主要驱动因素和优化方向的分析方法。</p>
+      </div>
+    </div>
+
+    <div class="formula-block">
+      GMV = <span style="color:var(--neon-green)">流量</span> &times; <span style="color:var(--neon-blue)">转化率</span> &times; <span style="color:var(--bright-yellow)">客单价</span>
+      <div class="formula-sub">增长率 &approx; (1 + 流量增长率) &times; (1 + 转化率增长率) &times; (1 + 客单价增长率) - 1</div>
+    </div>
+
+    <div class="formula-block" style="font-size:1rem; text-align:left;">
+      <div style="color:var(--neon-green); margin-bottom:8px; font-weight:600;">增长拆解步骤</div>
+      <span style="color:var(--text-secondary); font-family:var(--font-sans); font-size:0.95rem;">
+        确定指标 &#x2192; 拆解因素 &#x2192; 计算贡献 &#x2192; 深入归因 &#x2192; 总结经验
+      </span>
+    </div>
+
+    <h3 class="sub-title">适用场景</h3>
+    <ul class="checklist">
+      <li><strong>活动复盘</strong>：分析活动增长的主要驱动因素</li>
+      <li><strong>增长分析</strong>：定位增长引擎，复制成功经验</li>
+      <li><strong>目标规划</strong>：基于各因素潜力制定增长目标</li>
+    </ul>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">&#x26A0;&#xFE0F; 注意事项</div>
+      <div class="callout-body">
+        <ul>
+          <li>拆解因素之间可能存在相关性（如流量质量影响转化率），不能简单相加</li>
+          <li>要区分"一次性因素"和"可持续因素"，优先优化可持续因素</li>
+          <li>增长拆解要结合业务背景，避免纯数字游戏</li>
+          <li>归因分析要深入到可执行层面，找到具体的优化抓手</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 9: Exercises ===== -->
+<section id="sec-exercises" class="story-section">
+  <div class="container">
+    <h2 class="section-title">思考练习</h2>
+
+    <div class="exercise-block">
+      <div class="q-label">练习 1</div>
+      <div class="q-text">如何设计会员体系来提升用户价值？</div>
+    </div>
+
+    <div class="exercise-block">
+      <div class="q-label">练习 2</div>
+      <div class="q-text">会员日活动如何平衡GMV和利润？</div>
+    </div>
+
+    <div class="exercise-block">
+      <div class="q-label">练习 3</div>
+      <div class="q-text">如何评估会员运营的长期价值？</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SECTION 10: Summary ===== -->
+<section id="sec-summary" class="story-section">
+  <div class="container">
+    <h2 class="section-title">全篇总结</h2>
+    <p>
+      通过增长拆解法，我们对会员日活动的GMV增长进行了全面归因分析。核心发现是：<span class="highlight-term">流量增长</span>贡献了60%的GMV增长，而推送通知又是流量增长的最大来源。会员在转化率、客单价和复购率上全面碾压非会员，说明<span class="highlight-term">会员运营</span>是增长的核心引擎。
+    </p>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="sc-icon">&#x1F4C8;</div>
+        <div class="sc-title">增长引擎</div>
+        <div class="sc-body">流量增长贡献60%，推送通知是最大流量来源，流量翻倍增长。</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-icon">&#x1F465;</div>
+        <div class="sc-title">会员价值</div>
+        <div class="sc-body">会员转化率8%（非会员2%），客单价580元（非会员320元），全面领先。</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-icon">&#x1F3AF;</div>
+        <div class="sc-title">成功三要素</div>
+        <div class="sc-body">精准触达、专属权益、社交传播三大策略协同驱动增长。</div>
+      </div>
+      <div class="summary-card">
+        <div class="sc-icon">&#x1F4CB;</div>
+        <div class="sc-title">方法论</div>
+        <div class="sc-body">增长拆解法：GMV = 流量 x 转化率 x 客单价，层层深入归因。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="story-footer">
+  <p>故事20 &middot; 会员日活动的增长密码 &middot; 第五篇 活动分析</p>
+  <p style="margin-top:8px;"><a href="#">下一篇：故事21 - 广告投放的钱花哪了？</a></p>
+</footer>
+
+<script>
+// ===== Progress Bar =====
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const progress = (scrollTop / scrollHeight) * 100;
+  document.getElementById('progress-bar').style.width = progress + '%';
+});
+
+// ===== IntersectionObserver for Sections =====
+const sections = document.querySelectorAll('.story-section');
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+
+sections.forEach(sec => sectionObserver.observe(sec));
+
+// ===== Nav Dots =====
+const navDots = document.querySelectorAll('.nav-dot');
+const allTargets = document.querySelectorAll('[id]');
+
+navDots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const targetId = dot.getAttribute('data-target');
+    const target = document.getElementById(targetId);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Active dot tracking
+const dotSections = [];
+navDots.forEach(dot => {
+  const tid = dot.getAttribute('data-target');
+  const el = document.getElementById(tid);
+  if (el) dotSections.push({ dot, el });
+});
+
+window.addEventListener('scroll', () => {
+  let current = dotSections[0];
+  dotSections.forEach(item => {
+    if (window.scrollY >= item.el.offsetTop - 300) {
+      current = item;
+    }
+  });
+  navDots.forEach(d => d.classList.remove('active'));
+  if (current) current.dot.classList.add('active');
+});
+
+// ===== ECharts Theme =====
+const cyberColors = ['#00FF88', '#00BFFF', '#FF0066', '#FFD700', '#B44AFF'];
+const cyberTextColor = 'rgba(232,232,232,0.75)';
+const cyberBorderColor = 'rgba(0,255,136,0.15)';
+
+// ===== Chart 1: GMV Growth Waterfall =====
+(function() {
+  const chart = echarts.init(document.getElementById('chart-waterfall'));
+  const option = {
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(13,13,13,0.9)',
+      borderColor: 'rgba(0,255,136,0.3)',
+      textStyle: { color: '#E8E8E8', fontSize: 13 }
+    },
+    grid: { left: '12%', right: '8%', top: '15%', bottom: '15%' },
+    xAxis: {
+      type: 'category',
+      data: ['上月GMV', '流量贡献', '转化率贡献', '客单价贡献', '本月GMV'],
+      axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
+      axisLabel: { color: cyberTextColor, fontSize: 12 },
+      axisTick: { show: false }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'GMV（万元）',
+      nameTextStyle: { color: cyberTextColor, fontSize: 11 },
+      axisLine: { show: false },
+      axisLabel: { color: cyberTextColor, fontSize: 11 },
+      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } }
+    },
+    series: [
+      {
+        name: 'GMV',
+        type: 'bar',
+        barWidth: '40%',
+        data: [
+          { value: 200, itemStyle: { color: 'rgba(0,191,255,0.5)' } },
+          { value: 60, itemStyle: { color: '#00FF88' } },
+          { value: 20, itemStyle: { color: '#00BFFF' } },
+          { value: 20, itemStyle: { color: '#FFD700' } },
+          { value: 300, itemStyle: { color: 'rgba(0,255,136,0.7)' } }
+        ],
+        label: {
+          show: true,
+          position: 'top',
+          color: '#E8E8E8',
+          fontSize: 13,
+          fontWeight: 600,
+          formatter: function(p) {
+            if (p.dataIndex === 0) return '200万';
+            if (p.dataIndex === 4) return '300万';
+            return '+' + p.value + '万';
+          }
+        },
+        itemStyle: {
+          borderRadius: [4, 4, 0, 0]
+        }
+      }
+    ]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+
+// ===== Chart 2: Traffic Source Comparison =====
+(function() {
+  const chart = echarts.init(document.getElementById('chart-traffic'));
+  const option = {
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(13,13,13,0.9)',
+      borderColor: 'rgba(0,255,136,0.3)',
+      textStyle: { color: '#E8E8E8', fontSize: 13 }
+    },
+    legend: {
+      data: ['上月流量', '本月流量'],
+      textStyle: { color: cyberTextColor, fontSize: 12 },
+      top: '5%'
+    },
+    grid: { left: '10%', right: '8%', top: '18%', bottom: '15%' },
+    xAxis: {
+      type: 'category',
+      data: ['推送通知', '短信', '公众号', '自然流量'],
+      axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
+      axisLabel: { color: cyberTextColor, fontSize: 12 },
+      axisTick: { show: false }
+    },
+    yAxis: {
+      type: 'value',
+      name: '流量（万）',
+      nameTextStyle: { color: cyberTextColor, fontSize: 11 },
+      axisLine: { show: false },
+      axisLabel: { color: cyberTextColor, fontSize: 11 },
+      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } }
+    },
+    series: [
+      {
+        name: '上月流量',
+        type: 'bar',
+        barWidth: '30%',
+        data: [5, 3, 2, 10],
+        itemStyle: { color: 'rgba(0,191,255,0.4)', borderRadius: [4, 4, 0, 0] },
+        label: {
+          show: true, position: 'top', color: 'rgba(232,232,232,0.6)', fontSize: 11,
+          formatter: '{c}万'
+        }
+      },
+      {
+        name: '本月流量',
+        type: 'bar',
+        barWidth: '30%',
+        data: [10, 5, 3, 12],
+        itemStyle: { color: '#00FF88', borderRadius: [4, 4, 0, 0] },
+        label: {
+          show: true, position: 'top', color: '#00FF88', fontSize: 11, fontWeight: 600,
+          formatter: function(p) {
+            const growths = ['+100%', '+67%', '+50%', '+20%'];
+            return p.value + '万 (' + growths[p.dataIndex] + ')';
+          }
+        }
+      }
+    ]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+
+// ===== Chart 3: Radar Chart =====
+(function() {
+  const chart = echarts.init(document.getElementById('chart-radar'));
+  const option = {
+    backgroundColor: 'transparent',
+    tooltip: {
+      backgroundColor: 'rgba(13,13,13,0.9)',
+      borderColor: 'rgba(0,255,136,0.3)',
+      textStyle: { color: '#E8E8E8', fontSize: 13 }
+    },
+    legend: {
+      data: ['会员', '非会员'],
+      textStyle: { color: cyberTextColor, fontSize: 12 },
+      top: '5%'
+    },
+    radar: {
+      indicator: [
+        { name: '转化率', max: 10 },
+        { name: '客单价(百元)', max: 7 },
+        { name: '复购率(%)', max: 50 }
+      ],
+      shape: 'polygon',
+      splitNumber: 4,
+      axisName: { color: cyberTextColor, fontSize: 12 },
+      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+      splitArea: { areaStyle: { color: ['rgba(0,255,136,0.02)', 'rgba(0,191,255,0.02)'] } },
+      axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          value: [8, 5.8, 45],
+          name: '会员',
+          lineStyle: { color: '#00FF88', width: 2 },
+          areaStyle: { color: 'rgba(0,255,136,0.15)' },
+          itemStyle: { color: '#00FF88' },
+          symbol: 'circle',
+          symbolSize: 6
+        },
+        {
+          value: [2, 3.2, 15],
+          name: '非会员',
+          lineStyle: { color: '#FF0066', width: 2 },
+          areaStyle: { color: 'rgba(255,0,102,0.1)' },
+          itemStyle: { color: '#FF0066' },
+          symbol: 'circle',
+          symbolSize: 6
+        }
+      ]
+    }]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+
+// ===== Chart 4: Success Factors =====
+(function() {
+  const chart = echarts.init(document.getElementById('chart-factors'));
+  const option = {
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(13,13,13,0.9)',
+      borderColor: 'rgba(0,255,136,0.3)',
+      textStyle: { color: '#E8E8E8', fontSize: 13 }
+    },
+    grid: { left: '15%', right: '10%', top: '15%', bottom: '15%' },
+    xAxis: {
+      type: 'value',
+      name: '效果提升',
+      nameTextStyle: { color: cyberTextColor, fontSize: 11 },
+      axisLine: { show: false },
+      axisLabel: { color: cyberTextColor, fontSize: 11, formatter: '{value}%' },
+      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } }
+    },
+    yAxis: {
+      type: 'category',
+      data: ['社交传播\n(新增会员)', '专属权益\n(转化率)', '精准触达\n(打开率)'],
+      axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
+      axisLabel: { color: cyberTextColor, fontSize: 12, lineHeight: 18 },
+      axisTick: { show: false }
+    },
+    series: [{
+      type: 'bar',
+      barWidth: '45%',
+      data: [
+        { value: 20, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#00FF88'}, {offset: 1, color: '#00BFFF'}]) } },
+        { value: 35, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#00BFFF'}, {offset: 1, color: '#B44AFF'}]) } },
+        { value: 50, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#FFD700'}, {offset: 1, color: '#FF0066'}]) } }
+      ],
+      label: {
+        show: true,
+        position: 'right',
+        color: '#E8E8E8',
+        fontSize: 13,
+        fontWeight: 600,
+        formatter: '+{c}%'
+      },
+      itemStyle: { borderRadius: [0, 4, 4, 0] }
+    }]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+
+// ===== Chart 5: Strategy Prediction =====
+(function() {
+  const chart = echarts.init(document.getElementById('chart-prediction'));
+  const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
+  const option = {
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(13,13,13,0.9)',
+      borderColor: 'rgba(0,255,136,0.3)',
+      textStyle: { color: '#E8E8E8', fontSize: 13 }
+    },
+    legend: {
+      data: ['当前趋势', '实施策略后'],
+      textStyle: { color: cyberTextColor, fontSize: 12 },
+      top: '5%'
+    },
+    grid: { left: '10%', right: '8%', top: '18%', bottom: '15%' },
+    xAxis: {
+      type: 'category',
+      data: months,
+      axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } },
+      axisLabel: { color: cyberTextColor, fontSize: 12 },
+      axisTick: { show: false }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'GMV（万元）',
+      nameTextStyle: { color: cyberTextColor, fontSize: 11 },
+      axisLine: { show: false },
+      axisLabel: { color: cyberTextColor, fontSize: 11 },
+      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } }
+    },
+    series: [
+      {
+        name: '当前趋势',
+        type: 'line',
+        data: [200, 220, 240, 260, 280, 300],
+        lineStyle: { color: 'rgba(0,191,255,0.6)', width: 2, type: 'dashed' },
+        itemStyle: { color: '#00BFFF' },
+        symbol: 'circle',
+        symbolSize: 8,
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(0,191,255,0.1)' },
+            { offset: 1, color: 'rgba(0,191,255,0)' }
+          ])
+        }
+      },
+      {
+        name: '实施策略后',
+        type: 'line',
+        data: [200, 250, 310, 380, 460, 550],
+        lineStyle: { color: '#00FF88', width: 3 },
+        itemStyle: { color: '#00FF88' },
+        symbol: 'circle',
+        symbolSize: 8,
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(0,255,136,0.15)' },
+            { offset: 1, color: 'rgba(0,255,136,0)' }
+          ])
+        },
+        markPoint: {
+          data: [
+            {
+              coord: [5, 550],
+              value: '+83%',
+              symbolSize: 50,
+              itemStyle: { color: 'rgba(0,255,136,0.2)', borderColor: '#00FF88', borderWidth: 1 },
+              label: { color: '#00FF88', fontSize: 13, fontWeight: 700 }
+            }
+          ]
+        }
+      }
+    ]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+</script>
+
+</body>
+</html>

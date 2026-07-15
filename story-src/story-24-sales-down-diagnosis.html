@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>故事24：销售额下滑20%，如何力挽狂澜？</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg-primary: #121212;
+  --bg-secondary: #1E1E1E;
+  --bg-card: #1A1A1A;
+  --bg-card-hover: #222222;
+  --border-color: #2A2A2A;
+  --border-accent: #37474F;
+  --text-primary: #E0E0E0;
+  --text-secondary: #9E9E9E;
+  --text-muted: #616161;
+  --primary-dark: #B71C1C;
+  --primary: #F44336;
+  --primary-light: #EF5350;
+  --success: #4CAF50;
+  --success-light: #66BB6A;
+  --info: #2196F3;
+  --info-light: #42A5F5;
+  --warning: #FF9800;
+  --cold-gray: #37474F;
+  --cold-gray-light: #546E7A;
+  --font-serif: 'Noto Serif SC', serif;
+  --font-sans: 'Noto Sans SC', sans-serif;
+  --max-width: 960px;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--bg-primary);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.8;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }
+
+/* ===== Progress Bar ===== */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-dark), var(--primary), var(--warning));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+}
+
+/* ===== Navigation Dots ===== */
+#nav-dots {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border: none;
+  padding: 0;
+}
+
+.nav-dot:hover, .nav-dot.active {
+  background: var(--primary);
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.6);
+  transform: scale(1.3);
+}
+
+.nav-dot .nav-tooltip {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  border: 1px solid var(--border-color);
+}
+
+.nav-dot:hover .nav-tooltip { opacity: 1; }
+
+/* ===== Main Container ===== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(183, 28, 28, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(55, 71, 79, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg-primary) 0%, #0D0D0D 100%);
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(244, 67, 54, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 67, 54, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridPulse 8s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.hero-content { position: relative; z-index: 1; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(183, 28, 28, 0.15);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--primary-light);
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+}
+
+.hero-badge .pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 8px rgba(244, 67, 54, 0); }
+}
+
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 50%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.hero-meta-item .status-light {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(45deg);
+}
+
+/* ===== Section Styles ===== */
+.story-section {
+  padding: 80px 0;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.story-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-accent), transparent);
+  margin: 0 auto;
+  max-width: 200px;
+}
+
+.section-header {
+  margin-bottom: 40px;
+}
+
+.section-number {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  color: var(--primary);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.4;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  margin-top: 12px;
+  font-size: 0.95rem;
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 20px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  border-color: var(--border-accent);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-danger { border-left: 3px solid var(--primary); }
+.card-warning { border-left: 3px solid var(--warning); }
+.card-success { border-left: 3px solid var(--success); }
+.card-info { border-left: 3px solid var(--info); }
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.status-red { background: var(--primary); box-shadow: 0 0 6px rgba(244, 67, 54, 0.5); }
+.status-green { background: var(--success); box-shadow: 0 0 6px rgba(76, 175, 80, 0.5); }
+.status-yellow { background: var(--warning); box-shadow: 0 0 6px rgba(255, 152, 0, 0.5); }
+.status-blue { background: var(--info); box-shadow: 0 0 6px rgba(33, 150, 243, 0.5); }
+
+/* ===== Tables ===== */
+.data-table-wrapper {
+  overflow-x: auto;
+  margin: 16px 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table thead th {
+  background: rgba(55, 71, 79, 0.3);
+  color: var(--text-secondary);
+  font-weight: 500;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.data-table tbody td {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(42, 42, 42, 0.5);
+  color: var(--text-primary);
+}
+
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+.data-table tbody tr:hover { background: rgba(255, 255, 255, 0.02); }
+
+.data-table .val-negative { color: var(--primary-light); font-weight: 600; }
+.data-table .val-positive { color: var(--success-light); font-weight: 600; }
+.data-table .val-neutral { color: var(--text-secondary); }
+
+/* ===== Highlight Terms ===== */
+.highlight-term {
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.highlight-term.down {
+  color: var(--primary-light);
+  text-decoration: underline;
+  text-decoration-color: rgba(244, 67, 54, 0.4);
+  text-underline-offset: 3px;
+}
+.highlight-term.up {
+  color: var(--success-light);
+  text-decoration: underline;
+  text-decoration-color: rgba(76, 175, 80, 0.4);
+  text-underline-offset: 3px;
+}
+
+/* ===== Strong ===== */
+strong {
+  color: var(--primary-light);
+  font-weight: 600;
+}
+
+/* ===== Blockquote ===== */
+.blockquote {
+  border-left: 3px solid var(--primary);
+  background: rgba(183, 28, 28, 0.06);
+  padding: 16px 20px;
+  margin: 20px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.blockquote-success { border-left-color: var(--success); background: rgba(76, 175, 80, 0.06); }
+.blockquote-warning { border-left-color: var(--warning); background: rgba(255, 152, 0, 0.06); }
+.blockquote-info { border-left-color: var(--info); background: rgba(33, 150, 243, 0.06); }
+
+.blockquote .speaker {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--primary-light);
+  margin-bottom: 4px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Code Block ===== */
+.code-block {
+  background: #0D0D0D;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 16px 0;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/* ===== Chart Container ===== */
+.chart-container {
+  width: 100%;
+  height: 400px;
+  margin: 24px 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.chart-container-tall { height: 480px; }
+
+/* ===== TOC ===== */
+.toc {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.toc-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.toc-item:hover {
+  border-color: var(--primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.1);
+}
+
+.toc-num {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--primary);
+  min-width: 24px;
+}
+
+/* ===== Finding Cards ===== */
+.finding-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.finding-card {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  align-items: flex-start;
+}
+
+.finding-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.finding-icon.danger { background: rgba(244, 67, 54, 0.15); }
+.finding-icon.warning { background: rgba(255, 152, 0, 0.15); }
+.finding-icon.success { background: rgba(76, 175, 80, 0.15); }
+
+.finding-content h4 {
+  font-family: var(--font-serif);
+  color: #FFFFFF;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.finding-content p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.finding-content ul {
+  margin-top: 8px;
+  padding-left: 18px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.finding-content ul li { margin-bottom: 4px; }
+
+/* ===== Checklist ===== */
+.checklist { list-style: none; padding: 0; margin: 16px 0; }
+
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(42, 42, 42, 0.5);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.checklist li:last-child { border-bottom: none; }
+
+.check-icon {
+  color: var(--success);
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ===== Formula ===== */
+.formula-block {
+  background: rgba(33, 150, 243, 0.06);
+  border: 1px solid rgba(33, 150, 243, 0.15);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 16px 0;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--info-light);
+  letter-spacing: 1px;
+}
+
+/* ===== Method Tags ===== */
+.method-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.method-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid;
+}
+
+.method-tag.red { color: var(--primary-light); border-color: rgba(244, 67, 54, 0.3); background: rgba(244, 67, 54, 0.08); }
+.method-tag.green { color: var(--success-light); border-color: rgba(76, 175, 80, 0.3); background: rgba(76, 175, 80, 0.08); }
+.method-tag.blue { color: var(--info-light); border-color: rgba(33, 150, 243, 0.3); background: rgba(33, 150, 243, 0.08); }
+
+/* ===== Summary Section ===== */
+.summary-box {
+  background: linear-gradient(135deg, rgba(183, 28, 28, 0.08), rgba(55, 71, 79, 0.08));
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  margin: 24px 0;
+}
+
+.summary-box h3 {
+  font-family: var(--font-serif);
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+}
+
+.diagnostic-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.diag-step {
+  text-align: center;
+  padding: 20px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  transition: transform 0.3s;
+}
+
+.diag-step:hover { transform: translateY(-4px); }
+
+.diag-step-num {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.diag-step-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ===== Exercise ===== */
+.exercise-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin: 12px 0;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.exercise-num {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--info);
+  min-width: 28px;
+}
+
+.exercise-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 40px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  #nav-dots { display: none; }
+  .container { padding: 0 16px; }
+  .story-section { padding: 50px 0; }
+  .chart-container { height: 320px; }
+  .chart-container-tall { height: 380px; }
+  .toc { grid-template-columns: 1fr; }
+  .hero-meta { gap: 12px; }
+  .diagnostic-steps { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.6rem; }
+  .data-table { font-size: 12px; }
+  .data-table thead th, .data-table tbody td { padding: 8px 10px; }
+  .diagnostic-steps { grid-template-columns: 1fr; }
+}
+
+/* ===== Animation Utilities ===== */
+.fade-in { animation: fadeIn 0.8s ease forwards; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Flowchart Visual ===== */
+.flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 24px 0;
+}
+
+.flow-step {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  position: relative;
+}
+
+.flow-step:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.flow-step:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.flow-step:not(:last-child) { border-bottom: none; }
+
+.flow-step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.flow-step-num.start { background: rgba(244, 67, 54, 0.2); color: var(--primary-light); }
+.flow-step-num.step { background: rgba(33, 150, 243, 0.2); color: var(--info-light); }
+.flow-step-num.end { background: rgba(76, 175, 80, 0.2); color: var(--success-light); }
+
+.flow-step-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.flow-step-text strong {
+  color: #FFFFFF;
+}
+
+.flow-connector {
+  width: 2px;
+  height: 16px;
+  background: var(--border-accent);
+  margin-left: 37px;
+}
+
+/* ===== KPI Row ===== */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.kpi-card {
+  text-align: center;
+  padding: 20px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  transition: transform 0.3s;
+}
+
+.kpi-card:hover { transform: translateY(-2px); }
+
+.kpi-value {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.kpi-value.red { color: var(--primary-light); }
+.kpi-value.green { color: var(--success-light); }
+.kpi-value.blue { color: var(--info-light); }
+
+.kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ===== Two Column ===== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+@media (max-width: 640px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div id="progress-bar" style="width: 0%;"></div>
+
+<!-- Navigation Dots -->
+<nav id="nav-dots"></nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="sec-hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="pulse-dot"></span>
+      CRISIS ALERT - URGENT DIAGNOSIS
+    </div>
+    <h1>销售额下滑20%，<br>如何力挽狂澜？</h1>
+    <p class="hero-subtitle">一场关于GMV异常下滑的全面诊断：从指标拆解到原因归因，从短期止血到长期抗风险能力建设</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="status-light"></span> 综合诊断分析</div>
+      <div class="hero-meta-item"><span class="status-light"></span> 难度: 4/5</div>
+      <div class="hero-meta-item"><span class="status-light"></span> 阅读约15分钟</div>
+    </div>
+    <div class="method-tags" style="justify-content: center; margin-top: 24px;">
+      <span class="method-tag red">#综合诊断</span>
+      <span class="method-tag red">#指标拆解</span>
+      <span class="method-tag blue">#原因归因</span>
+      <span class="method-tag blue">#GMV分析</span>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>向下滚动开始诊断</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ==================== TOC ==================== -->
+<section class="story-section" id="sec-toc">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">CONTENTS</div>
+      <h2 class="section-title">诊断目录</h2>
+    </div>
+    <div class="toc">
+      <a class="toc-item" onclick="scrollToSection('sec-1')"><span class="toc-num">01</span> 故事背景</a>
+      <a class="toc-item" onclick="scrollToSection('sec-2')"><span class="toc-num">02</span> 分析思路</a>
+      <a class="toc-item" onclick="scrollToSection('sec-3')"><span class="toc-num">03</span> 指标拆解</a>
+      <a class="toc-item" onclick="scrollToSection('sec-4')"><span class="toc-num">04</span> 流量分析</a>
+      <a class="toc-item" onclick="scrollToSection('sec-5')"><span class="toc-num">05</span> 转化率分析</a>
+      <a class="toc-item" onclick="scrollToSection('sec-6')"><span class="toc-num">06</span> 用户分析</a>
+      <a class="toc-item" onclick="scrollToSection('sec-7')"><span class="toc-num">07</span> 商品分析</a>
+      <a class="toc-item" onclick="scrollToSection('sec-8')"><span class="toc-num">08</span> 原因归因</a>
+      <a class="toc-item" onclick="scrollToSection('sec-9')"><span class="toc-num">09</span> 短期对策</a>
+      <a class="toc-item" onclick="scrollToSection('sec-10')"><span class="toc-num">10</span> 长期优化</a>
+      <a class="toc-item" onclick="scrollToSection('sec-11')"><span class="toc-num">11</span> 关键发现</a>
+      <a class="toc-item" onclick="scrollToSection('sec-12')"><span class="toc-num">12</span> 行动结果</a>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 1: 故事背景 ==================== -->
+<section class="story-section" id="sec-1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 01</div>
+      <h2 class="section-title">故事背景</h2>
+    </div>
+
+    <div class="blockquote">
+      <div class="speaker">CEO / 老板</div>
+      "上个月销售额下滑了<span class="highlight-term down">20%</span>，这是什么情况？你们谁能给我一个解释？"
+    </div>
+
+    <p style="color: var(--text-secondary); margin: 16px 0;">运营总监、市场总监、产品总监面面相觑，一时答不上来。会议室里弥漫着紧张的气氛，每个人都在翻看自己部门的数据，却没有人能给出一个完整的解释。</p>
+
+    <div class="blockquote">
+      <div class="speaker">CEO / 老板</div>
+      "小林，你来做一次全面诊断，找出问题根源，给出解决方案。"
+    </div>
+
+    <div class="card card-danger" style="margin-top: 24px;">
+      <div class="card-title"><span class="status-indicator status-red"></span> 核心问题</div>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">销售额为什么下滑？如何扭转局面？这是一个需要从<strong>整体到局部</strong>、从<strong>现象到本质</strong>、从<strong>问题到对策</strong>进行系统性诊断的任务。</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 2: 分析思路 ==================== -->
+<section class="story-section" id="sec-2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 02</div>
+      <h2 class="section-title">分析思路</h2>
+      <p class="section-desc">这是一个综合性的诊断分析，需要运用多种方法：指标拆解、维度下钻、原因归因、制定对策。</p>
+    </div>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num start">!</div>
+        <div class="flow-step-text"><strong>开始：销售额下滑诊断</strong> — GMV从1000万降至800万，降幅达20%</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-num step">1</div>
+        <div class="flow-step-text"><strong>第一步：指标拆解</strong> — GMV = 流量 x 转化率 x 客单价</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-num step">2</div>
+        <div class="flow-step-text"><strong>第二步：维度下钻</strong> — 用户、商品、渠道、活动</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-num step">3</div>
+        <div class="flow-step-text"><strong>第三步：原因归因</strong> — 内部因素 vs 外部因素</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-num step">4</div>
+        <div class="flow-step-text"><strong>第四步：制定对策</strong> — 短期应对 + 长期优化</div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-step">
+        <div class="flow-step-num end">&#10003;</div>
+        <div class="flow-step-text"><strong>结论：输出诊断报告与解决方案</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 3: 指标拆解 ==================== -->
+<section class="story-section" id="sec-3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 03</div>
+      <h2 class="section-title">第一步：指标拆解</h2>
+      <p class="section-desc">将GMV拆解为流量、转化率、客单价三个核心驱动因素，找出变化的主要贡献者。</p>
+    </div>
+
+    <div class="formula-block">
+      GMV = 流量 &times; 转化率 &times; 客单价
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>指标</th>
+            <th>上月</th>
+            <th>本月</th>
+            <th>变化</th>
+            <th>贡献</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>GMV</strong></td>
+            <td><strong>1000万</strong></td>
+            <td><strong>800万</strong></td>
+            <td class="val-negative">-20%</td>
+            <td>-</td>
+            <td><span class="status-indicator status-red"></span> 严重下滑</td>
+          </tr>
+          <tr>
+            <td>流量</td>
+            <td><strong>50万</strong></td>
+            <td><strong>45万</strong></td>
+            <td class="val-negative">-10%</td>
+            <td class="val-negative"><strong>50%</strong></td>
+            <td><span class="status-indicator status-red"></span> 主要原因</td>
+          </tr>
+          <tr>
+            <td>转化率</td>
+            <td><strong>4%</strong></td>
+            <td><strong>3.5%</strong></td>
+            <td class="val-negative">-12.5%</td>
+            <td class="val-negative"><strong>30%</strong></td>
+            <td><span class="status-indicator status-red"></span> 次要原因</td>
+          </tr>
+          <tr>
+            <td>客单价</td>
+            <td>500元</td>
+            <td>508元</td>
+            <td class="val-positive">+1.6%</td>
+            <td class="val-neutral">-5%</td>
+            <td><span class="status-indicator status-yellow"></span> 略有提升</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-danger">
+      <div class="card-title"><span class="status-indicator status-red"></span> 关键发现</div>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;"><span class="highlight-term down">流量下降</span>（贡献50%）和<span class="highlight-term down">转化率下降</span>（贡献30%）是主要原因，合计解释了<strong>80%</strong>的GMV下滑。客单价略有提升，但不足以弥补流量和转化率的损失。</p>
+    </div>
+
+    <!-- Chart 1: GMV Waterfall -->
+    <div class="chart-container" id="chart1"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 4: 流量分析 ==================== -->
+<section class="story-section" id="sec-4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 04</div>
+      <h2 class="section-title">第二步：流量维度下钻</h2>
+      <p class="section-desc">流量贡献了50%的GMV下滑，需要进一步拆解各渠道的流量变化。</p>
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>渠道</th>
+            <th>上月</th>
+            <th>本月</th>
+            <th>变化</th>
+            <th>影响</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>自然搜索</td>
+            <td><strong>20万</strong></td>
+            <td><strong>18万</strong></td>
+            <td class="val-negative">-10%</td>
+            <td>中</td>
+            <td><span class="status-indicator status-yellow"></span> 小幅下降</td>
+          </tr>
+          <tr>
+            <td>付费广告</td>
+            <td><strong>15万</strong></td>
+            <td><strong>10万</strong></td>
+            <td class="val-negative">-33%</td>
+            <td>高</td>
+            <td><span class="status-indicator status-red"></span> 大幅下降</td>
+          </tr>
+          <tr>
+            <td>社交流量</td>
+            <td>10万</td>
+            <td>12万</td>
+            <td class="val-positive">+20%</td>
+            <td>低</td>
+            <td><span class="status-indicator status-green"></span> 增长</td>
+          </tr>
+          <tr>
+            <td>直接访问</td>
+            <td>5万</td>
+            <td>5万</td>
+            <td class="val-neutral">0%</td>
+            <td>无</td>
+            <td><span class="status-indicator status-yellow"></span> 持平</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-danger">
+      <div class="card-title"><span class="status-indicator status-red"></span> 关键发现</div>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;"><span class="highlight-term down">付费广告流量大幅下降33%</span>（从15万降至10万），是流量下降的最大来源。</p>
+    </div>
+
+    <!-- Chart 2: Channel Traffic -->
+    <div class="chart-container" id="chart2"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 5: 转化率分析 ==================== -->
+<section class="story-section" id="sec-5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 05</div>
+      <h2 class="section-title">转化率维度下钻</h2>
+      <p class="section-desc">转化率贡献了30%的GMV下滑，需要分析各转化环节的变化。</p>
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>环节</th>
+            <th>上月</th>
+            <th>本月</th>
+            <th>变化</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>访问 &rarr; 浏览</td>
+            <td><strong>65%</strong></td>
+            <td><strong>60%</strong></td>
+            <td class="val-negative">-5pp</td>
+            <td><span class="status-indicator status-red"></span> 前端下降明显</td>
+          </tr>
+          <tr>
+            <td>浏览 &rarr; 加购</td>
+            <td><strong>40%</strong></td>
+            <td><strong>35%</strong></td>
+            <td class="val-negative">-5pp</td>
+            <td><span class="status-indicator status-red"></span> 前端下降明显</td>
+          </tr>
+          <tr>
+            <td>加购 &rarr; 下单</td>
+            <td>50%</td>
+            <td>48%</td>
+            <td class="val-negative">-2pp</td>
+            <td><span class="status-indicator status-yellow"></span> 小幅下降</td>
+          </tr>
+          <tr>
+            <td>下单 &rarr; 支付</td>
+            <td>85%</td>
+            <td>82%</td>
+            <td class="val-negative">-3pp</td>
+            <td><span class="status-indicator status-yellow"></span> 小幅下降</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-warning">
+      <div class="card-title"><span class="status-indicator status-yellow"></span> 关键发现</div>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;">各环节转化率均下降，前端（访问&rarr;浏览、浏览&rarr;加购）更明显，各降5pp，可能与<strong>首页改版</strong>有关。</p>
+    </div>
+
+    <!-- Chart 3: Funnel Comparison -->
+    <div class="chart-container chart-container-tall" id="chart3"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 6: 用户分析 ==================== -->
+<section class="story-section" id="sec-6">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 06</div>
+      <h2 class="section-title">用户维度下钻</h2>
+      <p class="section-desc">从新老用户角度分析GMV下滑的结构性差异。</p>
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>用户类型</th>
+            <th>上月GMV</th>
+            <th>本月GMV</th>
+            <th>变化</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>新用户</td>
+            <td><strong>300万</strong></td>
+            <td><strong>200万</strong></td>
+            <td class="val-negative">-33%</td>
+            <td><span class="status-indicator status-red"></span> 严重下滑</td>
+          </tr>
+          <tr>
+            <td>老用户</td>
+            <td><strong>700万</strong></td>
+            <td><strong>600万</strong></td>
+            <td class="val-negative">-14%</td>
+            <td><span class="status-indicator status-red"></span> 明显下滑</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-danger">
+      <div class="card-title"><span class="status-indicator status-red"></span> 关键发现</div>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;"><span class="highlight-term down">新用户GMV下降更严重</span>（-33% vs -14%），说明新用户获取和转化都出了问题。</p>
+    </div>
+
+    <!-- Chart 4: User Type GMV -->
+    <div class="chart-container" id="chart4"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 7: 商品分析 ==================== -->
+<section class="story-section" id="sec-7">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 07</div>
+      <h2 class="section-title">商品维度下钻</h2>
+      <p class="section-desc">从品类角度分析各品类的GMV变化，定位问题品类。</p>
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>品类</th>
+            <th>上月GMV</th>
+            <th>本月GMV</th>
+            <th>变化</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>外套</td>
+            <td><strong>400万</strong></td>
+            <td><strong>350万</strong></td>
+            <td class="val-negative">-12.5%</td>
+            <td><span class="status-indicator status-yellow"></span> 小幅下降</td>
+          </tr>
+          <tr>
+            <td>裤装</td>
+            <td><strong>250万</strong></td>
+            <td><strong>200万</strong></td>
+            <td class="val-negative">-20%</td>
+            <td><span class="status-indicator status-red"></span> 明显下降</td>
+          </tr>
+          <tr>
+            <td>T恤</td>
+            <td><strong>200万</strong></td>
+            <td><strong>150万</strong></td>
+            <td class="val-negative">-25%</td>
+            <td><span class="status-indicator status-red"></span> 明显下降</td>
+          </tr>
+          <tr>
+            <td>配饰</td>
+            <td><strong>150万</strong></td>
+            <td><strong>100万</strong></td>
+            <td class="val-negative">-33%</td>
+            <td><span class="status-indicator status-red"></span> 严重下滑</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card card-warning">
+      <div class="card-title"><span class="status-indicator status-yellow"></span> 关键发现</div>
+      <p style="color: var(--text-secondary); font-size: 0.95rem;"><span class="highlight-term down">配饰和T恤下降最严重</span>（均超25%），可能与爆款断货有关。</p>
+    </div>
+
+    <!-- Chart 5: Category GMV -->
+    <div class="chart-container" id="chart5"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 8: 原因归因 ==================== -->
+<section class="story-section" id="sec-8">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 08</div>
+      <h2 class="section-title">第三步：原因归因</h2>
+      <p class="section-desc">综合以上分析，将原因分为内部因素和外部因素进行归因。</p>
+    </div>
+
+    <h3 style="font-family: var(--font-serif); color: #FFFFFF; margin-bottom: 16px; font-size: 1.1rem;">
+      <span class="status-indicator status-red" style="margin-right: 6px;"></span> 内部因素
+    </h3>
+
+    <div class="data-table-wrapper" style="margin-bottom: 32px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>因素</th>
+            <th>影响</th>
+            <th>数据佐证</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>广告预算削减</td>
+            <td>流量下降</td>
+            <td>广告预算减少<strong>30%</strong></td>
+            <td><span class="status-indicator status-red"></span> 直接原因</td>
+          </tr>
+          <tr>
+            <td>首页改版</td>
+            <td>转化率下降</td>
+            <td>改版后转化率下降</td>
+            <td><span class="status-indicator status-red"></span> 直接原因</td>
+          </tr>
+          <tr>
+            <td>爆款断货</td>
+            <td>销售损失</td>
+            <td>TOP10商品<strong>3个</strong>断货</td>
+            <td><span class="status-indicator status-red"></span> 直接原因</td>
+          </tr>
+          <tr>
+            <td>客服响应慢</td>
+            <td>用户体验差</td>
+            <td>响应时间从2分钟到<strong>10分钟</strong></td>
+            <td><span class="status-indicator status-yellow"></span> 间接原因</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-family: var(--font-serif); color: #FFFFFF; margin-bottom: 16px; font-size: 1.1rem;">
+      <span class="status-indicator status-yellow" style="margin-right: 6px;"></span> 外部因素
+    </h3>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>因素</th>
+            <th>影响</th>
+            <th>数据佐证</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>竞品促销</td>
+            <td>用户流失</td>
+            <td>竞品GMV增长<strong>20%</strong></td>
+            <td><span class="status-indicator status-yellow"></span> 外部压力</td>
+          </tr>
+          <tr>
+            <td>季节因素</td>
+            <td>需求下降</td>
+            <td>行业整体下滑<strong>10%</strong></td>
+            <td><span class="status-indicator status-yellow"></span> 外部压力</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 9: 短期对策 ==================== -->
+<section class="story-section" id="sec-9">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 09</div>
+      <h2 class="section-title">第四步：短期对策（1个月内）</h2>
+      <p class="section-desc">针对已识别的直接原因，制定快速止血方案。</p>
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>问题</th>
+            <th>对策</th>
+            <th>预期效果</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>广告预算削减</td>
+            <td>恢复核心渠道投放</td>
+            <td>流量恢复</td>
+            <td><span class="status-indicator status-green"></span> 立即见效</td>
+          </tr>
+          <tr>
+            <td>首页改版问题</td>
+            <td>回滚或优化</td>
+            <td>转化率恢复</td>
+            <td><span class="status-indicator status-green"></span> 立即见效</td>
+          </tr>
+          <tr>
+            <td>爆款断货</td>
+            <td>紧急补货</td>
+            <td>销售恢复</td>
+            <td><span class="status-indicator status-green"></span> 立即见效</td>
+          </tr>
+          <tr>
+            <td>客服响应慢</td>
+            <td>增加客服人手</td>
+            <td>体验提升</td>
+            <td><span class="status-indicator status-yellow"></span> 需要时间</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 10: 长期优化 ==================== -->
+<section class="story-section" id="sec-10">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 10</div>
+      <h2 class="section-title">长期优化（1-3个月）</h2>
+      <p class="section-desc">在止血的基础上，建立系统性的抗风险能力。</p>
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>方向</th>
+            <th>措施</th>
+            <th>预期效果</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>流量多元化</td>
+            <td>减少对付费广告依赖</td>
+            <td>抗风险能力提升</td>
+            <td><span class="status-indicator status-green"></span> 战略级</td>
+          </tr>
+          <tr>
+            <td>转化率优化</td>
+            <td>持续优化用户体验</td>
+            <td>转化率提升</td>
+            <td><span class="status-indicator status-green"></span> 持续改进</td>
+          </tr>
+          <tr>
+            <td>商品结构优化</td>
+            <td>提升爆款率</td>
+            <td>销售稳定</td>
+            <td><span class="status-indicator status-green"></span> 战略级</td>
+          </tr>
+          <tr>
+            <td>用户运营</td>
+            <td>提升老用户复购</td>
+            <td>用户价值提升</td>
+            <td><span class="status-indicator status-green"></span> 长期价值</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 11: 关键发现 ==================== -->
+<section class="story-section" id="sec-11">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 11</div>
+      <h2 class="section-title">关键发现</h2>
+    </div>
+
+    <div class="finding-grid">
+      <div class="finding-card">
+        <div class="finding-icon danger"><span class="status-indicator status-red" style="width: 12px; height: 12px;"></span></div>
+        <div class="finding-content">
+          <h4>发现1：多因素叠加导致下滑</h4>
+          <ul>
+            <li>广告预算削减导致流量下降</li>
+            <li>首页改版导致转化率下降</li>
+            <li>爆款断货导致销售损失</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-icon warning"><span class="status-indicator status-yellow" style="width: 12px; height: 12px;"></span></div>
+        <div class="finding-content">
+          <h4>发现2：新用户受影响更大</h4>
+          <ul>
+            <li>新用户GMV下降<span class="highlight-term down">33%</span></li>
+            <li>需要重点关注新用户获取</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="finding-card">
+        <div class="finding-icon success"><span class="status-indicator status-green" style="width: 12px; height: 12px;"></span></div>
+        <div class="finding-content">
+          <h4>发现3：需要系统性应对</h4>
+          <ul>
+            <li>短期快速止血</li>
+            <li>长期建立抗风险能力</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Section 12: 行动结果 ==================== -->
+<section class="story-section" id="sec-12">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">SECTION 12</div>
+      <h2 class="section-title">行动结果</h2>
+    </div>
+
+    <div class="blockquote blockquote-success">
+      <div class="speaker" style="color: var(--success-light);">CEO / 老板</div>
+      "问题找到了，各部门按对策执行，下个月我要看到改善。"
+    </div>
+
+    <h3 style="font-family: var(--font-serif); color: #FFFFFF; margin: 24px 0 16px; font-size: 1.1rem;">后续行动</h3>
+
+    <ul class="checklist">
+      <li><span class="check-icon">&#10003;</span> <strong>恢复核心渠道广告投放</strong> — 恢复百度SEM和社交广告投放</li>
+      <li><span class="check-icon">&#10003;</span> <strong>优化首页改版问题</strong> — 回滚或A/B测试优化</li>
+      <li><span class="check-icon">&#10003;</span> <strong>紧急补货爆款商品</strong> — 3个断货爆款紧急补货</li>
+      <li><span class="check-icon">&#10003;</span> <strong>增加客服人手</strong> — 响应时间恢复到2分钟内</li>
+    </ul>
+
+    <h3 style="font-family: var(--font-serif); color: #FFFFFF; margin: 32px 0 16px; font-size: 1.1rem;">一个月后效果</h3>
+
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-value green">950万</div>
+        <div class="kpi-label">GMV（恢复95%）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value green">48万</div>
+        <div class="kpi-label">流量（恢复96%）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value green">3.8%</div>
+        <div class="kpi-label">转化率（恢复95%）</div>
+      </div>
+    </div>
+
+    <div class="data-table-wrapper" style="margin-top: 20px;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>指标</th>
+            <th>下滑时</th>
+            <th>一个月后</th>
+            <th>恢复情况</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>GMV</strong></td>
+            <td>800万</td>
+            <td><strong>950万</strong></td>
+            <td>恢复95%</td>
+            <td><span class="status-indicator status-green"></span> 接近恢复</td>
+          </tr>
+          <tr>
+            <td>流量</td>
+            <td>45万</td>
+            <td><strong>48万</strong></td>
+            <td>恢复96%</td>
+            <td><span class="status-indicator status-green"></span> 接近恢复</td>
+          </tr>
+          <tr>
+            <td>转化率</td>
+            <td>3.5%</td>
+            <td><strong>3.8%</strong></td>
+            <td>恢复95%</td>
+            <td><span class="status-indicator status-green"></span> 接近恢复</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chart 6: Recovery Comparison -->
+    <div class="chart-container" id="chart6"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ==================== Summary ==================== -->
+<section class="story-section" id="sec-summary">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">METHODOLOGY</div>
+      <h2 class="section-title">方法论总结</h2>
+    </div>
+
+    <div class="summary-box">
+      <h3>核心方法：综合诊断分析</h3>
+      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px;">通过<strong>指标拆解</strong>、<strong>维度下钻</strong>、<strong>原因归因</strong>、<strong>制定对策</strong>四步法，系统性地诊断业务问题并给出解决方案。</p>
+
+      <div class="formula-block" style="margin-bottom: 16px;">
+        GMV = 流量 &times; 转化率 &times; 客单价
+      </div>
+
+      <div class="formula-block" style="font-size: 1rem;">
+        变化贡献<sub>i</sub> = &Delta;指标<sub>i</sub> / &Sigma;|&Delta;指标<sub>j</sub>|
+      </div>
+    </div>
+
+    <div class="diagnostic-steps">
+      <div class="diag-step">
+        <div class="diag-step-num">01</div>
+        <div class="diag-step-label">指标拆解<br><span style="font-size: 12px; color: var(--text-muted);">找出变化的主要因素</span></div>
+      </div>
+      <div class="diag-step">
+        <div class="diag-step-num">02</div>
+        <div class="diag-step-label">维度下钻<br><span style="font-size: 12px; color: var(--text-muted);">定位具体问题点</span></div>
+      </div>
+      <div class="diag-step">
+        <div class="diag-step-num">03</div>
+        <div class="diag-step-label">原因归因<br><span style="font-size: 12px; color: var(--text-muted);">内部 vs 外部因素</span></div>
+      </div>
+      <div class="diag-step">
+        <div class="diag-step-num">04</div>
+        <div class="diag-step-label">制定对策<br><span style="font-size: 12px; color: var(--text-muted);">短期 + 长期</span></div>
+      </div>
+    </div>
+
+    <div class="card card-warning" style="margin-top: 24px;">
+      <div class="card-title"><span class="status-indicator status-yellow"></span> 注意事项</div>
+      <ul style="color: var(--text-secondary); font-size: 0.9rem; padding-left: 18px; line-height: 2;">
+        <li>诊断分析需要快速响应，但也要避免草率结论</li>
+        <li>内外部因素要区分清楚，避免归因错误</li>
+        <li>对策要分优先级，短期止血优先</li>
+      </ul>
+    </div>
+
+    <div class="card card-info" style="margin-top: 16px;">
+      <div class="card-title"><span class="status-indicator status-blue"></span> 诊断思维</div>
+      <div class="method-tags">
+        <span class="method-tag blue">从整体到局部</span>
+        <span class="method-tag blue">从现象到本质</span>
+        <span class="method-tag blue">从问题到对策</span>
+      </div>
+    </div>
+
+    <h3 style="font-family: var(--font-serif); color: #FFFFFF; margin: 32px 0 16px; font-size: 1.1rem;">思考练习</h3>
+
+    <div class="exercise-card">
+      <div class="exercise-num">Q1</div>
+      <div class="exercise-text">如果销售额下滑但利润上升，这是好是坏？</div>
+    </div>
+    <div class="exercise-card">
+      <div class="exercise-num">Q2</div>
+      <div class="exercise-text">如何建立销售额预警机制？</div>
+    </div>
+    <div class="exercise-card">
+      <div class="exercise-num">Q3</div>
+      <div class="exercise-text">如何区分内部因素和外部因素的影响？</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== Footer ==================== -->
+<footer class="footer">
+  <div class="container">
+    <p>故事24：销售额下滑20%，如何力挽狂澜？</p>
+    <p style="margin-top: 8px; color: var(--text-muted);">综合诊断分析 &middot; 指标拆解 &middot; 原因归因 &middot; GMV分析</p>
+  </div>
+</footer>
+
+<script>
+// ===== Navigation Sections =====
+const sections = [
+  { id: 'sec-hero', label: '首页' },
+  { id: 'sec-toc', label: '目录' },
+  { id: 'sec-1', label: '故事背景' },
+  { id: 'sec-2', label: '分析思路' },
+  { id: 'sec-3', label: '指标拆解' },
+  { id: 'sec-4', label: '流量分析' },
+  { id: 'sec-5', label: '转化率分析' },
+  { id: 'sec-6', label: '用户分析' },
+  { id: 'sec-7', label: '商品分析' },
+  { id: 'sec-8', label: '原因归因' },
+  { id: 'sec-9', label: '短期对策' },
+  { id: 'sec-10', label: '长期优化' },
+  { id: 'sec-11', label: '关键发现' },
+  { id: 'sec-12', label: '行动结果' },
+  { id: 'sec-summary', label: '方法论总结' }
+];
+
+// Create nav dots
+const navDotsContainer = document.getElementById('nav-dots');
+sections.forEach((sec, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.innerHTML = `<span class="nav-tooltip">${sec.label}</span>`;
+  dot.onclick = () => scrollToSection(sec.id);
+  navDotsContainer.appendChild(dot);
+});
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== Progress Bar =====
+const progressBar = document.getElementById('progress-bar');
+function updateProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  progressBar.style.width = progress + '%';
+}
+
+// ===== IntersectionObserver =====
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.story-section').forEach(sec => sectionObserver.observe(sec));
+
+// Active nav dot observer
+const dotObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = sections.findIndex(s => s.id === entry.target.id);
+      if (idx >= 0) {
+        document.querySelectorAll('.nav-dot').forEach((d, i) => {
+          d.classList.toggle('active', i === idx);
+        });
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(sec => {
+  const el = document.getElementById(sec.id);
+  if (el) dotObserver.observe(el);
+});
+
+window.addEventListener('scroll', updateProgress);
+updateProgress();
+
+// ===== ECharts Theme =====
+const darkTheme = {
+  backgroundColor: 'transparent',
+  textStyle: { color: '#9E9E9E', fontFamily: 'Noto Sans SC' },
+  title: { textStyle: { color: '#E0E0E0', fontFamily: 'Noto Serif SC' } },
+  legend: { textStyle: { color: '#9E9E9E' } },
+  tooltip: {
+    backgroundColor: '#1E1E1E',
+    borderColor: '#37474F',
+    textStyle: { color: '#E0E0E0' }
+  },
+  xAxis: {
+    axisLine: { lineStyle: { color: '#37474F' } },
+    axisLabel: { color: '#9E9E9E' },
+    splitLine: { lineStyle: { color: 'rgba(55,71,79,0.3)' } }
+  },
+  yAxis: {
+    axisLine: { lineStyle: { color: '#37474F' } },
+    axisLabel: { color: '#9E9E9E' },
+    splitLine: { lineStyle: { color: 'rgba(55,71,79,0.3)' } }
+  }
+};
+
+// ===== Chart 1: GMV Waterfall =====
+const chart1 = echarts.init(document.getElementById('chart1'));
+chart1.setOption({
+  ...darkTheme,
+  title: { text: 'GMV拆解瀑布图：各因素对GMV变化的贡献', left: 'center', top: 10, textStyle: { fontSize: 14, color: '#E0E0E0' } },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(params) {
+    const p = params[0];
+    const labels = ['上月GMV', '流量影响', '转化率影响', '客单价影响', '本月GMV'];
+    const vals = [1000, -100, -60, 8, 800];
+    return `<b>${labels[p.dataIndex]}</b><br/>GMV: <b>${vals[p.dataIndex]}万</b>`;
+  }},
+  grid: { left: 60, right: 40, top: 50, bottom: 40 },
+  xAxis: { type: 'category', data: ['上月GMV', '流量影响', '转化率影响', '客单价影响', '本月GMV'], ...darkTheme.xAxis },
+  yAxis: { type: 'value', name: '万元', ...darkTheme.yAxis },
+  series: [{
+    type: 'bar',
+    barWidth: '50%',
+    data: [
+      { value: 1000, itemStyle: { color: '#37474F' } },
+      { value: -100, itemStyle: { color: '#F44336' } },
+      { value: -60, itemStyle: { color: '#EF5350' } },
+      { value: 8, itemStyle: { color: '#4CAF50' } },
+      { value: 800, itemStyle: { color: '#37474F' } }
+    ],
+    label: {
+      show: true,
+      position: 'top',
+      formatter: function(p) { return p.value + '万'; },
+      color: '#9E9E9E',
+      fontSize: 12
+    }
+  }]
+});
+
+// ===== Chart 2: Channel Traffic =====
+const chart2 = echarts.init(document.getElementById('chart2'));
+chart2.setOption({
+  ...darkTheme,
+  title: { text: '渠道流量变化对比（上月 vs 本月）', left: 'center', top: 10, textStyle: { fontSize: 14, color: '#E0E0E0' } },
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['上月', '本月'], bottom: 10, textStyle: { color: '#9E9E9E' } },
+  grid: { left: 60, right: 40, top: 50, bottom: 50 },
+  xAxis: { type: 'category', data: ['自然搜索', '付费广告', '社交流量', '直接访问'], ...darkTheme.xAxis },
+  yAxis: { type: 'value', name: '万', ...darkTheme.yAxis },
+  series: [
+    {
+      name: '上月',
+      type: 'bar',
+      barGap: '20%',
+      data: [20, 15, 10, 5],
+      itemStyle: { color: '#37474F', borderRadius: [4, 4, 0, 0] }
+    },
+    {
+      name: '本月',
+      type: 'bar',
+      data: [
+        { value: 18, itemStyle: { color: '#FF9800' } },
+        { value: 10, itemStyle: { color: '#F44336' } },
+        { value: 12, itemStyle: { color: '#4CAF50' } },
+        { value: 5, itemStyle: { color: '#37474F' } }
+      ],
+      label: {
+        show: true,
+        position: 'top',
+        formatter: function(p) {
+          const changes = ['-10%', '-33%', '+20%', '0%'];
+          return changes[p.dataIndex];
+        },
+        color: function(p) {
+          const v = p.value;
+          const prev = [20, 15, 10, 5][p.dataIndex];
+          return v < prev ? '#F44336' : v > prev ? '#4CAF50' : '#9E9E9E';
+        },
+        fontSize: 12
+      }
+    }
+  ]
+});
+
+// ===== Chart 3: Funnel Comparison =====
+const chart3 = echarts.init(document.getElementById('chart3'));
+chart3.setOption({
+  ...darkTheme,
+  title: { text: '转化漏斗对比（上月 vs 本月）', left: 'center', top: 10, textStyle: { fontSize: 14, color: '#E0E0E0' } },
+  tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
+  legend: { data: ['上月', '本月'], bottom: 10, textStyle: { color: '#9E9E9E' } },
+  grid: { left: 60, right: 200, top: 50, bottom: 50 },
+  series: [
+    {
+      name: '上月',
+      type: 'funnel',
+      left: '10%',
+      top: 60,
+      bottom: 60,
+      width: '35%',
+      sort: 'descending',
+      gap: 4,
+      label: { show: true, position: 'inside', formatter: '{b}\n{c}%', color: '#E0E0E0', fontSize: 12 },
+      itemStyle: { borderColor: '#1A1A1A', borderWidth: 1 },
+      data: [
+        { value: 65, name: '访问→浏览', itemStyle: { color: '#37474F' } },
+        { value: 40, name: '浏览→加购', itemStyle: { color: '#455A64' } },
+        { value: 50, name: '加购→下单', itemStyle: { color: '#546E7A' } },
+        { value: 85, name: '下单→支付', itemStyle: { color: '#607D8B' } }
+      ]
+    },
+    {
+      name: '本月',
+      type: 'funnel',
+      left: '55%',
+      top: 60,
+      bottom: 60,
+      width: '35%',
+      sort: 'descending',
+      gap: 4,
+      label: { show: true, position: 'inside', formatter: '{b}\n{c}%', color: '#E0E0E0', fontSize: 12 },
+      itemStyle: { borderColor: '#1A1A1A', borderWidth: 1 },
+      data: [
+        { value: 60, name: '访问→浏览', itemStyle: { color: '#F44336' } },
+        { value: 35, name: '浏览→加购', itemStyle: { color: '#EF5350' } },
+        { value: 48, name: '加购→下单', itemStyle: { color: '#FF9800' } },
+        { value: 82, name: '下单→支付', itemStyle: { color: '#FFB74D' } }
+      ]
+    }
+  ]
+});
+
+// ===== Chart 4: User Type GMV =====
+const chart4 = echarts.init(document.getElementById('chart4'));
+chart4.setOption({
+  ...darkTheme,
+  title: { text: '用户类型GMV变化（新用户 vs 老用户）', left: 'center', top: 10, textStyle: { fontSize: 14, color: '#E0E0E0' } },
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['上月', '本月'], bottom: 10, textStyle: { color: '#9E9E9E' } },
+  grid: { left: 60, right: 40, top: 50, bottom: 50 },
+  xAxis: { type: 'category', data: ['新用户', '老用户'], ...darkTheme.xAxis },
+  yAxis: { type: 'value', name: '万元', ...darkTheme.yAxis },
+  series: [
+    {
+      name: '上月',
+      type: 'bar',
+      barGap: '30%',
+      data: [300, 700],
+      itemStyle: { color: '#37474F', borderRadius: [4, 4, 0, 0] }
+    },
+    {
+      name: '本月',
+      type: 'bar',
+      data: [
+        { value: 200, itemStyle: { color: '#F44336' } },
+        { value: 600, itemStyle: { color: '#EF5350' } }
+      ],
+      label: {
+        show: true,
+        position: 'top',
+        formatter: function(p) {
+          return p.dataIndex === 0 ? '-33%' : '-14%';
+        },
+        color: '#F44336',
+        fontSize: 13,
+        fontWeight: 'bold'
+      }
+    }
+  ]
+});
+
+// ===== Chart 5: Category GMV =====
+const chart5 = echarts.init(document.getElementById('chart5'));
+chart5.setOption({
+  ...darkTheme,
+  title: { text: '各品类GMV变化对比', left: 'center', top: 10, textStyle: { fontSize: 14, color: '#E0E0E0' } },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['上月', '本月'], bottom: 10, textStyle: { color: '#9E9E9E' } },
+  grid: { left: 60, right: 40, top: 50, bottom: 50 },
+  xAxis: { type: 'category', data: ['外套', '裤装', 'T恤', '配饰'], ...darkTheme.xAxis },
+  yAxis: { type: 'value', name: '万元', ...darkTheme.yAxis },
+  series: [
+    {
+      name: '上月',
+      type: 'bar',
+      barGap: '20%',
+      data: [400, 250, 200, 150],
+      itemStyle: { color: '#37474F', borderRadius: [4, 4, 0, 0] }
+    },
+    {
+      name: '本月',
+      type: 'bar',
+      data: [
+        { value: 350, itemStyle: { color: '#FF9800' } },
+        { value: 200, itemStyle: { color: '#F44336' } },
+        { value: 150, itemStyle: { color: '#F44336' } },
+        { value: 100, itemStyle: { color: '#B71C1C' } }
+      ],
+      label: {
+        show: true,
+        position: 'top',
+        formatter: function(p) {
+          const changes = ['-12.5%', '-20%', '-25%', '-33%'];
+          return changes[p.dataIndex];
+        },
+        color: '#F44336',
+        fontSize: 12,
+        fontWeight: 'bold'
+      }
+    }
+  ]
+});
+
+// ===== Chart 6: Recovery Comparison =====
+const chart6 = echarts.init(document.getElementById('chart6'));
+chart6.setOption({
+  ...darkTheme,
+  title: { text: '恢复效果对比：下滑时 vs 一个月后', left: 'center', top: 10, textStyle: { fontSize: 14, color: '#E0E0E0' } },
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['正常水平', '下滑时', '一个月后'], bottom: 10, textStyle: { color: '#9E9E9E' } },
+  grid: { left: 80, right: 40, top: 50, bottom: 50 },
+  xAxis: { type: 'category', data: ['GMV(万)', '流量(万)', '转化率(%)'], ...darkTheme.xAxis },
+  yAxis: { type: 'value', ...darkTheme.yAxis },
+  series: [
+    {
+      name: '正常水平',
+      type: 'bar',
+      barGap: '10%',
+      data: [1000, 50, 4],
+      itemStyle: { color: '#37474F', borderRadius: [4, 4, 0, 0] }
+    },
+    {
+      name: '下滑时',
+      type: 'bar',
+      data: [
+        { value: 800, itemStyle: { color: '#F44336' } },
+        { value: 45, itemStyle: { color: '#F44336' } },
+        { value: 3.5, itemStyle: { color: '#F44336' } }
+      ]
+    },
+    {
+      name: '一个月后',
+      type: 'bar',
+      data: [
+        { value: 950, itemStyle: { color: '#4CAF50' } },
+        { value: 48, itemStyle: { color: '#4CAF50' } },
+        { value: 3.8, itemStyle: { color: '#4CAF50' } }
+      ],
+      label: {
+        show: true,
+        position: 'top',
+        formatter: function(p) {
+          const recovery = ['95%', '96%', '95%'];
+          return '恢复' + recovery[p.dataIndex];
+        },
+        color: '#4CAF50',
+        fontSize: 12,
+        fontWeight: 'bold'
+      }
+    }
+  ]
+});
+
+// ===== Resize Handler =====
+window.addEventListener('resize', () => {
+  chart1.resize();
+  chart2.resize();
+  chart3.resize();
+  chart4.resize();
+  chart5.resize();
+  chart6.resize();
+});
+
+// ===== Lazy Init Charts on Scroll =====
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      const chartMap = { chart1, chart2, chart3, chart4, chart5, chart6 };
+      if (chartMap[id]) chartMap[id].resize();
+    }
+  });
+}, { threshold: 0.1 });
+
+['chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) chartObserver.observe(el);
+});
+</script>
+
+</body>
+</html>

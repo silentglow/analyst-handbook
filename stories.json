@@ -1,0 +1,633 @@
+[
+  {
+    "id": "story-01",
+    "num": "01",
+    "slug": "gmv-up-profit-down",
+    "title": "GMV涨了，利润降低了",
+    "subtitle": "表面增长与真实价值为什么会背离？",
+    "category": "经营诊断",
+    "tags": [
+      "指标拆解",
+      "利润分析",
+      "促销评估"
+    ],
+    "difficulty": "入门",
+    "duration": 12,
+    "source": "story-01-gmv-up-profit-down.html",
+    "output": "gmv-up-profit-down.html",
+    "related_chapters": [
+      "ch04",
+      "ch09",
+      "ch14",
+      "ch20",
+      "ch24"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-02",
+    "num": "02",
+    "slug": "reports-business-does-not-use",
+    "title": "报表做了100张，业务说没用",
+    "subtitle": "从“交付报表”转向“支持决策”。",
+    "category": "指标与治理",
+    "tags": [
+      "需求分析",
+      "指标优先级",
+      "报表设计"
+    ],
+    "difficulty": "入门",
+    "duration": 11,
+    "source": "story-02-reports-business-does-not-use.html",
+    "output": "reports-business-does-not-use.html",
+    "related_chapters": [
+      "guide",
+      "ch03",
+      "ch15",
+      "ch02",
+      "ch13",
+      "ml01",
+      "ml04"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-03",
+    "num": "03",
+    "slug": "data-definition-conflict",
+    "title": "数据对不上，谁在说谎？",
+    "subtitle": "追溯来源、统一口径，找到数据冲突的真相。",
+    "category": "指标与治理",
+    "tags": [
+      "数据口径",
+      "数据质量",
+      "核对流程"
+    ],
+    "difficulty": "入门",
+    "duration": 12,
+    "source": "story-03-data-definition-conflict.html",
+    "output": "data-definition-conflict.html",
+    "related_chapters": [
+      "ch03",
+      "ch10",
+      "ch23",
+      "ch13",
+      "ch21"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-04",
+    "num": "04",
+    "slug": "conversion-rate-drop",
+    "title": "转化率跌了，问题在哪？",
+    "subtitle": "用漏斗和维度下钻定位转化问题。",
+    "category": "经营诊断",
+    "tags": [
+      "漏斗分析",
+      "异动排查",
+      "行为分析"
+    ],
+    "difficulty": "入门",
+    "duration": 13,
+    "source": "story-04-conversion-rate-drop.html",
+    "output": "conversion-rate-drop.html",
+    "related_chapters": [
+      "ch04",
+      "ch18"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-05",
+    "num": "05",
+    "slug": "increase-average-order-value",
+    "title": "客单价提升的三个秘密",
+    "subtitle": "从连带率、门槛和组合策略寻找增长空间。",
+    "category": "商品与经营",
+    "tags": [
+      "客单价",
+      "连带率",
+      "策略设计"
+    ],
+    "difficulty": "进阶",
+    "duration": 13,
+    "source": "story-05-increase-average-order-value.html",
+    "output": "increase-average-order-value.html",
+    "related_chapters": [
+      "ch09",
+      "ch14"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-06",
+    "num": "06",
+    "slug": "repurchase-user-story",
+    "title": "复购率背后的用户故事",
+    "subtitle": "从整体复购率进入不同用户群的行为差异。",
+    "category": "用户分析",
+    "tags": [
+      "复购率",
+      "用户分群",
+      "行为分析"
+    ],
+    "difficulty": "进阶",
+    "duration": 13,
+    "source": "story-06-repurchase-user-story.html",
+    "output": "repurchase-user-story.html",
+    "related_chapters": [
+      "ch07",
+      "ch08"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-07",
+    "num": "07",
+    "slug": "kpi-metric-conflict",
+    "title": "一个指标引发的血案",
+    "subtitle": "当单一KPI扭曲团队行为，如何重建指标体系？",
+    "category": "指标与治理",
+    "tags": [
+      "指标体系",
+      "KPI",
+      "反向指标"
+    ],
+    "difficulty": "进阶",
+    "duration": 12,
+    "source": "story-07-kpi-metric-conflict.html",
+    "output": "kpi-metric-conflict.html",
+    "related_chapters": [
+      "ch03",
+      "ch17",
+      "guide",
+      "ch16",
+      "ch21"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-08",
+    "num": "08",
+    "slug": "identify-vip-users",
+    "title": "谁是你的VIP用户？",
+    "subtitle": "用RFM和价值分层识别真正的高价值用户。",
+    "category": "用户分析",
+    "tags": [
+      "RFM",
+      "用户价值",
+      "分层运营"
+    ],
+    "difficulty": "入门",
+    "duration": 12,
+    "source": "story-08-identify-vip-users.html",
+    "output": "identify-vip-users.html",
+    "related_chapters": [
+      "ch07"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-09",
+    "num": "09",
+    "slug": "new-user-retention",
+    "title": "新用户为什么留不住？",
+    "subtitle": "沿着新用户路径找到激活与留存的断点。",
+    "category": "用户分析",
+    "tags": [
+      "新用户",
+      "激活",
+      "留存分析"
+    ],
+    "difficulty": "入门",
+    "duration": 12,
+    "source": "story-09-new-user-retention.html",
+    "output": "new-user-retention.html",
+    "related_chapters": [
+      "ch08",
+      "ch23"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-10",
+    "num": "10",
+    "slug": "existing-user-churn",
+    "title": "老用户正在悄悄离开",
+    "subtitle": "先定义“多久未购买”，再讨论征兆、预警和召回边界。",
+    "category": "用户分析",
+    "tags": [
+      "流失口径",
+      "观察窗口",
+      "召回策略"
+    ],
+    "difficulty": "挑战",
+    "duration": 15,
+    "source": "story-10-existing-user-churn.html",
+    "output": "existing-user-churn.html",
+    "related_chapters": [
+      "ch08",
+      "ch18"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-11",
+    "num": "11",
+    "slug": "customer-lifetime-value",
+    "title": "用户生命周期价值几何？",
+    "subtitle": "从LTV计算到渠道ROI和用户分层。",
+    "category": "用户分析",
+    "tags": [
+      "LTV",
+      "渠道质量",
+      "ROI"
+    ],
+    "difficulty": "进阶",
+    "duration": 14,
+    "source": "story-11-customer-lifetime-value.html",
+    "output": "customer-lifetime-value.html",
+    "related_chapters": [
+      "ch08",
+      "ch09",
+      "ch19"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-12",
+    "num": "12",
+    "slug": "user-personas",
+    "title": "千人千面的用户画像",
+    "subtitle": "把分散标签组织成可行动的用户画像。",
+    "category": "用户分析",
+    "tags": [
+      "用户画像",
+      "聚类",
+      "分层运营"
+    ],
+    "difficulty": "进阶",
+    "duration": 14,
+    "source": "story-12-user-personas.html",
+    "output": "user-personas.html",
+    "related_chapters": [
+      "ch07"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-13",
+    "num": "13",
+    "slug": "product-abc-analysis",
+    "title": "20%的商品贡献80%的GMV",
+    "subtitle": "用ABC与XYZ分析优化商品结构。",
+    "category": "商品与经营",
+    "tags": [
+      "ABC分类",
+      "商品结构",
+      "帕累托"
+    ],
+    "difficulty": "进阶",
+    "duration": 13,
+    "source": "story-13-product-abc-analysis.html",
+    "output": "product-abc-analysis.html",
+    "related_chapters": [
+      "ch14",
+      "ml03"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-14",
+    "num": "14",
+    "slug": "how-hit-products-emerge",
+    "title": "爆款是怎么炼成的？",
+    "subtitle": "从商品特征、流量与转化寻找爆款规律。",
+    "category": "商品与经营",
+    "tags": [
+      "商品分析",
+      "爆款",
+      "转化"
+    ],
+    "difficulty": "进阶",
+    "duration": 13,
+    "source": "story-14-how-hit-products-emerge.html",
+    "output": "how-hit-products-emerge.html",
+    "related_chapters": [
+      "ch14"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-15",
+    "num": "15",
+    "slug": "hidden-cost-of-inventory",
+    "title": "库存积压的隐形损失",
+    "subtitle": "把库存周转、资金占用和损耗放进同一张账。",
+    "category": "商品与经营",
+    "tags": [
+      "库存周转",
+      "成本",
+      "经营效率"
+    ],
+    "difficulty": "进阶",
+    "duration": 11,
+    "source": "story-15-hidden-cost-of-inventory.html",
+    "output": "hidden-cost-of-inventory.html",
+    "related_chapters": [
+      "ch14",
+      "ml02",
+      "ml03"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-16",
+    "num": "16",
+    "slug": "new-product-pricing",
+    "title": "新品上架，如何定价？",
+    "subtitle": "结合竞品、弹性和利润模拟形成定价建议。",
+    "category": "商品与经营",
+    "tags": [
+      "定价",
+      "价格弹性",
+      "利润模拟"
+    ],
+    "difficulty": "进阶",
+    "duration": 14,
+    "source": "story-16-new-product-pricing.html",
+    "output": "new-product-pricing.html",
+    "related_chapters": [
+      "ch05",
+      "ch09",
+      "ml03"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-17",
+    "num": "17",
+    "slug": "double-eleven-review",
+    "title": "双11复盘：GMV达标就成功了吗？",
+    "subtitle": "从增长质量、利润和用户行为重新评价活动。",
+    "category": "活动与增长",
+    "tags": [
+      "活动复盘",
+      "GMV",
+      "增长质量"
+    ],
+    "difficulty": "综合",
+    "duration": 15,
+    "source": "story-17-double-eleven-review.html",
+    "output": "double-eleven-review.html",
+    "related_chapters": [
+      "ch06",
+      "ch22",
+      "ml02"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-18",
+    "num": "18",
+    "slug": "coupon-incrementality",
+    "title": "优惠券发还是不发？",
+    "subtitle": "区分被补贴的自然转化与真正增量。",
+    "category": "活动与增长",
+    "tags": [
+      "优惠券",
+      "增量评估",
+      "实验设计"
+    ],
+    "difficulty": "进阶",
+    "duration": 12,
+    "source": "story-18-coupon-incrementality.html",
+    "output": "coupon-incrementality.html",
+    "related_chapters": [
+      "ch05",
+      "ch11",
+      "ch12",
+      "ch22",
+      "ml01"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-19",
+    "num": "19",
+    "slug": "failed-live-commerce",
+    "title": "一场失败的直播带货",
+    "subtitle": "从直播漏斗定位流量、停留和转化问题。",
+    "category": "活动与增长",
+    "tags": [
+      "直播",
+      "漏斗分析",
+      "转化率"
+    ],
+    "difficulty": "入门",
+    "duration": 11,
+    "source": "story-19-failed-live-commerce.html",
+    "output": "failed-live-commerce.html",
+    "related_chapters": [
+      "ch17",
+      "ch18",
+      "ml04"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-20",
+    "num": "20",
+    "slug": "membership-day-growth",
+    "title": "会员日活动的增长密码",
+    "subtitle": "拆解一次会员活动增长来自哪里。",
+    "category": "活动与增长",
+    "tags": [
+      "会员活动",
+      "增长拆解",
+      "用户行为"
+    ],
+    "difficulty": "进阶",
+    "duration": 11,
+    "source": "story-20-membership-day-growth.html",
+    "output": "membership-day-growth.html",
+    "related_chapters": [
+      "ch06",
+      "ch22"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-21",
+    "num": "21",
+    "slug": "advertising-roi",
+    "title": "广告投放的钱花哪了？",
+    "subtitle": "比较渠道ROI与用户质量，重新分配预算。",
+    "category": "流量与投放",
+    "tags": [
+      "广告投放",
+      "ROI",
+      "预算优化"
+    ],
+    "difficulty": "进阶",
+    "duration": 14,
+    "source": "story-21-advertising-roi.html",
+    "output": "advertising-roi.html",
+    "related_chapters": [
+      "ch10",
+      "ch22",
+      "ch24"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-22",
+    "num": "22",
+    "slug": "multi-touch-attribution",
+    "title": "用户从哪里来？",
+    "subtitle": "理解多触点归因与渠道协同。",
+    "category": "流量与投放",
+    "tags": [
+      "归因分析",
+      "用户触点",
+      "渠道协同"
+    ],
+    "difficulty": "综合",
+    "duration": 14,
+    "source": "story-22-multi-touch-attribution.html",
+    "output": "multi-touch-attribution.html",
+    "related_chapters": [
+      "ch12",
+      "ch22"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-23",
+    "num": "23",
+    "slug": "organic-vs-paid-traffic",
+    "title": "自然流量 vs 付费流量",
+    "subtitle": "比较两类流量的效率、质量和长期价值。",
+    "category": "流量与投放",
+    "tags": [
+      "流量结构",
+      "获客成本",
+      "长期价值"
+    ],
+    "difficulty": "进阶",
+    "duration": 12,
+    "source": "story-23-organic-vs-paid-traffic.html",
+    "output": "organic-vs-paid-traffic.html",
+    "related_chapters": [
+      "ch14",
+      "ch24"
+    ],
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "id": "story-24",
+    "num": "24",
+    "slug": "sales-down-diagnosis",
+    "title": "销售额下滑20%，如何力挽狂澜？",
+    "subtitle": "从公式、流量、转化、用户和商品完成系统诊断。",
+    "category": "经营诊断",
+    "tags": [
+      "销售分析",
+      "异动归因",
+      "策略制定"
+    ],
+    "difficulty": "综合",
+    "duration": 14,
+    "source": "story-24-sales-down-diagnosis.html",
+    "output": "sales-down-diagnosis.html",
+    "related_chapters": [
+      "ch02",
+      "ch04",
+      "ch18",
+      "ch20",
+      "ch15",
+      "ch21"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-25",
+    "num": "25",
+    "slug": "annual-growth-strategy",
+    "title": "年度增长策略制定",
+    "subtitle": "从复盘、目标、策略到资源拆解完成年度规划。",
+    "category": "活动与增长",
+    "tags": [
+      "增长策略",
+      "目标拆解",
+      "年度规划"
+    ],
+    "difficulty": "综合",
+    "duration": 15,
+    "source": "story-25-annual-growth-strategy.html",
+    "output": "annual-growth-strategy.html",
+    "related_chapters": [
+      "ch06",
+      "ch09",
+      "ch16",
+      "ch24",
+      "ch19",
+      "ch20"
+    ],
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "id": "story-26",
+    "num": "26",
+    "slug": "model-score-trap",
+    "title": "0.94 分的模型，为什么被叫停？",
+    "subtitle": "分数漂亮、名单精准，运营却发现超时订单更多了。问题究竟藏在哪里？",
+    "category": "机器学习决策",
+    "tags": [
+      "模型失败",
+      "数据泄漏",
+      "行动容量",
+      "上线复盘"
+    ],
+    "difficulty": "进阶",
+    "duration": 16,
+    "source": "story-26-model-score-trap.html",
+    "output": "model-score-trap.html",
+    "related_chapters": [
+      "ml01",
+      "ml02",
+      "ml04"
+    ],
+    "featured": true,
+    "status": "published",
+    "featured_rank": 0,
+    "visual": "assets/visuals/story-26-incident-console.svg",
+    "visual_alt": "模型离线得分优秀，但运营容量不足且投诉上升的事故控制台"
+  }
+]

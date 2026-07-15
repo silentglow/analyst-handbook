@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" role="img" aria-labelledby="title desc">
+<title id="title">模型失败的六层故障栈与处置闭环</title>
+<desc id="desc">模型失败可能来自目标、数据、验证、行动、环境或指标六层。出现事故后应先止损和降级，再保存现场、定位层级并小流量重测。</desc>
+<defs>
+ <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#100e13"/><stop offset="1" stop-color="#090b10"/></linearGradient>
+ <linearGradient id="stack4" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fb7185"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+ <marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#64748b"/></marker>
+ <style>text{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.ey{font-size:11px;font-weight:700;letter-spacing:2px;fill:#938b99}.h{font-size:28px;font-weight:800;fill:#f8fafc}.s{font-size:14px;fill:#aaa1af}.num{font-size:11px;font-weight:800}.st{font-size:19px;font-weight:800;fill:#fff}.sp{font-size:12px;fill:#b6aeb8}.flow-num{font-size:11px;font-weight:800}.flow-title{font-size:16px;font-weight:800;fill:#fff}.flow-copy{font-size:12px;fill:#9da6b5}.mono{font-family:ui-monospace,SFMono-Regular,monospace}</style>
+</defs>
+<rect width="720" height="720" rx="32" fill="url(#bg4)"/>
+<text x="42" y="45" class="ey">MODEL INCIDENT REVIEW</text><text x="42" y="82" class="h">模型“失败”不是一个单一问题</text><text x="42" y="108" class="s">先判断故障发生在哪一层，才知道该修模型，还是重写问题。</text>
+
+<g transform="translate(42 145)"><text x="0" y="0" class="num mono" fill="#fb8da0">01 · FAILURE STACK</text>
+<g transform="translate(0 21)"><rect width="310" height="62" rx="14" fill="#fb7185" fill-opacity=".15" stroke="#fb7185" stroke-opacity=".5"/><text x="18" y="26" class="st">目标失败</text><text x="18" y="47" class="sp">预测对了错误的结果</text><text x="283" y="38" text-anchor="end" class="num mono" fill="#fb8da0">WHY</text></g>
+<g transform="translate(8 91)"><rect width="302" height="62" rx="14" fill="#f97378" fill-opacity=".12" stroke="#f97378" stroke-opacity=".42"/><text x="18" y="26" class="st">数据失败</text><text x="18" y="47" class="sp">线上拿不到离线信息</text><text x="275" y="38" text-anchor="end" class="num mono" fill="#fb8da0">WHEN</text></g>
+<g transform="translate(16 161)"><rect width="294" height="62" rx="14" fill="#f77f67" fill-opacity=".105" stroke="#f77f67" stroke-opacity=".38"/><text x="18" y="26" class="st">验证失败</text><text x="18" y="47" class="sp">测试环境比现实简单</text><text x="267" y="38" text-anchor="end" class="num mono" fill="#f9a084">TEST</text></g>
+<g transform="translate(24 231)"><rect width="286" height="62" rx="14" fill="#f58b55" fill-opacity=".095" stroke="#f58b55" stroke-opacity=".35"/><text x="18" y="26" class="st">行动失败</text><text x="18" y="47" class="sp">名单没人用或无法处理</text><text x="259" y="38" text-anchor="end" class="num mono" fill="#f7a873">ACT</text></g>
+<g transform="translate(32 301)"><rect width="278" height="62" rx="14" fill="#f39742" fill-opacity=".085" stroke="#f39742" stroke-opacity=".32"/><text x="18" y="26" class="st">环境失败</text><text x="18" y="47" class="sp">模型改变了预测世界</text><text x="251" y="38" text-anchor="end" class="num mono" fill="#f8b86a">DRIFT</text></g>
+<g transform="translate(40 371)"><rect width="270" height="62" rx="14" fill="#f5a524" fill-opacity=".075" stroke="#f5a524" stroke-opacity=".3"/><text x="18" y="26" class="st">指标失败</text><text x="18" y="47" class="sp">平均分掩盖局部伤害</text><text x="243" y="38" text-anchor="end" class="num mono" fill="#f7c45c">METRIC</text></g>
+</g>
+
+<g transform="translate(397 145)"><text x="0" y="0" class="num mono" fill="#5eead4">02 · INCIDENT LOOP</text>
+<path d="M135 69C201 80 238 133 228 196M218 195l10 10 7-13M222 273C205 338 154 366 91 357M94 349l-12 8 12 8M39 320C-8 277-15 220 8 167M13 173L8 159l-10 10M36 91C65 61 99 52 135 59" fill="none" stroke="#64748b" stroke-width="2.5" marker-end="url(#a4)"/>
+<g transform="translate(74 29)"><circle cx="51" cy="51" r="49" fill="#fb7185" fill-opacity=".10" stroke="#fb7185" stroke-opacity=".45"/><text x="51" y="45" text-anchor="middle" class="flow-num" fill="#fb8da0">01</text><text x="51" y="68" text-anchor="middle" class="flow-title">先止损</text></g>
+<g transform="translate(169 158)"><circle cx="51" cy="51" r="49" fill="#fbbf24" fill-opacity=".09" stroke="#fbbf24" stroke-opacity=".4"/><text x="51" y="45" text-anchor="middle" class="flow-num" fill="#ffd45f">02</text><text x="51" y="68" text-anchor="middle" class="flow-title">保存现场</text></g>
+<g transform="translate(69 293)"><circle cx="51" cy="51" r="49" fill="#60a5fa" fill-opacity=".09" stroke="#60a5fa" stroke-opacity=".4"/><text x="51" y="45" text-anchor="middle" class="flow-num" fill="#88c4ff">03</text><text x="51" y="68" text-anchor="middle" class="flow-title">定位层级</text></g>
+<g transform="translate(-18 158)"><circle cx="51" cy="51" r="49" fill="#5eead4" fill-opacity=".09" stroke="#5eead4" stroke-opacity=".4"/><text x="51" y="45" text-anchor="middle" class="flow-num" fill="#83f4e2">04</text><text x="51" y="68" text-anchor="middle" class="flow-title">小流量重测</text></g>
+<g transform="translate(54 162)"><rect width="132" height="92" rx="18" fill="#10151b" stroke="#fff" stroke-opacity=".09"/><text x="66" y="34" text-anchor="middle" class="flow-num mono" fill="#8792a5">SAFE MODE</text><text x="66" y="60" text-anchor="middle" class="flow-title">降级到规则</text><text x="66" y="80" text-anchor="middle" class="flow-copy">先保护业务</text></g></g>
+
+<g transform="translate(42 625)"><rect width="636" height="54" rx="17" fill="#13161c" stroke="#fff" stroke-opacity=".08"/><rect x="1" y="1" width="8" height="52" rx="6" fill="url(#stack4)"/><text x="27" y="24" class="num mono" fill="#fb8da0">判断原则</text><text x="27" y="43" class="flow-copy">指标掉了不等于“换个更复杂的模型”；业务受损时，第一动作永远是止损。</text></g>
+</svg>

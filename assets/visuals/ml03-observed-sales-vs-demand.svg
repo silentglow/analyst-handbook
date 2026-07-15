@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" role="img" aria-labelledby="title desc">
+<title id="title">可观察销量与潜在需求的差异</title>
+<desc id="desc">潜在需求在促销期间继续上升，但库存上限造成缺货，可观察销量被截断并快速降至零，因此直接拿销量训练会错误地认为需求下降。</desc>
+<defs>
+ <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111018"/><stop offset="1" stop-color="#0b0d13"/></linearGradient>
+ <linearGradient id="area3" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8b5cf6" stop-opacity=".42"/><stop offset="1" stop-color="#8b5cf6" stop-opacity=".02"/></linearGradient>
+ <pattern id="stripe3" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="12" fill="#fb7185" fill-opacity=".09"/></pattern>
+ <filter id="glow3"><feGaussianBlur stdDeviation="5" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <style>text{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.ey{font-size:11px;font-weight:700;letter-spacing:2px;fill:#8d93a5}.h{font-size:28px;font-weight:800;fill:#f8fafc}.s{font-size:14px;fill:#a2a8b6}.axis{font-size:12px;fill:#727a8c}.tag{font-size:12px;font-weight:700}.call-title{font-size:18px;font-weight:800;fill:#fff}.call-copy{font-size:13px;fill:#adb3c0}.mono{font-family:ui-monospace,SFMono-Regular,monospace}</style>
+</defs>
+<rect width="720" height="720" rx="32" fill="url(#bg3)"/>
+<text x="42" y="45" class="ey">DEMAND IS NOT OBSERVED DIRECTLY</text><text x="42" y="82" class="h">销量下降，不一定是需求下降</text><text x="42" y="108" class="s">缺货会把真实需求截断；模型只能看见“卖出了多少”。</text>
+
+<g transform="translate(60 150)"><rect width="600" height="356" rx="22" fill="#0a0c12" stroke="#fff" stroke-opacity=".08"/><path d="M58 48V300H560" fill="none" stroke="#697083" stroke-width="1.5"/><g stroke="#fff" stroke-opacity=".055"><path d="M58 90H560M58 150H560M58 210H560M58 270H560"/><path d="M158 48V300M258 48V300M358 48V300M458 48V300"/></g>
+<rect x="337" y="48" width="132" height="252" fill="url(#stripe3)"/><text x="403" y="71" text-anchor="middle" class="tag mono" fill="#fb8fa1">缺货区间</text>
+<path d="M58 276 C105 264 134 242 171 229 C210 215 239 184 280 164 C320 143 341 110 379 88 C418 66 459 81 498 63 C527 50 545 55 560 49 L560 300 L58 300Z" fill="url(#area3)"/>
+<path d="M58 276 C105 264 134 242 171 229 C210 215 239 184 280 164 C320 143 341 110 379 88 C418 66 459 81 498 63 C527 50 545 55 560 49" fill="none" stroke="#c4b5fd" stroke-width="4" stroke-dasharray="9 8" stroke-linecap="round" filter="url(#glow3)"/>
+<path d="M58 276 C105 265 134 243 171 230 C210 216 239 185 280 165 C307 151 328 140 337 136 L337 136 C355 137 370 137 386 137 L386 137 L386 288 C411 291 436 292 469 293 C505 294 532 292 560 292" fill="none" stroke="#5eead4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M337 136H386" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+<circle cx="386" cy="137" r="7" fill="#fbbf24"/><path d="M386 137V288" stroke="#fb7185" stroke-width="2" stroke-dasharray="4 5"/>
+<text x="45" y="54" text-anchor="end" class="axis">高</text><text x="45" y="296" text-anchor="end" class="axis">低</text><text x="58" y="329" class="axis">活动前</text><text x="310" y="329" text-anchor="middle" class="axis">活动开始</text><text x="560" y="329" text-anchor="end" class="axis">活动后</text><text x="8" y="178" text-anchor="middle" class="axis" transform="rotate(-90 8 178)">商品需求 / 销量</text>
+<g transform="translate(95 25)"><line x1="0" y1="0" x2="35" y2="0" stroke="#c4b5fd" stroke-width="4" stroke-dasharray="8 6"/><text x="44" y="5" class="tag" fill="#d8ceff">潜在需求（无法直接观察）</text></g><g transform="translate(318 25)"><line x1="0" y1="0" x2="35" y2="0" stroke="#5eead4" stroke-width="4"/><text x="44" y="5" class="tag" fill="#8ef5e5">可观察销量</text></g>
+</g>
+
+<g transform="translate(60 535)"><rect width="600" height="128" rx="20" fill="#17131e" stroke="#8b5cf6" stroke-opacity=".26"/><g transform="translate(21 25)"><circle cx="33" cy="34" r="32" fill="#8b5cf6" fill-opacity=".14"/><path d="M18 35h30M33 20v30" stroke="#b9a4ff" stroke-width="4" stroke-linecap="round"/><circle cx="33" cy="34" r="7" fill="#b9a4ff"/></g><text x="100" y="40" class="call-title">模型看到：销量突然归零</text><text x="100" y="67" class="call-copy">模型容易学成“促销后需求下滑”，实际是货卖完了。</text><text x="100" y="94" class="call-copy">正确处理：标记缺货时段，估计需求区间，并单独评估。</text><g transform="translate(482 23)"><rect width="92" height="82" rx="16" fill="#fb7185" fill-opacity=".07" stroke="#fb7185" stroke-opacity=".22"/><text x="46" y="34" text-anchor="middle" class="tag mono" fill="#ff9aaa">OBSERVED</text><text x="46" y="64" text-anchor="middle" class="call-title">≠ TRUE</text></g></g>
+<text x="360" y="694" text-anchor="middle" class="tag" fill="#a79ebc">先问“数据是怎样产生的”，再问“用哪个算法”</text>
+</svg>

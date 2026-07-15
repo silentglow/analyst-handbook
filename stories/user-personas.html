@@ -1,0 +1,2864 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>故事12：千人千面的用户画像 — 数据分析故事</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CSS VARIABLES & RESET
+   ============================================================ */
+:root {
+  --primary: #0033A0;
+  --primary-light: #3366CC;
+  --primary-dark: #001F66;
+  --accent: #FF6600;
+  --accent-light: #FF8833;
+  --text: #333333;
+  --text-light: #666666;
+  --text-muted: #999999;
+  --bg: #FFFFFF;
+  --bg-card: #F7F8FA;
+  --bg-section: #FAFBFC;
+  --border: #E0E0E0;
+  --border-subtle: #EEEEEE;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+  --radius: 4px;
+  --font-serif: 'Noto Serif SC', 'Georgia', serif;
+  --font-sans: 'Noto Sans SC', 'Helvetica Neue', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.9;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  background-image:
+    linear-gradient(rgba(0, 51, 160, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 51, 160, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+html { scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg); }
+
+/* Strong/Bold text */
+strong, b {
+  font-weight: 600;
+  color: var(--primary-light);
+  letter-spacing: 0.01em;
+}
+
+/* Inline highlight for key data terms */
+.highlight-term {
+  background: linear-gradient(180deg, transparent 55%, rgba(0, 51, 160, 0.15) 55%);
+  padding: 0 3px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--primary);
+  z-index: 1000;
+  transition: width 0.1s linear;
+}
+
+/* ============================================================
+   NAVIGATION DOTS
+   ============================================================ */
+.nav-dots {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border: none;
+  outline: none;
+}
+
+.nav-dot.active {
+  background: var(--primary);
+  transform: scale(1.3);
+}
+
+.nav-dot:hover {
+  background: var(--accent);
+  transform: scale(1.2);
+}
+
+.nav-dot::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  font-family: var(--font-sans);
+}
+
+.nav-dot:hover::after { opacity: 1; }
+
+/* ============================================================
+   MAIN CONTAINER
+   ============================================================ */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 32px;
+  position: relative;
+}
+
+.hero-number {
+  font-family: var(--font-serif);
+  font-size: clamp(120px, 20vw, 200px);
+  font-weight: 900;
+  color: var(--primary);
+  opacity: 0.08;
+  line-height: 1;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+.hero-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 500px;
+  line-height: 1.8;
+  position: relative;
+}
+
+.hero-tags {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-tag {
+  font-size: 12px;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-light);
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 40px;
+  margin-top: 48px;
+  position: relative;
+}
+
+.hero-meta-item {
+  text-align: center;
+}
+
+.hero-meta-value {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+  display: block;
+}
+
+.hero-meta-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 3px;
+  animation: bounce 2s infinite;
+}
+
+.hero-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ============================================================
+   SECTION STYLES
+   ============================================================ */
+.section {
+  padding: 100px 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+
+.section-number {
+  font-family: var(--font-serif);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 3px;
+  background: var(--primary);
+  margin-top: 16px;
+}
+
+.section p {
+  font-size: 15px;
+  color: var(--text-light);
+  margin-bottom: 20px;
+  line-height: 2;
+}
+
+/* ============================================================
+   TOC SECTION
+   ============================================================ */
+.toc {
+  padding: 80px 0;
+}
+
+.toc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 40px;
+}
+
+.toc-item {
+  padding: 24px;
+  background: var(--bg-card);
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: block;
+}
+
+.toc-item:hover {
+  border-left-color: var(--primary);
+  background: var(--bg-section);
+}
+
+.toc-item-num {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  opacity: 0.3;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.toc-item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   CALLOUT BLOCKS
+   ============================================================ */
+.callout {
+  padding: 20px 24px;
+  margin: 28px 0;
+  border-left: 4px solid var(--primary);
+  background: var(--bg-card);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.callout-danger {
+  border-left-color: #CC0000;
+  background: #FFF5F5;
+}
+
+.callout-warning {
+  border-left-color: var(--accent);
+  background: #FFF8F0;
+}
+
+.callout-tip {
+  border-left-color: var(--primary);
+  background: #F0F4FF;
+}
+
+.callout-info {
+  border-left-color: var(--text-muted);
+  background: var(--bg-card);
+}
+
+.callout-question {
+  border-left-color: var(--primary);
+  background: #F0F4FF;
+}
+
+.callout-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.callout p {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.callout p:last-child { margin-bottom: 0; }
+
+/* Dialogue callout */
+.dialogue {
+  padding: 20px 24px;
+  margin: 20px 0;
+  border-left: 4px solid var(--primary);
+  background: var(--bg-card);
+  font-style: italic;
+}
+
+.dialogue .speaker {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ============================================================
+   CODE BLOCKS
+   ============================================================ */
+.code-block {
+  background: #1E1E2E;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 28px 0;
+  box-shadow: var(--shadow);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #181825;
+  border-bottom: 1px solid #313244;
+}
+
+.code-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.code-dot:nth-child(1) { background: #FF5F56; }
+.code-dot:nth-child(2) { background: #FFBD2E; }
+.code-dot:nth-child(3) { background: #27C93F; }
+
+.code-lang {
+  font-size: 11px;
+  color: #6C7086;
+  margin-left: 8px;
+  font-family: var(--font-sans);
+  letter-spacing: 1px;
+}
+
+.code-block pre {
+  padding: 20px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  color: #CDD6F4;
+}
+
+.code-block .comment { color: #6C7086; }
+.code-block .keyword { color: #CBA6F7; }
+.code-block .string { color: #A6E3A1; }
+.code-block .function { color: #89B4FA; }
+.code-block .number { color: #FAB387; }
+.code-block .variable { color: #F38BA8; }
+.code-block .dict-key { color: #89DCEB; }
+
+/* ============================================================
+   JSON CARD (code editor style)
+   ============================================================ */
+.json-card {
+  background: #1E1E2E;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 28px 0;
+  box-shadow: var(--shadow);
+  border: 1px solid #313244;
+}
+
+.json-card .code-header {
+  background: #181825;
+}
+
+.json-card pre {
+  padding: 20px;
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.7;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  color: #CDD6F4;
+}
+
+/* ============================================================
+   DATA TABLES
+   ============================================================ */
+.data-table-wrapper {
+  margin: 28px 0;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table thead {
+  background: var(--primary);
+  color: #FFFFFF;
+}
+
+.data-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text);
+  vertical-align: top;
+}
+
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+.data-table tbody tr:hover {
+  background: var(--bg-section);
+}
+
+.data-table .badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.badge-success { background: #E8F5E9; color: #2E7D32; }
+.badge-info { background: #E3F2FD; color: #1565C0; }
+.badge-warning { background: #FFF3E0; color: #E65100; }
+.badge-danger { background: #FFEBEE; color: #C62828; }
+
+/* ============================================================
+   CHART CONTAINERS
+   ============================================================ */
+.chart-container {
+  width: 100%;
+  height: 420px;
+  margin: 32px 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  padding: 8px;
+}
+
+.chart-container-tall {
+  height: 500px;
+}
+
+.chart-caption {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: -20px;
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   STAT CARDS (Swiss grid style)
+   ============================================================ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin: 32px 0;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.stat-card {
+  background: var(--bg);
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.stat-value {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-value.accent { color: var(--accent); }
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ============================================================
+   CHECKLIST
+   ============================================================ */
+.checklist {
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+}
+
+.checklist li {
+  padding: 12px 16px;
+  border-left: 3px solid var(--primary);
+  margin-bottom: 8px;
+  background: var(--bg-card);
+  font-size: 14px;
+  color: var(--text);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.checklist-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   TAG CLOUD
+   ============================================================ */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.tag {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-size: 12px;
+  color: var(--text-light);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.tag:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #F0F4FF;
+}
+
+.tag-primary {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #F0F4FF;
+  font-weight: 600;
+}
+
+.tag-accent {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #FFF8F0;
+  font-weight: 600;
+}
+
+/* ============================================================
+   FLOW DIAGRAM (CSS-based)
+   ============================================================ */
+.flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 32px 0;
+}
+
+.flow-step {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.flow-step-num {
+  width: 56px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 900;
+  color: #FFFFFF;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+.flow-step-num.accent { background: var(--accent); }
+.flow-step-num.success { background: #2E7D32; }
+
+.flow-step-content {
+  flex: 1;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-left: none;
+  display: flex;
+  align-items: center;
+}
+
+.flow-step-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.flow-step-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   SUMMARY SECTION
+   ============================================================ */
+.summary-box {
+  border: 2px solid var(--primary);
+  padding: 40px;
+  margin: 32px 0;
+  position: relative;
+  background: var(--bg);
+}
+
+.summary-box::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 40px;
+  height: 40px;
+  background: var(--accent);
+}
+
+.summary-box h3 {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+/* ============================================================
+   EXERCISE CARDS
+   ============================================================ */
+.exercise-card {
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin: 16px 0;
+  background: var(--bg-card);
+  position: relative;
+  padding-left: 60px;
+}
+
+.exercise-card::before {
+  content: '?';
+  position: absolute;
+  left: 20px;
+  top: 24px;
+  width: 28px;
+  height: 28px;
+  background: var(--primary);
+  color: #FFFFFF;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+}
+
+.exercise-card p {
+  font-size: 14px;
+  color: var(--text);
+  margin: 0;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  padding: 60px 0;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  margin-top: 60px;
+}
+
+.footer p {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .hero { padding: 60px 20px; min-height: 90vh; }
+  .hero-meta { gap: 24px; flex-wrap: wrap; }
+  .toc-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav-dots { display: none; }
+  .section { padding: 60px 0; }
+  .chart-container { height: 320px; }
+  .chart-container-tall { height: 380px; }
+  .summary-box { padding: 24px; padding-left: 24px; }
+}
+
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .hero-tags { gap: 8px; }
+  .hero-meta { flex-direction: column; gap: 16px; }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero .hero-label,
+.hero h1,
+.hero .hero-subtitle,
+.hero .hero-tags,
+.hero .hero-meta {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+.hero .hero-label { animation-delay: 0.2s; }
+.hero h1 { animation-delay: 0.4s; }
+.hero .hero-subtitle { animation-delay: 0.6s; }
+.hero .hero-tags { animation-delay: 0.8s; }
+.hero .hero-meta { animation-delay: 1.0s; }
+
+/* ============================================================
+   PERSONA CARD
+   ============================================================ */
+.persona-card {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  margin: 32px 0;
+  overflow: hidden;
+}
+
+.persona-header {
+  background: var(--primary);
+  color: #FFFFFF;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.persona-avatar {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.persona-name {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.persona-id {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.persona-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.persona-section {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+}
+
+.persona-section:nth-child(even) { border-right: none; }
+.persona-section:nth-last-child(-n+2) { border-bottom: none; }
+
+.persona-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.persona-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.persona-row-label { color: var(--text-muted); }
+.persona-row-value { color: var(--text); font-weight: 500; }
+
+@media (max-width: 600px) {
+  .persona-body { grid-template-columns: 1fr; }
+  .persona-section { border-right: none !important; }
+}
+
+/* ============================================================
+   STRATEGY TABLE
+   ============================================================ */
+.strategy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 28px 0;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.strategy-card {
+  background: var(--bg);
+  padding: 24px;
+}
+
+.strategy-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.strategy-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.strategy-icon-blue { background: #E3F2FD; border-radius: 2px; }
+.strategy-icon-orange { background: #FFF3E0; border-radius: 2px; }
+.strategy-icon-green { background: #E8F5E9; border-radius: 2px; }
+.strategy-icon-gray { background: #F5F5F5; border-radius: 2px; }
+
+.strategy-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.strategy-desc {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .strategy-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   RESULT BAR
+   ============================================================ */
+.result-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border-left: 4px solid var(--primary);
+}
+
+.result-bar-label {
+  font-size: 13px;
+  color: var(--text-light);
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.result-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--border-subtle);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.result-bar-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 4px;
+  transition: width 1.5s ease;
+}
+
+.result-bar-value {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 50px;
+  text-align: right;
+}
+
+.result-bar.accent { border-left-color: var(--accent); }
+.result-bar.accent .result-bar-fill { background: var(--accent); }
+.result-bar.accent .result-bar-value { color: var(--accent); }
+</style>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../assets/story-shell.css">
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots">
+  <button class="nav-dot" data-target="hero" data-label="封面"></button>
+  <button class="nav-dot" data-target="toc" data-label="目录"></button>
+  <button class="nav-dot" data-target="sec-background" data-label="故事背景"></button>
+  <button class="nav-dot" data-target="sec-problem" data-label="问题定义"></button>
+  <button class="nav-dot" data-target="sec-framework" data-label="画像框架"></button>
+  <button class="nav-dot" data-target="sec-basic" data-label="基础属性"></button>
+  <button class="nav-dot" data-target="sec-behavior" data-label="行为特征"></button>
+  <button class="nav-dot" data-target="sec-preference" data-label="偏好特征"></button>
+  <button class="nav-dot" data-target="sec-profile" data-label="画像整合"></button>
+  <button class="nav-dot" data-target="sec-application" data-label="画像应用"></button>
+  <button class="nav-dot" data-target="sec-findings" data-label="关键发现"></button>
+  <button class="nav-dot" data-target="sec-recommendations" data-label="业务建议"></button>
+  <button class="nav-dot" data-target="sec-results" data-label="行动结果"></button>
+  <button class="nav-dot" data-target="sec-methodology" data-label="方法论"></button>
+  <button class="nav-dot" data-target="sec-exercises" data-label="思考练习"></button>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="hero-number">12</div>
+  <div class="hero-label">DATA STORY</div>
+  <h1>千人千面的用户画像</h1>
+  <p class="hero-subtitle">用户画像构建与精准营销应用 —— 如何通过多维度数据标签化，构建用户的数字化表示，驱动个性化推荐与精细化运营。</p>
+  <div class="hero-tags">
+    <span class="hero-tag">#用户画像</span>
+    <span class="hero-tag">#标签体系</span>
+    <span class="hero-tag">#精准营销</span>
+  </div>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="hero-meta-value">3/5</span>
+      <span class="hero-meta-label">难度</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-value">18min</span>
+      <span class="hero-meta-label">阅读时间</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-value">53</span>
+      <span class="hero-meta-label">标签总数</span>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TABLE OF CONTENTS
+     ============================================================ -->
+<section class="section toc" id="toc">
+  <div class="container">
+    <span class="section-number">CONTENTS</span>
+    <h2 class="section-title">目录</h2>
+    <div class="toc-grid">
+      <a class="toc-item" href="#sec-background">
+        <span class="toc-item-num">01</span>
+        <span class="toc-item-title">故事背景</span>
+      </a>
+      <a class="toc-item" href="#sec-problem">
+        <span class="toc-item-num">02</span>
+        <span class="toc-item-title">问题定义</span>
+      </a>
+      <a class="toc-item" href="#sec-framework">
+        <span class="toc-item-num">03</span>
+        <span class="toc-item-title">用户画像框架</span>
+      </a>
+      <a class="toc-item" href="#sec-basic">
+        <span class="toc-item-num">04</span>
+        <span class="toc-item-title">基础属性标签</span>
+      </a>
+      <a class="toc-item" href="#sec-behavior">
+        <span class="toc-item-num">05</span>
+        <span class="toc-item-title">行为特征标签</span>
+      </a>
+      <a class="toc-item" href="#sec-preference">
+        <span class="toc-item-num">06</span>
+        <span class="toc-item-title">偏好特征标签</span>
+      </a>
+      <a class="toc-item" href="#sec-profile">
+        <span class="toc-item-num">07</span>
+        <span class="toc-item-title">用户画像整合</span>
+      </a>
+      <a class="toc-item" href="#sec-application">
+        <span class="toc-item-num">08</span>
+        <span class="toc-item-title">画像应用场景</span>
+      </a>
+      <a class="toc-item" href="#sec-findings">
+        <span class="toc-item-num">09</span>
+        <span class="toc-item-title">关键发现</span>
+      </a>
+      <a class="toc-item" href="#sec-recommendations">
+        <span class="toc-item-num">10</span>
+        <span class="toc-item-title">业务建议</span>
+      </a>
+      <a class="toc-item" href="#sec-results">
+        <span class="toc-item-num">11</span>
+        <span class="toc-item-title">行动结果</span>
+      </a>
+      <a class="toc-item" href="#sec-methodology">
+        <span class="toc-item-num">12</span>
+        <span class="toc-item-title">方法论总结</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 1: 故事背景
+     ============================================================ -->
+<section class="section" id="sec-background">
+  <div class="container">
+    <span class="section-number">01 / BACKGROUND</span>
+    <h2 class="section-title">故事背景</h2>
+
+    <div class="dialogue">
+      <span class="speaker">运营总监</span>
+      <p>"我们想给用户做个性化推荐，但不知道用户喜欢什么。你能不能帮我们给用户打标签？"</p>
+    </div>
+
+    <div class="dialogue">
+      <span class="speaker">小林</span>
+      <p>"你们想要什么样的标签？"</p>
+    </div>
+
+    <div class="dialogue">
+      <span class="speaker">运营总监</span>
+      <p>"比如用户喜欢什么品类、什么风格、什么价位，这样我们推荐的时候能更精准。"</p>
+    </div>
+
+    <div class="callout callout-question" style="margin-top:32px;">
+      <span class="callout-label">核心问题</span>
+      <p><strong>如何构建用户画像？如何用用户画像指导精准营销？</strong></p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 2: 问题定义
+     ============================================================ -->
+<section class="section" id="sec-problem">
+  <div class="container">
+    <span class="section-number">02 / PROBLEM DEFINITION</span>
+    <h2 class="section-title">问题定义</h2>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin-bottom:16px;color:var(--text);">业务问题</h3>
+    <p>需要构建用户画像，用于：</p>
+    <ul class="checklist">
+      <li><span class="checklist-icon">1.</span> 个性化推荐</li>
+      <li><span class="checklist-icon">2.</span> 精准营销</li>
+      <li><span class="checklist-icon">3.</span> 用户分层运营</li>
+    </ul>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">分析问题</h3>
+    <p>转化为数据分析问题：</p>
+    <ul class="checklist">
+      <li><span class="checklist-icon" style="color:var(--primary);font-weight:700;">&#9312;</span> <strong>用户画像包含哪些维度？</strong> —— 确定画像的维度框架</li>
+      <li><span class="checklist-icon" style="color:var(--primary);font-weight:700;">&#9313;</span> <strong>如何从数据中提取用户标签？</strong> —— 标签提取的方法与实现</li>
+      <li><span class="checklist-icon" style="color:var(--primary);font-weight:700;">&#9314;</span> <strong>如何应用用户画像？</strong> —— 画像在推荐、营销等场景的应用</li>
+    </ul>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 3: 用户画像框架
+     ============================================================ -->
+<section class="section" id="sec-framework">
+  <div class="container">
+    <span class="section-number">03 / FRAMEWORK</span>
+    <h2 class="section-title">用户画像框架</h2>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin-bottom:20px;color:var(--text);">用户画像维度</h3>
+    <p>用户画像由四大维度构成，每个维度下包含多个子维度，形成完整的用户数字化表示。</p>
+
+    <!-- Radar Chart: User Profile Dimensions -->
+    <div class="chart-container chart-container-tall" id="chart-radar"></div>
+    <p class="chart-caption">图1：用户画像四维框架 —— 基础属性、行为特征、偏好特征、价值特征</p>
+
+    <!-- Tree Chart: Tag System -->
+    <div class="chart-container chart-container-tall" id="chart-tree"></div>
+    <p class="chart-caption">图2：标签体系层级结构 —— 从四大维度到具体标签的树状分类</p>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 4: 基础属性标签
+     ============================================================ -->
+<section class="section" id="sec-basic">
+  <div class="container">
+    <span class="section-number">04 / BASIC ATTRIBUTES</span>
+    <h2 class="section-title">基础属性标签</h2>
+
+    <div class="callout callout-info">
+      <span class="callout-label">数据来源</span>
+      <p>用户注册信息、设备信息</p>
+    </div>
+
+    <p>基础属性标签是用户画像的基石，包含人口属性、设备属性和会员属性三大类。这些标签相对<strong>静态</strong>，变化频率低，但为后续分析提供了重要的上下文信息。</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-lang">PYTHON</span>
+      </div>
+      <pre><span class="comment"># 基础属性标签</span>
+<span class="variable">user_basic</span> = {
+    <span class="string">'user_id'</span>: <span class="string">'001'</span>,
+    <span class="string">'age'</span>: <span class="number">28</span>,                    <span class="comment"># 年龄</span>
+    <span class="string">'gender'</span>: <span class="string">'female'</span>,           <span class="comment"># 性别</span>
+    <span class="string">'city'</span>: <span class="string">'上海'</span>,               <span class="comment"># 城市</span>
+    <span class="string">'city_tier'</span>: <span class="string">'一线'</span>,          <span class="comment"># 城市等级</span>
+    <span class="string">'device'</span>: <span class="string">'iOS'</span>,              <span class="comment"># 设备类型</span>
+    <span class="string">'member_level'</span>: <span class="string">'黄金会员'</span>,   <span class="comment"># 会员等级</span>
+    <span class="string">'register_days'</span>: <span class="number">365</span>          <span class="comment"># 注册天数</span>
+}</pre>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">3</div>
+        <div class="stat-label">属性大类</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">10</div>
+        <div class="stat-label">标签数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">低</div>
+        <div class="stat-label">变化频率</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">高</div>
+        <div class="stat-label">覆盖率</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 5: 行为特征标签
+     ============================================================ -->
+<section class="section" id="sec-behavior">
+  <div class="container">
+    <span class="section-number">05 / BEHAVIORAL FEATURES</span>
+    <h2 class="section-title">行为特征标签</h2>
+
+    <div class="callout callout-info">
+      <span class="callout-label">数据来源</span>
+      <p>用户行为日志</p>
+    </div>
+
+    <p>行为特征标签反映用户的<strong>动态行为模式</strong>，包括活跃特征、消费特征和互动特征。与基础属性不同，行为标签需要持续更新，以反映用户最新的行为变化。</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-lang">PYTHON</span>
+      </div>
+      <pre><span class="comment"># 活跃特征</span>
+<span class="keyword">def</span> <span class="function">get_activity_tags</span>(<span class="variable">user_id</span>):
+    <span class="comment"># 最近30天行为</span>
+    <span class="variable">actions</span> = <span class="function">get_user_actions</span>(<span class="variable">user_id</span>, days=<span class="number">30</span>)
+
+    <span class="keyword">return</span> {
+        <span class="string">'visit_count'</span>: <span class="function">len</span>(<span class="variable">actions</span>),
+        <span class="string">'avg_duration'</span>: <span class="variable">actions</span>[<span class="string">'duration'</span>].<span class="function">mean</span>(),
+        <span class="string">'active_level'</span>: <span class="function">get_active_level</span>(<span class="function">len</span>(<span class="variable">actions</span>)),
+        <span class="string">'active_time'</span>: <span class="function">get_active_time</span>(<span class="variable">actions</span>),
+    }
+
+<span class="comment"># 消费特征</span>
+<span class="keyword">def</span> <span class="function">get_consume_tags</span>(<span class="variable">user_id</span>):
+    <span class="variable">orders</span> = <span class="function">get_user_orders</span>(<span class="variable">user_id</span>, days=<span class="number">90</span>)
+
+    <span class="keyword">return</span> {
+        <span class="string">'order_count'</span>: <span class="function">len</span>(<span class="variable">orders</span>),
+        <span class="string">'total_amount'</span>: <span class="variable">orders</span>[<span class="string">'amount'</span>].<span class="function">sum</span>(),
+        <span class="string">'avg_order_amount'</span>: <span class="variable">orders</span>[<span class="string">'amount'</span>].<span class="function">mean</span>(),
+        <span class="string">'consume_level'</span>: <span class="function">get_consume_level</span>(<span class="variable">orders</span>[<span class="string">'amount'</span>].<span class="function">mean</span>()),
+    }</pre>
+    </div>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">行为标签示例</h3>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>标签类型</th>
+            <th>标签名称</th>
+            <th>标签值</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>活跃特征</td>
+            <td>活跃等级</td>
+            <td><strong>高活跃</strong></td>
+            <td><span class="badge badge-success">优质</span></td>
+          </tr>
+          <tr>
+            <td>活跃特征</td>
+            <td>活跃时段</td>
+            <td>晚间活跃</td>
+            <td><span class="badge badge-info">信息</span></td>
+          </tr>
+          <tr>
+            <td>消费特征</td>
+            <td>消费等级</td>
+            <td>中等消费</td>
+            <td><span class="badge badge-info">正常</span></td>
+          </tr>
+          <tr>
+            <td>消费特征</td>
+            <td>客单价区间</td>
+            <td>300-500元</td>
+            <td><span class="badge badge-info">信息</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">15</div>
+        <div class="stat-label">标签数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">高</div>
+        <div class="stat-label">变化频率</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">30天</div>
+        <div class="stat-label">更新周期</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">3</div>
+        <div class="stat-label">特征大类</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 6: 偏好特征标签
+     ============================================================ -->
+<section class="section" id="sec-preference">
+  <div class="container">
+    <span class="section-number">06 / PREFERENCE FEATURES</span>
+    <h2 class="section-title">偏好特征标签</h2>
+
+    <p>偏好特征标签揭示用户的<strong>潜在消费倾向</strong>，包括品类偏好、风格偏好、价格偏好和时间偏好。这些标签是预测用户未来行为的重要依据。</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-lang">PYTHON</span>
+      </div>
+      <pre><span class="keyword">def</span> <span class="function">get_category_preference</span>(<span class="variable">user_id</span>):
+    <span class="string">"""计算用户的品类偏好"""</span>
+    <span class="variable">orders</span> = <span class="function">get_user_orders</span>(<span class="variable">user_id</span>)
+
+    <span class="comment"># 统计各品类购买金额</span>
+    <span class="variable">category_amount</span> = <span class="variable">orders</span>.<span class="function">groupby</span>(<span class="string">'category'</span>)[<span class="string">'amount'</span>].<span class="function">sum</span>()
+    <span class="variable">total_amount</span> = <span class="variable">category_amount</span>.<span class="function">sum</span>()
+
+    <span class="comment"># 计算各品类占比</span>
+    <span class="variable">category_ratio</span> = <span class="variable">category_amount</span> / <span class="variable">total_amount</span>
+
+    <span class="comment"># 找出偏好品类（占比>20%）</span>
+    <span class="variable">preferred</span> = <span class="variable">category_ratio</span>[<span class="variable">category_ratio</span> > <span class="number">0.2</span>].index.<span class="function">tolist</span>()
+
+    <span class="keyword">return</span> {
+        <span class="string">'preferred_categories'</span>: <span class="variable">preferred</span>,
+        <span class="string">'category_distribution'</span>: <span class="variable">category_ratio</span>.<span class="function">to_dict</span>()
+    }</pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-lang">PYTHON</span>
+      </div>
+      <pre><span class="keyword">def</span> <span class="function">get_price_preference</span>(<span class="variable">user_id</span>):
+    <span class="string">"""计算用户的价格偏好"""</span>
+    <span class="variable">orders</span> = <span class="function">get_user_orders</span>(<span class="variable">user_id</span>)
+
+    <span class="comment"># 统计各价格区间购买次数</span>
+    <span class="variable">price_bins</span> = [<span class="number">0</span>, <span class="number">100</span>, <span class="number">300</span>, <span class="number">500</span>, <span class="number">1000</span>, <span class="keyword">float</span>(<span class="string">'inf'</span>)]
+    <span class="variable">price_labels</span> = [<span class="string">'低价'</span>, <span class="string">'中低价'</span>, <span class="string">'中价'</span>, <span class="string">'中高价'</span>, <span class="string">'高价'</span>]
+
+    <span class="variable">orders</span>[<span class="string">'price_level'</span>] = pd.<span class="function">cut</span>(
+        <span class="variable">orders</span>[<span class="string">'unit_price'</span>],
+        bins=<span class="variable">price_bins</span>,
+        labels=<span class="variable">price_labels</span>
+    )
+
+    <span class="variable">price_distribution</span> = <span class="variable">orders</span>[<span class="string">'price_level'</span>].<span class="function">value_counts</span>(normalize=<span class="keyword">True</span>)
+
+    <span class="comment"># 价格敏感度</span>
+    <span class="variable">discount_rate</span> = <span class="variable">orders</span>[<span class="string">'discount_amount'</span>].<span class="function">sum</span>() / <span class="variable">orders</span>[<span class="string">'original_amount'</span>].<span class="function">sum</span>()
+    <span class="variable">price_sensitivity</span> = <span class="string">'高敏感'</span> <span class="keyword">if</span> <span class="variable">discount_rate</span> > <span class="number">0.3</span> <span class="keyword">else</span> <span class="string">'低敏感'</span>
+
+    <span class="keyword">return</span> {
+        <span class="string">'main_price_level'</span>: <span class="variable">price_distribution</span>.<span class="function">idxmax</span>(),
+        <span class="string">'price_sensitivity'</span>: <span class="variable">price_sensitivity</span>,
+        <span class="string">'price_distribution'</span>: <span class="variable">price_distribution</span>.<span class="function">to_dict</span>()
+    }</pre>
+    </div>
+
+    <!-- Category Preference Donut Chart -->
+    <div class="chart-container" id="chart-category"></div>
+    <p class="chart-caption">图3：品类偏好分布 —— 用户购买金额在各品类的占比</p>
+
+    <!-- Price Sensitivity Bar Chart -->
+    <div class="chart-container" id="chart-price"></div>
+    <p class="chart-caption">图4：价格敏感度分布 —— 各价格区间的购买频次占比</p>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">偏好标签示例</h3>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>标签类型</th>
+            <th>标签名称</th>
+            <th>标签值</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>品类偏好</td>
+            <td>主购品类</td>
+            <td><strong>外套、裤装</strong></td>
+            <td><span class="badge badge-success">核心</span></td>
+          </tr>
+          <tr>
+            <td>品类偏好</td>
+            <td>品类广度</td>
+            <td>中等（3个品类）</td>
+            <td><span class="badge badge-info">信息</span></td>
+          </tr>
+          <tr>
+            <td>价格偏好</td>
+            <td>价格区间</td>
+            <td>中价（300-500元）</td>
+            <td><span class="badge badge-info">信息</span></td>
+          </tr>
+          <tr>
+            <td>价格偏好</td>
+            <td>价格敏感度</td>
+            <td>中等敏感</td>
+            <td><span class="badge badge-warning">注意</span></td>
+          </tr>
+          <tr>
+            <td>风格偏好</td>
+            <td>风格偏好</td>
+            <td><strong>简约风</strong></td>
+            <td><span class="badge badge-success">核心</span></td>
+          </tr>
+          <tr>
+            <td>时间偏好</td>
+            <td>购买时段</td>
+            <td>周末偏好</td>
+            <td><span class="badge badge-info">信息</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">20</div>
+        <div class="stat-label">标签数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">4</div>
+        <div class="stat-label">偏好大类</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">中</div>
+        <div class="stat-label">变化频率</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">预测</div>
+        <div class="stat-label">标签性质</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 7: 用户画像整合
+     ============================================================ -->
+<section class="section" id="sec-profile">
+  <div class="container">
+    <span class="section-number">07 / PROFILE INTEGRATION</span>
+    <h2 class="section-title">用户画像整合</h2>
+
+    <p>将基础属性、行为特征、偏好特征和价值特征整合为完整的用户画像，形成对用户的<strong>全方位数字化描述</strong>。每个用户都拥有一份独特的画像档案。</p>
+
+    <!-- Persona Card -->
+    <div class="persona-card">
+      <div class="persona-header">
+        <div class="persona-avatar">001</div>
+        <div>
+          <div class="persona-name">用户 #001</div>
+          <div class="persona-id">黄金会员 / 上海 / 女性 / 28岁</div>
+        </div>
+      </div>
+      <div class="persona-body">
+        <div class="persona-section">
+          <div class="persona-section-title">基础属性</div>
+          <div class="persona-row"><span class="persona-row-label">年龄</span><span class="persona-row-value">28岁</span></div>
+          <div class="persona-row"><span class="persona-row-label">性别</span><span class="persona-row-value">女性</span></div>
+          <div class="persona-row"><span class="persona-row-label">城市</span><span class="persona-row-value">上海（一线）</span></div>
+          <div class="persona-row"><span class="persona-row-label">会员等级</span><span class="persona-row-value">黄金会员</span></div>
+        </div>
+        <div class="persona-section">
+          <div class="persona-section-title">行为特征</div>
+          <div class="persona-row"><span class="persona-row-label">活跃等级</span><span class="persona-row-value">高活跃</span></div>
+          <div class="persona-row"><span class="persona-row-label">活跃时段</span><span class="persona-row-value">晚间活跃</span></div>
+          <div class="persona-row"><span class="persona-row-label">消费等级</span><span class="persona-row-value">中等消费</span></div>
+          <div class="persona-row"><span class="persona-row-label">平均客单价</span><span class="persona-row-value">380元</span></div>
+        </div>
+        <div class="persona-section">
+          <div class="persona-section-title">偏好特征</div>
+          <div class="persona-row"><span class="persona-row-label">品类偏好</span><span class="persona-row-value">外套、裤装</span></div>
+          <div class="persona-row"><span class="persona-row-label">价格区间</span><span class="persona-row-value">中价（300-500元）</span></div>
+          <div class="persona-row"><span class="persona-row-label">价格敏感度</span><span class="persona-row-value">中等</span></div>
+          <div class="persona-row"><span class="persona-row-label">风格偏好</span><span class="persona-row-value">简约风</span></div>
+        </div>
+        <div class="persona-section">
+          <div class="persona-section-title">价值特征</div>
+          <div class="persona-row"><span class="persona-row-label">LTV等级</span><span class="persona-row-value">中等</span></div>
+          <div class="persona-row"><span class="persona-row-label">忠诚度</span><span class="persona-row-value">高</span></div>
+          <div class="persona-row"><span class="persona-row-label">潜力等级</span><span class="persona-row-value">中高</span></div>
+          <div class="persona-row"><span class="persona-row-label">购买频率</span><span class="persona-row-value">月均2次</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">完整画像 JSON 数据</h3>
+
+    <div class="json-card">
+      <div class="code-header">
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-lang">JSON</span>
+      </div>
+      <pre>{
+  <span class="dict-key">"user_id"</span>: <span class="string">"001"</span>,
+  <span class="dict-key">"basic_info"</span>: {
+    <span class="dict-key">"age"</span>: <span class="number">28</span>,
+    <span class="dict-key">"gender"</span>: <span class="string">"female"</span>,
+    <span class="dict-key">"city"</span>: <span class="string">"上海"</span>,
+    <span class="dict-key">"city_tier"</span>: <span class="string">"一线"</span>,
+    <span class="dict-key">"member_level"</span>: <span class="string">"黄金会员"</span>
+  },
+  <span class="dict-key">"behavior"</span>: {
+    <span class="dict-key">"active_level"</span>: <span class="string">"高活跃"</span>,
+    <span class="dict-key">"active_time"</span>: <span class="string">"晚间活跃"</span>,
+    <span class="dict-key">"consume_level"</span>: <span class="string">"中等消费"</span>,
+    <span class="dict-key">"avg_order_amount"</span>: <span class="number">380</span>,
+    <span class="dict-key">"order_frequency"</span>: <span class="string">"月均2次"</span>
+  },
+  <span class="dict-key">"preference"</span>: {
+    <span class="dict-key">"preferred_categories"</span>: [<span class="string">"外套"</span>, <span class="string">"裤装"</span>],
+    <span class="dict-key">"category_breadth"</span>: <span class="string">"中等"</span>,
+    <span class="dict-key">"price_level"</span>: <span class="string">"中价"</span>,
+    <span class="dict-key">"price_sensitivity"</span>: <span class="string">"中等"</span>,
+    <span class="dict-key">"style_preference"</span>: <span class="string">"简约风"</span>
+  },
+  <span class="dict-key">"value"</span>: {
+    <span class="dict-key">"ltv_level"</span>: <span class="string">"中等"</span>,
+    <span class="dict-key">"loyalty_level"</span>: <span class="string">"高"</span>,
+    <span class="dict-key">"potential_level"</span>: <span class="string">"中高"</span>
+  },
+  <span class="dict-key">"tags"</span>: [
+    <span class="string">"女性"</span>, <span class="string">"28岁"</span>, <span class="string">"一线城市"</span>, <span class="string">"黄金会员"</span>,
+    <span class="string">"高活跃"</span>, <span class="string">"中等消费"</span>, <span class="string">"外套偏好"</span>, <span class="string">"裤装偏好"</span>,
+    <span class="string">"中价偏好"</span>, <span class="string">"简约风"</span>, <span class="string">"高忠诚"</span>
+  ]
+}</pre>
+    </div>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">用户标签云</h3>
+    <div class="tag-cloud">
+      <span class="tag tag-primary">女性</span>
+      <span class="tag tag-primary">28岁</span>
+      <span class="tag">一线城市</span>
+      <span class="tag tag-accent">黄金会员</span>
+      <span class="tag tag-primary">高活跃</span>
+      <span class="tag">中等消费</span>
+      <span class="tag tag-accent">外套偏好</span>
+      <span class="tag tag-accent">裤装偏好</span>
+      <span class="tag">中价偏好</span>
+      <span class="tag tag-primary">简约风</span>
+      <span class="tag tag-primary">高忠诚</span>
+      <span class="tag">晚间活跃</span>
+      <span class="tag">周末偏好</span>
+      <span class="tag">中等敏感</span>
+      <span class="tag">月均2次</span>
+      <span class="tag">iOS设备</span>
+      <span class="tag">中高潜力</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 8: 画像应用场景
+     ============================================================ -->
+<section class="section" id="sec-application">
+  <div class="container">
+    <span class="section-number">08 / APPLICATION</span>
+    <h2 class="section-title">画像应用场景</h2>
+
+    <p>用户画像的最终价值在于<strong>落地应用</strong>。以下是三个核心应用场景：个性化推荐、精准营销和用户分层。</p>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">应用场景一：个性化推荐</h3>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-lang">PYTHON</span>
+      </div>
+      <pre><span class="keyword">def</span> <span class="function">get_personalized_recommendations</span>(<span class="variable">user_id</span>):
+    <span class="string">"""基于用户画像的个性化推荐"""</span>
+    <span class="variable">profile</span> = <span class="function">get_user_profile</span>(<span class="variable">user_id</span>)
+    <span class="variable">recommendations</span> = []
+
+    <span class="comment"># 基于品类偏好推荐</span>
+    <span class="keyword">for</span> <span class="variable">category</span> <span class="keyword">in</span> <span class="variable">profile</span>[<span class="string">'preference'</span>][<span class="string">'preferred_categories'</span>]:
+        <span class="variable">items</span> = <span class="function">get_hot_items</span>(<span class="variable">category</span>, price_level=<span class="variable">profile</span>[<span class="string">'preference'</span>][<span class="string">'price_level'</span>])
+        <span class="variable">recommendations</span>.<span class="function">extend</span>(<span class="variable">items</span>[:<span class="number">5</span>])
+
+    <span class="comment"># 基于风格偏好推荐</span>
+    <span class="variable">style</span> = <span class="variable">profile</span>[<span class="string">'preference'</span>][<span class="string">'style_preference'</span>]
+    <span class="variable">style_items</span> = <span class="function">get_style_items</span>(<span class="variable">style</span>)
+    <span class="variable">recommendations</span>.<span class="function">extend</span>(<span class="variable">style_items</span>[:<span class="number">3</span>])
+
+    <span class="keyword">return</span> <span class="variable">recommendations</span></pre>
+    </div>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">应用场景二：精准营销</h3>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>用户画像</th>
+            <th>营销策略</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>高消费+低敏感</td>
+            <td>推送新品、高端商品</td>
+            <td><span class="badge badge-success">高价值</span></td>
+          </tr>
+          <tr>
+            <td>中消费+高敏感</td>
+            <td>推送折扣、优惠活动</td>
+            <td><span class="badge badge-warning">价格驱动</span></td>
+          </tr>
+          <tr>
+            <td>低消费+高活跃</td>
+            <td>推送低价爆款、引导首单</td>
+            <td><span class="badge badge-info">培养中</span></td>
+          </tr>
+          <tr>
+            <td>外套偏好</td>
+            <td>推送外套新品、搭配推荐</td>
+            <td><span class="badge badge-info">精准推荐</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">应用场景三：用户分层</h3>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-dot"></span>
+        <span class="code-lang">PYTHON</span>
+      </div>
+      <pre><span class="keyword">def</span> <span class="function">segment_users</span>():
+    <span class="string">"""基于用户画像的用户分层"""</span>
+    <span class="variable">users</span> = <span class="function">get_all_users</span>()
+    <span class="variable">segments</span> = {
+        <span class="string">'高价值用户'</span>: [],      <span class="comment"># 高消费+高忠诚</span>
+        <span class="string">'潜力用户'</span>: [],        <span class="comment"># 中消费+高活跃</span>
+        <span class="string">'价格敏感用户'</span>: [],    <span class="comment"># 高敏感+中消费</span>
+        <span class="string">'低价值用户'</span>: [],      <span class="comment"># 低消费+低活跃</span>
+    }
+
+    <span class="keyword">for</span> <span class="variable">user</span> <span class="keyword">in</span> <span class="variable">users</span>:
+        <span class="variable">profile</span> = <span class="function">get_user_profile</span>(<span class="variable">user</span>[<span class="string">'user_id'</span>])
+
+        <span class="keyword">if</span> <span class="variable">profile</span>[<span class="string">'value'</span>][<span class="string">'consume_level'</span>] == <span class="string">'高'</span> \
+           <span class="keyword">and</span> <span class="variable">profile</span>[<span class="string">'value'</span>][<span class="string">'loyalty_level'</span>] == <span class="string">'高'</span>:
+            <span class="variable">segments</span>[<span class="string">'高价值用户'</span>].<span class="function">append</span>(<span class="variable">user</span>)
+        <span class="keyword">elif</span> <span class="variable">profile</span>[<span class="string">'behavior'</span>][<span class="string">'active_level'</span>] == <span class="string">'高活跃'</span>:
+            <span class="variable">segments</span>[<span class="string">'潜力用户'</span>].<span class="function">append</span>(<span class="variable">user</span>)
+        <span class="keyword">elif</span> <span class="variable">profile</span>[<span class="string">'preference'</span>][<span class="string">'price_sensitivity'</span>] == <span class="string">'高敏感'</span>:
+            <span class="variable">segments</span>[<span class="string">'价格敏感用户'</span>].<span class="function">append</span>(<span class="variable">user</span>)
+        <span class="keyword">else</span>:
+            <span class="variable">segments</span>[<span class="string">'低价值用户'</span>].<span class="function">append</span>(<span class="variable">user</span>)
+
+    <span class="keyword">return</span> <span class="variable">segments</span></pre>
+    </div>
+
+    <!-- User Segmentation Scatter Chart -->
+    <div class="chart-container chart-container-tall" id="chart-scatter"></div>
+    <p class="chart-caption">图5：用户分群散点图 —— 消费能力 vs 忠诚度的四象限分布</p>
+
+    <!-- Strategy Cards -->
+    <div class="strategy-grid">
+      <div class="strategy-card">
+        <div class="strategy-card-header">
+          <div class="strategy-icon strategy-icon-blue">&#9733;</div>
+          <div class="strategy-title">高价值用户</div>
+        </div>
+        <div class="strategy-desc">高消费+高忠诚。推送新品、高端商品，提供VIP专属服务，维护品牌忠诚度。</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-header">
+          <div class="strategy-icon strategy-icon-orange">&#8593;</div>
+          <div class="strategy-title">潜力用户</div>
+        </div>
+        <div class="strategy-desc">中消费+高活跃。推送个性化推荐，引导消费升级，培养为高价值用户。</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-header">
+          <div class="strategy-icon strategy-icon-green">&#9830;</div>
+          <div class="strategy-title">价格敏感用户</div>
+        </div>
+        <div class="strategy-desc">高敏感+中消费。推送折扣、优惠券，在促销节点精准触达，提升转化率。</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-header">
+          <div class="strategy-icon strategy-icon-gray">&#8226;</div>
+          <div class="strategy-title">低价值用户</div>
+        </div>
+        <div class="strategy-desc">低消费+低活跃。推送低价爆款，激活沉默用户，降低流失率。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 9: 关键发现
+     ============================================================ -->
+<section class="section" id="sec-findings">
+  <div class="container">
+    <span class="section-number">09 / KEY FINDINGS</span>
+    <h2 class="section-title">关键发现</h2>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">发现 1</span>
+      <p><strong>用户画像需要多维度</strong></p>
+      <p>基础属性提供静态特征，行为特征提供动态特征，偏好特征提供预测能力，价值特征提供评估依据。四个维度缺一不可，共同构成完整的用户认知。</p>
+    </div>
+
+    <div class="callout callout-warning">
+      <span class="callout-label">发现 2</span>
+      <p><strong>标签需要持续更新</strong></p>
+      <p>用户行为在变化，偏好在变化。画像不是一次性的工作，需要建立<strong>定期更新机制</strong>，确保标签的时效性和准确性。</p>
+    </div>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">发现 3</span>
+      <p><strong>画像应用场景广泛</strong></p>
+      <p>从个性化推荐到精准营销，从用户分层到产品优化，用户画像的价值在于<strong>连接数据与业务决策</strong>，让每一次运营动作都有据可依。</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 10: 业务建议
+     ============================================================ -->
+<section class="section" id="sec-recommendations">
+  <div class="container">
+    <span class="section-number">10 / RECOMMENDATIONS</span>
+    <h2 class="section-title">业务建议</h2>
+
+    <div class="callout callout-tip">
+      <span class="callout-label">短期建议</span>
+      <p><strong>1. 建立基础标签体系</strong> —— 覆盖人口属性标签、消费行为标签、偏好标签三大类，快速上线MVP版本。</p>
+      <p><strong>2. 应用到营销场景</strong> —— 实现精准推送、个性化优惠券、差异化服务，验证画像的业务价值。</p>
+    </div>
+
+    <div class="callout callout-info">
+      <span class="callout-label">长期建议</span>
+      <p><strong>1. 完善标签体系</strong> —— 增加更多标签维度，提升标签准确度，建立标签管理平台。</p>
+      <p><strong>2. 实时画像更新</strong> —— 实时行为更新画像，动态调整推荐策略，实现实时营销触达。</p>
+    </div>
+
+    <!-- Flow Steps -->
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">建立基础标签体系</div>
+            <div class="flow-step-desc">人口属性 + 消费行为 + 偏好标签</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">应用到营销场景</div>
+            <div class="flow-step-desc">精准推送 + 个性化优惠券 + 差异化服务</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">3</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">完善标签体系</div>
+            <div class="flow-step-desc">增加维度 + 提升准确度 + 建立管理平台</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num accent">4</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">实时画像更新</div>
+            <div class="flow-step-desc">实时行为更新 + 动态推荐策略 + 实时营销触达</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num success">5</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">持续优化闭环</div>
+            <div class="flow-step-desc">效果评估 + 标签迭代 + 策略优化</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 11: 行动结果
+     ============================================================ -->
+<section class="section" id="sec-results">
+  <div class="container">
+    <span class="section-number">11 / RESULTS</span>
+    <h2 class="section-title">行动结果</h2>
+
+    <p>小林帮助运营团队建立了完整的用户画像体系，覆盖四大维度共 <span class="highlight-term">53个标签</span>，并在多个业务场景中取得了显著效果。</p>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">标签体系</h3>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">10</div>
+        <div class="stat-label">基础属性标签</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">15</div>
+        <div class="stat-label">行为特征标签</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">20</div>
+        <div class="stat-label">偏好特征标签</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">8</div>
+        <div class="stat-label">价值特征标签</div>
+      </div>
+    </div>
+
+    <!-- Tag Distribution Chart -->
+    <div class="chart-container" id="chart-tags"></div>
+    <p class="chart-caption">图6：标签体系分布 —— 四大维度的标签数量与占比</p>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">应用效果</h3>
+
+    <div class="result-bar">
+      <div class="result-bar-label">推荐点击率提升</div>
+      <div class="result-bar-track"><div class="result-bar-fill" data-width="25"></div></div>
+      <div class="result-bar-value">+25%</div>
+    </div>
+    <div class="result-bar accent">
+      <div class="result-bar-label">营销转化率提升</div>
+      <div class="result-bar-track"><div class="result-bar-fill" data-width="18"></div></div>
+      <div class="result-bar-value">+18%</div>
+    </div>
+    <div class="result-bar">
+      <div class="result-bar-label">用户满意度提升</div>
+      <div class="result-bar-track"><div class="result-bar-fill" data-width="15"></div></div>
+      <div class="result-bar-value">+15%</div>
+    </div>
+
+    <!-- Effect Comparison Chart -->
+    <div class="chart-container" id="chart-effect"></div>
+    <p class="chart-caption">图7：应用效果对比 —— 画像应用前后的关键指标变化</p>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 12: 方法论总结
+     ============================================================ -->
+<section class="section" id="sec-methodology">
+  <div class="container">
+    <span class="section-number">12 / METHODOLOGY</span>
+    <h2 class="section-title">方法论总结</h2>
+
+    <div class="summary-box">
+      <h3>核心方法：用户画像</h3>
+      <p style="font-size:14px;color:var(--text-light);line-height:2;">用户画像（User Profile）是通过多维度数据标签化，构建用户的数字化表示，用于指导个性化推荐、精准营销和用户分层运营。</p>
+    </div>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">用户画像构建步骤</h3>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">确定画像维度</div>
+            <div class="flow-step-desc">基础属性、行为特征、偏好特征、价值特征</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">数据采集</div>
+            <div class="flow-step-desc">注册信息、行为日志、订单数据</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">3</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">标签提取</div>
+            <div class="flow-step-desc">规则计算、模型预测</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">4</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">画像整合</div>
+            <div class="flow-step-desc">整合为完整画像</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num success">5</div>
+        <div class="flow-step-content">
+          <div>
+            <div class="flow-step-title">应用场景</div>
+            <div class="flow-step-desc">推荐、营销、分层</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">标签类型</h3>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>类型</th>
+            <th>说明</th>
+            <th>示例</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>事实标签</td>
+            <td>直接从数据获取</td>
+            <td>性别、年龄</td>
+            <td><span class="badge badge-info">基础</span></td>
+          </tr>
+          <tr>
+            <td>统计标签</td>
+            <td>统计计算得到</td>
+            <td>消费频次、客单价</td>
+            <td><span class="badge badge-info">计算</span></td>
+          </tr>
+          <tr>
+            <td>预测标签</td>
+            <td>模型预测得到</td>
+            <td>流失概率、LTV</td>
+            <td><span class="badge badge-success">高级</span></td>
+          </tr>
+          <tr>
+            <td>业务标签</td>
+            <td>业务规则定义</td>
+            <td>高价值用户、价格敏感</td>
+            <td><span class="badge badge-warning">应用</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700;margin:32px 0 16px;color:var(--text);">适用场景</h3>
+    <ul class="checklist">
+      <li><span class="checklist-icon" style="color:#2E7D32;">&#10003;</span> <strong>个性化推荐</strong>：基于画像推荐</li>
+      <li><span class="checklist-icon" style="color:#2E7D32;">&#10003;</span> <strong>精准营销</strong>：基于画像营销</li>
+      <li><span class="checklist-icon" style="color:#2E7D32;">&#10003;</span> <strong>用户分层</strong>：基于画像分层</li>
+      <li><span class="checklist-icon" style="color:#2E7D32;">&#10003;</span> <strong>产品优化</strong>：基于画像优化</li>
+    </ul>
+
+    <div class="callout callout-warning" style="margin-top:32px;">
+      <span class="callout-label">注意事项</span>
+      <p><strong>1. 隐私合规</strong> —— 遵守数据隐私法规</p>
+      <p><strong>2. 标签质量</strong> —— 确保标签准确</p>
+      <p><strong>3. 持续更新</strong> —— 定期更新画像</p>
+      <p><strong>4. 应用闭环</strong> —— 画像要能落地应用</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================
+     SECTION 13: 思考练习
+     ============================================================ -->
+<section class="section" id="sec-exercises">
+  <div class="container">
+    <span class="section-number">EXERCISES</span>
+    <h2 class="section-title">思考练习</h2>
+
+    <div class="exercise-card">
+      <p><strong>练习 1：</strong>如何评估用户画像标签的准确性？可以从标签覆盖率、标签一致性、业务验证等角度思考。</p>
+    </div>
+
+    <div class="exercise-card">
+      <p><strong>练习 2：</strong>用户画像在B端业务（如企业客户）中如何应用？考虑企业客户的画像维度与C端的差异。</p>
+    </div>
+
+    <div class="exercise-card">
+      <p><strong>练习 3：</strong>如何保护用户隐私的同时构建有效的用户画像？思考数据脱敏、合规使用、用户授权等方案。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <p>DATA STORY #12 &mdash; 千人千面的用户画像</p>
+    <p style="margin-top:8px;">下一篇：故事13 &mdash; 20%的商品贡献80%的GMV</p>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// ============================================================
+// PROGRESS BAR
+// ============================================================
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  progressBar.style.width = progress + '%';
+});
+
+// ============================================================
+// NAVIGATION DOTS
+// ============================================================
+const navDots = document.querySelectorAll('.nav-dot');
+const sections = [];
+
+navDots.forEach(dot => {
+  const targetId = dot.getAttribute('data-target');
+  const section = document.getElementById(targetId);
+  if (section) sections.push({ dot, section });
+
+  dot.addEventListener('click', () => {
+    const target = document.getElementById(targetId);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ============================================================
+// INTERSECTION OBSERVER - Scroll Animations
+// ============================================================
+const observerOptions = {
+  root: null,
+  rootMargin: '0px 0px -80px 0px',
+  threshold: 0.1
+};
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+
+      // Update nav dots
+      sections.forEach(s => {
+        if (s.section === entry.target) {
+          s.dot.classList.add('active');
+        } else {
+          s.dot.classList.remove('active');
+        }
+      });
+
+      // Animate result bars
+      const bars = entry.target.querySelectorAll('.result-bar-fill');
+      bars.forEach(bar => {
+        const width = bar.getAttribute('data-width');
+        setTimeout(() => { bar.style.width = width + '%'; }, 300);
+      });
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.section').forEach(section => {
+  sectionObserver.observe(section);
+});
+
+// ============================================================
+// ECHARTS - Common theme
+// ============================================================
+const COLORS = {
+  primary: '#0033A0',
+  primaryLight: '#3366CC',
+  primaryDark: '#001F66',
+  accent: '#FF6600',
+  accentLight: '#FF8833',
+  gray: '#999999',
+  lightGray: '#CCCCCC',
+  bg: '#FFFFFF',
+  text: '#333333',
+  textLight: '#666666'
+};
+
+// ============================================================
+// CHART 1: Radar - User Profile Dimensions
+// ============================================================
+const chartRadar = echarts.init(document.getElementById('chart-radar'));
+chartRadar.setOption({
+  tooltip: {
+    trigger: 'item',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E0E0E0',
+    textStyle: { color: '#333333', fontSize: 13 }
+  },
+  legend: {
+    data: ['用户 #001', '用户 #002', '用户 #003'],
+    bottom: 10,
+    textStyle: { color: '#666666', fontSize: 12, fontFamily: 'Noto Sans SC' },
+    itemWidth: 16,
+    itemHeight: 8
+  },
+  radar: {
+    indicator: [
+      { name: '人口属性', max: 100 },
+      { name: '设备属性', max: 100 },
+      { name: '会员属性', max: 100 },
+      { name: '活跃特征', max: 100 },
+      { name: '消费特征', max: 100 },
+      { name: '互动特征', max: 100 },
+      { name: '品类偏好', max: 100 },
+      { name: '风格偏好', max: 100 },
+      { name: '价格偏好', max: 100 },
+      { name: '消费能力', max: 100 },
+      { name: '忠诚度', max: 100 },
+      { name: '潜力', max: 100 }
+    ],
+    shape: 'polygon',
+    splitNumber: 4,
+    axisName: {
+      color: '#666666',
+      fontSize: 11,
+      fontFamily: 'Noto Sans SC'
+    },
+    splitLine: { lineStyle: { color: '#EEEEEE' } },
+    splitArea: { areaStyle: { color: ['#FAFBFC', '#FFFFFF', '#FAFBFC', '#FFFFFF'] } },
+    axisLine: { lineStyle: { color: '#E0E0E0' } }
+  },
+  series: [{
+    type: 'radar',
+    data: [
+      {
+        value: [85, 90, 75, 88, 65, 70, 82, 78, 60, 65, 85, 72],
+        name: '用户 #001',
+        lineStyle: { color: COLORS.primary, width: 2 },
+        areaStyle: { color: COLORS.primary, opacity: 0.1 },
+        itemStyle: { color: COLORS.primary }
+      },
+      {
+        value: [60, 70, 50, 45, 80, 55, 90, 65, 75, 80, 60, 85],
+        name: '用户 #002',
+        lineStyle: { color: COLORS.accent, width: 2 },
+        areaStyle: { color: COLORS.accent, opacity: 0.1 },
+        itemStyle: { color: COLORS.accent }
+      },
+      {
+        value: [70, 60, 85, 55, 50, 40, 45, 50, 85, 45, 40, 55],
+        name: '用户 #003',
+        lineStyle: { color: COLORS.gray, width: 2 },
+        areaStyle: { color: COLORS.gray, opacity: 0.08 },
+        itemStyle: { color: COLORS.gray }
+      }
+    ]
+  }]
+});
+
+// ============================================================
+// CHART 2: Tree - Tag System
+// ============================================================
+const chartTree = echarts.init(document.getElementById('chart-tree'));
+chartTree.setOption({
+  tooltip: {
+    trigger: 'item',
+    triggerOn: 'mousemove',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E0E0E0',
+    textStyle: { color: '#333333', fontSize: 12 }
+  },
+  series: [{
+    type: 'tree',
+    data: [{
+      name: '用户画像',
+      children: [
+        {
+          name: '基础属性',
+          children: [
+            { name: '人口属性\n年龄/性别/城市' },
+            { name: '设备属性\n设备类型/系统版本' },
+            { name: '会员属性\n会员等级/注册时间' }
+          ]
+        },
+        {
+          name: '行为特征',
+          children: [
+            { name: '活跃特征\n访问频次/停留时长' },
+            { name: '消费特征\n客单价/购买频次' },
+            { name: '互动特征\n收藏/评价/分享' }
+          ]
+        },
+        {
+          name: '偏好特征',
+          children: [
+            { name: '品类偏好\n喜欢买什么品类' },
+            { name: '风格偏好\n喜欢什么风格' },
+            { name: '价格偏好\n价格敏感度' },
+            { name: '时间偏好\n什么时候购买' }
+          ]
+        },
+        {
+          name: '价值特征',
+          children: [
+            { name: '消费能力\n高/中/低消费' },
+            { name: '忠诚度\n高/中/低忠诚' },
+            { name: '潜力\n高/中/低潜力' }
+          ]
+        }
+      ]
+    }],
+    top: '5%',
+    left: '12%',
+    bottom: '5%',
+    right: '20%',
+    symbolSize: 10,
+    orient: 'LR',
+    label: {
+      position: 'left',
+      verticalAlign: 'middle',
+      align: 'right',
+      fontSize: 12,
+      fontFamily: 'Noto Sans SC',
+      color: '#333333'
+    },
+    leaves: {
+      label: {
+        position: 'right',
+        verticalAlign: 'middle',
+        align: 'left',
+        fontSize: 11,
+        fontFamily: 'Noto Sans SC',
+        color: '#666666'
+      }
+    },
+    lineStyle: {
+      color: '#CCCCCC',
+      width: 1.5,
+      curveness: 0.5
+    },
+    itemStyle: {
+      color: COLORS.primary,
+      borderColor: COLORS.primary
+    },
+    emphasis: {
+      focus: 'descendant',
+      itemStyle: { color: COLORS.accent }
+    },
+    expandAndCollapse: true,
+    animationDuration: 550,
+    animationDurationUpdate: 750,
+    initialTreeDepth: 2
+  }]
+});
+
+// ============================================================
+// CHART 3: Donut - Category Preference
+// ============================================================
+const chartCategory = echarts.init(document.getElementById('chart-category'));
+chartCategory.setOption({
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: {c}元 ({d}%)',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E0E0E0',
+    textStyle: { color: '#333333', fontSize: 13 }
+  },
+  legend: {
+    orient: 'vertical',
+    right: '5%',
+    top: 'center',
+    textStyle: { color: '#666666', fontSize: 12, fontFamily: 'Noto Sans SC' },
+    itemWidth: 12,
+    itemHeight: 12,
+    itemGap: 16
+  },
+  series: [{
+    type: 'pie',
+    radius: ['45%', '72%'],
+    center: ['35%', '50%'],
+    avoidLabelOverlap: true,
+    itemStyle: {
+      borderRadius: 3,
+      borderColor: '#FFFFFF',
+      borderWidth: 2
+    },
+    label: {
+      show: false
+    },
+    emphasis: {
+      label: {
+        show: true,
+        fontSize: 14,
+        fontWeight: 'bold',
+        fontFamily: 'Noto Sans SC'
+      },
+      itemStyle: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.15)'
+      }
+    },
+    data: [
+      { value: 2860, name: '外套', itemStyle: { color: COLORS.primary } },
+      { value: 2280, name: '裤装', itemStyle: { color: COLORS.primaryLight } },
+      { value: 1520, name: '鞋靴', itemStyle: { color: '#6699CC' } },
+      { value: 1140, name: '配饰', itemStyle: { color: COLORS.accent } },
+      { value: 760, name: '内搭', itemStyle: { color: COLORS.gray } },
+      { value: 440, name: '其他', itemStyle: { color: COLORS.lightGray } }
+    ]
+  }]
+});
+
+// ============================================================
+// CHART 4: Bar - Price Sensitivity
+// ============================================================
+const chartPrice = echarts.init(document.getElementById('chart-price'));
+chartPrice.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E0E0E0',
+    textStyle: { color: '#333333', fontSize: 13 }
+  },
+  grid: {
+    left: '8%',
+    right: '8%',
+    bottom: '12%',
+    top: '8%'
+  },
+  xAxis: {
+    type: 'category',
+    data: ['0-100元\n低价', '100-300元\n中低价', '300-500元\n中价', '500-1000元\n中高价', '1000元以上\n高价'],
+    axisLabel: {
+      color: '#666666',
+      fontSize: 11,
+      fontFamily: 'Noto Sans SC',
+      interval: 0
+    },
+    axisLine: { lineStyle: { color: '#E0E0E0' } },
+    axisTick: { show: false }
+  },
+  yAxis: {
+    type: 'value',
+    name: '购买频次占比 (%)',
+    nameTextStyle: { color: '#999999', fontSize: 11, fontFamily: 'Noto Sans SC' },
+    axisLabel: { color: '#999999', fontSize: 11 },
+    axisLine: { show: false },
+    splitLine: { lineStyle: { color: '#EEEEEE' } }
+  },
+  series: [{
+    type: 'bar',
+    data: [
+      { value: 15, itemStyle: { color: COLORS.lightGray } },
+      { value: 25, itemStyle: { color: '#6699CC' } },
+      { value: 35, itemStyle: { color: COLORS.primary } },
+      { value: 18, itemStyle: { color: COLORS.primaryLight } },
+      { value: 7, itemStyle: { color: COLORS.accent } }
+    ],
+    barWidth: '50%',
+    itemStyle: {
+      borderRadius: [2, 2, 0, 0]
+    },
+    label: {
+      show: true,
+      position: 'top',
+      formatter: '{c}%',
+      color: '#333333',
+      fontSize: 12,
+      fontWeight: 600,
+      fontFamily: 'Noto Sans SC'
+    }
+  }]
+});
+
+// ============================================================
+// CHART 5: Scatter - User Segmentation
+// ============================================================
+const chartScatter = echarts.init(document.getElementById('chart-scatter'));
+// Generate scatter data
+function generateScatterData() {
+  const data = [];
+  // High value users (high consume + high loyalty)
+  for (let i = 0; i < 35; i++) {
+    data.push([60 + Math.random() * 35, 65 + Math.random() * 30, 20 + Math.random() * 15]);
+  }
+  // Potential users (mid consume + high active)
+  for (let i = 0; i < 45; i++) {
+    data.push([30 + Math.random() * 35, 50 + Math.random() * 40, 15 + Math.random() * 10]);
+  }
+  // Price sensitive (high sensitive + mid consume)
+  for (let i = 0; i < 40; i++) {
+    data.push([20 + Math.random() * 40, 20 + Math.random() * 35, 12 + Math.random() * 8]);
+  }
+  // Low value (low consume + low active)
+  for (let i = 0; i < 30; i++) {
+    data.push([5 + Math.random() * 25, 5 + Math.random() * 25, 8 + Math.random() * 7]);
+  }
+  return data;
+}
+
+const scatterData = generateScatterData();
+const scatterSeries = [
+  {
+    name: '高价值用户',
+    type: 'scatter',
+    data: scatterData.slice(0, 35),
+    symbolSize: function(d) { return d[2]; },
+    itemStyle: { color: COLORS.primary, opacity: 0.7 },
+    emphasis: { itemStyle: { opacity: 1, shadowBlur: 10 } }
+  },
+  {
+    name: '潜力用户',
+    type: 'scatter',
+    data: scatterData.slice(35, 80),
+    symbolSize: function(d) { return d[2]; },
+    itemStyle: { color: COLORS.accent, opacity: 0.7 },
+    emphasis: { itemStyle: { opacity: 1, shadowBlur: 10 } }
+  },
+  {
+    name: '价格敏感用户',
+    type: 'scatter',
+    data: scatterData.slice(80, 120),
+    symbolSize: function(d) { return d[2]; },
+    itemStyle: { color: '#6699CC', opacity: 0.7 },
+    emphasis: { itemStyle: { opacity: 1, shadowBlur: 10 } }
+  },
+  {
+    name: '低价值用户',
+    type: 'scatter',
+    data: scatterData.slice(120, 150),
+    symbolSize: function(d) { return d[2]; },
+    itemStyle: { color: COLORS.lightGray, opacity: 0.7 },
+    emphasis: { itemStyle: { opacity: 1, shadowBlur: 10 } }
+  }
+];
+
+chartScatter.setOption({
+  tooltip: {
+    trigger: 'item',
+    formatter: function(p) {
+      return p.seriesName + '<br/>消费能力: ' + p.value[0].toFixed(0) + '<br/>忠诚度: ' + p.value[1].toFixed(0);
+    },
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E0E0E0',
+    textStyle: { color: '#333333', fontSize: 12 }
+  },
+  legend: {
+    data: ['高价值用户', '潜力用户', '价格敏感用户', '低价值用户'],
+    bottom: 10,
+    textStyle: { color: '#666666', fontSize: 11, fontFamily: 'Noto Sans SC' },
+    itemWidth: 12,
+    itemHeight: 12
+  },
+  grid: {
+    left: '10%',
+    right: '10%',
+    bottom: '15%',
+    top: '8%'
+  },
+  xAxis: {
+    name: '消费能力',
+    nameTextStyle: { color: '#999999', fontSize: 12, fontFamily: 'Noto Sans SC' },
+    axisLabel: { color: '#999999', fontSize: 11 },
+    axisLine: { lineStyle: { color: '#E0E0E0' } },
+    splitLine: { show: false }
+  },
+  yAxis: {
+    name: '忠诚度',
+    nameTextStyle: { color: '#999999', fontSize: 12, fontFamily: 'Noto Sans SC' },
+    axisLabel: { color: '#999999', fontSize: 11 },
+    axisLine: { show: false },
+    splitLine: { lineStyle: { color: '#EEEEEE' } }
+  },
+  series: scatterSeries,
+  markLine: {
+    silent: true,
+    lineStyle: { color: '#E0E0E0', type: 'dashed' }
+  }
+});
+
+// Add quadrant lines via markLine in each series
+scatterSeries.forEach(s => {
+  s.markLine = {
+    silent: true,
+    symbol: 'none',
+    lineStyle: { color: '#E0E0E0', type: 'dashed', width: 1 },
+    data: [
+      { xAxis: 50 },
+      { yAxis: 50 }
+    ],
+    label: { show: false }
+  };
+});
+chartScatter.setOption({ series: scatterSeries });
+
+// ============================================================
+// CHART 6: Bar - Tag Distribution
+// ============================================================
+const chartTags = echarts.init(document.getElementById('chart-tags'));
+chartTags.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E0E0E0',
+    textStyle: { color: '#333333', fontSize: 13 }
+  },
+  grid: {
+    left: '12%',
+    right: '8%',
+    bottom: '12%',
+    top: '8%'
+  },
+  xAxis: {
+    type: 'category',
+    data: ['基础属性', '行为特征', '偏好特征', '价值特征'],
+    axisLabel: {
+      color: '#666666',
+      fontSize: 12,
+      fontFamily: 'Noto Sans SC'
+    },
+    axisLine: { lineStyle: { color: '#E0E0E0' } },
+    axisTick: { show: false }
+  },
+  yAxis: {
+    type: 'value',
+    name: '标签数量',
+    nameTextStyle: { color: '#999999', fontSize: 11, fontFamily: 'Noto Sans SC' },
+    axisLabel: { color: '#999999', fontSize: 11 },
+    axisLine: { show: false },
+    splitLine: { lineStyle: { color: '#EEEEEE' } }
+  },
+  series: [{
+    type: 'bar',
+    data: [
+      { value: 10, itemStyle: { color: COLORS.primary } },
+      { value: 15, itemStyle: { color: COLORS.primaryLight } },
+      { value: 20, itemStyle: { color: COLORS.accent } },
+      { value: 8, itemStyle: { color: COLORS.gray } }
+    ],
+    barWidth: '45%',
+    itemStyle: { borderRadius: [2, 2, 0, 0] },
+    label: {
+      show: true,
+      position: 'top',
+      formatter: '{c}个',
+      color: '#333333',
+      fontSize: 13,
+      fontWeight: 700,
+      fontFamily: 'Noto Serif SC'
+    }
+  }]
+});
+
+// ============================================================
+// CHART 7: Bar - Effect Comparison (Before vs After)
+// ============================================================
+const chartEffect = echarts.init(document.getElementById('chart-effect'));
+chartEffect.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E0E0E0',
+    textStyle: { color: '#333333', fontSize: 13 }
+  },
+  legend: {
+    data: ['应用前', '应用后'],
+    bottom: 10,
+    textStyle: { color: '#666666', fontSize: 12, fontFamily: 'Noto Sans SC' },
+    itemWidth: 16,
+    itemHeight: 8
+  },
+  grid: {
+    left: '10%',
+    right: '10%',
+    bottom: '18%',
+    top: '8%'
+  },
+  xAxis: {
+    type: 'category',
+    data: ['推荐点击率 (%)', '营销转化率 (%)', '用户满意度 (%)'],
+    axisLabel: {
+      color: '#666666',
+      fontSize: 12,
+      fontFamily: 'Noto Sans SC'
+    },
+    axisLine: { lineStyle: { color: '#E0E0E0' } },
+    axisTick: { show: false }
+  },
+  yAxis: {
+    type: 'value',
+    axisLabel: { color: '#999999', fontSize: 11 },
+    axisLine: { show: false },
+    splitLine: { lineStyle: { color: '#EEEEEE' } }
+  },
+  series: [
+    {
+      name: '应用前',
+      type: 'bar',
+      data: [12, 8, 72],
+      barWidth: '28%',
+      itemStyle: { color: COLORS.lightGray, borderRadius: [2, 2, 0, 0] },
+      label: {
+        show: true,
+        position: 'top',
+        formatter: '{c}%',
+        color: '#999999',
+        fontSize: 11
+      }
+    },
+    {
+      name: '应用后',
+      type: 'bar',
+      data: [15, 9.44, 82.8],
+      barWidth: '28%',
+      itemStyle: { color: COLORS.primary, borderRadius: [2, 2, 0, 0] },
+      label: {
+        show: true,
+        position: 'top',
+        formatter: '{c}%',
+        color: COLORS.primary,
+        fontSize: 11,
+        fontWeight: 600
+      }
+    }
+  ]
+});
+
+// ============================================================
+// RESPONSIVE - Resize Charts
+// ============================================================
+window.addEventListener('resize', () => {
+  chartRadar.resize();
+  chartTree.resize();
+  chartCategory.resize();
+  chartPrice.resize();
+  chartScatter.resize();
+  chartTags.resize();
+  chartEffect.resize();
+});
+
+// ============================================================
+// INITIAL STATE - Set first section visible
+// ============================================================
+document.querySelector('.hero').style.opacity = '1';
+document.querySelector('.hero').style.transform = 'translateY(0)';
+</script>
+
+<script>window.STORY_META = {"id": "story-12", "num": "12", "title": "千人千面的用户画像", "subtitle": "把分散标签组织成可行动的用户画像。", "category": "用户分析", "duration": 14, "tags": ["用户画像", "聚类", "分层运营"], "indexHref": "index.html", "homeHref": "../home.html", "relatedChapters": [{"num": "07", "title": "用户画像与分层运营", "href": "../articles/ch07.html"}], "storyCount": 26, "prev": {"title": "用户生命周期价值几何？", "href": "customer-lifetime-value.html"}, "next": {"title": "20%的商品贡献80%的GMV", "href": "product-abc-analysis.html"}};</script>
+<script src="../assets/story-shell.js"></script>
+</body>
+</html>

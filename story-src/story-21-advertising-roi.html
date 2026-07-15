@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>故事21：广告投放的钱花哪了？ — 数据分析故事</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CSS VARIABLES & RESET
+   ============================================================ */
+:root {
+  --bg-deep: #050510;
+  --bg: #0A0A1A;
+  --primary: #1A237E;
+  --primary-light: #3949AB;
+  --secondary: #4A148C;
+  --secondary-light: #7B1FA2;
+  --accent: #FF3D00;
+  --accent-light: #FF6E40;
+  --gold: #FFD54F;
+  --green: #00E676;
+  --green-dim: #00C853;
+  --text: #E8EAF6;
+  --text-light: #9FA8DA;
+  --text-muted: #5C6BC0;
+  --bg-card: rgba(26, 35, 126, 0.25);
+  --bg-card-hover: rgba(26, 35, 126, 0.35);
+  --bg-section: rgba(74, 20, 140, 0.08);
+  --border: rgba(92, 107, 192, 0.2);
+  --border-subtle: rgba(92, 107, 192, 0.1);
+  --border-glow: rgba(255, 61, 0, 0.3);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(92, 107, 192, 0.08);
+  --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 61, 0, 0.05);
+  --radius: 16px;
+  --font-serif: 'Noto Serif SC', 'Georgia', serif;
+  --font-sans: 'Noto Sans SC', 'Helvetica Neue', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--bg-deep);
+  line-height: 1.9;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+html { scrollbar-width: thin; scrollbar-color: var(--primary) var(--bg-deep); }
+
+/* Strong/Bold text */
+strong, b {
+  font-weight: 600;
+  color: var(--primary-light);
+  letter-spacing: 0.02em;
+}
+
+/* Inline highlight for key data terms */
+.highlight-term {
+  background: linear-gradient(180deg, transparent 55%, rgba(255, 61, 0, 0.3) 55%);
+  padding: 0 2px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ============================================================
+   STARFIELD CANVAS
+   ============================================================ */
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary-light), var(--accent));
+  z-index: 1000;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 12px rgba(255, 61, 0, 0.5);
+}
+
+/* ============================================================
+   NAVIGATION DOTS
+   ============================================================ */
+.nav-dots {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border: none;
+  outline: none;
+}
+
+.nav-dot.active {
+  background: var(--accent);
+  transform: scale(1.4);
+  box-shadow: 0 0 10px rgba(255, 61, 0, 0.6);
+}
+
+.nav-dot:hover::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(10, 10, 26, 0.95);
+  color: var(--text);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  border: 1px solid var(--border);
+}
+
+/* ============================================================
+   SECTION BASE
+   ============================================================ */
+.story-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.story-section .container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 40px;
+  width: 100%;
+}
+
+/* Scroll animation */
+.fade-in {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(255, 61, 0, 0.06) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(26, 35, 126, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 60%, rgba(74, 20, 140, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  background: rgba(255, 61, 0, 0.08);
+  border: 1px solid rgba(255, 61, 0, 0.25);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 32px;
+  letter-spacing: 0.05em;
+}
+
+.hero-badge .pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 24px;
+  color: var(--text);
+  position: relative;
+}
+
+.hero-title .accent {
+  color: var(--accent);
+  position: relative;
+}
+
+.hero-title .accent::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 2px;
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--text-light);
+  max-width: 600px;
+  margin: 0 auto 48px;
+  line-height: 1.8;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.hero-meta-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.hero-meta-value {
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  transform: rotate(45deg);
+}
+
+/* ============================================================
+   SECTION TITLES
+   ============================================================ */
+.section-number {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-light);
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+
+/* ============================================================
+   GLASS CARD
+   ============================================================ */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================================
+   CALLOUT BOXES
+   ============================================================ */
+.callout {
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 24px 0;
+  position: relative;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.callout::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+}
+
+.callout-danger {
+  background: rgba(255, 61, 0, 0.06);
+  border: 1px solid rgba(255, 61, 0, 0.2);
+}
+.callout-danger::before { background: var(--accent); }
+
+.callout-warning {
+  background: rgba(255, 213, 79, 0.06);
+  border: 1px solid rgba(255, 213, 79, 0.2);
+}
+.callout-warning::before { background: var(--gold); }
+
+.callout-tip {
+  background: rgba(0, 230, 118, 0.06);
+  border: 1px solid rgba(0, 230, 118, 0.2);
+}
+.callout-tip::before { background: var(--green); }
+
+.callout-info {
+  background: rgba(26, 35, 126, 0.12);
+  border: 1px solid rgba(26, 35, 126, 0.3);
+}
+.callout-info::before { background: var(--primary-light); }
+
+.callout-question {
+  background: rgba(255, 213, 79, 0.04);
+  border: 1px solid rgba(255, 213, 79, 0.12);
+}
+.callout-question::before { background: var(--gold); }
+
+.callout-quote {
+  background: rgba(92, 107, 192, 0.06);
+  border: 1px solid rgba(92, 107, 192, 0.12);
+}
+.callout-quote::before { background: var(--text-light); }
+
+.callout-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.callout-danger .callout-label { color: var(--accent); }
+.callout-warning .callout-label { color: var(--gold); }
+.callout-tip .callout-label { color: var(--green); }
+.callout-info .callout-label { color: var(--primary-light); }
+.callout-question .callout-label { color: var(--gold); }
+
+.callout-content {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.callout-content strong {
+  color: var(--text);
+}
+
+.callout-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+
+.callout-content ul li {
+  padding: 4px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.callout-content ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.callout-danger .callout-content ul li::before { background: var(--accent); }
+.callout-warning .callout-content ul li::before { background: var(--gold); }
+.callout-tip .callout-content ul li::before { background: var(--green); }
+
+/* ============================================================
+   DATA TABLES
+   ============================================================ */
+.data-table-wrapper {
+  overflow-x: auto;
+  margin: 24px 0;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table thead th {
+  background: rgba(26, 35, 126, 0.3);
+  color: var(--text);
+  font-weight: 600;
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+
+.data-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(92, 107, 192, 0.06);
+  color: var(--text-light);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(255, 61, 0, 0.03);
+}
+
+.data-table .danger-row {
+  background: rgba(255, 61, 0, 0.04);
+}
+
+.data-table .danger-row td {
+  color: var(--accent-light);
+  font-weight: 500;
+}
+
+.data-table .warning-row {
+  background: rgba(255, 213, 79, 0.03);
+}
+
+.data-table .success-row {
+  background: rgba(0, 230, 118, 0.03);
+}
+
+.data-table .total-row {
+  background: rgba(26, 35, 126, 0.15);
+  font-weight: 600;
+}
+
+.data-table .total-row td {
+  color: var(--text);
+  border-top: 2px solid var(--border);
+}
+
+/* ============================================================
+   SIGNAL PANEL (channel data display)
+   ============================================================ */
+.signal-panel {
+  background: rgba(10, 10, 26, 0.6);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 230, 118, 0.15);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.signal-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  animation: signal-scan 3s ease-in-out infinite;
+}
+
+@keyframes signal-scan {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+.signal-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.signal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 1.5s infinite;
+}
+
+.signal-panel-title {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--green);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.signal-panel .data-table thead th {
+  background: rgba(0, 230, 118, 0.08);
+}
+
+/* ============================================================
+   CHART CONTAINERS
+   ============================================================ */
+.chart-container {
+  width: 100%;
+  height: 420px;
+  margin: 32px 0;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(10, 10, 26, 0.5);
+  padding: 16px;
+}
+
+.chart-container-sm {
+  height: 340px;
+}
+
+/* ============================================================
+   PROCESS STEPS
+   ============================================================ */
+.process-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 32px 0;
+}
+
+.process-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 0;
+  position: relative;
+}
+
+.process-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 52px;
+  bottom: -4px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--primary), var(--border-subtle));
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.step-number.blue {
+  background: rgba(26, 35, 126, 0.5);
+  color: var(--primary-light);
+  border: 2px solid rgba(57, 73, 171, 0.3);
+}
+
+.step-number.red {
+  background: rgba(255, 61, 0, 0.15);
+  color: var(--accent);
+  border: 2px solid rgba(255, 61, 0, 0.3);
+}
+
+.step-number.green {
+  background: rgba(0, 230, 118, 0.15);
+  color: var(--green);
+  border: 2px solid rgba(0, 230, 118, 0.3);
+}
+
+.step-number.gold {
+  background: rgba(255, 213, 79, 0.12);
+  color: var(--gold);
+  border: 2px solid rgba(255, 213, 79, 0.3);
+}
+
+.step-content h4 {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.step-content p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* ============================================================
+   STAT CARDS
+   ============================================================ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border);
+}
+
+.stat-card .stat-value {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.stat-card .stat-value.red { color: var(--accent); }
+.stat-card .stat-value.gold { color: var(--gold); }
+.stat-card .stat-value.green { color: var(--green); }
+.stat-card .stat-value.blue { color: var(--primary-light); }
+
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   TAG LIST
+   ============================================================ */
+.tag-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.tag-red {
+  color: var(--accent);
+  border-color: rgba(255, 61, 0, 0.3);
+  background: rgba(255, 61, 0, 0.08);
+}
+
+.tag-blue {
+  color: var(--primary-light);
+  border-color: rgba(57, 73, 171, 0.3);
+  background: rgba(26, 35, 126, 0.15);
+}
+
+.tag-gold {
+  color: var(--gold);
+  border-color: rgba(255, 213, 79, 0.3);
+  background: rgba(255, 213, 79, 0.08);
+}
+
+.tag-green {
+  color: var(--green);
+  border-color: rgba(0, 230, 118, 0.3);
+  background: rgba(0, 230, 118, 0.08);
+}
+
+/* ============================================================
+   CHECKLIST
+   ============================================================ */
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+}
+
+.checklist li {
+  padding: 10px 16px 10px 44px;
+  position: relative;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: background 0.2s ease;
+}
+
+.checklist li:hover {
+  background: rgba(26, 35, 126, 0.1);
+}
+
+.checklist li::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--green);
+  background: rgba(0, 230, 118, 0.15);
+}
+
+.checklist li::after {
+  content: '\2713';
+  position: absolute;
+  left: 19px;
+  top: 13px;
+  color: var(--green);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+   TOC (Table of Contents)
+   ============================================================ */
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 32px 0;
+}
+
+.toc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.toc-item:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 61, 0, 0.1);
+}
+
+.toc-num {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent);
+  min-width: 24px;
+}
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+.section-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 2px;
+  margin: 40px 0;
+}
+
+/* ============================================================
+   PARAGRAPH
+   ============================================================ */
+.content-text {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+
+.content-text + .content-text {
+  margin-top: 8px;
+}
+
+/* ============================================================
+   SUMMARY SECTION
+   ============================================================ */
+.summary-section {
+  background: linear-gradient(180deg, transparent, rgba(255, 61, 0, 0.02));
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin: 32px 0;
+}
+
+.summary-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 28px;
+  transition: transform 0.3s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+}
+
+.summary-card .card-icon {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.summary-card h4 {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.summary-card p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   FORMULA BOX
+   ============================================================ */
+.formula-box {
+  background: rgba(10, 10, 26, 0.6);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 32px;
+  margin: 24px 0;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+}
+
+.formula-box .formula-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.story-footer {
+  text-align: center;
+  padding: 60px 40px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border-subtle);
+  position: relative;
+  z-index: 1;
+}
+
+.story-footer a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.story-footer a:hover {
+  color: var(--accent-light);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .story-section .container {
+    padding: 0 20px;
+  }
+  .nav-dots {
+    right: 12px;
+    gap: 8px;
+  }
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+  }
+  .nav-dot:hover::after {
+    display: none;
+  }
+  .hero-meta {
+    gap: 20px;
+  }
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .chart-container {
+    height: 320px;
+    padding: 8px;
+  }
+  .glass-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  .toc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes signal-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.3); }
+  50% { box-shadow: 0 0 20px 4px rgba(0, 230, 118, 0.1); }
+}
+
+.signal-panel {
+  animation: signal-pulse 4s ease-in-out infinite;
+}
+
+/* Orbit ring decoration */
+.orbit-ring {
+  position: absolute;
+  border: 1px solid rgba(92, 107, 192, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<!-- Starfield Canvas -->
+<canvas id="starfield"></canvas>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots">
+  <button class="nav-dot" data-target="hero" data-label="首页"></button>
+  <button class="nav-dot" data-target="toc" data-label="目录"></button>
+  <button class="nav-dot" data-target="sec-background" data-label="故事背景"></button>
+  <button class="nav-dot" data-target="sec-overview" data-label="投放概览"></button>
+  <button class="nav-dot" data-target="sec-chart1" data-label="金额vs GMV"></button>
+  <button class="nav-dot" data-target="sec-deep" data-label="深度分析"></button>
+  <button class="nav-dot" data-target="sec-chart2" data-label="ROI对比"></button>
+  <button class="nav-dot" data-target="sec-chart3" data-label="用户质量"></button>
+  <button class="nav-dot" data-target="sec-optimize" data-label="优化建议"></button>
+  <button class="nav-dot" data-target="sec-chart4" data-label="当前vs建议"></button>
+  <button class="nav-dot" data-target="sec-chart5" data-label="效率矩阵"></button>
+  <button class="nav-dot" data-target="sec-findings" data-label="关键发现"></button>
+  <button class="nav-dot" data-target="sec-advice" data-label="业务建议"></button>
+  <button class="nav-dot" data-target="sec-method" data-label="方法论"></button>
+  <button class="nav-dot" data-target="sec-exercise" data-label="思考练习"></button>
+  <button class="nav-dot" data-target="sec-summary" data-label="总结"></button>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     ============================================================ -->
+<section class="hero-section" id="hero">
+  <div class="hero-badge">
+    <span class="pulse-dot"></span>
+    故事21 / 渠道分析
+  </div>
+  <h1 class="hero-title">
+    广告投放的<span class="accent">钱</span>花哪了？
+  </h1>
+  <p class="hero-subtitle">
+    100万广告费投下去，效果究竟如何？<br>
+    通过渠道ROI分析，精准定位每一分钱的去向与回报。
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">核心方法</span>
+      <span class="hero-meta-value">渠道ROI分析</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">难度</span>
+      <span class="hero-meta-value">&#11088;&#11088;&#11088;&#9734;&#9734;</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">阅读时间</span>
+      <span class="hero-meta-value">约 8 分钟</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">标签</span>
+      <span class="hero-meta-value">#渠道分析 #ROI #广告投放</span>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>向下探索</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TABLE OF CONTENTS
+     ============================================================ -->
+<section class="story-section" id="toc">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">NAVIGATION</p>
+      <h2 class="section-title">探索路线图</h2>
+      <p class="section-subtitle">跟随信号，逐步揭开广告投放效果的真相。</p>
+      <div class="toc-grid">
+        <a class="toc-item" href="#sec-background">
+          <span class="toc-num">01</span> 故事背景
+        </a>
+        <a class="toc-item" href="#sec-overview">
+          <span class="toc-num">02</span> 投放概览
+        </a>
+        <a class="toc-item" href="#sec-chart1">
+          <span class="toc-num">03</span> 金额 vs GMV
+        </a>
+        <a class="toc-item" href="#sec-deep">
+          <span class="toc-num">04</span> 渠道深度分析
+        </a>
+        <a class="toc-item" href="#sec-chart2">
+          <span class="toc-num">05</span> ROI 对比
+        </a>
+        <a class="toc-item" href="#sec-chart3">
+          <span class="toc-num">06</span> 用户质量雷达
+        </a>
+        <a class="toc-item" href="#sec-optimize">
+          <span class="toc-num">07</span> 优化建议
+        </a>
+        <a class="toc-item" href="#sec-chart4">
+          <span class="toc-num">08</span> 当前 vs 建议
+        </a>
+        <a class="toc-item" href="#sec-chart5">
+          <span class="toc-num">09</span> 效率矩阵
+        </a>
+        <a class="toc-item" href="#sec-findings">
+          <span class="toc-num">10</span> 关键发现
+        </a>
+        <a class="toc-item" href="#sec-advice">
+          <span class="toc-num">11</span> 业务建议
+        </a>
+        <a class="toc-item" href="#sec-method">
+          <span class="toc-num">12</span> 方法论总结
+        </a>
+        <a class="toc-item" href="#sec-exercise">
+          <span class="toc-num">13</span> 思考练习
+        </a>
+        <a class="toc-item" href="#sec-summary">
+          <span class="toc-num">14</span> 总结
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 1: STORY BACKGROUND
+     ============================================================ -->
+<section class="story-section" id="sec-background">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 01</p>
+      <h2 class="section-title">故事背景</h2>
+      <div class="section-divider"></div>
+
+      <div class="callout callout-quote">
+        <div class="callout-label">老板</div>
+        <div class="callout-content">
+          "上个月投放了<span class="highlight-term">100万</span>广告费，但不知道效果如何。这100万花得值不值？"
+        </div>
+      </div>
+
+      <div class="callout callout-quote">
+        <div class="callout-label">市场部经理</div>
+        <div class="callout-content">
+          "你帮我分析一下各渠道的投放效果。"
+        </div>
+      </div>
+
+      <div class="callout callout-question">
+        <div class="callout-label">核心问题</div>
+        <div class="callout-content">
+          如何评估广告投放效果？各渠道<span class="highlight-term">ROI</span>如何？
+        </div>
+      </div>
+
+      <p class="content-text">
+        这是一则非常典型的场景。公司投入了大量广告预算，但管理层对投放效果缺乏清晰的认知。市场部在多个渠道同时投放，却无法回答一个最基本的问题：<strong>钱花得值不值？</strong>
+      </p>
+      <p class="content-text">
+        接下来，我们将通过<strong>渠道ROI分析</strong>的方法，一步步拆解各渠道的投放数据，找出问题所在，并给出优化建议。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 2: INVESTMENT OVERVIEW
+     ============================================================ -->
+<section class="story-section" id="sec-overview">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 02 / 第一步</p>
+      <h2 class="section-title">投放概览</h2>
+      <p class="section-subtitle">首先，我们需要一张全局视图，了解各渠道的投放金额、带来的GMV以及ROI。</p>
+
+      <!-- Key Stats -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value gold">100万</div>
+          <div class="stat-label">总投放金额</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value green">320万</div>
+          <div class="stat-label">总带来GMV</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value blue">3.2</div>
+          <div class="stat-label">整体ROI</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value red">4个</div>
+          <div class="stat-label">投放渠道</div>
+        </div>
+      </div>
+
+      <!-- Signal Panel: Channel Data -->
+      <div class="signal-panel">
+        <div class="signal-panel-header">
+          <span class="signal-dot"></span>
+          <span class="signal-panel-title">CHANNEL SIGNAL // 渠道投放数据面板</span>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>渠道</th>
+                <th>投放金额</th>
+                <th>占比</th>
+                <th>带来GMV</th>
+                <th>ROI</th>
+                <th>判断</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="success-row">
+                <td><strong>百度SEM</strong></td>
+                <td><span class="highlight-term">30万</span></td>
+                <td>30%</td>
+                <td><span class="highlight-term">120万</span></td>
+                <td><span class="highlight-term">4.0</span></td>
+                <td><span class="tag tag-green">优秀</span></td>
+              </tr>
+              <tr class="warning-row">
+                <td><strong>信息流</strong></td>
+                <td><span class="highlight-term">40万</span></td>
+                <td>40%</td>
+                <td><span class="highlight-term">100万</span></td>
+                <td><span class="highlight-term">2.5</span></td>
+                <td><span class="tag tag-gold">偏低</span></td>
+              </tr>
+              <tr class="success-row">
+                <td><strong>社交广告</strong></td>
+                <td><span class="highlight-term">20万</span></td>
+                <td>20%</td>
+                <td><span class="highlight-term">80万</span></td>
+                <td><span class="highlight-term">4.0</span></td>
+                <td><span class="tag tag-green">优秀</span></td>
+              </tr>
+              <tr class="danger-row">
+                <td><strong>其他</strong></td>
+                <td><span class="highlight-term">10万</span></td>
+                <td>10%</td>
+                <td><span class="highlight-term">20万</span></td>
+                <td><span class="highlight-term">2.0</span></td>
+                <td><span class="tag tag-red">较差</span></td>
+              </tr>
+              <tr class="total-row">
+                <td><strong>合计</strong></td>
+                <td><strong>100万</strong></td>
+                <td><strong>100%</strong></td>
+                <td><strong>320万</strong></td>
+                <td><strong>3.2</strong></td>
+                <td><span class="tag tag-green">良好</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout callout-danger">
+        <div class="callout-label">关键发现</div>
+        <div class="callout-content">
+          整体ROI为<span class="highlight-term">3.2</span>，但信息流投放占比最大（<span class="highlight-term">40%</span>）却ROI最低（<span class="highlight-term">2.5</span>），存在严重的<strong>资源错配</strong>问题。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 3: CHART 1 - Investment vs GMV
+     ============================================================ -->
+<section class="story-section" id="sec-chart1">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 03 / 数据可视化</p>
+      <h2 class="section-title">投放金额 vs GMV</h2>
+      <p class="section-subtitle">双轴图直观展示各渠道的投入产出关系。柱状表示投放金额，折线表示GMV。</p>
+      <div class="chart-container" id="chart1"></div>
+      <p class="content-text">
+        从图中可以清晰看到：<strong>信息流</strong>虽然投放金额最高（40万），但带来的GMV（100万）远低于百度SEM（120万）。这说明信息流的<strong>转化效率</strong>存在明显问题。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4: DEEP ANALYSIS
+     ============================================================ -->
+<section class="story-section" id="sec-deep">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 04 / 第二步</p>
+      <h2 class="section-title">渠道深度分析</h2>
+      <p class="section-subtitle">仅看ROI还不够，我们需要进一步分析各渠道的用户质量，才能做出更精准的判断。</p>
+
+      <!-- Signal Panel: User Quality -->
+      <div class="signal-panel">
+        <div class="signal-panel-header">
+          <span class="signal-dot"></span>
+          <span class="signal-panel-title">USER QUALITY SIGNAL // 各渠道用户质量数据</span>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>渠道</th>
+                <th>新增用户</th>
+                <th>获客成本</th>
+                <th>首单转化率</th>
+                <th>30天留存率</th>
+                <th>判断</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="success-row">
+                <td><strong>百度SEM</strong></td>
+                <td><span class="highlight-term">1.5万</span></td>
+                <td>20元</td>
+                <td><span class="highlight-term">35%</span></td>
+                <td><span class="highlight-term">45%</span></td>
+                <td><span class="tag tag-green">优秀</span></td>
+              </tr>
+              <tr class="danger-row">
+                <td><strong>信息流</strong></td>
+                <td><span class="highlight-term">2万</span></td>
+                <td>20元</td>
+                <td><span class="highlight-term">20%</span></td>
+                <td><span class="highlight-term">25%</span></td>
+                <td><span class="tag tag-red">较差</span></td>
+              </tr>
+              <tr class="success-row">
+                <td><strong>社交广告</strong></td>
+                <td><span class="highlight-term">1万</span></td>
+                <td>20元</td>
+                <td><span class="highlight-term">40%</span></td>
+                <td><span class="highlight-term">50%</span></td>
+                <td><span class="tag tag-green">最佳</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-label">关键发现</div>
+        <div class="callout-content">
+          信息流获客成本低但<strong>用户质量差</strong>——首单转化率仅<span class="highlight-term">20%</span>（vs 社交广告<span class="highlight-term">40%</span>），30天留存率仅<span class="highlight-term">25%</span>（vs 社交广告<span class="highlight-term">50%</span>）。
+        </div>
+      </div>
+
+      <p class="content-text">
+        有趣的是，三个渠道的<strong>获客成本都是20元</strong>，但用户质量却天差地别。这说明获客成本并不能完全反映渠道价值——<strong>便宜不等于好</strong>，关键在于获取的用户能不能真正转化为付费用户并留存下来。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5: CHART 2 - ROI Comparison
+     ============================================================ -->
+<section class="story-section" id="sec-chart2">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 05 / 数据可视化</p>
+      <h2 class="section-title">渠道ROI对比</h2>
+      <p class="section-subtitle">水平条形图清晰展示各渠道ROI差异，红色警戒线标识整体平均水平。</p>
+      <div class="chart-container" id="chart2"></div>
+      <p class="content-text">
+        ROI差异非常明显：百度SEM和社交广告的ROI达到<span class="highlight-term">4.0</span>，是"其他"渠道（<span class="highlight-term">2.0</span>）的两倍。信息流虽然不是最差，但考虑到其投放金额最大，<strong>低ROI的影响被放大了</strong>。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6: CHART 3 - User Quality Radar
+     ============================================================ -->
+<section class="story-section" id="sec-chart3">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 06 / 数据可视化</p>
+      <h2 class="section-title">用户质量多维对比</h2>
+      <p class="section-subtitle">雷达图从获客成本、首单转化率、30天留存率三个维度，综合对比各渠道的用户质量。</p>
+      <div class="chart-container" id="chart3"></div>
+      <p class="content-text">
+        雷达图直观地展示了<strong>社交广告</strong>在用户质量方面的全面优势：转化率和留存率均为最高。而<strong>信息流</strong>虽然获客数量最多，但质量指标全面落后，形成了一个"大而不强"的典型。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 7: OPTIMIZATION SUGGESTIONS
+     ============================================================ -->
+<section class="story-section" id="sec-optimize">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 07 / 第三步</p>
+      <h2 class="section-title">投放优化建议</h2>
+      <p class="section-subtitle">基于以上分析，我们制定了一套投放优化方案，将资源从低效渠道向高效渠道转移。</p>
+
+      <div class="signal-panel">
+        <div class="signal-panel-header">
+          <span class="signal-dot"></span>
+          <span class="signal-panel-title">OPTIMIZATION SIGNAL // 投放优化方案</span>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>渠道</th>
+                <th>当前投放</th>
+                <th>建议投放</th>
+                <th>调整幅度</th>
+                <th>理由</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="success-row">
+                <td><strong>百度SEM</strong></td>
+                <td>30万</td>
+                <td><span class="highlight-term">40万</span></td>
+                <td><span class="tag tag-green">+10万</span></td>
+                <td>ROI高，用户质量好</td>
+              </tr>
+              <tr class="danger-row">
+                <td><strong>信息流</strong></td>
+                <td>40万</td>
+                <td><span class="highlight-term">20万</span></td>
+                <td><span class="tag tag-red">-20万</span></td>
+                <td>ROI低，用户质量差</td>
+              </tr>
+              <tr class="success-row">
+                <td><strong>社交广告</strong></td>
+                <td>20万</td>
+                <td><span class="highlight-term">30万</span></td>
+                <td><span class="tag tag-green">+10万</span></td>
+                <td>ROI高，用户质量好</td>
+              </tr>
+              <tr>
+                <td><strong>其他</strong></td>
+                <td>10万</td>
+                <td>10万</td>
+                <td><span class="tag tag-gold">持平</span></td>
+                <td>维持现状</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="content-text">
+        核心思路很简单：<strong>加大高效渠道投入，削减低效渠道预算</strong>。百度SEM和社交广告是表现最好的两个渠道，应该获得更多资源；信息流虽然获客量大，但用户质量差，需要大幅缩减。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 8: CHART 4 - Current vs Suggested
+     ============================================================ -->
+<section class="story-section" id="sec-chart4">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 08 / 数据可视化</p>
+      <h2 class="section-title">当前投放 vs 优化建议</h2>
+      <p class="section-subtitle">对比图清晰展示预算调整方向：信息流大幅缩减，百度SEM和社交广告相应增加。</p>
+      <div class="chart-container" id="chart4"></div>
+      <p class="content-text">
+        优化后，总预算仍为<span class="highlight-term">100万</span>不变，但预计整体GMV将从<span class="highlight-term">320万</span>提升至约<span class="highlight-term">400万</span>，整体ROI从<span class="highlight-term">3.2</span>提升至约<span class="highlight-term">4.0</span>。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 9: CHART 5 - Efficiency Matrix
+     ============================================================ -->
+<section class="story-section" id="sec-chart5">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 09 / 数据可视化</p>
+      <h2 class="section-title">渠道效率矩阵</h2>
+      <p class="section-subtitle">气泡图综合展示投放金额（X轴）、ROI（Y轴）和用户质量（气泡大小），一眼看清每个渠道的定位。</p>
+      <div class="chart-container" id="chart5"></div>
+      <p class="content-text">
+        理想的渠道应该位于<strong>右上方</strong>（高ROI + 高质量用户）。社交广告和百度SEM正是这样的渠道。信息流虽然投放金额大，但ROI低、用户质量差，处于<strong>左下方</strong>，是需要重点优化的对象。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 10: KEY FINDINGS
+     ============================================================ -->
+<section class="story-section" id="sec-findings">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 10</p>
+      <h2 class="section-title">关键发现</h2>
+      <div class="section-divider"></div>
+
+      <div class="callout callout-danger">
+        <div class="callout-label">发现1：渠道ROI差异大</div>
+        <div class="callout-content">
+          <ul>
+            <li>不同渠道ROI差异明显（<span class="highlight-term">2.0 ~ 4.0</span>）</li>
+            <li>需要优化投放结构，将资源向高ROI渠道倾斜</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-warning">
+        <div class="callout-label">发现2：获客成本 ≠ 用户价值</div>
+        <div class="callout-content">
+          <ul>
+            <li>信息流获客成本低但<strong>用户质量差</strong></li>
+            <li>需要综合评估，不能只看获客成本</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-label">发现3：投放需要持续优化</div>
+        <div class="callout-content">
+          <ul>
+            <li>定期评估渠道效果</li>
+            <li>动态调整投放策略</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 11: BUSINESS ADVICE
+     ============================================================ -->
+<section class="story-section" id="sec-advice">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 11</p>
+      <h2 class="section-title">业务建议</h2>
+      <div class="section-divider"></div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="card-icon">&#128640;</div>
+          <h4>短期建议：调整投放结构</h4>
+          <p>增加高ROI渠道投放（百度SEM、社交广告），减少低ROI渠道投放（信息流）。同时优化投放策略，实施精准定向和创意优化。</p>
+        </div>
+        <div class="summary-card">
+          <div class="card-icon">&#128202;</div>
+          <h4>长期建议：建立评估体系</h4>
+          <p>定期评估渠道效果，建立预警机制。当某渠道ROI低于阈值时自动触发告警，确保问题能被及时发现和解决。</p>
+        </div>
+        <div class="summary-card">
+          <div class="card-icon">&#9881;</div>
+          <h4>长期建议：建立优化机制</h4>
+          <p>通过A/B测试持续优化投放策略。对不同渠道的定向人群、广告素材、出价策略进行系统化测试和迭代。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 12: METHODOLOGY
+     ============================================================ -->
+<section class="story-section" id="sec-method">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 12</p>
+      <h2 class="section-title">方法论总结</h2>
+      <div class="section-divider"></div>
+
+      <div class="callout callout-info">
+        <div class="callout-label">核心方法：渠道ROI分析</div>
+        <div class="callout-content">
+          <strong>定义</strong>：通过计算各广告渠道的投资回报率（ROI），评估投放效果，优化资源配置。
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <div class="formula-label">ROI Formula</div>
+        ROI = GMV / 投放金额 = 带来的交易额 / 广告花费
+      </div>
+
+      <div class="glass-card" style="margin-top: 24px;">
+        <h4 style="font-family: var(--font-serif); color: var(--text); margin-bottom: 16px;">适用场景</h4>
+        <ul class="checklist">
+          <li>多渠道广告投放效果评估</li>
+          <li>广告预算分配优化</li>
+          <li>渠道质量对比分析</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-warning" style="margin-top: 24px;">
+        <div class="callout-label">注意事项</div>
+        <div class="callout-content">
+          <ul>
+            <li>ROI仅衡量短期转化效果，品牌广告需结合其他指标</li>
+            <li>不同渠道的用户生命周期价值（LTV）可能差异很大</li>
+            <li>需要考虑归因问题，避免重复计算</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4 style="font-family: var(--font-serif); color: var(--text); margin-top: 32px; margin-bottom: 16px;">分析步骤</h4>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-number red">1</div>
+          <div class="step-content">
+            <h4>收集投放数据</h4>
+            <p>汇总各渠道的投放金额、GMV、用户数据等基础信息。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number blue">2</div>
+          <div class="step-content">
+            <h4>计算各渠道ROI</h4>
+            <p>ROI = GMV / 投放金额，量化每个渠道的投入产出比。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number blue">3</div>
+          <div class="step-content">
+            <h4>分析用户质量</h4>
+            <p>从获客成本、转化率、留存率等维度评估用户质量。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number blue">4</div>
+          <div class="step-content">
+            <h4>对比渠道表现</h4>
+            <p>识别优劣渠道，找出资源错配的环节。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number blue">5</div>
+          <div class="step-content">
+            <h4>制定优化方案</h4>
+            <p>调整预算分配，将资源向高效渠道倾斜。</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="step-number green">6</div>
+          <div class="step-content">
+            <h4>输出分析报告</h4>
+            <p>形成渠道ROI分析报告与优化建议，推动执行落地。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 13: EXERCISES
+     ============================================================ -->
+<section class="story-section" id="sec-exercise">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">CHAPTER 13</p>
+      <h2 class="section-title">思考练习</h2>
+      <div class="section-divider"></div>
+
+      <div class="callout callout-question">
+        <div class="callout-label">练习 1</div>
+        <div class="callout-content">
+          如何评估品牌广告的效果（不以转化为目标）？
+        </div>
+      </div>
+
+      <div class="callout callout-question">
+        <div class="callout-label">练习 2</div>
+        <div class="callout-content">
+          如何设计广告投放的A/B测试？
+        </div>
+      </div>
+
+      <div class="callout callout-question">
+        <div class="callout-label">练习 3</div>
+        <div class="callout-content">
+          如何平衡短期ROI和长期品牌建设？
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 14: SUMMARY
+     ============================================================ -->
+<section class="story-section summary-section" id="sec-summary">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-number">EPILOGUE</p>
+      <h2 class="section-title">总结</h2>
+      <div class="section-divider"></div>
+
+      <p class="content-text">
+        通过本次渠道ROI分析，我们揭示了广告投放中一个普遍存在的问题：<strong>花钱最多的渠道，未必是效果最好的渠道</strong>。信息流广告占据了40%的预算，却只贡献了最低的ROI和最差的用户质量。
+      </p>
+      <p class="content-text">
+        核心要点可以归纳为三句话：
+      </p>
+
+      <div class="stat-grid" style="margin-top: 32px;">
+        <div class="stat-card">
+          <div class="stat-value red">2.0 ~ 4.0</div>
+          <div class="stat-label">渠道ROI差异范围</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value gold">40% vs 20%</div>
+          <div class="stat-label">信息流占比 vs 实际应投占比</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value green">3.2 → 4.0</div>
+          <div class="stat-label">优化后预期ROI提升</div>
+        </div>
+      </div>
+
+      <p class="content-text" style="margin-top: 24px;">
+        <strong>第一</strong>，不同渠道的ROI差异巨大，必须精细化评估，不能"一刀切"。<br>
+        <strong>第二</strong>，获客成本不等于用户价值，需要综合转化率和留存率来判断。<br>
+        <strong>第三</strong>，广告投放是一个持续优化的过程，需要建立常态化的评估和调整机制。
+      </p>
+
+      <div class="callout callout-tip" style="margin-top: 32px;">
+        <div class="callout-label">一句话总结</div>
+        <div class="callout-content">
+          <strong>广告投放的核心不是"花多少钱"，而是"每一块钱花在了哪里、带来了什么回报"。</strong>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 48px;">
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          下一篇 <a href="#" style="color: var(--accent); text-decoration: none;">故事22：用户从哪里来？</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="story-footer">
+  <p>数据分析故事合集 &mdash; 故事21：广告投放的钱花哪了？</p>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// ============================================================
+// STARFIELD BACKGROUND
+// ============================================================
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  const STAR_COUNT = 200;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function createStars() {
+    stars = [];
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.3,
+        alpha: Math.random() * 0.8 + 0.2,
+        speed: Math.random() * 0.3 + 0.05,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      const flicker = 0.5 + 0.5 * Math.sin(time * 0.001 * s.speed + s.phase);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200, 210, 255, ${s.alpha * flicker})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  createStars();
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', () => { resize(); createStars(); });
+})();
+
+// ============================================================
+// PROGRESS BAR
+// ============================================================
+window.addEventListener('scroll', function() {
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const progress = (scrollTop / scrollHeight) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// ============================================================
+// INTERSECTION OBSERVER - FADE IN
+// ============================================================
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+// ============================================================
+// NAVIGATION DOTS
+// ============================================================
+const sections = document.querySelectorAll('.story-section, .hero-section');
+const navDots = document.querySelectorAll('.nav-dot');
+
+// Click to scroll
+navDots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const targetId = dot.getAttribute('data-target');
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+
+// Active state on scroll
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navDots.forEach(dot => {
+        dot.classList.toggle('active', dot.getAttribute('data-target') === id);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(sec => sectionObserver.observe(sec));
+
+// ============================================================
+// ECHARTS - Common Theme
+// ============================================================
+const chartTextColor = '#9FA8DA';
+const chartAxisColor = 'rgba(92, 107, 192, 0.3)';
+const chartBg = 'transparent';
+
+function getBaseOption() {
+  return {
+    backgroundColor: chartBg,
+    textStyle: { color: chartTextColor, fontFamily: 'Noto Sans SC' },
+    tooltip: {
+      backgroundColor: 'rgba(10, 10, 26, 0.9)',
+      borderColor: 'rgba(92, 107, 192, 0.3)',
+      textStyle: { color: '#E8EAF6', fontFamily: 'Noto Sans SC' }
+    }
+  };
+}
+
+// ============================================================
+// CHART 1: Investment vs GMV (Bar + Line)
+// ============================================================
+(function() {
+  const chart = echarts.init(document.getElementById('chart1'));
+  const option = Object.assign(getBaseOption(), {
+    legend: {
+      data: ['投放金额(万)', 'GMV(万)'],
+      textStyle: { color: chartTextColor },
+      top: 10
+    },
+    grid: { left: '8%', right: '8%', bottom: '12%', top: '18%' },
+    xAxis: {
+      type: 'category',
+      data: ['百度SEM', '信息流', '社交广告', '其他'],
+      axisLine: { lineStyle: { color: chartAxisColor } },
+      axisLabel: { color: chartTextColor }
+    },
+    yAxis: [
+      {
+        type: 'value',
+        name: '金额(万)',
+        nameTextStyle: { color: chartTextColor },
+        axisLine: { lineStyle: { color: chartAxisColor } },
+        axisLabel: { color: chartTextColor },
+        splitLine: { lineStyle: { color: 'rgba(92, 107, 192, 0.1)' } }
+      },
+      {
+        type: 'value',
+        name: 'GMV(万)',
+        nameTextStyle: { color: chartTextColor },
+        axisLine: { lineStyle: { color: chartAxisColor } },
+        axisLabel: { color: chartTextColor },
+        splitLine: { show: false }
+      }
+    ],
+    series: [
+      {
+        name: '投放金额(万)',
+        type: 'bar',
+        barWidth: '35%',
+        data: [
+          { value: 30, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#3949AB'}, {offset: 1, color: '#1A237E'}]) } },
+          { value: 40, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#FF6E40'}, {offset: 1, color: '#FF3D00'}]) } },
+          { value: 20, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#3949AB'}, {offset: 1, color: '#1A237E'}]) } },
+          { value: 10, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: '#5C6BC0'}, {offset: 1, color: '#3949AB'}]) } }
+        ],
+        label: { show: true, position: 'top', color: '#E8EAF6', fontSize: 13, fontWeight: 'bold' }
+      },
+      {
+        name: 'GMV(万)',
+        type: 'line',
+        yAxisIndex: 1,
+        data: [120, 100, 80, 20],
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 10,
+        lineStyle: { color: '#00E676', width: 3 },
+        itemStyle: { color: '#00E676', borderColor: '#050510', borderWidth: 2 },
+        label: { show: true, position: 'top', color: '#00E676', fontSize: 13, fontWeight: 'bold' }
+      }
+    ]
+  });
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+
+// ============================================================
+// CHART 2: ROI Comparison (Horizontal Bar)
+// ============================================================
+(function() {
+  const chart = echarts.init(document.getElementById('chart2'));
+  const option = Object.assign(getBaseOption(), {
+    grid: { left: '20%', right: '12%', bottom: '8%', top: '8%' },
+    xAxis: {
+      type: 'value',
+      name: 'ROI',
+      nameTextStyle: { color: chartTextColor },
+      max: 5,
+      axisLine: { lineStyle: { color: chartAxisColor } },
+      axisLabel: { color: chartTextColor },
+      splitLine: { lineStyle: { color: 'rgba(92, 107, 192, 0.1)' } }
+    },
+    yAxis: {
+      type: 'category',
+      data: ['其他', '信息流', '百度SEM', '社交广告'],
+      axisLine: { lineStyle: { color: chartAxisColor } },
+      axisLabel: { color: chartTextColor, fontSize: 13 }
+    },
+    series: [{
+      type: 'bar',
+      barWidth: '50%',
+      data: [
+        { value: 2.0, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#FF3D00'}, {offset: 1, color: '#FF6E40'}]) } },
+        { value: 2.5, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#FFD54F'}, {offset: 1, color: '#FFAB00'}]) } },
+        { value: 4.0, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#00C853'}, {offset: 1, color: '#00E676'}]) } },
+        { value: 4.0, itemStyle: { color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#00C853'}, {offset: 1, color: '#00E676'}]) } }
+      ],
+      label: { show: true, position: 'right', color: '#E8EAF6', fontSize: 14, fontWeight: 'bold', formatter: '{c}' },
+      markLine: {
+        silent: true,
+        symbol: 'none',
+        lineStyle: { color: '#FF3D00', type: 'dashed', width: 2 },
+        data: [{ xAxis: 3.2, label: { formatter: '整体ROI 3.2', color: '#FF3D00', fontSize: 12 } }]
+      }
+    }]
+  });
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+
+// ============================================================
+// CHART 3: User Quality Radar
+// ============================================================
+(function() {
+  const chart = echarts.init(document.getElementById('chart3'));
+  const option = Object.assign(getBaseOption(), {
+    legend: {
+      data: ['百度SEM', '信息流', '社交广告'],
+      textStyle: { color: chartTextColor },
+      top: 10
+    },
+    radar: {
+      indicator: [
+        { name: '新增用户(万)', max: 2.5 },
+        { name: '首单转化率(%)', max: 50 },
+        { name: '30天留存率(%)', max: 60 }
+      ],
+      shape: 'polygon',
+      splitNumber: 4,
+      axisName: { color: chartTextColor, fontSize: 12 },
+      splitLine: { lineStyle: { color: 'rgba(92, 107, 192, 0.15)' } },
+      splitArea: { areaStyle: { color: ['rgba(26, 35, 126, 0.05)', 'rgba(26, 35, 126, 0.1)'] } },
+      axisLine: { lineStyle: { color: 'rgba(92, 107, 192, 0.2)' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          value: [1.5, 35, 45],
+          name: '百度SEM',
+          lineStyle: { color: '#3949AB', width: 2 },
+          itemStyle: { color: '#3949AB' },
+          areaStyle: { color: 'rgba(57, 73, 171, 0.2)' }
+        },
+        {
+          value: [2.0, 20, 25],
+          name: '信息流',
+          lineStyle: { color: '#FF3D00', width: 2 },
+          itemStyle: { color: '#FF3D00' },
+          areaStyle: { color: 'rgba(255, 61, 0, 0.15)' }
+        },
+        {
+          value: [1.0, 40, 50],
+          name: '社交广告',
+          lineStyle: { color: '#00E676', width: 2 },
+          itemStyle: { color: '#00E676' },
+          areaStyle: { color: 'rgba(0, 230, 118, 0.15)' }
+        }
+      ]
+    }]
+  });
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+
+// ============================================================
+// CHART 4: Current vs Suggested (Grouped Bar)
+// ============================================================
+(function() {
+  const chart = echarts.init(document.getElementById('chart4'));
+  const option = Object.assign(getBaseOption(), {
+    legend: {
+      data: ['当前投放(万)', '建议投放(万)'],
+      textStyle: { color: chartTextColor },
+      top: 10
+    },
+    grid: { left: '8%', right: '8%', bottom: '12%', top: '18%' },
+    xAxis: {
+      type: 'category',
+      data: ['百度SEM', '信息流', '社交广告', '其他'],
+      axisLine: { lineStyle: { color: chartAxisColor } },
+      axisLabel: { color: chartTextColor }
+    },
+    yAxis: {
+      type: 'value',
+      name: '金额(万)',
+      nameTextStyle: { color: chartTextColor },
+      axisLine: { lineStyle: { color: chartAxisColor } },
+      axisLabel: { color: chartTextColor },
+      splitLine: { lineStyle: { color: 'rgba(92, 107, 192, 0.1)' } }
+    },
+    series: [
+      {
+        name: '当前投放(万)',
+        type: 'bar',
+        barWidth: '30%',
+        data: [30, 40, 20, 10],
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {offset: 0, color: '#5C6BC0'},
+            {offset: 1, color: '#3949AB'}
+          ]),
+          borderRadius: [4, 4, 0, 0]
+        },
+        label: { show: true, position: 'top', color: '#9FA8DA', fontSize: 12 }
+      },
+      {
+        name: '建议投放(万)',
+        type: 'bar',
+        barWidth: '30%',
+        data: [40, 20, 30, 10],
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {offset: 0, color: '#00E676'},
+            {offset: 1, color: '#00C853'}
+          ]),
+          borderRadius: [4, 4, 0, 0]
+        },
+        label: { show: true, position: 'top', color: '#00E676', fontSize: 12, fontWeight: 'bold' }
+      }
+    ]
+  });
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+
+// ============================================================
+// CHART 5: Efficiency Matrix (Bubble)
+// ============================================================
+(function() {
+  const chart = echarts.init(document.getElementById('chart5'));
+  const option = Object.assign(getBaseOption(), {
+    legend: {
+      data: ['渠道'],
+      textStyle: { color: chartTextColor },
+      top: 10
+    },
+    grid: { left: '12%', right: '12%', bottom: '15%', top: '15%' },
+    xAxis: {
+      type: 'value',
+      name: '投放金额(万)',
+      nameTextStyle: { color: chartTextColor },
+      axisLine: { lineStyle: { color: chartAxisColor } },
+      axisLabel: { color: chartTextColor },
+      splitLine: { lineStyle: { color: 'rgba(92, 107, 192, 0.1)' } }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'ROI',
+      nameTextStyle: { color: chartTextColor },
+      min: 1,
+      max: 5,
+      axisLine: { lineStyle: { color: chartAxisColor } },
+      axisLabel: { color: chartTextColor },
+      splitLine: { lineStyle: { color: 'rgba(92, 107, 192, 0.1)' } }
+    },
+    series: [{
+      name: '渠道',
+      type: 'scatter',
+      symbolSize: function(data) {
+        return data[2] * 12;
+      },
+      data: [
+        {
+          value: [30, 4.0, 3.5],
+          name: '百度SEM',
+          itemStyle: { color: new echarts.graphic.RadialGradient(0.5, 0.5, 0.5, [
+            {offset: 0, color: 'rgba(57, 73, 171, 0.8)'},
+            {offset: 1, color: 'rgba(26, 35, 126, 0.6)'}
+          ])}
+        },
+        {
+          value: [40, 2.5, 2.0],
+          name: '信息流',
+          itemStyle: { color: new echarts.graphic.RadialGradient(0.5, 0.5, 0.5, [
+            {offset: 0, color: 'rgba(255, 61, 0, 0.8)'},
+            {offset: 1, color: 'rgba(255, 61, 0, 0.5)'}
+          ])}
+        },
+        {
+          value: [20, 4.0, 4.0],
+          name: '社交广告',
+          itemStyle: { color: new echarts.graphic.RadialGradient(0.5, 0.5, 0.5, [
+            {offset: 0, color: 'rgba(0, 230, 118, 0.8)'},
+            {offset: 1, color: 'rgba(0, 200, 83, 0.5)'}
+          ])}
+        },
+        {
+          value: [10, 2.0, 1.0],
+          name: '其他',
+          itemStyle: { color: new echarts.graphic.RadialGradient(0.5, 0.5, 0.5, [
+            {offset: 0, color: 'rgba(255, 213, 79, 0.7)'},
+            {offset: 1, color: 'rgba(255, 171, 0, 0.4)'}
+          ])}
+        }
+      ],
+      label: {
+        show: true,
+        formatter: function(params) { return params.name; },
+        position: 'top',
+        color: '#E8EAF6',
+        fontSize: 13,
+        fontWeight: 'bold'
+      },
+      markLine: {
+        silent: true,
+        symbol: 'none',
+        lineStyle: { color: 'rgba(255, 61, 0, 0.3)', type: 'dashed' },
+        data: [
+          { yAxis: 3.2, label: { formatter: 'ROI 3.2', color: '#FF6E40', fontSize: 11 } }
+        ]
+      },
+      tooltip: {
+        formatter: function(params) {
+          const d = params.value;
+          return '<strong>' + params.name + '</strong><br/>' +
+                 '投放金额：' + d[0] + '万<br/>' +
+                 'ROI：' + d[1] + '<br/>' +
+                 '用户质量评分：' + d[2];
+        }
+      }
+    }]
+  });
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
+})();
+</script>
+</body>
+</html>

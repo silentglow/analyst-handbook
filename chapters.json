@@ -17,7 +17,30 @@
       "label": "准备好了？",
       "link": "articles/ch02.html",
       "text": "第二章 · 进入鲜食记的业务场景"
-    }
+    },
+    "module": "business-loop",
+    "content_type": "guide",
+    "duration": 6,
+    "objectives": [
+      "理解数据分析面试真正评估的四类能力",
+      "学会使用课程、案例故事与复习模式"
+    ],
+    "framework": [
+      "定义问题",
+      "结构化拆解",
+      "用数据验证",
+      "形成业务决策",
+      "清晰表达"
+    ],
+    "interview_answer": "面试官不只看工具熟练度，更关注你能否把模糊业务问题转化为可验证的分析，并推动形成决策。",
+    "pitfalls": [
+      "只背框架名称，不解释分析顺序",
+      "只讲结论，不说明证据和验证过程"
+    ],
+    "related_stories": [
+      "story-02",
+      "story-07"
+    ]
   },
   {
     "slug": "ch02",
@@ -35,7 +58,29 @@
     "next": {
       "link": "ch03.html",
       "text": "第三章 · 该盯哪些指标"
-    }
+    },
+    "module": "business-loop",
+    "content_type": "case",
+    "duration": 9,
+    "objectives": [
+      "从模糊需求中识别真正需要回答的问题",
+      "建立分析前的任务边界和交付意识"
+    ],
+    "framework": [
+      "明确业务目标",
+      "确认指标异常",
+      "列出未知问题",
+      "确定汇报交付"
+    ],
+    "interview_answer": "拿到业务异动时，我不会立即下结论，而会先澄清业务目标、指标口径、影响范围和交付时限，再安排验证顺序。",
+    "pitfalls": [
+      "看到数据就直接解释原因",
+      "没有确认业务方真正要做的决策"
+    ],
+    "related_stories": [
+      "story-02",
+      "story-24"
+    ]
   },
   {
     "slug": "ch03",
@@ -53,7 +98,30 @@
     "next": {
       "link": "ch04.html",
       "text": "第四章 · 开始排查异动"
-    }
+    },
+    "module": "business-loop",
+    "content_type": "case",
+    "duration": 10,
+    "objectives": [
+      "识别指标口径变化带来的假异常",
+      "用指标树建立后续排查范围"
+    ],
+    "framework": [
+      "确认分子分母",
+      "确认时间窗口",
+      "确认埋点与数据延迟",
+      "建立指标树"
+    ],
+    "interview_answer": "我会先检查口径、埋点和数据延迟，确认异常真实存在；随后围绕业务目标搭建指标树，避免无目的地下钻。",
+    "pitfalls": [
+      "把指标定义当作默认共识",
+      "一开始就同时拆很多无关维度"
+    ],
+    "related_stories": [
+      "story-03",
+      "story-07",
+      "story-02"
+    ]
   },
   {
     "slug": "ch04",
@@ -71,7 +139,31 @@
     "next": {
       "link": "ch05.html",
       "text": "第五章 · 设计AB实验验证方案"
-    }
+    },
+    "module": "business-loop",
+    "content_type": "case",
+    "duration": 13,
+    "objectives": [
+      "掌握异动分析的标准排查顺序",
+      "区分相关线索、业务假设和已验证根因"
+    ],
+    "framework": [
+      "可信度检查",
+      "时间定位",
+      "维度下钻",
+      "行为验证",
+      "形成归因"
+    ],
+    "interview_answer": "异动分析先排除数据问题，再定位异常时间和影响范围，然后按渠道、用户和行为环节下钻，最后用更多证据验证最可能的原因。",
+    "pitfalls": [
+      "找到相关维度就宣布根因",
+      "忽略渠道结构变化造成的整体波动"
+    ],
+    "related_stories": [
+      "story-01",
+      "story-04",
+      "story-24"
+    ]
   },
   {
     "slug": "ch05",
@@ -89,7 +181,30 @@
     "next": {
       "link": "ch06.html",
       "text": "第六章 · 落地策略"
-    }
+    },
+    "module": "business-loop",
+    "content_type": "case",
+    "duration": 13,
+    "objectives": [
+      "把业务建议转化为可检验假设",
+      "设计指标、样本和风险控制完整的实验"
+    ],
+    "framework": [
+      "提出假设",
+      "确定实验单位",
+      "选择主指标与护栏指标",
+      "估算样本量",
+      "设定停止规则"
+    ],
+    "interview_answer": "实验设计需要同时说明假设、随机单位、主指标、护栏指标、样本量、实验周期和停止规则，避免只比较上线前后。",
+    "pitfalls": [
+      "实验中途频繁查看并提前停止",
+      "只看转化提升，不看投诉或留存等护栏指标"
+    ],
+    "related_stories": [
+      "story-18",
+      "story-16"
+    ]
   },
   {
     "slug": "ch06",
@@ -107,7 +222,31 @@
     "next": {
       "link": "ch07.html",
       "text": "第七章 · 用户画像与分层运营"
-    }
+    },
+    "module": "business-loop",
+    "content_type": "case",
+    "duration": 10,
+    "objectives": [
+      "将实验结论转化为可执行上线计划",
+      "建立监控、灰度和回退机制"
+    ],
+    "framework": [
+      "确认收益与风险",
+      "制定灰度计划",
+      "设置监控阈值",
+      "准备回退方案",
+      "复盘沉淀"
+    ],
+    "interview_answer": "分析闭环不止于给建议，还要说明负责人、上线节奏、监控指标、异常阈值和回退方案，并在上线后验证长期效果。",
+    "pitfalls": [
+      "把汇报完成当成项目结束",
+      "只有成功方案，没有风险和回退预案"
+    ],
+    "related_stories": [
+      "story-17",
+      "story-20",
+      "story-25"
+    ]
   },
   {
     "slug": "ch07",
@@ -125,7 +264,30 @@
     "next": {
       "link": "ch08.html",
       "text": "第八章 · 留存分析与生命周期"
-    }
+    },
+    "module": "analysis-toolbox",
+    "content_type": "concept",
+    "duration": 11,
+    "objectives": [
+      "区分人口属性标签和行为价值分层",
+      "让每个用户分层对应明确运营动作"
+    ],
+    "framework": [
+      "明确分层目的",
+      "选择行为与价值指标",
+      "验证组间差异",
+      "匹配差异化策略"
+    ],
+    "interview_answer": "用户分层不是贴标签，而是寻找对策略反应不同的人群；分层结果必须能够指导触达、权益或产品策略。",
+    "pitfalls": [
+      "标签很多但无法指导动作",
+      "只看行为表象，不区分购买动机"
+    ],
+    "related_stories": [
+      "story-08",
+      "story-12",
+      "story-06"
+    ]
   },
   {
     "slug": "ch08",
@@ -143,7 +305,32 @@
     "next": {
       "link": "ch09.html",
       "text": "第九章 · 数据预测与目标拆解"
-    }
+    },
+    "module": "analysis-toolbox",
+    "content_type": "concept",
+    "duration": 12,
+    "objectives": [
+      "正确构建留存队列并解读曲线",
+      "区分渠道质量与产品承接问题"
+    ],
+    "framework": [
+      "定义留存行为",
+      "建立Cohort",
+      "比较曲线形态",
+      "下钻关键行为",
+      "制定召回或激活策略"
+    ],
+    "interview_answer": "留存分析要统一用户起点和留存行为，使用Cohort比较不同人群，再结合关键行为判断问题发生在获客质量还是产品承接。",
+    "pitfalls": [
+      "只比较总体留存率",
+      "不同注册时间和渠道用户直接混在一起"
+    ],
+    "related_stories": [
+      "story-06",
+      "story-09",
+      "story-10",
+      "story-11"
+    ]
   },
   {
     "slug": "ch09",
@@ -161,7 +348,33 @@
     "next": {
       "link": "ch10.html",
       "text": "第十章 · 辛普森悖论"
-    }
+    },
+    "module": "analysis-toolbox",
+    "content_type": "concept",
+    "duration": 12,
+    "objectives": [
+      "把业务目标拆成可执行驱动因素",
+      "通过敏感性分析比较不同达成路径"
+    ],
+    "framework": [
+      "明确北极星目标",
+      "建立驱动公式",
+      "设定基线与假设",
+      "计算多条路径",
+      "识别关键约束"
+    ],
+    "interview_answer": "目标拆解不是平均分配，而是建立驱动公式，在基线、资源和约束条件下比较多种路径，并说明最敏感的杠杆。",
+    "pitfalls": [
+      "只给单一路径和单点预测",
+      "假设没有基线或业务依据"
+    ],
+    "related_stories": [
+      "story-05",
+      "story-16",
+      "story-25",
+      "story-01",
+      "story-11"
+    ]
   },
   {
     "slug": "ch10",
@@ -179,7 +392,30 @@
     "next": {
       "link": "ch11.html",
       "text": "第十一章 · P值与样本量"
-    }
+    },
+    "module": "analysis-toolbox",
+    "content_type": "concept",
+    "duration": 10,
+    "objectives": [
+      "识别整体趋势与分组趋势冲突",
+      "解释结构占比变化如何造成辛普森悖论"
+    ],
+    "framework": [
+      "查看整体趋势",
+      "按关键变量分组",
+      "比较组内趋势",
+      "检查结构占比",
+      "回到因果机制"
+    ],
+    "interview_answer": "当整体与分组结论冲突时，我会检查样本结构和混杂变量，避免用聚合数据直接做因果解释。",
+    "pitfalls": [
+      "只报整体平均数",
+      "分组后仍忽略各组样本占比变化"
+    ],
+    "related_stories": [
+      "story-03",
+      "story-21"
+    ]
   },
   {
     "slug": "ch11",
@@ -197,7 +433,29 @@
     "next": {
       "link": "ch12.html",
       "text": "第十二章 · 因果推断入门"
-    }
+    },
+    "module": "analysis-toolbox",
+    "content_type": "concept",
+    "duration": 15,
+    "objectives": [
+      "正确解释P值、显著性和置信区间",
+      "根据基线、MDE和功效估算样本量"
+    ],
+    "framework": [
+      "确定基线与MDE",
+      "设定显著性和功效",
+      "估算样本量",
+      "预先约定分析规则",
+      "同时报告效应量与区间"
+    ],
+    "interview_answer": "P值表示在原假设成立时观察到当前或更极端结果的概率，不是策略有效的概率；结论还需结合效应量、置信区间和业务价值。",
+    "pitfalls": [
+      "把P值理解为策略无效的概率",
+      "反复偷看结果并提前停止实验"
+    ],
+    "related_stories": [
+      "story-18"
+    ]
   },
   {
     "slug": "ch12",
@@ -215,7 +473,30 @@
     "next": {
       "link": "ch13.html",
       "text": "第十三章 · AI辅助数据分析"
-    }
+    },
+    "module": "analysis-toolbox",
+    "content_type": "concept",
+    "duration": 13,
+    "objectives": [
+      "区分相关关系和因果效果",
+      "根据业务条件选择DID、RDD或PSM"
+    ],
+    "framework": [
+      "定义处理与结果",
+      "识别反事实",
+      "检查可用自然实验",
+      "验证识别假设",
+      "进行稳健性检验"
+    ],
+    "interview_answer": "因果推断的核心是构造可信反事实；选择方法前要说明处理机制、关键假设以及如何验证平行趋势或断点连续性。",
+    "pitfalls": [
+      "看到相关性就归因",
+      "只说方法名称，不说明识别假设"
+    ],
+    "related_stories": [
+      "story-18",
+      "story-22"
+    ]
   },
   {
     "slug": "ch13",
@@ -233,7 +514,30 @@
     "next": {
       "link": "ch14.html",
       "text": "第十四章 · 互联网商业模式拆解"
-    }
+    },
+    "module": "analysis-toolbox",
+    "content_type": "concept",
+    "duration": 11,
+    "objectives": [
+      "明确AI在分析流程中的适用边界",
+      "建立可审计的人机协作分析流程"
+    ],
+    "framework": [
+      "定义口径与权限",
+      "让AI辅助查询和探索",
+      "人工验证结果",
+      "保留证据链",
+      "由业务负责人决策"
+    ],
+    "interview_answer": "AI适合辅助取数、探索和表达，但口径定义、因果判断、业务权衡和最终决策仍需要分析师负责。",
+    "pitfalls": [
+      "直接相信模型生成的数字和结论",
+      "把敏感数据和业务权限问题交给模型忽略"
+    ],
+    "related_stories": [
+      "story-02",
+      "story-03"
+    ]
   },
   {
     "slug": "ch14",
@@ -251,7 +555,34 @@
     "next": {
       "link": "ch15.html",
       "text": "第十五章 · 自我介绍与简历"
-    }
+    },
+    "module": "analysis-toolbox",
+    "content_type": "concept",
+    "duration": 12,
+    "objectives": [
+      "从收入、成本和约束拆解商业模式",
+      "让指标体系与盈利方式保持一致"
+    ],
+    "framework": [
+      "识别客户与价值主张",
+      "拆解收入公式",
+      "拆解成本结构",
+      "定位增长约束",
+      "选择健康度指标"
+    ],
+    "interview_answer": "理解商业模式后才能选择正确指标；我会从客户、价值、收入、成本和关键约束五个方面拆解，而不是只看用户增长。",
+    "pitfalls": [
+      "只讲收入，不分析成本和单位经济模型",
+      "所有产品都套用同一套增长指标"
+    ],
+    "related_stories": [
+      "story-01",
+      "story-13",
+      "story-15",
+      "story-23",
+      "story-05",
+      "story-14"
+    ]
   },
   {
     "slug": "ch15",
@@ -269,7 +600,30 @@
     "next": {
       "link": "ch16.html",
       "text": "第十六章 · 一面与二面的差异"
-    }
+    },
+    "module": "interview-output",
+    "content_type": "interview",
+    "duration": 10,
+    "objectives": [
+      "构造有定位、有证据的60秒自我介绍",
+      "把职责描述改写为业务成果"
+    ],
+    "framework": [
+      "一句话定位",
+      "相关经历",
+      "代表项目",
+      "量化结果",
+      "岗位连接"
+    ],
+    "interview_answer": "自我介绍应围绕岗位建立定位，用一到两个量化项目证明能力，并留下值得面试官继续追问的线索。",
+    "pitfalls": [
+      "按简历顺序逐条念经历",
+      "只罗列工具，没有业务结果"
+    ],
+    "related_stories": [
+      "story-02",
+      "story-24"
+    ]
   },
   {
     "slug": "ch16",
@@ -287,7 +641,29 @@
     "next": {
       "link": "ch17.html",
       "text": "第十七章 · 面试真题：指标体系"
-    }
+    },
+    "module": "interview-output",
+    "content_type": "interview",
+    "duration": 9,
+    "objectives": [
+      "区分一面、二面和业务负责人的考察重点",
+      "针对不同面试阶段调整答案深度"
+    ],
+    "framework": [
+      "识别面试角色",
+      "判断考察目标",
+      "调整技术与业务比重",
+      "准备对应追问"
+    ],
+    "interview_answer": "一面重点证明分析基本功，二面重点证明业务判断和推动能力；同一项目需要准备技术细节与决策影响两个版本。",
+    "pitfalls": [
+      "所有面试轮次使用同一套回答",
+      "二面继续只讲SQL和方法细节"
+    ],
+    "related_stories": [
+      "story-07",
+      "story-25"
+    ]
   },
   {
     "slug": "ch17",
@@ -305,7 +681,30 @@
     "next": {
       "link": "ch18.html",
       "text": "第十八章 · 面试真题：异动分析"
-    }
+    },
+    "module": "interview-output",
+    "content_type": "interview",
+    "duration": 12,
+    "objectives": [
+      "在面试中结构化搭建指标体系",
+      "同时设置结果、过程和反向指标"
+    ],
+    "framework": [
+      "明确业务阶段与目标",
+      "拆用户和业务链路",
+      "设置结果指标",
+      "设置过程指标",
+      "补充护栏与反向指标"
+    ],
+    "interview_answer": "搭指标体系前先问业务阶段和目标，再按用户与业务链路拆解结果指标、过程指标和护栏指标，并说明优先级。",
+    "pitfalls": [
+      "上来就罗列大量指标",
+      "只有增长指标，没有质量和风险指标"
+    ],
+    "related_stories": [
+      "story-07",
+      "story-19"
+    ]
   },
   {
     "slug": "ch18",
@@ -323,7 +722,32 @@
     "next": {
       "link": "ch19.html",
       "text": "第十九章 · 费米估算"
-    }
+    },
+    "module": "interview-output",
+    "content_type": "interview",
+    "duration": 13,
+    "objectives": [
+      "在90秒内给出完整异动分析框架",
+      "应对“如何验证根因”的追问"
+    ],
+    "framework": [
+      "确认异常真实",
+      "定位时间与范围",
+      "按公式和维度下钻",
+      "提出并验证假设",
+      "给出策略与监控"
+    ],
+    "interview_answer": "我会先排除口径和埋点问题，再定位异常发生时间；随后按指标公式及渠道、用户、产品环节下钻，结合事件和行为数据验证假设，最后给出止损和长期方案。",
+    "pitfalls": [
+      "回答变成可能原因清单",
+      "没有说明如何从相关线索验证到根因"
+    ],
+    "related_stories": [
+      "story-04",
+      "story-10",
+      "story-24",
+      "story-19"
+    ]
   },
   {
     "slug": "ch19",
@@ -341,7 +765,30 @@
     "next": {
       "link": "ch20.html",
       "text": "第二十章 · 没有项目经历怎么办"
-    }
+    },
+    "module": "interview-output",
+    "content_type": "interview",
+    "duration": 11,
+    "objectives": [
+      "用可解释的结构完成费米估算",
+      "通过上下界和敏感性分析处理不确定性"
+    ],
+    "framework": [
+      "明确口径",
+      "拆解公式",
+      "给出有依据假设",
+      "计算量级",
+      "做上下界检查"
+    ],
+    "interview_answer": "费米估算重点不在精确结果，而在结构、假设和校验；我会先定义口径，再拆公式、给假设、计算量级并用常识做上下界检查。",
+    "pitfalls": [
+      "直接猜最终数字",
+      "假设很多但不解释来源和量级"
+    ],
+    "related_stories": [
+      "story-11",
+      "story-25"
+    ]
   },
   {
     "slug": "ch20",
@@ -359,25 +806,73 @@
     "next": {
       "link": "ch21.html",
       "text": "第二十一章 · 大厂面试录音精选"
-    }
+    },
+    "module": "interview-output",
+    "content_type": "interview",
+    "duration": 10,
+    "objectives": [
+      "把练习项目改造成可信的项目经历",
+      "用STAR与证据链表达个人贡献"
+    ],
+    "framework": [
+      "选择真实问题",
+      "说明个人职责",
+      "展示分析与取舍",
+      "量化结果",
+      "诚实说明限制"
+    ],
+    "interview_answer": "没有正式项目也可以做公开数据项目，但必须说明数据来源、个人贡献、分析限制和可验证产出，不能把模拟项目包装成真实工作经历。",
+    "pitfalls": [
+      "虚构业务结果或个人职责",
+      "只展示图表，没有问题和决策"
+    ],
+    "related_stories": [
+      "story-01",
+      "story-24",
+      "story-25"
+    ]
   },
   {
     "slug": "ch21",
     "num": "21",
-    "title": "大厂面试录音精选（上）",
-    "short_title": "面试录音（上）",
-    "badge": "CH21 / 面试实战",
+    "title": "完整模拟面试：从开场到反问",
+    "short_title": "完整模拟面试",
+    "badge": "CH21 / 模拟面试",
     "theme": "#fbbf24",
     "theme_rgb": "251,191,36",
     "typewriter": [
-      "大厂面试录音",
-      "还原真实面试对话"
+      "完整模拟面试",
+      "从开场到反问"
     ],
-    "description": "还原真实数据分析师面试对话，看面试官怎么追问、候选人怎么应对。",
+    "description": "经历一场从自我介绍、项目深挖到业务案例和反问的完整模拟面试。",
     "next": {
       "link": "ch22.html",
       "text": "第二十二章 · 策略评估案例分析"
-    }
+    },
+    "module": "mock-career",
+    "content_type": "interview",
+    "duration": 15,
+    "objectives": [
+      "经历一场从自我介绍到反问的完整模拟面试",
+      "识别面试官追问背后的评分意图"
+    ],
+    "framework": [
+      "开场定位",
+      "项目深挖",
+      "业务案例",
+      "技术追问",
+      "复盘与反问"
+    ],
+    "interview_answer": "完整面试中要保持回答层级：先给结论和结构，再根据追问展开证据、技术细节与个人贡献。",
+    "pitfalls": [
+      "第一轮回答就讲得过长",
+      "面对追问不断改变原始口径"
+    ],
+    "related_stories": [
+      "story-03",
+      "story-07",
+      "story-24"
+    ]
   },
   {
     "slug": "ch22",
@@ -395,7 +890,33 @@
     "next": {
       "link": "ch23.html",
       "text": "第二十三章 · SQL面试必备"
-    }
+    },
+    "module": "mock-career",
+    "content_type": "interview",
+    "duration": 14,
+    "objectives": [
+      "从收益、行为和生态三个层次评估策略",
+      "设计可信的策略效果评估方案"
+    ],
+    "framework": [
+      "明确策略目标",
+      "计算直接收益成本",
+      "分析用户行为变化",
+      "评估长期生态影响",
+      "设计实验或准实验"
+    ],
+    "interview_answer": "策略评估不能只看一个结果指标，需要同时计算直接收益、用户行为迁移和长期生态影响，并说明反事实如何构造。",
+    "pitfalls": [
+      "用上线前后对比直接认定效果",
+      "忽略策略导致的用户迁移和长期副作用"
+    ],
+    "related_stories": [
+      "story-17",
+      "story-18",
+      "story-20",
+      "story-21",
+      "story-22"
+    ]
   },
   {
     "slug": "ch23",
@@ -413,7 +934,30 @@
     "next": {
       "link": "ch24.html",
       "text": "第二十四章 · 行业认知与职业规划"
-    }
+    },
+    "module": "mock-career",
+    "content_type": "interview",
+    "duration": 12,
+    "objectives": [
+      "解释SQL方案而不是只给出语句",
+      "识别留存、JOIN和窗口函数常见陷阱"
+    ],
+    "framework": [
+      "确认数据粒度",
+      "定义口径",
+      "选择连接关系",
+      "处理重复与空值",
+      "校验结果"
+    ],
+    "interview_answer": "SQL面试先说明表粒度和业务口径，再描述连接、聚合和窗口逻辑，最后说明如何校验重复、空值和边界日期。",
+    "pitfalls": [
+      "直接写SQL但没有确认粒度",
+      "JOIN造成重复后仍继续聚合"
+    ],
+    "related_stories": [
+      "story-03",
+      "story-09"
+    ]
   },
   {
     "slug": "ch24",
@@ -432,6 +976,216 @@
       "label": "回到起点",
       "link": "../home.html",
       "text": "回到首页"
-    }
+    },
+    "module": "mock-career",
+    "content_type": "career",
+    "duration": 14,
+    "objectives": [
+      "理解不同行业分析岗位的核心差异",
+      "制定下一阶段可执行的能力补齐计划"
+    ],
+    "framework": [
+      "判断行业商业模式",
+      "识别岗位核心问题",
+      "盘点可迁移能力",
+      "定位能力缺口",
+      "制定90天计划"
+    ],
+    "interview_answer": "职业选择应同时看行业问题、岗位职责和能力成长；我会用已有项目证明通用分析能力，再补充目标行业的商业指标和典型案例。",
+    "pitfalls": [
+      "只按公司知名度选择岗位",
+      "准备大量行业术语却没有通用分析框架"
+    ],
+    "related_stories": [
+      "story-01",
+      "story-21",
+      "story-25",
+      "story-23"
+    ]
+  },
+  {
+    "slug": "ml01",
+    "num": "ML01",
+    "title": "先别建模：审查业务问题",
+    "short_title": "先判断，再建模",
+    "badge": "ML01 / 问题审查",
+    "theme": "#fb7185",
+    "theme_rgb": "251,113,133",
+    "typewriter": [
+      "先别急着建模",
+      "先证明问题成立"
+    ],
+    "description": "用四类真实需求判断该做分析、规则、实验还是预测；学会拒绝一个定义错误的模型项目。",
+    "next": {
+      "link": "ml02.html",
+      "text": "ML02 · 履约风险决策"
+    },
+    "module": "ml-decision",
+    "content_type": "concept",
+    "duration": 18,
+    "objectives": [
+      "判断业务问题是否具备清晰对象、时点、结果和动作",
+      "识别目标错误、标签模糊、验证失真和无行动出口四类失败"
+    ],
+    "framework": [
+      "还原决策",
+      "固定时点",
+      "定义结果",
+      "寻找动作",
+      "比较替代方案",
+      "决定是否建模"
+    ],
+    "interview_answer": "我不会收到预测需求就直接选模型，而会先明确谁在什么时点对什么对象做决策、结果何时可观察、预测后能采取什么动作，并用规则或实验作为替代方案。只有目标稳定、数据可得、结果可验证且行动收益大于成本时才进入建模。",
+    "pitfalls": [
+      "把业务名词直接当作标签，例如笼统定义用户流失",
+      "默认机器学习一定优于规则、分析或实验",
+      "只讨论离线分数，不确认预测结果由谁使用"
+    ],
+    "related_stories": [
+      "story-26",
+      "story-02",
+      "story-18"
+    ],
+    "visual": "assets/visuals/ml01-decision-routes.svg",
+    "visual_alt": "分析、规则、实验和预测四条业务决策路径"
+  },
+  {
+    "slug": "ml02",
+    "num": "ML02",
+    "title": "大促履约风险：从规则到模型",
+    "short_title": "履约风险决策",
+    "badge": "ML02 / 分类与阈值",
+    "theme": "#60a5fa",
+    "theme_rgb": "96,165,250",
+    "typewriter": [
+      "三万笔待发货订单",
+      "运营只能处理两千笔"
+    ],
+    "description": "在明确预测时点和处理能力后，比较规则、分类模型与人工策略，而不是只追求更高分数。",
+    "next": {
+      "link": "ml03.html",
+      "text": "ML03 · 需求预测陷阱"
+    },
+    "module": "ml-decision",
+    "content_type": "case",
+    "duration": 20,
+    "objectives": [
+      "建立可用信息、标签窗口和泄漏字段清单",
+      "根据处理容量与错误成本选择模型阈值和交付名单"
+    ],
+    "framework": [
+      "明确时点",
+      "建立规则基线",
+      "训练候选模型",
+      "按容量选阈值",
+      "小流量试运行",
+      "复盘干预结果"
+    ],
+    "interview_answer": "履约风险预测先固定支付后十分钟的预测时点，以48小时是否发货为结果，排除投诉、退款等未来字段；先用商家历史超时率建立规则基线，再比较模型在前两千笔订单中的命中率，并通过小流量试运行验证运营干预是否真的减少超时。",
+    "pitfalls": [
+      "使用预测时点之后产生的字段造成数据泄漏",
+      "用默认0.5阈值而不考虑运营容量",
+      "把识别高风险等同于干预一定有效"
+    ],
+    "related_stories": [
+      "story-26",
+      "story-15",
+      "story-17"
+    ],
+    "visual": "assets/visuals/ml02-fulfillment-command-center.svg",
+    "visual_alt": "三万笔订单经过风险、可干预性和容量筛选形成行动名单"
+  },
+  {
+    "slug": "ml03",
+    "num": "ML03",
+    "title": "需求预测：销量不等于需求",
+    "short_title": "需求预测陷阱",
+    "badge": "ML03 / 回归与时间",
+    "theme": "#fbbf24",
+    "theme_rgb": "251,191,36",
+    "typewriter": [
+      "历史销量很完整",
+      "为什么还是预测错了"
+    ],
+    "description": "从门店补货进入时间预测，识别随机切分、缺货截断、促销变化和平均指标掩盖局部失败。",
+    "next": {
+      "link": "ml04.html",
+      "text": "ML04 · 模型失败复盘"
+    },
+    "module": "ml-decision",
+    "content_type": "case",
+    "duration": 20,
+    "objectives": [
+      "区分可观察销量与无法完整观察的真实需求",
+      "使用时间回测、分群误差和业务成本评价预测方案"
+    ],
+    "framework": [
+      "确认决策周期",
+      "建立朴素基线",
+      "按时间回测",
+      "修正缺货偏差",
+      "分群检查误差",
+      "转成补货策略"
+    ],
+    "interview_answer": "需求预测不能把历史销量直接等同于需求。门店缺货时销量被库存上限截断，因此我会保留缺货标记、按时间滚动回测，并分别检查新品、促销品和长尾商品的误差，最后用缺货与积压成本决定预测如何进入补货策略。",
+    "pitfalls": [
+      "随机打乱时间数据导致验证结果虚高",
+      "只看总体平均误差而忽略关键商品",
+      "库存为零时仍把销量当作完整需求"
+    ],
+    "related_stories": [
+      "story-15",
+      "story-13",
+      "story-16"
+    ],
+    "visual": "assets/visuals/ml03-observed-sales-vs-demand.svg",
+    "visual_alt": "缺货时可观察销量与潜在需求发生背离"
+  },
+  {
+    "slug": "ml04",
+    "num": "ML04",
+    "title": "模型失败复盘：高分为什么没价值",
+    "short_title": "模型失败复盘",
+    "badge": "ML04 / 上线复盘",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "typewriter": [
+      "离线分数很好",
+      "上线为什么失败"
+    ],
+    "description": "拆解泄漏、错目标、行动瓶颈、反馈回路与环境变化，建立模型叫停、修复和降级机制。",
+    "next": {
+      "label": "进入案例",
+      "link": "../stories/model-score-trap.html",
+      "text": "案例26 · 0.94分模型为何被叫停"
+    },
+    "module": "ml-decision",
+    "content_type": "case",
+    "duration": 22,
+    "objectives": [
+      "从目标、数据、验证、行动和监控五个层面复盘模型失败",
+      "为模型设计叫停条件、规则降级和重新验证方案"
+    ],
+    "framework": [
+      "确认失败现象",
+      "定位失败层级",
+      "阻断继续损失",
+      "回到业务基线",
+      "修复并重测",
+      "沉淀预警"
+    ],
+    "interview_answer": "模型失败不能只归因于算法。我会先判断是目标定义、数据泄漏、验证方式、行动承接还是环境变化出了问题；立即设置保护阈值或降级到规则，再用分群和时间回测复现问题，确认修复方案后小流量重启，并持续监控数据、策略和业务结果。",
+    "pitfalls": [
+      "分数下降就直接更换更复杂的模型",
+      "只监控模型指标，不监控实际业务结果",
+      "上线失败后继续扩大流量等待模型自行恢复"
+    ],
+    "related_stories": [
+      "story-26",
+      "story-02",
+      "story-19"
+    ],
+    "visual": "assets/visuals/ml04-model-failure-stack.svg",
+    "visual_alt": "模型失败六层故障栈与事故处置闭环"
   }
 ]

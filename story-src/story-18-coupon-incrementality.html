@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>故事18：优惠券发还是不发？</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+:root {
+  --primary: #27AE60;
+  --primary-dark: #1E8449;
+  --primary-mid: #2ECC71;
+  --primary-light: #E8F8F0;
+  --accent-gold: #F39C12;
+  --accent-gold-light: #FEF5E7;
+  --accent-red: #E74C3C;
+  --accent-red-light: #FDEDEC;
+  --bg: #F5FFF8;
+  --bg-pattern: #EAF7EF;
+  --card-bg: #FFFFFF;
+  --card-header: #27AE60;
+  --text: #1A2E1F;
+  --text-muted: #5A7A62;
+  --border: #C8E6D0;
+  --shadow: rgba(39,174,96,0.08);
+  --font-title: 'Noto Serif SC', serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 16px;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(39,174,96,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(243,156,18,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(39,174,96,0.02) 0%, transparent 50%);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-dark); }
+
+/* Reading Progress Bar */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px; z-index: 1000;
+  background: linear-gradient(90deg, var(--primary), var(--primary-mid), var(--accent-gold));
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* Right Navigation Dots */
+#nav-dots {
+  position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+  z-index: 999; display: flex; flex-direction: column; gap: 12px;
+}
+.nav-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--border); border: 2px solid var(--primary);
+  cursor: pointer; transition: all 0.3s ease; position: relative;
+}
+.nav-dot.active { background: var(--accent-gold); border-color: var(--accent-gold); transform: scale(1.3); }
+.nav-dot:hover { background: var(--primary); }
+.nav-dot .dot-label {
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  background: var(--primary-dark); color: #fff; padding: 4px 12px; border-radius: 4px;
+  font-size: 12px; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.nav-dot:hover .dot-label { opacity: 1; }
+
+/* Container */
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+/* Hero Section */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, #2ECC71 100%);
+  position: relative; overflow: hidden; text-align: center; color: #fff;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(243,156,18,0.1) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 40%);
+}
+/* Coupon pattern overlay */
+.hero::after {
+  content: ''; position: absolute; inset: 0; opacity: 0.04;
+  background-image: repeating-linear-gradient(
+    45deg, transparent, transparent 20px,
+    rgba(255,255,255,0.5) 20px, rgba(255,255,255,0.5) 21px
+  );
+}
+.hero-content { position: relative; z-index: 1; padding: 40px 24px; }
+.hero-badge {
+  display: inline-block; background: rgba(243,156,18,0.2); border: 1px solid var(--accent-gold);
+  color: var(--accent-gold); padding: 6px 20px; border-radius: 20px; font-size: 14px;
+  margin-bottom: 24px; letter-spacing: 2px;
+}
+.hero h1 {
+  font-family: var(--font-title); font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700; line-height: 1.3; margin-bottom: 20px;
+}
+.hero .subtitle {
+  font-size: 1.1rem; color: rgba(255,255,255,0.8); max-width: 600px; margin: 0 auto 32px;
+}
+.hero-meta { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; font-size: 14px; color: rgba(255,255,255,0.6); }
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  animation: bounce 2s infinite; color: rgba(255,255,255,0.5); font-size: 28px;
+  z-index: 1;
+}
+@keyframes bounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* Coupon ticket floating decoration */
+.hero-ticket {
+  position: absolute; z-index: 0; opacity: 0.08;
+  background: #fff; border-radius: 8px; padding: 12px 16px;
+  font-size: 12px; color: var(--primary-dark); font-weight: 600;
+}
+.hero-ticket-1 { top: 15%; left: 8%; transform: rotate(-15deg); }
+.hero-ticket-2 { top: 25%; right: 10%; transform: rotate(12deg); }
+.hero-ticket-3 { bottom: 20%; left: 12%; transform: rotate(8deg); }
+.hero-ticket-4 { bottom: 30%; right: 6%; transform: rotate(-10deg); }
+
+/* Sections */
+.section {
+  padding: 80px 0; opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.section.visible { opacity: 1; transform: translateY(0); }
+
+.section-title {
+  font-family: var(--font-title); font-size: 1.8rem; color: var(--primary-dark);
+  margin-bottom: 8px; position: relative; padding-bottom: 16px;
+}
+.section-title::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 60px; height: 3px; background: var(--accent-gold); border-radius: 2px;
+}
+.section-subtitle {
+  color: var(--text-muted); font-size: 1rem; margin-bottom: 32px;
+}
+
+/* TOC */
+.toc-card {
+  background: #fff; border-radius: 12px; padding: 32px 40px;
+  box-shadow: 0 2px 16px var(--shadow); border-left: 4px solid var(--primary);
+  position: relative; overflow: hidden;
+}
+.toc-card::before {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 120px; height: 120px; border-radius: 0 0 0 120px;
+  background: var(--primary-light);
+}
+.toc-card h3 { font-family: var(--font-title); color: var(--primary-dark); margin-bottom: 20px; font-size: 1.3rem; position: relative; }
+.toc-list { list-style: none; counter-reset: toc; position: relative; }
+.toc-list li {
+  counter-increment: toc; padding: 10px 0; border-bottom: 1px dashed var(--border);
+  display: flex; align-items: center; gap: 12px; cursor: pointer;
+  transition: color 0.2s;
+}
+.toc-list li:last-child { border-bottom: none; }
+.toc-list li:hover { color: var(--primary); }
+.toc-list li::before {
+  content: counter(toc, decimal-leading-zero); font-family: var(--font-title);
+  font-weight: 700; color: var(--primary); font-size: 1.1rem; min-width: 32px;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 12px var(--shadow); margin-bottom: 24px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px var(--shadow); }
+.card-header {
+  background: var(--card-header); color: #fff; padding: 14px 24px;
+  font-family: var(--font-title); font-size: 1.05rem; font-weight: 600;
+}
+.card-body { padding: 24px; }
+
+/* Coupon Ticket Card */
+.coupon-ticket {
+  background: #fff; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 3px 16px var(--shadow); margin: 20px 0;
+  position: relative; display: flex;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.coupon-ticket:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 8px 30px rgba(39,174,96,0.15); }
+.coupon-ticket-left {
+  flex: 0 0 140px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 24px 16px; color: #fff; position: relative;
+}
+.coupon-ticket-left.type-a { background: linear-gradient(135deg, var(--primary), var(--primary-mid)); }
+.coupon-ticket-left.type-b { background: linear-gradient(135deg, #2E86C1, #3498DB); }
+.coupon-ticket-left.type-c { background: linear-gradient(135deg, var(--accent-gold), #F1C40F); }
+.coupon-ticket-left.type-d { background: linear-gradient(135deg, var(--accent-red), #EC7063); }
+.coupon-amount {
+  font-family: var(--font-title); font-size: 2rem; font-weight: 700; line-height: 1;
+}
+.coupon-amount .yen { font-size: 1rem; font-weight: 400; }
+.coupon-condition { font-size: 0.8rem; margin-top: 6px; opacity: 0.9; }
+.coupon-ticket-right {
+  flex: 1; padding: 20px 24px; display: flex; flex-direction: column; justify-content: center;
+  border-left: 2px dashed var(--border); position: relative;
+}
+.coupon-ticket-right::before,
+.coupon-ticket-right::after {
+  content: ''; position: absolute; left: -11px; width: 20px; height: 20px;
+  background: var(--bg); border-radius: 50%;
+}
+.coupon-ticket-right::before { top: -10px; }
+.coupon-ticket-right::after { bottom: -10px; }
+.coupon-name { font-weight: 600; font-size: 1rem; color: var(--text); margin-bottom: 8px; }
+.coupon-stats { display: flex; gap: 16px; flex-wrap: wrap; }
+.coupon-stat { font-size: 0.85rem; color: var(--text-muted); }
+.coupon-stat strong { color: var(--primary); font-weight: 600; }
+.coupon-badge {
+  position: absolute; top: 12px; right: 16px; padding: 3px 10px;
+  border-radius: 10px; font-size: 0.75rem; font-weight: 600;
+}
+.coupon-badge.good { background: var(--primary-light); color: var(--primary); }
+.coupon-badge.warn { background: var(--accent-gold-light); color: var(--accent-gold); }
+
+/* Quote / Callout Cards */
+.callout {
+  border-radius: 10px; padding: 20px 24px; margin: 20px 0;
+  border-left: 4px solid; position: relative;
+}
+.callout-danger { background: var(--accent-red-light); border-color: var(--accent-red); }
+.callout-warning { background: var(--accent-gold-light); border-color: var(--accent-gold); }
+.callout-info { background: #EBF5FB; border-color: #2E86C1; }
+.callout-tip { background: var(--primary-light); border-color: var(--primary); }
+.callout-quote { background: #F0F9F4; border-color: var(--primary); font-style: italic; }
+.callout-question { background: #FEF9E7; border-color: #E67E22; }
+.callout-label {
+  font-weight: 600; font-size: 0.85rem; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.callout-danger .callout-label { color: var(--accent-red); }
+.callout-warning .callout-label { color: var(--accent-gold); }
+.callout-info .callout-label { color: #2E86C1; }
+.callout-tip .callout-label { color: var(--primary); }
+.callout-quote .callout-label { color: var(--primary); }
+.callout-question .callout-label { color: #E67E22; }
+
+/* Tables */
+.data-table-wrapper { overflow-x: auto; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 12px var(--shadow); }
+.data-table {
+  width: 100%; border-collapse: collapse; background: #fff; font-size: 0.95rem;
+}
+.data-table thead th {
+  background: var(--primary-dark); color: #fff; padding: 12px 16px;
+  text-align: left; font-weight: 600; font-size: 0.9rem; white-space: nowrap;
+}
+.data-table tbody td {
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: rgba(39,174,96,0.04); }
+.data-table tfoot td {
+  background: var(--primary-light); font-weight: 700; padding: 12px 16px;
+  border-top: 2px solid var(--primary);
+}
+
+/* Strong / Highlight */
+strong { color: var(--primary); font-weight: 600; }
+.highlight-term {
+  color: var(--accent-gold); text-decoration: underline;
+  text-decoration-color: rgba(243,156,18,0.4); text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+/* Money display */
+.money {
+  font-family: var(--font-title); font-weight: 700;
+  color: var(--accent-gold); font-size: 1.1em;
+}
+.money-red { color: var(--accent-red); }
+.money-green { color: var(--primary); }
+
+/* Save tag */
+.save-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--accent-gold); color: #fff; padding: 2px 10px;
+  border-radius: 4px; font-size: 0.8rem; font-weight: 600;
+  transform: rotate(-2deg);
+}
+
+/* Chart containers */
+.chart-box {
+  background: #fff; border-radius: 12px; padding: 24px;
+  box-shadow: 0 2px 12px var(--shadow); margin: 24px 0;
+}
+.chart-box h4 {
+  font-family: var(--font-title); color: var(--primary-dark); margin-bottom: 16px;
+  font-size: 1.05rem;
+}
+.chart-container { width: 100%; height: 380px; }
+.chart-container-tall { width: 100%; height: 440px; }
+
+/* Code blocks */
+.code-block {
+  background: var(--primary-dark); color: #E8E8E8; padding: 20px 24px;
+  border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.9rem;
+  line-height: 1.7; overflow-x: auto; margin: 16px 0;
+}
+
+/* Formula */
+.formula {
+  background: var(--primary-light); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 24px; margin: 16px 0; text-align: center;
+  font-family: 'Courier New', monospace; font-size: 1.05rem; color: var(--primary-dark);
+}
+
+/* Summary section */
+.summary-section {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  color: #fff; border-radius: 16px; padding: 48px 40px; margin-top: 40px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.summary-section::before {
+  content: ''; position: absolute; inset: 0; opacity: 0.05;
+  background-image: repeating-linear-gradient(
+    45deg, transparent, transparent 30px,
+    rgba(255,255,255,0.5) 30px, rgba(255,255,255,0.5) 31px
+  );
+}
+.summary-section h2 { font-family: var(--font-title); font-size: 1.8rem; margin-bottom: 24px; position: relative; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; margin-top: 32px; position: relative; }
+.summary-stat {
+  background: rgba(255,255,255,0.1); border-radius: 12px; padding: 24px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.summary-stat .stat-value {
+  font-family: var(--font-title); font-size: 2rem; font-weight: 700;
+  color: var(--accent-gold);
+}
+.summary-stat .stat-label { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+/* Checklist */
+.checklist { list-style: none; margin: 12px 0; }
+.checklist li { padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; }
+.checklist li::before { content: ''; flex-shrink: 0; }
+.check-yes::before { content: '\2705'; }
+.check-no::before { content: '\2B1C'; }
+
+/* Tags */
+.tag {
+  display: inline-block; background: var(--primary-light); color: var(--primary);
+  padding: 3px 12px; border-radius: 12px; font-size: 0.8rem; margin: 2px 4px;
+}
+
+/* Flowchart style card */
+.flow-card {
+  background: #fff; border-radius: 12px; padding: 24px;
+  box-shadow: 0 2px 12px var(--shadow); margin: 20px 0;
+}
+.flow-step {
+  display: flex; align-items: center; gap: 16px; padding: 12px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.flow-step:last-child { border-bottom: none; }
+.flow-icon {
+  width: 44px; height: 44px; border-radius: 10px; display: flex;
+  align-items: center; justify-content: center; font-size: 1.2rem;
+  flex-shrink: 0; color: #fff;
+}
+.flow-icon.step-1 { background: var(--primary); }
+.flow-icon.step-2 { background: #2E86C1; }
+.flow-icon.step-3 { background: #8E44AD; }
+.flow-icon.step-4 { background: var(--accent-gold); }
+.flow-icon.result { background: var(--primary-dark); }
+.flow-text { flex: 1; }
+.flow-text h5 { font-size: 0.95rem; margin-bottom: 2px; color: var(--text); }
+.flow-text p { font-size: 0.85rem; color: var(--text-muted); }
+.flow-arrow {
+  color: var(--border); font-size: 1.2rem; flex-shrink: 0;
+}
+
+/* Strategy card */
+.strategy-card {
+  background: #fff; border-radius: 12px; padding: 24px;
+  box-shadow: 0 2px 12px var(--shadow); margin: 16px 0;
+  display: flex; gap: 20px; align-items: flex-start;
+  border-left: 4px solid var(--primary);
+  transition: transform 0.3s;
+}
+.strategy-card:hover { transform: translateX(4px); }
+.strategy-card.optimized { border-left-color: var(--accent-gold); }
+.strategy-icon {
+  width: 48px; height: 48px; border-radius: 12px; display: flex;
+  align-items: center; justify-content: center; font-size: 1.4rem;
+  flex-shrink: 0; background: var(--primary-light);
+}
+.strategy-card.optimized .strategy-icon { background: var(--accent-gold-light); }
+.strategy-content h4 { font-size: 1rem; margin-bottom: 6px; color: var(--text); }
+.strategy-content p { font-size: 0.9rem; color: var(--text-muted); }
+
+/* Exercise card */
+.exercise-card {
+  background: #fff; border-radius: 12px; padding: 24px;
+  box-shadow: 0 2px 12px var(--shadow); margin: 16px 0;
+  border: 1px solid var(--border); cursor: pointer;
+  transition: border-color 0.3s;
+}
+.exercise-card:hover { border-color: var(--accent-gold); }
+.exercise-card h4 { color: var(--primary-dark); margin-bottom: 8px; font-size: 1rem; }
+.exercise-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+/* Method card */
+.method-card {
+  background: #fff; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 12px var(--shadow); margin: 20px 0;
+}
+.method-card-header {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff; padding: 20px 24px;
+}
+.method-card-header h3 { font-family: var(--font-title); font-size: 1.2rem; margin-bottom: 4px; }
+.method-card-header p { font-size: 0.9rem; opacity: 0.85; }
+.method-card-body { padding: 24px; }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 40px 24px; color: var(--text-muted);
+  font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #nav-dots { display: none; }
+  .hero h1 { font-size: 1.8rem; }
+  .section { padding: 48px 0; }
+  .summary-section { padding: 32px 20px; }
+  .chart-container { height: 300px; }
+  .chart-container-tall { height: 360px; }
+  .data-table { font-size: 0.85rem; }
+  .data-table thead th, .data-table tbody td { padding: 8px 10px; }
+  .coupon-ticket { flex-direction: column; }
+  .coupon-ticket-left { flex: 0 0 auto; padding: 16px; }
+  .coupon-ticket-right { border-left: none; border-top: 2px dashed var(--border); }
+  .coupon-ticket-right::before, .coupon-ticket-right::after { display: none; }
+  .hero-ticket { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Reading Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Navigation Dots -->
+<nav id="nav-dots">
+  <div class="nav-dot" data-target="hero"><span class="dot-label">封面</span></div>
+  <div class="nav-dot" data-target="toc"><span class="dot-label">目录</span></div>
+  <div class="nav-dot" data-target="sec-background"><span class="dot-label">故事背景</span></div>
+  <div class="nav-dot" data-target="sec-problem"><span class="dot-label">问题定义</span></div>
+  <div class="nav-dot" data-target="sec-usage"><span class="dot-label">效果分析</span></div>
+  <div class="nav-dot" data-target="sec-roi"><span class="dot-label">ROI计算</span></div>
+  <div class="nav-dot" data-target="sec-users"><span class="dot-label">用户分析</span></div>
+  <div class="nav-dot" data-target="sec-strategy"><span class="dot-label">策略优化</span></div>
+  <div class="nav-dot" data-target="sec-findings"><span class="dot-label">关键发现</span></div>
+  <div class="nav-dot" data-target="sec-suggestions"><span class="dot-label">业务建议</span></div>
+  <div class="nav-dot" data-target="sec-method"><span class="dot-label">方法论</span></div>
+  <div class="nav-dot" data-target="sec-exercise"><span class="dot-label">思考练习</span></div>
+  <div class="nav-dot" data-target="sec-summary"><span class="dot-label">总结</span></div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="hero">
+  <div class="hero-ticket hero-ticket-1">&#x1F3AB; &#x00A5;30 OFF</div>
+  <div class="hero-ticket hero-ticket-2">&#x1F3AB; &#x00A5;50 OFF</div>
+  <div class="hero-ticket hero-ticket-3">&#x1F3AB; &#x00A5;100 OFF</div>
+  <div class="hero-ticket hero-ticket-4">&#x1F3AB; SAVE NOW</div>
+  <div class="hero-content">
+    <div class="hero-badge">STORY 18</div>
+    <h1>优惠券发还是不发？</h1>
+    <p class="subtitle">优惠券效果评估与ROI分析 -- 当运营热情遇上财务理性，数据如何给出答案</p>
+    <div class="hero-meta">
+      <span>优惠券分析</span>
+      <span>ROI评估</span>
+      <span>用户分群</span>
+      <span>策略优化</span>
+    </div>
+  </div>
+  <div class="hero-scroll">&#8595;</div>
+</section>
+
+<!-- ==================== TOC ==================== -->
+<section class="section" id="toc">
+  <div class="container">
+    <div class="toc-card">
+      <h3>目录导航</h3>
+      <ol class="toc-list">
+        <li onclick="scrollTo_('sec-background')">故事背景 -- 财务总监的担忧</li>
+        <li onclick="scrollTo_('sec-problem')">问题定义 -- 从业务到分析</li>
+        <li onclick="scrollTo_('sec-usage')">第一步：优惠券效果分析</li>
+        <li onclick="scrollTo_('sec-roi')">第二步：优惠券ROI计算</li>
+        <li onclick="scrollTo_('sec-users')">第三步：优惠券用户分析</li>
+        <li onclick="scrollTo_('sec-strategy')">第四步：优惠券策略优化</li>
+        <li onclick="scrollTo_('sec-findings')">关键发现</li>
+        <li onclick="scrollTo_('sec-suggestions')">业务建议</li>
+        <li onclick="scrollTo_('sec-method')">方法论总结</li>
+        <li onclick="scrollTo_('sec-exercise')">思考练习</li>
+        <li onclick="scrollTo_('sec-summary')">全文总结</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 1. 故事背景 ==================== -->
+<section class="section" id="sec-background">
+  <div class="container">
+    <h2 class="section-title">一、故事背景</h2>
+    <p class="section-subtitle">运营团队计划发一批优惠券来提升销量，但财务总监提出了质疑</p>
+
+    <div class="callout callout-danger">
+      <div class="callout-label">财务总监</div>
+      <p>"发优惠券会损失利润，到底值不值？"</p>
+    </div>
+
+    <div class="callout callout-quote" style="margin-top:16px;">
+      <div class="callout-label">运营总监</div>
+      <p>"你帮我分析一下，发优惠券的ROI怎么算？"</p>
+    </div>
+
+    <p style="margin-top:20px;">优惠券是电商运营中最常见的促销手段之一，几乎每个平台都在使用。然而，<span class="highlight-term">发优惠券真的划算吗</span>？每张优惠券背后都是真金白银的利润让渡。如果不做精细化的效果评估，优惠券很容易变成"赔本赚吆喝"的无效营销。</p>
+
+    <p style="margin-top:12px;">作为数据分析师，我们需要用数据回答这个核心问题：<span class="highlight-term">优惠券到底该不该发？怎么发才最有效？</span></p>
+
+    <div class="callout callout-question" style="margin-top:24px;">
+      <div class="callout-label">核心问题</div>
+      <p>如何评估优惠券的效果？发还是不发？</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 2. 问题定义 ==================== -->
+<section class="section" id="sec-problem">
+  <div class="container">
+    <h2 class="section-title">二、问题定义</h2>
+    <p class="section-subtitle">将模糊的优惠券决策转化为可量化的分析课题</p>
+
+    <div class="card">
+      <div class="card-header">业务问题</div>
+      <div class="card-body">
+        <p>优惠券决策，需要解决三个核心问题：</p>
+        <ul class="checklist" style="margin-top:12px;">
+          <li class="check-no"><strong>评估优惠券效果</strong> -- 分析不同类型优惠券的使用情况和带动效果</li>
+          <li class="check-no"><strong>计算优惠券ROI</strong> -- 量化优惠券的投入产出比</li>
+          <li class="check-no"><strong>制定优惠券策略</strong> -- 优化优惠券类型、发放对象和使用规则</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header">分析问题转化</div>
+      <div class="card-body">
+        <p>将业务问题转化为数据分析问题：</p>
+        <ul class="checklist" style="margin-top:12px;">
+          <li class="check-no"><strong>优惠券对销量的提升效果？</strong> -- 对比有/无优惠券的销量差异</li>
+          <li class="check-no"><strong>优惠券的真实成本？</strong> -- 计算优惠金额和隐性成本</li>
+          <li class="check-no"><strong>如何优化优惠券策略？</strong> -- 基于用户分群精准发放</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 3. 优惠券效果分析 ==================== -->
+<section class="section" id="sec-usage">
+  <div class="container">
+    <h2 class="section-title">三、优惠券效果分析</h2>
+    <p class="section-subtitle">第一步：摸清不同优惠券的使用情况和带动效果</p>
+
+    <p>首先，我们来看三种优惠券的使用数据。运营团队发放了三种不同面额的满减优惠券，我们逐一分析它们的表现。</p>
+
+    <!-- Coupon Ticket Cards -->
+    <div class="coupon-ticket">
+      <div class="coupon-ticket-left type-a">
+        <div class="coupon-amount"><span class="yen">&#165;</span>30</div>
+        <div class="coupon-condition">满200可用</div>
+      </div>
+      <div class="coupon-ticket-right">
+        <div class="coupon-name">满200减30优惠券</div>
+        <div class="coupon-stats">
+          <span class="coupon-stat">发放量 <strong>10万</strong></span>
+          <span class="coupon-stat">使用量 <strong>3万</strong></span>
+          <span class="coupon-stat">使用率 <strong>30%</strong></span>
+          <span class="coupon-stat">带动GMV <strong>600万</strong></span>
+        </div>
+        <span class="coupon-badge good">&#x2705; 推荐发放</span>
+      </div>
+    </div>
+
+    <div class="coupon-ticket">
+      <div class="coupon-ticket-left type-b">
+        <div class="coupon-amount"><span class="yen">&#165;</span>50</div>
+        <div class="coupon-condition">满300可用</div>
+      </div>
+      <div class="coupon-ticket-right">
+        <div class="coupon-name">满300减50优惠券</div>
+        <div class="coupon-stats">
+          <span class="coupon-stat">发放量 <strong>8万</strong></span>
+          <span class="coupon-stat">使用量 <strong>2万</strong></span>
+          <span class="coupon-stat">使用率 <strong>25%</strong></span>
+          <span class="coupon-stat">带动GMV <strong>600万</strong></span>
+        </div>
+        <span class="coupon-badge warn">&#x26A0;&#xFE0F; 需优化</span>
+      </div>
+    </div>
+
+    <div class="coupon-ticket">
+      <div class="coupon-ticket-left type-c">
+        <div class="coupon-amount"><span class="yen">&#165;</span>100</div>
+        <div class="coupon-condition">满500可用</div>
+      </div>
+      <div class="coupon-ticket-right">
+        <div class="coupon-name">满500减100优惠券</div>
+        <div class="coupon-stats">
+          <span class="coupon-stat">发放量 <strong>5万</strong></span>
+          <span class="coupon-stat">使用量 <strong>1万</strong></span>
+          <span class="coupon-stat">使用率 <strong>20%</strong></span>
+          <span class="coupon-stat">带动GMV <strong>500万</strong></span>
+        </div>
+        <span class="coupon-badge warn">&#x26A0;&#xFE0F; 需优化</span>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>优惠券类型</th>
+            <th>发放量</th>
+            <th>使用量</th>
+            <th>使用率</th>
+            <th>带动GMV</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>满200减30</td>
+            <td><strong>10万</strong></td>
+            <td><strong>3万</strong></td>
+            <td><strong>30%</strong></td>
+            <td><strong>600万</strong></td>
+            <td>&#x2705;</td>
+          </tr>
+          <tr>
+            <td>满300减50</td>
+            <td><strong>8万</strong></td>
+            <td><strong>2万</strong></td>
+            <td><strong>25%</strong></td>
+            <td><strong>600万</strong></td>
+            <td>&#x26A0;&#xFE0F;</td>
+          </tr>
+          <tr>
+            <td>满500减100</td>
+            <td><strong>5万</strong></td>
+            <td><strong>1万</strong></td>
+            <td><strong>20%</strong></td>
+            <td><strong>500万</strong></td>
+            <td>&#x26A0;&#xFE0F;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-tip" style="margin-top:20px;">
+      <div class="callout-label">关键发现</div>
+      <p>满200减30使用率最高（30%），但客单价较低。满500减100虽然面额大，但使用率仅20%，门槛过高导致转化困难。</p>
+    </div>
+
+    <!-- Chart 1: 优惠券使用率对比 -->
+    <div class="chart-box">
+      <h4>&#x1F4CA; 优惠券使用率与带动GMV对比</h4>
+      <div class="chart-container" id="chart-usage"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 4. 优惠券ROI计算 ==================== -->
+<section class="section" id="sec-roi">
+  <div class="container">
+    <h2 class="section-title">四、优惠券ROI计算</h2>
+    <p class="section-subtitle">第二步：量化每张优惠券的投入产出比</p>
+
+    <p>知道了使用数据还不够，关键是要算清楚：<span class="highlight-term">每投入1元优惠成本，能带来多少收益？</span></p>
+
+    <div class="formula">
+      优惠券ROI = (带动GMV - 优惠成本) / 优惠成本
+    </div>
+
+    <p style="margin-top:12px;color:var(--text-muted);font-size:0.9rem;">
+      其中，优惠成本 = 使用量 x 优惠面值；带动GMV为使用优惠券的订单总金额。
+    </p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>优惠券类型</th>
+            <th>带动GMV</th>
+            <th>优惠成本</th>
+            <th>净增GMV</th>
+            <th>ROI</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>满200减30</td>
+            <td><span class="money">600万</span></td>
+            <td><span class="money-red">90万</span></td>
+            <td><span class="money-green">510万</span></td>
+            <td><strong>5.7</strong></td>
+            <td>&#x2705;</td>
+          </tr>
+          <tr>
+            <td>满300减50</td>
+            <td><span class="money">600万</span></td>
+            <td><span class="money-red">100万</span></td>
+            <td><span class="money-green">500万</span></td>
+            <td><strong>5.0</strong></td>
+            <td>&#x2705;</td>
+          </tr>
+          <tr>
+            <td>满500减100</td>
+            <td><span class="money">500万</span></td>
+            <td><span class="money-red">100万</span></td>
+            <td><span class="money-green">400万</span></td>
+            <td><strong>4.0</strong></td>
+            <td>&#x26A0;&#xFE0F;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-tip" style="margin-top:20px;">
+      <div class="callout-label">关键发现</div>
+      <p>满200减30的ROI最高（5.7），意味着每投入1元优惠成本，能带来5.7元的GMV。满500减100的ROI最低（4.0），虽然面额大但效率不高。</p>
+    </div>
+
+    <!-- Chart 2: ROI对比 -->
+    <div class="chart-box">
+      <h4>&#x1F4B0; 优惠券ROI对比分析</h4>
+      <div class="chart-container" id="chart-roi"></div>
+    </div>
+
+    <!-- Chart 3: 成本结构环形图 -->
+    <div class="chart-box">
+      <h4>&#x1F4CA; 优惠券成本结构分析</h4>
+      <div class="chart-container" id="chart-cost"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 5. 优惠券用户分析 ==================== -->
+<section class="section" id="sec-users">
+  <div class="container">
+    <h2 class="section-title">五、优惠券用户分析</h2>
+    <p class="section-subtitle">第三步：不同用户群体对优惠券的反应差异巨大</p>
+
+    <p>同样的优惠券，发给不同的人效果截然不同。<span class="highlight-term">用户分群</span>是优惠券精准投放的关键。我们将用户分为高、中、低三个价值层级，分析优惠券对各群体的差异化影响。</p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>用户类型</th>
+            <th>使用率</th>
+            <th>客单价提升</th>
+            <th>复购率</th>
+            <th>价值</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>高价值用户</td>
+            <td>15%</td>
+            <td>+10%</td>
+            <td><strong>45%</strong></td>
+            <td>低</td>
+            <td>&#x26A0;&#xFE0F;</td>
+          </tr>
+          <tr>
+            <td>中价值用户</td>
+            <td><strong>35%</strong></td>
+            <td><strong>+25%</strong></td>
+            <td>30%</td>
+            <td>高</td>
+            <td>&#x2705;</td>
+          </tr>
+          <tr>
+            <td>低价值用户</td>
+            <td>50%</td>
+            <td>+40%</td>
+            <td>15%</td>
+            <td>中</td>
+            <td>&#x26A0;&#xFE0F;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-danger" style="margin-top:20px;">
+      <div class="callout-label">关键发现</div>
+      <p><strong>中价值用户优惠券效果最好</strong>。高价值用户本身购买意愿强，优惠券是"白送"的利润损失；低价值用户虽然使用率高，但复购率低，难以形成长期价值。</p>
+    </div>
+
+    <!-- Chart 4: 用户分群雷达图 -->
+    <div class="chart-box">
+      <h4>&#x1F465; 用户分群效果雷达图</h4>
+      <div class="chart-container" id="chart-radar"></div>
+    </div>
+
+    <!-- Chart 5: 用户使用率与复购率气泡图 -->
+    <div class="chart-box">
+      <h4>&#x1F4C8; 优惠券类型推荐矩阵</h4>
+      <div class="chart-container" id="chart-bubble"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 6. 优惠券策略优化 ==================== -->
+<section class="section" id="sec-strategy">
+  <div class="container">
+    <h2 class="section-title">六、优惠券策略优化</h2>
+    <p class="section-subtitle">第四步：基于数据洞察，制定精准投放策略</p>
+
+    <p>综合以上分析，我们提出三大优化策略，预期可以将整体ROI提升<span class="highlight-term">30%以上</span>。</p>
+
+    <!-- Strategy Cards -->
+    <div class="strategy-card">
+      <div class="strategy-icon">&#x1F3AF;</div>
+      <div class="strategy-content">
+        <h4>精准发放 -- 只发给中价值用户</h4>
+        <p>中价值用户优惠券效果最好（使用率35%，客单价提升25%）。停止对高价值用户的过度补贴，将资源集中在中价值用户群体，预期ROI提升<strong>30%</strong>。</p>
+      </div>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-icon">&#x1F4C8;</div>
+      <div class="strategy-content">
+        <h4>门槛优化 -- 提高满减门槛</h4>
+        <p>适当提高满减门槛，引导用户增加购买金额。例如将满200减30调整为满250减30，预期客单价提升<strong>15%</strong>。</p>
+      </div>
+    </div>
+
+    <div class="strategy-card">
+      <div class="strategy-icon">&#x23F0;</div>
+      <div class="strategy-content">
+        <h4>时效控制 -- 限制使用时间</h4>
+        <p>缩短优惠券有效期（如7天），制造紧迫感，提升转化率。避免用户囤券不用的现象，预期转化率提升<strong>20%</strong>。</p>
+      </div>
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>策略</th>
+            <th>说明</th>
+            <th>预期效果</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>精准发放</td>
+            <td>只发给中价值用户</td>
+            <td>ROI提升 <strong>30%</strong></td>
+            <td>&#x1F4C8;</td>
+          </tr>
+          <tr>
+            <td>门槛优化</td>
+            <td>提高满减门槛</td>
+            <td>客单价提升</td>
+            <td>&#x1F4C8;</td>
+          </tr>
+          <tr>
+            <td>时效控制</td>
+            <td>限制使用时间</td>
+            <td>转化率提升</td>
+            <td>&#x1F4C8;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Flow Chart -->
+    <div class="flow-card">
+      <h4 style="font-family:var(--font-title);color:var(--primary-dark);margin-bottom:16px;">优惠券决策分析流程</h4>
+      <div class="flow-step">
+        <div class="flow-icon step-1">&#x1F3AF;</div>
+        <div class="flow-text">
+          <h5>优惠券决策</h5>
+          <p>运营提出发券需求，财务提出成本质疑</p>
+        </div>
+        <div class="flow-arrow">&#x2193;</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon step-2">&#x1F4CA;</div>
+        <div class="flow-text">
+          <h5>效果分析</h5>
+          <p>使用率 / 带动GMV -- 满减30使用率最高</p>
+        </div>
+        <div class="flow-arrow">&#x2193;</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon step-3">&#x1F4B0;</div>
+        <div class="flow-text">
+          <h5>ROI计算</h5>
+          <p>净增GMV / ROI -- 满减30 ROI最高(5.7)</p>
+        </div>
+        <div class="flow-arrow">&#x2193;</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon step-4">&#x1F465;</div>
+        <div class="flow-text">
+          <h5>用户分群</h5>
+          <p>高/中/低价值用户 -- 中价值用户效果最佳</p>
+        </div>
+        <div class="flow-arrow">&#x2193;</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon result">&#x2705;</div>
+        <div class="flow-text">
+          <h5>策略输出</h5>
+          <p>精准发放 + 门槛优化 + 时效控制</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 6: 策略优化效果预测 -->
+    <div class="chart-box">
+      <h4>&#x1F4C9; 策略优化效果预测（实施前后对比）</h4>
+      <div class="chart-container" id="chart-optimization"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 7. 关键发现 ==================== -->
+<section class="section" id="sec-findings">
+  <div class="container">
+    <h2 class="section-title">七、关键发现</h2>
+    <p class="section-subtitle">三条核心洞察，回答"发还是不发"的根本问题</p>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">发现1：优惠券ROI差异大</div>
+      <p>不同类型优惠券ROI差异显著。满200减30的ROI为5.7，而满500减100仅为4.0。选择正确的优惠券类型至关重要 -- <strong>不是面额越大越好</strong>。</p>
+    </div>
+
+    <div class="callout callout-tip" style="margin-top:16px;">
+      <div class="callout-label">发现2：用户分群很重要</div>
+      <p>不同用户群体对优惠券的反应差异巨大。中价值用户的优惠券效果远优于高价值和低价值用户。<strong>精准投放比广撒网有效得多</strong>。</p>
+    </div>
+
+    <div class="callout callout-danger" style="margin-top:16px;">
+      <div class="callout-label">发现3：优惠券有真实成本</div>
+      <p>优惠金额是真实的利润损失。三种优惠券合计优惠成本达<strong>290万</strong>。如果不计算ROI就盲目发券，可能造成严重的利润流失。</p>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:16px;">
+      <div class="callout-label">结论</div>
+      <p><strong>优惠券应该发，但要精发</strong>。选择ROI高的类型（满200减30），精准投放给中价值用户，配合门槛优化和时效控制，才能实现利润最大化。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 8. 业务建议 ==================== -->
+<section class="section" id="sec-suggestions">
+  <div class="container">
+    <h2 class="section-title">八、业务建议</h2>
+    <p class="section-subtitle">针对不同场景，制定差异化的优惠券策略</p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>场景</th>
+            <th>优惠券类型</th>
+            <th>发放对象</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>促首单</td>
+            <td>满100减20</td>
+            <td>新用户</td>
+            <td>&#x2705;</td>
+          </tr>
+          <tr>
+            <td>提客单</td>
+            <td>满300减50</td>
+            <td>中价值用户</td>
+            <td>&#x2705;</td>
+          </tr>
+          <tr>
+            <td>召回流失</td>
+            <td>满200减50</td>
+            <td>流失风险用户</td>
+            <td>&#x26A0;&#xFE0F;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-warning" style="margin-top:24px;">
+      <div class="callout-label">注意事项</div>
+      <ul style="padding-left:18px;">
+        <li>避免对高价值用户过度发放优惠券，造成利润流失</li>
+        <li>优惠券门槛需根据品类利润率灵活调整</li>
+        <li>注意优惠券对品牌价格体系的冲击</li>
+      </ul>
+    </div>
+
+    <!-- Scenario Coupon Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:24px;">
+      <div class="coupon-ticket" style="flex-direction:column;margin:0;">
+        <div class="coupon-ticket-left type-a" style="flex:0 0 auto;padding:16px;width:100%;flex-direction:row;gap:12px;">
+          <div class="coupon-amount" style="font-size:1.5rem;"><span class="yen">&#165;</span>20</div>
+          <div class="coupon-condition">满100可用</div>
+        </div>
+        <div class="coupon-ticket-right" style="border-left:none;border-top:2px dashed var(--border);padding:16px;">
+          <div class="coupon-name">促首单券</div>
+          <div class="coupon-stats">
+            <span class="coupon-stat">对象: <strong>新用户</strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="coupon-ticket" style="flex-direction:column;margin:0;">
+        <div class="coupon-ticket-left type-b" style="flex:0 0 auto;padding:16px;width:100%;flex-direction:row;gap:12px;">
+          <div class="coupon-amount" style="font-size:1.5rem;"><span class="yen">&#165;</span>50</div>
+          <div class="coupon-condition">满300可用</div>
+        </div>
+        <div class="coupon-ticket-right" style="border-left:none;border-top:2px dashed var(--border);padding:16px;">
+          <div class="coupon-name">提客单券</div>
+          <div class="coupon-stats">
+            <span class="coupon-stat">对象: <strong>中价值用户</strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="coupon-ticket" style="flex-direction:column;margin:0;">
+        <div class="coupon-ticket-left type-d" style="flex:0 0 auto;padding:16px;width:100%;flex-direction:row;gap:12px;">
+          <div class="coupon-amount" style="font-size:1.5rem;"><span class="yen">&#165;</span>50</div>
+          <div class="coupon-condition">满200可用</div>
+        </div>
+        <div class="coupon-ticket-right" style="border-left:none;border-top:2px dashed var(--border);padding:16px;">
+          <div class="coupon-name">召回流失券</div>
+          <div class="coupon-stats">
+            <span class="coupon-stat">对象: <strong>流失风险用户</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 9. 方法论总结 ==================== -->
+<section class="section" id="sec-method">
+  <div class="container">
+    <h2 class="section-title">九、方法论总结</h2>
+    <p class="section-subtitle">掌握ROI分析方法，让每一分营销投入都有据可依</p>
+
+    <div class="method-card">
+      <div class="method-card-header">
+        <h3>核心方法：ROI分析</h3>
+        <p>Return on Investment -- 投资回报率</p>
+      </div>
+      <div class="method-card-body">
+        <div class="callout callout-info" style="margin:0;">
+          <div class="callout-label">定义</div>
+          <p><strong>ROI</strong>（Return on Investment）即投资回报率，是衡量投资效益的核心指标，表示每投入1元成本能带来多少收益。</p>
+        </div>
+
+        <div class="formula" style="margin-top:16px;">
+          ROI = (收益 - 成本) / 成本
+        </div>
+        <div class="formula">
+          优惠券ROI = (带动GMV - 优惠成本) / 优惠成本
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+          <div class="card-header">适用场景</div>
+          <div class="card-body">
+            <ul class="checklist">
+              <li class="check-yes"><strong>营销决策</strong> -- 评估营销活动效果</li>
+              <li class="check-yes"><strong>投资决策</strong> -- 评估投资回报</li>
+              <li class="check-yes"><strong>资源配置</strong> -- 优化资源分配</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout callout-warning" style="margin-top:16px;">
+          <div class="callout-label">注意事项</div>
+          <ul style="padding-left:18px;">
+            <li>ROI计算要区分"增量销售"和"本就会发生的销售"</li>
+            <li>优惠券成本不仅是面值金额，还包括隐性成本（品牌贬值、价格体系冲击）</li>
+            <li>要关注优惠券对用户长期行为的影响，而非仅看短期效果</li>
+            <li>不同用户群体的ROI差异大，需分群评估</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 10. 思考练习 ==================== -->
+<section class="section" id="sec-exercise">
+  <div class="container">
+    <h2 class="section-title">十、思考练习</h2>
+    <p class="section-subtitle">三个开放性问题，检验你的分析思维</p>
+
+    <div class="exercise-card">
+      <h4>&#x1F9E0; 练习1：增量销售如何区分？</h4>
+      <p>如何区分优惠券带来的增量销售和本就会发生的销售？提示：可以考虑A/B测试、用户行为对比等方法。</p>
+    </div>
+
+    <div class="exercise-card">
+      <h4>&#x1F3A8; 练习2：品牌形象的影响</h4>
+      <p>优惠券对品牌形象有什么影响？频繁发券是否会让用户形成"不打折不买"的心理预期？</p>
+    </div>
+
+    <div class="exercise-card">
+      <h4>&#x1F9EA; 练习3：A/B测试设计</h4>
+      <p>如何设计一个优惠券A/B测试？需要考虑哪些变量、对照组和评估指标？</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SUMMARY ==================== -->
+<section class="section" id="sec-summary">
+  <div class="container">
+    <div class="summary-section">
+      <h2>全文总结</h2>
+      <p style="opacity:0.85;max-width:600px;margin:0 auto;">优惠券不是"发了就有效"，也不是"发了一定亏"。关键在于用数据驱动决策，选对类型、投对人、设好规则。</p>
+      <div class="summary-grid">
+        <div class="summary-stat">
+          <div class="stat-value">5.7x</div>
+          <div class="stat-label">满200减30 ROI</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-value">35%</div>
+          <div class="stat-label">中价值用户使用率</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-value">1700万</div>
+          <div class="stat-label">总带动GMV</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-value">+30%</div>
+          <div class="stat-label">精准投放ROI提升</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>故事18：优惠券发还是不发？ -- 数据分析故事合集</p>
+  <p style="margin-top:4px;">下一篇：故事19 -- 一场失败的直播带货</p>
+</footer>
+
+<script>
+// ==================== SCROLL PROGRESS ====================
+window.addEventListener('scroll', function() {
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var progress = (scrollTop / scrollHeight) * 100;
+  document.getElementById('progress-bar').style.width = progress + '%';
+});
+
+// ==================== NAV DOTS ====================
+function scrollTo_(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+document.querySelectorAll('.nav-dot').forEach(function(dot) {
+  dot.addEventListener('click', function() {
+    var target = this.getAttribute('data-target');
+    scrollTo_(target);
+  });
+});
+
+// ==================== INTERSECTION OBSERVER ====================
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.section').forEach(function(sec) {
+  observer.observe(sec);
+});
+
+// Active nav dot on scroll
+var sections = document.querySelectorAll('.section, .hero');
+var navDots = document.querySelectorAll('.nav-dot');
+window.addEventListener('scroll', function() {
+  var scrollPos = window.scrollY + window.innerHeight / 2;
+  sections.forEach(function(sec, i) {
+    var top = sec.offsetTop;
+    var bottom = top + sec.offsetHeight;
+    if (scrollPos >= top && scrollPos < bottom) {
+      navDots.forEach(function(d) { d.classList.remove('active'); });
+      var dot = document.querySelector('.nav-dot[data-target="' + sec.id + '"]');
+      if (dot) dot.classList.add('active');
+    }
+  });
+});
+
+// ==================== ECHARTS ====================
+var greenPalette = ['#27AE60', '#2ECC71', '#1E8449'];
+var goldPalette = ['#F39C12', '#F1C40F', '#E67E22'];
+var mixedPalette = ['#27AE60', '#2E86C1', '#F39C12'];
+
+// Chart 1: 优惠券使用率与带动GMV对比
+var chart1 = echarts.init(document.getElementById('chart-usage'));
+chart1.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'cross' },
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: '#C8E6D0',
+    textStyle: { color: '#1A2E1F' }
+  },
+  legend: {
+    data: ['使用率', '带动GMV(万)'],
+    top: 0,
+    textStyle: { color: '#5A7A62' }
+  },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'category',
+    data: ['满200减30', '满300减50', '满500减100'],
+    axisLine: { lineStyle: { color: '#C8E6D0' } },
+    axisLabel: { color: '#5A7A62' }
+  },
+  yAxis: [
+    {
+      type: 'value',
+      name: '使用率(%)',
+      nameTextStyle: { color: '#5A7A62' },
+      axisLine: { lineStyle: { color: '#C8E6D0' } },
+      axisLabel: { color: '#5A7A62', formatter: '{value}%' },
+      splitLine: { lineStyle: { color: '#E8F8F0' } }
+    },
+    {
+      type: 'value',
+      name: '带动GMV(万)',
+      nameTextStyle: { color: '#5A7A62' },
+      axisLine: { lineStyle: { color: '#C8E6D0' } },
+      axisLabel: { color: '#5A7A62' },
+      splitLine: { show: false }
+    }
+  ],
+  series: [
+    {
+      name: '使用率',
+      type: 'bar',
+      data: [30, 25, 20],
+      barWidth: '30%',
+      itemStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: '#27AE60' },
+          { offset: 1, color: '#2ECC71' }
+        ]),
+        borderRadius: [6, 6, 0, 0]
+      },
+      label: {
+        show: true, position: 'top',
+        formatter: '{c}%',
+        color: '#27AE60', fontWeight: 600
+      }
+    },
+    {
+      name: '带动GMV(万)',
+      type: 'bar',
+      yAxisIndex: 1,
+      data: [600, 600, 500],
+      barWidth: '30%',
+      itemStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: '#F39C12' },
+          { offset: 1, color: '#F1C40F' }
+        ]),
+        borderRadius: [6, 6, 0, 0]
+      },
+      label: {
+        show: true, position: 'top',
+        formatter: '{c}万',
+        color: '#F39C12', fontWeight: 600
+      }
+    }
+  ]
+});
+
+// Chart 2: ROI对比水平条形图
+var chart2 = echarts.init(document.getElementById('chart-roi'));
+chart2.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: '#C8E6D0',
+    textStyle: { color: '#1A2E1F' }
+  },
+  legend: {
+    data: ['带动GMV', '优惠成本', '净增GMV'],
+    top: 0,
+    textStyle: { color: '#5A7A62' }
+  },
+  grid: { left: '3%', right: '8%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'value',
+    name: '金额(万)',
+    nameTextStyle: { color: '#5A7A62' },
+    axisLine: { lineStyle: { color: '#C8E6D0' } },
+    axisLabel: { color: '#5A7A62' },
+    splitLine: { lineStyle: { color: '#E8F8F0' } }
+  },
+  yAxis: {
+    type: 'category',
+    data: ['满500减100', '满300减50', '满200减30'],
+    axisLine: { lineStyle: { color: '#C8E6D0' } },
+    axisLabel: { color: '#5A7A62', fontSize: 13 }
+  },
+  series: [
+    {
+      name: '带动GMV',
+      type: 'bar',
+      stack: 'total',
+      data: [500, 600, 600],
+      itemStyle: { color: '#2ECC71', borderRadius: 0 },
+      label: { show: true, position: 'inside', color: '#fff', fontWeight: 600, formatter: '{c}万' }
+    },
+    {
+      name: '优惠成本',
+      type: 'bar',
+      stack: 'total',
+      data: [100, 100, 90],
+      itemStyle: { color: '#E74C3C' },
+      label: { show: true, position: 'inside', color: '#fff', fontWeight: 600, formatter: '{c}万' }
+    },
+    {
+      name: '净增GMV',
+      type: 'bar',
+      stack: 'net',
+      data: [400, 500, 510],
+      itemStyle: { color: '#27AE60', borderRadius: [0, 6, 6, 0] },
+      label: { show: true, position: 'right', color: '#27AE60', fontWeight: 600, formatter: '{c}万' }
+    }
+  ]
+});
+
+// Chart 3: 成本结构环形图
+var chart3 = echarts.init(document.getElementById('chart-cost'));
+chart3.setOption({
+  tooltip: {
+    trigger: 'item',
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: '#C8E6D0',
+    textStyle: { color: '#1A2E1F' },
+    formatter: '{b}: {c}万 ({d}%)'
+  },
+  legend: {
+    orient: 'vertical',
+    right: '5%',
+    top: 'center',
+    textStyle: { color: '#5A7A62' }
+  },
+  series: [
+    {
+      type: 'pie',
+      radius: ['40%', '70%'],
+      center: ['35%', '50%'],
+      avoidLabelOverlap: true,
+      itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 3 },
+      label: {
+        show: true,
+        formatter: '{b}\n{d}%',
+        color: '#1A2E1F',
+        fontSize: 12
+      },
+      labelLine: { lineStyle: { color: '#C8E6D0' } },
+      emphasis: {
+        label: { show: true, fontSize: 14, fontWeight: 'bold' },
+        itemStyle: { shadowBlur: 10, shadowColor: 'rgba(39,174,96,0.3)' }
+      },
+      data: [
+        { value: 90, name: '满200减30\n优惠成本', itemStyle: { color: '#27AE60' } },
+        { value: 100, name: '满300减50\n优惠成本', itemStyle: { color: '#2E86C1' } },
+        { value: 100, name: '满500减100\n优惠成本', itemStyle: { color: '#F39C12' } }
+      ]
+    }
+  ],
+  graphic: [
+    {
+      type: 'text',
+      left: '30%',
+      top: '45%',
+      style: {
+        text: '总成本',
+        fill: '#5A7A62',
+        fontSize: 13,
+        textAlign: 'center'
+      }
+    },
+    {
+      type: 'text',
+      left: '30%',
+      top: '52%',
+      style: {
+        text: '290万',
+        fill: '#E74C3C',
+        fontSize: 22,
+        fontWeight: 'bold',
+        fontFamily: 'Noto Serif SC',
+        textAlign: 'center'
+      }
+    }
+  ]
+});
+
+// Chart 4: 用户分群雷达图
+var chart4 = echarts.init(document.getElementById('chart-radar'));
+chart4.setOption({
+  tooltip: {
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: '#C8E6D0',
+    textStyle: { color: '#1A2E1F' }
+  },
+  legend: {
+    data: ['高价值用户', '中价值用户', '低价值用户'],
+    top: 0,
+    textStyle: { color: '#5A7A62' }
+  },
+  radar: {
+    indicator: [
+      { name: '使用率', max: 60 },
+      { name: '客单价提升', max: 50 },
+      { name: '复购率', max: 50 },
+      { name: '综合价值', max: 100 }
+    ],
+    shape: 'circle',
+    splitNumber: 4,
+    axisName: { color: '#5A7A62', fontSize: 12 },
+    splitLine: { lineStyle: { color: '#E8F8F0' } },
+    splitArea: { areaStyle: { color: ['rgba(39,174,96,0.02)', 'rgba(39,174,96,0.05)'] } },
+    axisLine: { lineStyle: { color: '#C8E6D0' } }
+  },
+  series: [{
+    type: 'radar',
+    data: [
+      {
+        value: [15, 10, 45, 35],
+        name: '高价值用户',
+        lineStyle: { color: '#E74C3C', width: 2 },
+        itemStyle: { color: '#E74C3C' },
+        areaStyle: { color: 'rgba(231,76,60,0.1)' }
+      },
+      {
+        value: [35, 25, 30, 85],
+        name: '中价值用户',
+        lineStyle: { color: '#27AE60', width: 2 },
+        itemStyle: { color: '#27AE60' },
+        areaStyle: { color: 'rgba(39,174,96,0.15)' }
+      },
+      {
+        value: [50, 40, 15, 50],
+        name: '低价值用户',
+        lineStyle: { color: '#F39C12', width: 2 },
+        itemStyle: { color: '#F39C12' },
+        areaStyle: { color: 'rgba(243,156,18,0.1)' }
+      }
+    ]
+  }]
+});
+
+// Chart 5: 优惠券类型推荐矩阵（气泡图）
+var chart5 = echarts.init(document.getElementById('chart-bubble'));
+chart5.setOption({
+  tooltip: {
+    formatter: function(p) {
+      return p.data[3] + '<br/>使用率: ' + p.data[0] + '%<br/>复购率: ' + p.data[1] + '%<br/>客单价提升: ' + p.data[2] + '%';
+    },
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: '#C8E6D0',
+    textStyle: { color: '#1A2E1F' }
+  },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'value',
+    name: '优惠券使用率(%)',
+    nameTextStyle: { color: '#5A7A62' },
+    axisLine: { lineStyle: { color: '#C8E6D0' } },
+    axisLabel: { color: '#5A7A62' },
+    splitLine: { lineStyle: { color: '#E8F8F0' } },
+    min: 0, max: 60
+  },
+  yAxis: {
+    type: 'value',
+    name: '复购率(%)',
+    nameTextStyle: { color: '#5A7A62' },
+    axisLine: { lineStyle: { color: '#C8E6D0' } },
+    axisLabel: { color: '#5A7A62' },
+    splitLine: { lineStyle: { color: '#E8F8F0' } },
+    min: 0, max: 55
+  },
+  series: [
+    {
+      type: 'scatter',
+      data: [
+        [15, 45, 10, '高价值用户', 2000],
+        [35, 30, 25, '中价值用户', 3500],
+        [50, 15, 40, '低价值用户', 1500]
+      ],
+      symbolSize: function(data) { return data[4] / 15; },
+      itemStyle: {
+        shadowBlur: 10,
+        shadowColor: 'rgba(39,174,96,0.2)',
+        color: function(params) {
+          var colors = ['#E74C3C', '#27AE60', '#F39C12'];
+          return colors[params.dataIndex];
+        }
+      },
+      label: {
+        show: true,
+        formatter: function(p) { return p.data[3]; },
+        position: 'top',
+        color: '#1A2E1F',
+        fontWeight: 600,
+        fontSize: 12
+      },
+      markLine: {
+        lineStyle: { color: '#27AE60', type: 'dashed', width: 1 },
+        data: [
+          { xAxis: 30, label: { formatter: '推荐使用率线', color: '#27AE60', fontSize: 10 } }
+        ]
+      }
+    }
+  ]
+});
+
+// Chart 6: 策略优化效果预测
+var chart6 = echarts.init(document.getElementById('chart-optimization'));
+chart6.setOption({
+  tooltip: {
+    trigger: 'axis',
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: '#C8E6D0',
+    textStyle: { color: '#1A2E1F' }
+  },
+  legend: {
+    data: ['优化前', '优化后'],
+    top: 0,
+    textStyle: { color: '#5A7A62' }
+  },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'category',
+    data: ['使用率', '客单价', '转化率', 'ROI', '净增GMV'],
+    axisLine: { lineStyle: { color: '#C8E6D0' } },
+    axisLabel: { color: '#5A7A62', fontSize: 12 }
+  },
+  yAxis: {
+    type: 'value',
+    name: '指数值',
+    nameTextStyle: { color: '#5A7A62' },
+    axisLine: { lineStyle: { color: '#C8E6D0' } },
+    axisLabel: { color: '#5A7A62' },
+    splitLine: { lineStyle: { color: '#E8F8F0' } }
+  },
+  series: [
+    {
+      name: '优化前',
+      type: 'bar',
+      data: [25, 100, 100, 100, 100],
+      barWidth: '30%',
+      itemStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: '#C8E6D0' },
+          { offset: 1, color: '#E8F8F0' }
+        ]),
+        borderRadius: [6, 6, 0, 0]
+      },
+      label: { show: true, position: 'top', color: '#5A7A62', fontWeight: 600 }
+    },
+    {
+      name: '优化后',
+      type: 'bar',
+      data: [35, 115, 120, 130, 130],
+      barWidth: '30%',
+      itemStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: '#27AE60' },
+          { offset: 1, color: '#2ECC71' }
+        ]),
+        borderRadius: [6, 6, 0, 0]
+      },
+      label: { show: true, position: 'top', color: '#27AE60', fontWeight: 600 }
+    }
+  ]
+});
+
+// Resize handler
+window.addEventListener('resize', function() {
+  chart1.resize();
+  chart2.resize();
+  chart3.resize();
+  chart4.resize();
+  chart5.resize();
+  chart6.resize();
+});
+</script>
+</body>
+</html>

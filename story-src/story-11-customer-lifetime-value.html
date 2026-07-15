@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>故事11：用户生命周期价值几何 — 数据分析故事</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CSS VARIABLES & RESET
+   ============================================================ */
+:root {
+  --primary: #1A1A1A;
+  --primary-light: #2C3E50;
+  --accent: #C0392B;
+  --accent-light: #E74C3C;
+  --highlight: #C0392B;
+  --success: #27AE60;
+  --warning: #F39C12;
+  --danger: #C0392B;
+  --text: #1A1A1A;
+  --text-light: #555555;
+  --text-muted: #999999;
+  --bg: #FAFAFA;
+  --bg-card: #FFFFFF;
+  --bg-section: #FFFFFF;
+  --border: #E8E8E8;
+  --border-subtle: #F0F0F0;
+  --shadow: 0 2px 16px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.06);
+  --radius: 8px;
+  --font-serif: 'Noto Serif SC', 'Georgia', serif;
+  --font-sans: 'Noto Sans SC', 'Helvetica Neue', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 2;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Subtle paper texture */
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(0,0,0,0.01) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0,0,0,0.008) 0%, transparent 50%);
+}
+
+/* Custom scrollbar - minimal ink style */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+html { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+
+/* Strong/Bold text */
+strong, b {
+  font-weight: 600;
+  color: var(--primary-light);
+  letter-spacing: 0.01em;
+}
+
+/* Inline highlight for key data terms */
+.highlight-term {
+  background: linear-gradient(180deg, transparent 60%, rgba(192,57,43,0.15) 60%);
+  padding: 0 2px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--primary);
+  z-index: 1000;
+  transition: width 0.1s linear;
+}
+
+/* ============================================================
+   NAVIGATION DOTS
+   ============================================================ */
+.nav-dots {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border: none;
+  outline: none;
+}
+
+.nav-dot.active {
+  background: var(--primary);
+  transform: scale(1.5);
+}
+
+.nav-dot:hover::after {
+  content: attr(data-label);
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--primary);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+   SECTION BASE
+   ============================================================ */
+.story-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  position: relative;
+}
+
+.story-section .container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 40px;
+  width: 100%;
+}
+
+/* Section divider */
+.story-section + .story-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Scroll animation */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0.02) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 40px;
+  letter-spacing: 0.08em;
+}
+
+.hero-badge .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.hero-number {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.4;
+  margin-bottom: 28px;
+  color: var(--primary);
+  position: relative;
+  letter-spacing: 0.02em;
+}
+
+.hero-title .accent {
+  color: var(--accent);
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: var(--text-light);
+  max-width: 480px;
+  margin: 0 auto 56px;
+  line-height: 2;
+  font-weight: 300;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-meta-item {
+  text-align: center;
+}
+
+.hero-meta-item .label {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.hero-meta-item .value {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  animation: float 3s ease-in-out infinite;
+}
+
+.hero-scroll-hint .line {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, var(--border), transparent);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ============================================================
+   SECTION TITLES
+   ============================================================ */
+.section-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 40px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.section-title .num {
+  color: var(--accent);
+  margin-right: 8px;
+  font-weight: 900;
+}
+
+/* ============================================================
+   CONTENT TYPOGRAPHY
+   ============================================================ */
+.content p {
+  margin-bottom: 1.5em;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 2;
+}
+
+.content p strong {
+  color: var(--primary-light);
+}
+
+/* ============================================================
+   CALLOUT / QUOTE BLOCKS
+   ============================================================ */
+.callout {
+  border-left: 2px solid var(--border);
+  padding: 20px 0 20px 24px;
+  margin: 32px 0;
+  position: relative;
+}
+
+.callquote {
+  border-left: 2px solid var(--primary);
+  padding: 20px 0 20px 24px;
+  margin: 32px 0;
+}
+
+.callquote .speaker {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+
+.callquote .words {
+  font-size: 1.05rem;
+  color: var(--primary);
+  line-height: 1.9;
+  font-weight: 400;
+}
+
+.callquote.danger {
+  border-left-color: var(--accent);
+}
+
+.callquote.danger .words {
+  color: var(--accent);
+}
+
+.calltip {
+  border-left: 2px solid var(--success);
+  padding: 20px 0 20px 24px;
+  margin: 32px 0;
+  background: rgba(39,174,96,0.03);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.calltip .tip-label {
+  font-size: 0.75rem;
+  color: var(--success);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.calltip .tip-content {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+.calldanger {
+  border-left: 2px solid var(--accent);
+  padding: 20px 0 20px 24px;
+  margin: 32px 0;
+  background: rgba(192,57,43,0.02);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.calldanger .danger-label {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.calldanger .danger-content {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+.calldanger .danger-content li {
+  margin-bottom: 4px;
+}
+
+.callwarning {
+  border-left: 2px solid var(--warning);
+  padding: 20px 0 20px 24px;
+  margin: 32px 0;
+  background: rgba(243,156,18,0.02);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.callwarning .warning-label {
+  font-size: 0.75rem;
+  color: var(--warning);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.callwarning .warning-content {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+.callinfo {
+  border-left: 2px solid var(--primary-light);
+  padding: 20px 0 20px 24px;
+  margin: 32px 0;
+  background: rgba(44,62,80,0.02);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.callinfo .info-label {
+  font-size: 0.75rem;
+  color: var(--primary-light);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.callinfo .info-content {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+/* ============================================================
+   TABLES - Minimal ink style
+   ============================================================ */
+.ink-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 28px 0;
+  font-size: 0.88rem;
+}
+
+.ink-table thead th {
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--primary);
+}
+
+.ink-table tbody td {
+  padding: 10px 12px;
+  color: var(--text-light);
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+}
+
+.ink-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ink-table tbody tr:hover {
+  background: rgba(0,0,0,0.01);
+}
+
+.ink-table .val {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.ink-table .good { color: var(--success); }
+.ink-table .warn { color: var(--warning); }
+.ink-table .bad { color: var(--accent); }
+
+/* ============================================================
+   FORMULA DISPLAY
+   ============================================================ */
+.formula-block {
+  text-align: center;
+  padding: 32px 24px;
+  margin: 32px 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+}
+
+.formula-block .formula {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--primary);
+  letter-spacing: 0.02em;
+  line-height: 1.8;
+}
+
+.formula-block .formula sub,
+.formula-block .formula sup {
+  font-size: 0.7em;
+}
+
+.formula-block .formula-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+  line-height: 1.8;
+}
+
+/* ============================================================
+   CODE BLOCK - Minimal dark style
+   ============================================================ */
+.code-block {
+  background: var(--primary);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin: 28px 0;
+  overflow-x: auto;
+  position: relative;
+}
+
+.code-block .code-lang {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.code-block pre {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.82rem;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.85);
+  white-space: pre;
+  tab-size: 4;
+}
+
+.code-block .kw { color: #E74C3C; }
+.code-block .fn { color: #E8E8E8; }
+.code-block .str { color: #27AE60; }
+.code-block .cmt { color: rgba(255,255,255,0.3); font-style: italic; }
+.code-block .num { color: #F39C12; }
+.code-block .op { color: rgba(255,255,255,0.5); }
+
+/* ============================================================
+   CHART CONTAINER
+   ============================================================ */
+.chart-container {
+  width: 100%;
+  height: 380px;
+  margin: 28px 0;
+  position: relative;
+}
+
+.chart-container-sm {
+  height: 300px;
+}
+
+.chart-container-lg {
+  height: 440px;
+}
+
+/* ============================================================
+   TOC (TABLE OF CONTENTS)
+   ============================================================ */
+.toc-section {
+  min-height: auto;
+  padding: 60px 0;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.toc-item {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toc-item:first-child {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.toc-item:hover {
+  padding-left: 8px;
+}
+
+.toc-item .toc-num {
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  min-width: 24px;
+  font-weight: 600;
+}
+
+.toc-item .toc-text {
+  font-size: 0.92rem;
+  color: var(--text-light);
+  flex: 1;
+}
+
+.toc-item:hover .toc-text {
+  color: var(--primary);
+}
+
+.toc-item .toc-page {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   METRIC CARDS
+   ============================================================ */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 28px 0;
+}
+
+.metric-card {
+  text-align: center;
+  padding: 24px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.metric-card .metric-value {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+.metric-card .metric-value.accent {
+  color: var(--accent);
+}
+
+.metric-card .metric-value.success {
+  color: var(--success);
+}
+
+.metric-card .metric-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   CHECKLIST
+   ============================================================ */
+.checklist {
+  list-style: none;
+  margin: 20px 0;
+}
+
+.checklist li {
+  padding: 8px 0;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.checklist li .check-icon {
+  color: var(--success);
+  font-size: 0.85rem;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   SUMMARY / CONCLUSION
+   ============================================================ */
+.summary-section {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 28px 0;
+}
+
+.summary-card {
+  padding: 24px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+  box-shadow: var(--shadow);
+}
+
+.summary-card .sc-title {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.summary-card .sc-desc {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+/* ============================================================
+   RESULT BADGES
+   ============================================================ */
+.result-row {
+  display: flex;
+  gap: 16px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+
+.result-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.result-badge .rb-icon {
+  font-size: 1rem;
+}
+
+.result-badge .rb-val {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ============================================================
+   QUESTION BLOCK
+   ============================================================ */
+.question-block {
+  padding: 20px 24px;
+  margin: 20px 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+}
+
+.question-block .q-label {
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+
+.question-block .q-text {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.story-footer {
+  text-align: center;
+  padding: 60px 0;
+  min-height: auto;
+}
+
+.story-footer .footer-line {
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+  margin: 0 auto 24px;
+}
+
+.story-footer .footer-text {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .story-section .container { padding: 0 24px; }
+  .hero-title { font-size: 2rem; }
+  .hero-meta { gap: 24px; }
+  .metric-row { grid-template-columns: 1fr; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .nav-dots { right: 12px; gap: 8px; }
+  .nav-dot { width: 5px; height: 5px; }
+  .chart-container { height: 300px; }
+  .chart-container-lg { height: 360px; }
+  .ink-table { font-size: 0.8rem; }
+  .ink-table thead th, .ink-table tbody td { padding: 8px 6px; }
+}
+
+@media (max-width: 480px) {
+  .story-section .container { padding: 0 20px; }
+  .hero-subtitle { font-size: 0.9rem; }
+  .section-title { font-size: 1.4rem; }
+  .formula-block .formula { font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots">
+  <button class="nav-dot" data-target="hero" data-label="序幕"></button>
+  <button class="nav-dot" data-target="toc" data-label="目录"></button>
+  <button class="nav-dot" data-target="sec1" data-label="故事背景"></button>
+  <button class="nav-dot" data-target="sec2" data-label="问题定义"></button>
+  <button class="nav-dot" data-target="sec3" data-label="LTV模型"></button>
+  <button class="nav-dot" data-target="sec4" data-label="整体LTV"></button>
+  <button class="nav-dot" data-target="sec5" data-label="分群体LTV"></button>
+  <button class="nav-dot" data-target="sec6" data-label="首单与LTV"></button>
+  <button class="nav-dot" data-target="sec7" data-label="预测模型"></button>
+  <button class="nav-dot" data-target="sec8" data-label="投放ROI"></button>
+  <button class="nav-dot" data-target="sec9" data-label="用户分层"></button>
+  <button class="nav-dot" data-target="sec10" data-label="关键发现"></button>
+  <button class="nav-dot" data-target="sec11" data-label="业务建议"></button>
+  <button class="nav-dot" data-target="sec12" data-label="行动结果"></button>
+  <button class="nav-dot" data-target="sec13" data-label="方法论"></button>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+     ============================================================ -->
+<section class="hero-section story-section" id="hero">
+  <div class="container">
+    <div class="hero-badge fade-in">
+      <span class="dot"></span>
+      <span>用户分析 · 第三篇</span>
+    </div>
+    <div class="hero-number fade-in">STORY 11</div>
+    <h1 class="hero-title fade-in">用户生命周期<br><span class="accent">价值几何？</span></h1>
+    <p class="hero-subtitle fade-in">当老板问"一个用户值多少钱"，小林用数据给出了答案——LTV模型，从获客成本到投资回报的完整计算。</p>
+    <div class="hero-meta fade-in">
+      <div class="hero-meta-item">
+        <div class="label">核心方法</div>
+        <div class="value">LTV模型</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="label">难度</div>
+        <div class="value">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="label">阅读时间</div>
+        <div class="value">约 18 分钟</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>向下阅读</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TABLE OF CONTENTS
+     ============================================================ -->
+<section class="story-section toc-section" id="toc">
+  <div class="container">
+    <div class="section-label fade-in">CONTENTS</div>
+    <h2 class="section-title fade-in">目录</h2>
+    <ul class="toc-list fade-in">
+      <li class="toc-item" onclick="document.getElementById('sec1').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">01</span>
+        <span class="toc-text">故事背景 — 200万预算的追问</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec2').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">02</span>
+        <span class="toc-text">问题定义 — 三个核心问题</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec3').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">03</span>
+        <span class="toc-text">LTV模型介绍 — 三种计算方法</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec4').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">04</span>
+        <span class="toc-text">整体LTV计算 — ARPU × 生命周期</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec5').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">05</span>
+        <span class="toc-text">分渠道LTV — 渠道价值差异</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec6').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">06</span>
+        <span class="toc-text">首单金额与LTV — 强相关性发现</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec7').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">07</span>
+        <span class="toc-text">LTV预测模型 — 特征与代码</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec8').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">08</span>
+        <span class="toc-text">投放ROI评估 — 预算分配建议</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec9').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">09</span>
+        <span class="toc-text">用户分层运营 — 高中低价值策略</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec10').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">10</span>
+        <span class="toc-text">关键发现 — 四大洞察</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec11').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">11</span>
+        <span class="toc-text">业务建议 — 短期与长期</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec12').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">12</span>
+        <span class="toc-text">行动结果 — 一个季度后的变化</span>
+      </li>
+      <li class="toc-item" onclick="document.getElementById('sec13').scrollIntoView({behavior:'smooth'})">
+        <span class="toc-num">13</span>
+        <span class="toc-text">方法论总结 — LTV模型全貌</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 1: 故事背景
+     ============================================================ -->
+<section class="story-section" id="sec1">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 01</div>
+    <h2 class="section-title fade-in"><span class="num">壹</span>故事背景</h2>
+    <div class="content fade-in">
+      <p>市场部在制定下季度的投放计划，向老板申请了<strong>200万</strong>预算。</p>
+
+      <div class="callquote fade-in">
+        <div class="speaker">老板</div>
+        <div class="words">"这200万能带来多少回报？"</div>
+      </div>
+
+      <div class="callquote fade-in">
+        <div class="speaker">市场部经理</div>
+        <div class="words">"预计能带来5万新用户。"</div>
+      </div>
+
+      <div class="callquote danger fade-in">
+        <div class="speaker">老板</div>
+        <div class="words">"5万新用户值多少钱？"</div>
+      </div>
+
+      <p>市场部经理一时语塞。老板看向小林：</p>
+
+      <div class="callquote danger fade-in">
+        <div class="speaker">老板</div>
+        <div class="words">"小林，你帮我算算，一个用户到底值多少钱？"</div>
+      </div>
+
+      <div class="question-block fade-in">
+        <div class="q-label">CORE QUESTION</div>
+        <div class="q-text">如何计算用户生命周期价值（LTV）？如何用LTV指导业务决策？</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 2: 问题定义
+     ============================================================ -->
+<section class="story-section" id="sec2">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 02</div>
+    <h2 class="section-title fade-in"><span class="num">贰</span>问题定义</h2>
+    <div class="content fade-in">
+      <p><strong>业务问题</strong>：需要评估用户价值，用于判断获客成本是否合理、评估市场投放ROI、制定用户运营策略。</p>
+      <p><strong>分析问题</strong>：转化为数据分析问题——</p>
+
+      <ul class="checklist fade-in">
+        <li><span class="check-icon">&#9634;</span> <span><strong>什么是LTV？如何计算？</strong> — 掌握LTV的计算方法和公式</span></li>
+        <li><span class="check-icon">&#9634;</span> <span><strong>不同用户群体的LTV差异如何？</strong> — 分渠道、分群体计算LTV</span></li>
+        <li><span class="check-icon">&#9634;</span> <span><strong>LTV如何指导业务决策？</strong> — LTV在投放、运营中的应用</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 3: LTV模型介绍
+     ============================================================ -->
+<section class="story-section" id="sec3">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 03</div>
+    <h2 class="section-title fade-in"><span class="num">叁</span>LTV模型介绍</h2>
+    <div class="content fade-in">
+      <p><strong>LTV（Lifetime Value）</strong>即用户生命周期价值，指一个用户在与企业关系的整个生命周期内，为企业创造的<strong>总价值</strong>。</p>
+
+      <h3 style="font-family:var(--font-serif);font-size:1.1rem;color:var(--primary);margin:32px 0 16px;font-weight:600;">方法一：简单估算法</h3>
+
+      <div class="formula-block fade-in">
+        <div class="formula">LTV = ARPU &times; 用户生命周期长度</div>
+        <div class="formula-note">
+          ARPU = 总收入 / 总用户数（平均每用户收入）<br>
+          用户生命周期长度 = 1 / 流失率
+        </div>
+      </div>
+
+      <h3 style="font-family:var(--font-serif);font-size:1.1rem;color:var(--primary);margin:32px 0 16px;font-weight:600;">方法二：历史数据法</h3>
+
+      <div class="formula-block fade-in">
+        <div class="formula">LTV = &Sigma;<sub>t=1</sub><sup>T</sup> 用户在第t期的贡献</div>
+        <div class="formula-note">把用户从获取到流失的所有贡献加总</div>
+      </div>
+
+      <h3 style="font-family:var(--font-serif);font-size:1.1rem;color:var(--primary);margin:32px 0 16px;font-weight:600;">方法三：预测模型法</h3>
+
+      <div class="formula-block fade-in">
+        <div class="formula">LTV = &Sigma;<sub>t=1</sub><sup>T</sup> 预测未来第t期贡献 &times; 折现因子</div>
+        <div class="formula-note">需要预测用户未来的行为</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 4: 整体LTV计算
+     ============================================================ -->
+<section class="story-section" id="sec4">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 04</div>
+    <h2 class="section-title fade-in"><span class="num">肆</span>整体LTV计算</h2>
+    <div class="content fade-in">
+      <p>小林首先收集了基础数据：</p>
+
+      <div class="metric-row fade-in">
+        <div class="metric-card">
+          <div class="metric-value">80<span style="font-size:0.9rem;font-weight:400;color:var(--text-muted)">元</span></div>
+          <div class="metric-label">月 ARPU</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value accent">8<span style="font-size:0.9rem;font-weight:400;color:var(--text-muted)">%</span></div>
+          <div class="metric-label">月流失率</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">12.5<span style="font-size:0.9rem;font-weight:400;color:var(--text-muted)">月</span></div>
+          <div class="metric-label">平均生命周期</div>
+        </div>
+      </div>
+
+      <div class="formula-block fade-in">
+        <div class="formula">LTV = ARPU &times; 生命周期 = 80 &times; 12.5 = <span style="color:var(--accent);font-weight:900">1000元</span></div>
+      </div>
+
+      <p>与获客成本对比：</p>
+
+      <table class="ink-table fade-in">
+        <thead>
+          <tr>
+            <th>指标</th>
+            <th>数值</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LTV</td>
+            <td class="val">1000元</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>CAC（获客成本）</td>
+            <td class="val">150元</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>LTV / CAC</td>
+            <td class="val good">6.7</td>
+            <td class="good">远高于健康阈值 3</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="calltip fade-in">
+        <div class="tip-label">核心洞察</div>
+        <div class="tip-content">LTV/CAC = 6.7，远高于健康阈值3，说明获客投资回报良好。</div>
+      </div>
+    </div>
+
+    <!-- Chart 1: LTV Gauge -->
+    <div class="chart-container chart-container-sm fade-in" id="chart1"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 5: 分渠道LTV
+     ============================================================ -->
+<section class="story-section" id="sec5">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 05</div>
+    <h2 class="section-title fade-in"><span class="num">伍</span>分渠道LTV对比</h2>
+    <div class="content fade-in">
+      <p>小林发现不同渠道的用户群体LTV差异很大：</p>
+
+      <table class="ink-table fade-in">
+        <thead>
+          <tr>
+            <th>渠道</th>
+            <th>CAC</th>
+            <th>LTV</th>
+            <th>LTV/CAC</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>自然搜索</td>
+            <td class="val">50元</td>
+            <td class="val">1500元</td>
+            <td class="val good">30</td>
+            <td class="good">最优</td>
+          </tr>
+          <tr>
+            <td>信息流广告</td>
+            <td class="val">180元</td>
+            <td class="val">800元</td>
+            <td class="val warn">4.4</td>
+            <td class="warn">中等</td>
+          </tr>
+          <tr>
+            <td>社交广告</td>
+            <td class="val">120元</td>
+            <td class="val">1100元</td>
+            <td class="val good">9.2</td>
+            <td class="good">较好</td>
+          </tr>
+          <tr>
+            <td>活动引流</td>
+            <td class="val">200元</td>
+            <td class="val">500元</td>
+            <td class="val bad">2.5</td>
+            <td class="bad">低于健康阈值</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="calldanger fade-in">
+        <div class="danger-label">关键发现</div>
+        <div class="danger-content">
+          <ul style="list-style:none;padding:0">
+            <li>&#8226; 自然搜索LTV最高，CAC最低，是最优质渠道</li>
+            <li>&#8226; 活动引流LTV/CAC只有2.5，低于健康阈值</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 2: Channel LTV vs CAC Bubble -->
+    <div class="chart-container fade-in" id="chart2"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 6: 首单金额与LTV
+     ============================================================ -->
+<section class="story-section" id="sec6">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 06</div>
+    <h2 class="section-title fade-in"><span class="num">陆</span>首单金额与LTV</h2>
+    <div class="content fade-in">
+      <p>按首单金额分层后，差异更加显著：</p>
+
+      <table class="ink-table fade-in">
+        <thead>
+          <tr>
+            <th>首单金额</th>
+            <th>用户占比</th>
+            <th>LTV</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>&lt; 100元</td>
+            <td>40%</td>
+            <td class="val">400元</td>
+            <td class="warn">需提升</td>
+          </tr>
+          <tr>
+            <td>100 - 300元</td>
+            <td>30%</td>
+            <td class="val">900元</td>
+            <td>正常</td>
+          </tr>
+          <tr>
+            <td>300 - 500元</td>
+            <td>20%</td>
+            <td class="val good">1800元</td>
+            <td class="good">优质</td>
+          </tr>
+          <tr>
+            <td>&gt; 500元</td>
+            <td>10%</td>
+            <td class="val good">3200元</td>
+            <td class="good">核心</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="calldanger fade-in">
+        <div class="danger-label">关键发现</div>
+        <div class="danger-content">
+          <ul style="list-style:none;padding:0">
+            <li>&#8226; 首单金额与LTV强相关</li>
+            <li>&#8226; 高首单用户LTV是低首单用户的 <strong>8倍</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 3: First Order Amount vs LTV Bar -->
+    <div class="chart-container fade-in" id="chart3"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 7: LTV预测模型
+     ============================================================ -->
+<section class="story-section" id="sec7">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 07</div>
+    <h2 class="section-title fade-in"><span class="num">柒</span>LTV预测模型</h2>
+    <div class="content fade-in">
+      <p>小林尝试构建LTV预测模型，用用户前30天的行为预测未来LTV。关键特征包括首单金额、访问频次、品类数等。</p>
+
+      <table class="ink-table fade-in">
+        <thead>
+          <tr>
+            <th>特征</th>
+            <th>相关系数</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>首单金额</td>
+            <td class="val">0.65</td>
+            <td class="good">核心特征</td>
+          </tr>
+          <tr>
+            <td>前30天购买频次</td>
+            <td class="val">0.58</td>
+            <td class="good">重要</td>
+          </tr>
+          <tr>
+            <td>前30天访问次数</td>
+            <td class="val">0.52</td>
+            <td class="good">重要</td>
+          </tr>
+          <tr>
+            <td>品类数</td>
+            <td class="val">0.45</td>
+            <td>参考</td>
+          </tr>
+          <tr>
+            <td>是否会员</td>
+            <td class="val">0.38</td>
+            <td>参考</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chart 4: Feature Importance Horizontal Bar -->
+    <div class="chart-container chart-container-sm fade-in" id="chart4"></div>
+
+    <div class="content fade-in">
+      <p>简化版预测模型代码：</p>
+
+      <div class="code-block fade-in">
+        <span class="code-lang">PYTHON</span>
+<pre><span class="kw">def</span> <span class="fn">predict_ltv</span>(user):
+    <span class="cmt">"""基于用户前30天行为预测LTV"""</span>
+    base_ltv = <span class="num">1000</span>  <span class="cmt"># 基准LTV</span>
+
+    <span class="cmt"># 首单金额调整</span>
+    <span class="kw">if</span> user.first_order_amount <span class="op">></span> <span class="num">500</span>:
+        base_ltv <span class="op">*=</span> <span class="num">2.5</span>
+    <span class="kw">elif</span> user.first_order_amount <span class="op">></span> <span class="num">300</span>:
+        base_ltv <span class="op">*=</span> <span class="num">1.8</span>
+    <span class="kw">elif</span> user.first_order_amount <span class="op">></span> <span class="num">100</span>:
+        base_ltv <span class="op">*=</span> <span class="num">1.0</span>
+    <span class="kw">else</span>:
+        base_ltv <span class="op">*=</span> <span class="num">0.5</span>
+
+    <span class="cmt"># 访问频次调整</span>
+    <span class="kw">if</span> user.visit_count_30d <span class="op">></span> <span class="num">10</span>:
+        base_ltv <span class="op">*=</span> <span class="num">1.3</span>
+    <span class="kw">elif</span> user.visit_count_30d <span class="op">></span> <span class="num">5</span>:
+        base_ltv <span class="op">*=</span> <span class="num">1.1</span>
+
+    <span class="cmt"># 会员状态调整</span>
+    <span class="kw">if</span> user.is_member:
+        base_ltv <span class="op">*=</span> <span class="num">1.5</span>
+
+    <span class="kw">return</span> base_ltv</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 8: 投放ROI评估
+     ============================================================ -->
+<section class="story-section" id="sec8">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 08</div>
+    <h2 class="section-title fade-in"><span class="num">捌</span>投放ROI评估</h2>
+    <div class="content fade-in">
+      <p>将LTV应用于投放预算分配决策：</p>
+
+      <table class="ink-table fade-in">
+        <thead>
+          <tr>
+            <th>渠道</th>
+            <th>投放预算</th>
+            <th>预计获客</th>
+            <th>CAC</th>
+            <th>预计LTV</th>
+            <th>ROI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>自然搜索</td>
+            <td>20万</td>
+            <td>4000</td>
+            <td class="val">50</td>
+            <td class="val good">1500</td>
+            <td class="val good">30x</td>
+          </tr>
+          <tr>
+            <td>信息流</td>
+            <td>100万</td>
+            <td>5500</td>
+            <td class="val">180</td>
+            <td class="val">800</td>
+            <td class="val warn">4.4x</td>
+          </tr>
+          <tr>
+            <td>社交广告</td>
+            <td>80万</td>
+            <td>6700</td>
+            <td class="val">120</td>
+            <td class="val good">1100</td>
+            <td class="val good">9.2x</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="calltip fade-in">
+        <div class="tip-label">建议</div>
+        <div class="tip-content">增加社交广告预算，减少信息流预算。</div>
+      </div>
+    </div>
+
+    <!-- Chart 5: ROI Comparison Bar -->
+    <div class="chart-container fade-in" id="chart5"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 9: 用户分层运营
+     ============================================================ -->
+<section class="story-section" id="sec9">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 09</div>
+    <h2 class="section-title fade-in"><span class="num">玖</span>用户分层运营</h2>
+    <div class="content fade-in">
+      <p>基于LTV将用户分为三个层级，制定差异化运营策略：</p>
+
+      <table class="ink-table fade-in">
+        <thead>
+          <tr>
+            <th>LTV层级</th>
+            <th>用户占比</th>
+            <th>LTV范围</th>
+            <th>运营策略</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>高价值</td>
+            <td class="val">15%</td>
+            <td>&gt; 2000元</td>
+            <td>VIP服务、专属权益</td>
+          </tr>
+          <tr>
+            <td>中价值</td>
+            <td class="val">35%</td>
+            <td>800 - 2000元</td>
+            <td>提升频次、会员引导</td>
+          </tr>
+          <tr>
+            <td>低价值</td>
+            <td class="val">50%</td>
+            <td>&lt; 800元</td>
+            <td>基础服务、低成本维护</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>获客成本决策公式：</p>
+
+      <div class="formula-block fade-in">
+        <div class="formula">获客成本上限 = LTV / 目标LTV/CAC比率</div>
+        <div class="formula-note">
+          假设 LTV = 1000元，目标 LTV/CAC = 3<br>
+          则：获客成本上限 = 1000 / 3 = <strong style="color:var(--accent)">333元</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 6: LTV/CAC Health Dashboard -->
+    <div class="chart-container fade-in" id="chart6"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 10: 关键发现
+     ============================================================ -->
+<section class="story-section" id="sec10">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 10</div>
+    <h2 class="section-title fade-in"><span class="num">拾</span>关键发现</h2>
+    <div class="content fade-in">
+
+      <div class="calldanger fade-in">
+        <div class="danger-label">发现 1：整体LTV健康</div>
+        <div class="danger-content">
+          <ul style="list-style:none;padding:0">
+            <li>&#8226; LTV/CAC = 6.7，远高于健康阈值3</li>
+            <li>&#8226; 获客投资回报良好</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callwarning fade-in">
+        <div class="warning-label">发现 2：渠道LTV差异大</div>
+        <div class="warning-content">
+          <ul style="list-style:none;padding:0">
+            <li>&#8226; 自然搜索LTV最高，是最优质渠道</li>
+            <li>&#8226; 活动引流LTV最低，需要优化</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="calltip fade-in">
+        <div class="tip-label">发现 3：首单金额预测LTV</div>
+        <div class="tip-content">
+          <ul style="list-style:none;padding:0">
+            <li>&#8226; 首单金额与LTV强相关</li>
+            <li>&#8226; 可以用首单金额初步判断用户价值</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="calltip fade-in">
+        <div class="tip-label">发现 4：LTV指导决策</div>
+        <div class="tip-content">
+          <ul style="list-style:none;padding:0">
+            <li>&#8226; 投放预算分配</li>
+            <li>&#8226; 用户分层运营</li>
+            <li>&#8226; 获客成本决策</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 11: 业务建议
+     ============================================================ -->
+<section class="story-section" id="sec11">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 11</div>
+    <h2 class="section-title fade-in"><span class="num">拾壹</span>业务建议</h2>
+    <div class="content fade-in">
+
+      <h3 style="font-family:var(--font-serif);font-size:1.05rem;color:var(--success);margin:0 0 16px;font-weight:600;">短期建议</h3>
+
+      <div class="summary-grid fade-in">
+        <div class="summary-card">
+          <div class="sc-title">优化投放策略</div>
+          <div class="sc-desc">增加高LTV渠道预算<br>减少低LTV渠道预算<br>提升投放精准度</div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-title">提升用户LTV</div>
+          <div class="sc-desc">引导首单金额提升<br>提升复购频次<br>延长用户生命周期</div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-title">建立LTV监控</div>
+          <div class="sc-desc">定期计算各渠道LTV<br>监控LTV变化趋势<br>异常预警</div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-title">用户分层运营</div>
+          <div class="sc-desc">基于LTV进行用户分层<br>差异化运营策略<br>精准资源分配</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:var(--font-serif);font-size:1.05rem;color:var(--primary-light);margin:32px 0 16px;font-weight:600;">长期建议</h3>
+
+      <div class="callinfo fade-in">
+        <div class="info-label">长期方向</div>
+        <div class="info-content">
+          <strong>建立LTV预测模型</strong> — 用机器学习提升预测准确率，实时预测用户LTV，指导精细化运营。<br><br>
+          <strong>LTV驱动的运营体系</strong> — 基于LTV的用户分层、资源分配、绩效评估。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 12: 行动结果
+     ============================================================ -->
+<section class="story-section" id="sec12">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 12</div>
+    <h2 class="section-title fade-in"><span class="num">拾贰</span>行动结果</h2>
+    <div class="content fade-in">
+      <p>小林将LTV分析结果汇报给老板和市场部：</p>
+
+      <div class="callquote fade-in" style="border-left-color:var(--success)">
+        <div class="speaker">老板</div>
+        <div class="words" style="color:var(--success)">"原来一个用户平均价值1000元，那200万预算能带来2000万回报，可以批准。"</div>
+      </div>
+
+      <div class="callquote fade-in" style="border-left-color:var(--success)">
+        <div class="speaker">市场部经理</div>
+        <div class="words" style="color:var(--success)">"我们以后会用LTV来评估渠道质量，而不是只看获客数量。"</div>
+      </div>
+
+      <p style="margin-top:28px"><strong>后续行动：</strong></p>
+      <ul class="checklist fade-in">
+        <li><span class="check-icon">&#10003;</span> <span>调整投放渠道策略</span></li>
+        <li><span class="check-icon">&#10003;</span> <span>建立LTV监控体系</span></li>
+        <li><span class="check-icon">&#10003;</span> <span>基于LTV进行用户分层运营</span></li>
+      </ul>
+
+      <p style="margin-top:28px"><strong>一个季度后效果：</strong></p>
+      <div class="result-row fade-in">
+        <div class="result-badge">
+          <span class="rb-icon">&#8593;</span>
+          <span>整体LTV提升</span>
+          <span class="rb-val">15%</span>
+        </div>
+        <div class="result-badge">
+          <span class="rb-icon">&#8593;</span>
+          <span>高价值渠道占比提升</span>
+          <span class="rb-val">&#10004;</span>
+        </div>
+        <div class="result-badge">
+          <span class="rb-icon">&#8593;</span>
+          <span>获客ROI提升</span>
+          <span class="rb-val">20%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEC 13: 方法论总结
+     ============================================================ -->
+<section class="story-section" id="sec13">
+  <div class="container">
+    <div class="section-label fade-in">CHAPTER 13</div>
+    <h2 class="section-title fade-in"><span class="num">拾叁</span>方法论总结</h2>
+    <div class="content fade-in">
+      <p><strong>LTV（Lifetime Value）模型</strong>通过计算用户在整个生命周期内为企业创造的总价值，评估获客投资回报，指导投放决策和用户运营策略。</p>
+
+      <p style="margin-top:28px"><strong>LTV计算步骤：</strong></p>
+      <ul class="checklist fade-in">
+        <li><span class="check-icon">1</span> <span>计算ARPU（平均每用户收入）</span></li>
+        <li><span class="check-icon">2</span> <span>计算流失率（用户流失比例）</span></li>
+        <li><span class="check-icon">3</span> <span>计算生命周期（1 / 流失率）</span></li>
+        <li><span class="check-icon">4</span> <span>计算LTV（ARPU &times; 生命周期）</span></li>
+      </ul>
+
+      <p style="margin-top:28px"><strong>LTV/CAC比率标准：</strong></p>
+
+      <table class="ink-table fade-in">
+        <thead>
+          <tr>
+            <th>LTV/CAC</th>
+            <th>评估</th>
+            <th>建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>&lt; 1</td>
+            <td class="bad">亏损</td>
+            <td>停止获客，优化成本</td>
+          </tr>
+          <tr>
+            <td>1 - 3</td>
+            <td class="warn">低效</td>
+            <td>优化获客策略</td>
+          </tr>
+          <tr>
+            <td>3 - 5</td>
+            <td class="good">健康</td>
+            <td>维持现状</td>
+          </tr>
+          <tr>
+            <td>&gt; 5</td>
+            <td class="good">高效</td>
+            <td>增加获客预算</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top:28px"><strong>适用场景：</strong></p>
+      <ul class="checklist fade-in">
+        <li><span class="check-icon">&#10003;</span> <span><strong>投放决策</strong> — 评估渠道价值</span></li>
+        <li><span class="check-icon">&#10003;</span> <span><strong>用户运营</strong> — 用户分层运营</span></li>
+        <li><span class="check-icon">&#10003;</span> <span><strong>产品定价</strong> — 定价策略制定</span></li>
+        <li><span class="check-icon">&#10003;</span> <span><strong>企业估值</strong> — 企业价值评估</span></li>
+      </ul>
+
+      <div class="callwarning fade-in">
+        <div class="warning-label">注意事项</div>
+        <div class="warning-content">
+          <ul style="list-style:none;padding:0">
+            <li>&#8226; <strong>LTV是预测值</strong>：实际价值可能有偏差</li>
+            <li>&#8226; <strong>分群体计算</strong>：不同群体LTV差异大</li>
+            <li>&#8226; <strong>定期更新</strong>：LTV会随时间变化</li>
+            <li>&#8226; <strong>结合其他指标</strong>：LTV不是唯一指标</li>
+          </ul>
+        </div>
+      </div>
+
+      <p style="margin-top:28px"><strong>思考练习：</strong></p>
+
+      <div class="question-block fade-in">
+        <div class="q-label">练习 1</div>
+        <div class="q-text">如果LTV/CAC &lt; 1，应该怎么办？减少获客还是提升LTV？</div>
+      </div>
+
+      <div class="question-block fade-in">
+        <div class="q-label">练习 2</div>
+        <div class="q-text">如何用机器学习构建更准确的LTV预测模型？需要哪些特征？</div>
+      </div>
+
+      <div class="question-block fade-in">
+        <div class="q-label">练习 3</div>
+        <div class="q-text">LTV模型在订阅制业务（如视频会员）和电商业务中有什么不同？</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="story-section story-footer">
+  <div class="container">
+    <div class="footer-line fade-in"></div>
+    <div class="footer-text fade-in">故事11 · 用户生命周期价值几何 · 数据分析故事合集</div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// ============================================================
+// PROGRESS BAR
+// ============================================================
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  progressBar.style.width = progress + '%';
+});
+
+// ============================================================
+// NAVIGATION DOTS
+// ============================================================
+const navDots = document.querySelectorAll('.nav-dot');
+const sections = [];
+navDots.forEach(dot => {
+  const target = document.getElementById(dot.dataset.target);
+  if (target) sections.push({ dot, el: target });
+});
+
+navDots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const target = document.getElementById(dot.dataset.target);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Active dot tracking
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navDots.forEach(d => d.classList.remove('active'));
+      const match = sections.find(s => s.el === entry.target);
+      if (match) match.dot.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(s => sectionObserver.observe(s.el));
+
+// ============================================================
+// FADE-IN ANIMATION
+// ============================================================
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+// ============================================================
+// ECHARTS - Color palette (ink style)
+// ============================================================
+const inkColors = {
+  black: '#1A1A1A',
+  darkGray: '#555555',
+  gray: '#999999',
+  lightGray: '#CCCCCC',
+  border: '#E8E8E8',
+  bg: '#FAFAFA',
+  white: '#FFFFFF',
+  red: '#C0392B',
+  redLight: 'rgba(192,57,43,0.15)',
+  green: '#27AE60',
+  greenLight: 'rgba(39,174,96,0.15)',
+  yellow: '#F39C12',
+  yellowLight: 'rgba(243,156,18,0.15)',
+  blue: '#2C3E50',
+  blueLight: 'rgba(44,62,80,0.1)',
+};
+
+// ============================================================
+// CHART 1: LTV Gauge
+// ============================================================
+const chart1 = echarts.init(document.getElementById('chart1'));
+chart1.setOption({
+  series: [{
+    type: 'gauge',
+    startAngle: 200,
+    endAngle: -20,
+    min: 0,
+    max: 2000,
+    radius: '85%',
+    center: ['50%', '55%'],
+    splitNumber: 4,
+    axisLine: {
+      lineStyle: {
+        width: 12,
+        color: [
+          [0.25, inkColors.lightGray],
+          [0.5, inkColors.gray],
+          [0.75, inkColors.darkGray],
+          [1, inkColors.red]
+        ]
+      }
+    },
+    pointer: {
+      icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
+      length: '55%',
+      width: 8,
+      offsetCenter: [0, '-10%'],
+      itemStyle: { color: inkColors.black }
+    },
+    axisTick: { distance: -18, length: 6, lineStyle: { color: '#fff', width: 1.5 } },
+    splitLine: { distance: -22, length: 12, lineStyle: { color: '#fff', width: 2 } },
+    axisLabel: { color: inkColors.gray, distance: 28, fontSize: 11, fontFamily: 'Noto Sans SC' },
+    anchor: { show: true, size: 14, itemStyle: { borderWidth: 3, borderColor: inkColors.black, color: inkColors.white } },
+    title: { show: true, offsetCenter: [0, '30%'], fontSize: 13, color: inkColors.gray, fontFamily: 'Noto Sans SC' },
+    detail: {
+      valueAnimation: true,
+      fontSize: 36,
+      fontFamily: 'Noto Serif SC',
+      fontWeight: 900,
+      offsetCenter: [0, '55%'],
+      color: inkColors.red,
+      formatter: '{value}元'
+    },
+    data: [{ value: 1000, name: 'LTV 用户生命周期价值' }]
+  }]
+});
+
+// ============================================================
+// CHART 2: Channel LTV vs CAC Bubble Chart
+// ============================================================
+const chart2 = echarts.init(document.getElementById('chart2'));
+chart2.setOption({
+  tooltip: {
+    trigger: 'item',
+    backgroundColor: inkColors.white,
+    borderColor: inkColors.border,
+    borderWidth: 1,
+    textStyle: { color: inkColors.black, fontFamily: 'Noto Sans SC', fontSize: 12 },
+    formatter: function(p) {
+      return '<strong>' + p.data[3] + '</strong><br/>' +
+             'CAC: ' + p.data[0] + '元<br/>' +
+             'LTV: ' + p.data[1] + '元<br/>' +
+             'LTV/CAC: ' + p.data[4] + '<br/>' +
+             '用户数: ' + p.data[2];
+    }
+  },
+  grid: { left: 60, right: 40, top: 40, bottom: 50 },
+  xAxis: {
+    name: 'CAC (获客成本)',
+    nameLocation: 'center',
+    nameGap: 36,
+    nameTextStyle: { color: inkColors.gray, fontSize: 11, fontFamily: 'Noto Sans SC' },
+    min: 0,
+    max: 250,
+    splitLine: { lineStyle: { color: inkColors.border, type: 'dashed' } },
+    axisLine: { lineStyle: { color: inkColors.border } },
+    axisLabel: { color: inkColors.gray, fontSize: 11 },
+    axisTick: { lineStyle: { color: inkColors.border } }
+  },
+  yAxis: {
+    name: 'LTV (生命周期价值)',
+    nameLocation: 'center',
+    nameGap: 50,
+    nameTextStyle: { color: inkColors.gray, fontSize: 11, fontFamily: 'Noto Sans SC' },
+    min: 0,
+    max: 1800,
+    splitLine: { lineStyle: { color: inkColors.border, type: 'dashed' } },
+    axisLine: { lineStyle: { color: inkColors.border } },
+    axisLabel: { color: inkColors.gray, fontSize: 11 },
+    axisTick: { lineStyle: { color: inkColors.border } }
+  },
+  graphic: [
+    {
+      type: 'line',
+      shape: { x1: 60, y1: 240, x2: 660, y2: 240 },
+      style: { stroke: inkColors.red, lineDash: [4, 4], lineWidth: 1 }
+    }
+  ],
+  series: [{
+    type: 'scatter',
+    symbolSize: function(data) { return Math.sqrt(data[2]) * 3; },
+    data: [
+      [50, 1500, 4000, '自然搜索', 30],
+      [180, 800, 5500, '信息流广告', 4.4],
+      [120, 1100, 6700, '社交广告', 9.2],
+      [200, 500, 3000, '活动引流', 2.5]
+    ],
+    itemStyle: {
+      color: function(params) {
+        var colors = [inkColors.green, inkColors.yellow, inkColors.blue, inkColors.red];
+        return colors[params.dataIndex];
+      },
+      opacity: 0.7,
+      shadowBlur: 8,
+      shadowColor: 'rgba(0,0,0,0.1)'
+    },
+    label: {
+      show: true,
+      formatter: function(p) { return p.data[3]; },
+      position: 'top',
+      color: inkColors.darkGray,
+      fontSize: 11,
+      fontFamily: 'Noto Sans SC'
+    },
+    emphasis: {
+      itemStyle: { opacity: 1, shadowBlur: 16 }
+    },
+    markLine: {
+      silent: true,
+      lineStyle: { color: inkColors.red, type: 'dashed', width: 1, opacity: 0.5 },
+      data: [{ yAxis: 800, label: { formatter: 'LTV=800', color: inkColors.red, fontSize: 10, fontFamily: 'Noto Sans SC' } }]
+    }
+  }]
+});
+
+// ============================================================
+// CHART 3: First Order Amount vs LTV Bar Chart
+// ============================================================
+const chart3 = echarts.init(document.getElementById('chart3'));
+chart3.setOption({
+  tooltip: {
+    trigger: 'axis',
+    backgroundColor: inkColors.white,
+    borderColor: inkColors.border,
+    borderWidth: 1,
+    textStyle: { color: inkColors.black, fontFamily: 'Noto Sans SC', fontSize: 12 },
+    axisPointer: { type: 'shadow', shadowStyle: { color: inkColors.blueLight } }
+  },
+  grid: { left: 80, right: 40, top: 40, bottom: 60 },
+  xAxis: {
+    type: 'value',
+    name: 'LTV (元)',
+    nameLocation: 'center',
+    nameGap: 36,
+    nameTextStyle: { color: inkColors.gray, fontSize: 11, fontFamily: 'Noto Sans SC' },
+    splitLine: { lineStyle: { color: inkColors.border, type: 'dashed' } },
+    axisLine: { lineStyle: { color: inkColors.border } },
+    axisLabel: { color: inkColors.gray, fontSize: 11 }
+  },
+  yAxis: {
+    type: 'category',
+    data: ['> 500元', '300-500元', '100-300元', '< 100元'],
+    axisLine: { lineStyle: { color: inkColors.border } },
+    axisTick: { show: false },
+    axisLabel: { color: inkColors.darkGray, fontSize: 12, fontFamily: 'Noto Sans SC' }
+  },
+  series: [
+    {
+      name: 'LTV',
+      type: 'bar',
+      barWidth: 28,
+      data: [
+        { value: 3200, itemStyle: { color: inkColors.red } },
+        { value: 1800, itemStyle: { color: inkColors.darkGray } },
+        { value: 900, itemStyle: { color: inkColors.gray } },
+        { value: 400, itemStyle: { color: inkColors.lightGray } }
+      ],
+      label: {
+        show: true,
+        position: 'right',
+        formatter: '{c}元',
+        color: inkColors.darkGray,
+        fontSize: 12,
+        fontFamily: 'Noto Serif SC',
+        fontWeight: 600
+      },
+      itemStyle: { borderRadius: [0, 4, 4, 0] }
+    },
+    {
+      name: '用户占比',
+      type: 'bar',
+      barWidth: 12,
+      barGap: '-100%',
+      barOffset: 20,
+      data: [
+        { value: 10, itemStyle: { color: inkColors.redLight } },
+        { value: 20, itemStyle: { color: 'rgba(85,85,85,0.1)' } },
+        { value: 30, itemStyle: { color: 'rgba(153,153,153,0.1)' } },
+        { value: 40, itemStyle: { color: 'rgba(204,204,204,0.1)' } }
+      ],
+      label: {
+        show: true,
+        position: 'insideLeft',
+        formatter: '{c}%',
+        color: inkColors.gray,
+        fontSize: 10,
+        fontFamily: 'Noto Sans SC'
+      },
+      itemStyle: { borderRadius: [0, 2, 2, 0] },
+      tooltip: { valueFormatter: function(v) { return v + '%'; } }
+    }
+  ]
+});
+
+// ============================================================
+// CHART 4: Feature Importance Horizontal Bar
+// ============================================================
+const chart4 = echarts.init(document.getElementById('chart4'));
+chart4.setOption({
+  tooltip: {
+    trigger: 'axis',
+    backgroundColor: inkColors.white,
+    borderColor: inkColors.border,
+    borderWidth: 1,
+    textStyle: { color: inkColors.black, fontFamily: 'Noto Sans SC', fontSize: 12 },
+    axisPointer: { type: 'shadow', shadowStyle: { color: inkColors.blueLight } }
+  },
+  grid: { left: 140, right: 50, top: 20, bottom: 30 },
+  xAxis: {
+    type: 'value',
+    max: 1,
+    splitLine: { lineStyle: { color: inkColors.border, type: 'dashed' } },
+    axisLine: { lineStyle: { color: inkColors.border } },
+    axisLabel: { color: inkColors.gray, fontSize: 11, formatter: '{value}' }
+  },
+  yAxis: {
+    type: 'category',
+    data: ['是否会员', '品类数', '前30天访问次数', '前30天购买频次', '首单金额'],
+    axisLine: { lineStyle: { color: inkColors.border } },
+    axisTick: { show: false },
+    axisLabel: { color: inkColors.darkGray, fontSize: 12, fontFamily: 'Noto Sans SC' }
+  },
+  series: [{
+    type: 'bar',
+    data: [
+      { value: 0.38, itemStyle: { color: inkColors.lightGray } },
+      { value: 0.45, itemStyle: { color: inkColors.gray } },
+      { value: 0.52, itemStyle: { color: inkColors.darkGray } },
+      { value: 0.58, itemStyle: { color: inkColors.blue } },
+      { value: 0.65, itemStyle: { color: inkColors.red } }
+    ],
+    barWidth: 20,
+    label: {
+      show: true,
+      position: 'right',
+      formatter: '{c}',
+      color: inkColors.darkGray,
+      fontSize: 12,
+      fontFamily: 'Noto Serif SC',
+      fontWeight: 600
+    },
+    itemStyle: { borderRadius: [0, 4, 4, 0] }
+  }]
+});
+
+// ============================================================
+// CHART 5: ROI Comparison Bar Chart
+// ============================================================
+const chart5 = echarts.init(document.getElementById('chart5'));
+chart5.setOption({
+  tooltip: {
+    trigger: 'axis',
+    backgroundColor: inkColors.white,
+    borderColor: inkColors.border,
+    borderWidth: 1,
+    textStyle: { color: inkColors.black, fontFamily: 'Noto Sans SC', fontSize: 12 },
+    axisPointer: { type: 'shadow', shadowStyle: { color: inkColors.blueLight } }
+  },
+  legend: {
+    data: ['ROI (倍)', '投放预算 (万)'],
+    bottom: 0,
+    textStyle: { color: inkColors.gray, fontSize: 11, fontFamily: 'Noto Sans SC' },
+    itemWidth: 12,
+    itemHeight: 12,
+    itemGap: 24
+  },
+  grid: { left: 60, right: 40, top: 40, bottom: 50 },
+  xAxis: {
+    type: 'category',
+    data: ['自然搜索', '信息流', '社交广告'],
+    axisLine: { lineStyle: { color: inkColors.border } },
+    axisTick: { show: false },
+    axisLabel: { color: inkColors.darkGray, fontSize: 12, fontFamily: 'Noto Sans SC' }
+  },
+  yAxis: [
+    {
+      type: 'value',
+      name: 'ROI (倍)',
+      nameTextStyle: { color: inkColors.gray, fontSize: 11, fontFamily: 'Noto Sans SC' },
+      splitLine: { lineStyle: { color: inkColors.border, type: 'dashed' } },
+      axisLine: { lineStyle: { color: inkColors.border } },
+      axisLabel: { color: inkColors.gray, fontSize: 11 }
+    },
+    {
+      type: 'value',
+      name: '预算 (万)',
+      nameTextStyle: { color: inkColors.gray, fontSize: 11, fontFamily: 'Noto Sans SC' },
+      splitLine: { show: false },
+      axisLine: { show: false },
+      axisLabel: { color: inkColors.gray, fontSize: 11 }
+    }
+  ],
+  series: [
+    {
+      name: 'ROI (倍)',
+      type: 'bar',
+      barWidth: 32,
+      data: [
+        { value: 30, itemStyle: { color: inkColors.red } },
+        { value: 4.4, itemStyle: { color: inkColors.gray } },
+        { value: 9.2, itemStyle: { color: inkColors.darkGray } }
+      ],
+      label: {
+        show: true,
+        position: 'top',
+        formatter: '{c}x',
+        color: inkColors.darkGray,
+        fontSize: 12,
+        fontFamily: 'Noto Serif SC',
+        fontWeight: 600
+      },
+      itemStyle: { borderRadius: [4, 4, 0, 0] }
+    },
+    {
+      name: '投放预算 (万)',
+      type: 'bar',
+      yAxisIndex: 1,
+      barWidth: 16,
+      data: [20, 100, 80],
+      label: {
+        show: true,
+        position: 'top',
+        formatter: '{c}万',
+        color: inkColors.gray,
+        fontSize: 10,
+        fontFamily: 'Noto Sans SC'
+      },
+      itemStyle: { color: inkColors.lightGray, borderRadius: [2, 2, 0, 0] }
+    }
+  ]
+});
+
+// ============================================================
+// CHART 6: LTV/CAC Health Dashboard
+// ============================================================
+const chart6 = echarts.init(document.getElementById('chart6'));
+chart6.setOption({
+  tooltip: {
+    trigger: 'item',
+    backgroundColor: inkColors.white,
+    borderColor: inkColors.border,
+    borderWidth: 1,
+    textStyle: { color: inkColors.black, fontFamily: 'Noto Sans SC', fontSize: 12 },
+    formatter: function(p) { return p.name + '<br/>LTV/CAC: ' + p.value; }
+  },
+  series: [
+    {
+      type: 'gauge',
+      center: ['20%', '55%'],
+      radius: '70%',
+      startAngle: 200,
+      endAngle: -20,
+      min: 0,
+      max: 35,
+      splitNumber: 5,
+      axisLine: {
+        lineStyle: {
+          width: 10,
+          color: [
+            [0.086, inkColors.red],
+            [0.257, inkColors.yellow],
+            [0.4, inkColors.green],
+            [1, inkColors.green]
+          ]
+        }
+      },
+      pointer: {
+        icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
+        length: '50%',
+        width: 6,
+        offsetCenter: [0, '-10%'],
+        itemStyle: { color: inkColors.black }
+      },
+      axisTick: { distance: -14, length: 4, lineStyle: { color: '#fff', width: 1 } },
+      splitLine: { distance: -18, length: 8, lineStyle: { color: '#fff', width: 1.5 } },
+      axisLabel: { color: inkColors.gray, distance: 20, fontSize: 9, fontFamily: 'Noto Sans SC' },
+      anchor: { show: true, size: 10, itemStyle: { borderWidth: 2, borderColor: inkColors.black, color: inkColors.white } },
+      title: { show: true, offsetCenter: [0, '28%'], fontSize: 11, color: inkColors.gray, fontFamily: 'Noto Sans SC' },
+      detail: {
+        valueAnimation: true,
+        fontSize: 22,
+        fontFamily: 'Noto Serif SC',
+        fontWeight: 900,
+        offsetCenter: [0, '50%'],
+        color: inkColors.green,
+        formatter: '{value}'
+      },
+      data: [{ value: 30, name: '自然搜索' }]
+    },
+    {
+      type: 'gauge',
+      center: ['50%', '55%'],
+      radius: '70%',
+      startAngle: 200,
+      endAngle: -20,
+      min: 0,
+      max: 35,
+      splitNumber: 5,
+      axisLine: {
+        lineStyle: {
+          width: 10,
+          color: [
+            [0.086, inkColors.red],
+            [0.257, inkColors.yellow],
+            [0.4, inkColors.green],
+            [1, inkColors.green]
+          ]
+        }
+      },
+      pointer: {
+        icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
+        length: '50%',
+        width: 6,
+        offsetCenter: [0, '-10%'],
+        itemStyle: { color: inkColors.black }
+      },
+      axisTick: { distance: -14, length: 4, lineStyle: { color: '#fff', width: 1 } },
+      splitLine: { distance: -18, length: 8, lineStyle: { color: '#fff', width: 1.5 } },
+      axisLabel: { color: inkColors.gray, distance: 20, fontSize: 9, fontFamily: 'Noto Sans SC' },
+      anchor: { show: true, size: 10, itemStyle: { borderWidth: 2, borderColor: inkColors.black, color: inkColors.white } },
+      title: { show: true, offsetCenter: [0, '28%'], fontSize: 11, color: inkColors.gray, fontFamily: 'Noto Sans SC' },
+      detail: {
+        valueAnimation: true,
+        fontSize: 22,
+        fontFamily: 'Noto Serif SC',
+        fontWeight: 900,
+        offsetCenter: [0, '50%'],
+        color: inkColors.yellow,
+        formatter: '{value}'
+      },
+      data: [{ value: 4.4, name: '信息流广告' }]
+    },
+    {
+      type: 'gauge',
+      center: ['80%', '55%'],
+      radius: '70%',
+      startAngle: 200,
+      endAngle: -20,
+      min: 0,
+      max: 35,
+      splitNumber: 5,
+      axisLine: {
+        lineStyle: {
+          width: 10,
+          color: [
+            [0.086, inkColors.red],
+            [0.257, inkColors.yellow],
+            [0.4, inkColors.green],
+            [1, inkColors.green]
+          ]
+        }
+      },
+      pointer: {
+        icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
+        length: '50%',
+        width: 6,
+        offsetCenter: [0, '-10%'],
+        itemStyle: { color: inkColors.black }
+      },
+      axisTick: { distance: -14, length: 4, lineStyle: { color: '#fff', width: 1 } },
+      splitLine: { distance: -18, length: 8, lineStyle: { color: '#fff', width: 1.5 } },
+      axisLabel: { color: inkColors.gray, distance: 20, fontSize: 9, fontFamily: 'Noto Sans SC' },
+      anchor: { show: true, size: 10, itemStyle: { borderWidth: 2, borderColor: inkColors.black, color: inkColors.white } },
+      title: { show: true, offsetCenter: [0, '28%'], fontSize: 11, color: inkColors.gray, fontFamily: 'Noto Sans SC' },
+      detail: {
+        valueAnimation: true,
+        fontSize: 22,
+        fontFamily: 'Noto Serif SC',
+        fontWeight: 900,
+        offsetCenter: [0, '50%'],
+        color: inkColors.green,
+        formatter: '{value}'
+      },
+      data: [{ value: 9.2, name: '社交广告' }]
+    }
+  ]
+});
+
+// ============================================================
+// RESIZE HANDLER
+// ============================================================
+window.addEventListener('resize', () => {
+  chart1.resize();
+  chart2.resize();
+  chart3.resize();
+  chart4.resize();
+  chart5.resize();
+  chart6.resize();
+});
+</script>
+
+</body>
+</html>

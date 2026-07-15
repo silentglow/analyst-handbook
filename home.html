@@ -1,286 +1,245 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>数据分析面试速通课</title>
-<link rel="stylesheet" href="assets/style.css">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          surface: { 900: '#06070a', 800: '#0c0d12' },
-          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
-        }
-      }
-    }
-  }
-</script>
-</head>
-<body>
-<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
-  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(94,234,212,0.12),transparent 70%);top:-200px;left:-100px"></div>
-  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
-  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
-</div>
-<div class="grid-bg"></div>
-<nav class="topnav">
-  <a href="home.html" class="topnav-logo">DATA ANALYSIS</a>
-  <div class="topnav-links"><a href="#">笔记</a></div>
-</nav>
-<main class="page">
-  <header style="margin-bottom:48px">
-    <h1 class="ch-title" style="min-height:auto;background:linear-gradient(135deg,#fff 0%,#5eead4 50%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">数据分析面试速通课</h1>
-    <p class="ch-subtitle" style="opacity:0;animation:fadeUp 1s ease-out 0.5s forwards">跟着鲜食记APP的真实业务案例，走完从发现问题到解决问题的完整链路。</p>
-  </header>
-  <div class="space-y-4">
-    <a href="index.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">01</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">学习指南</h3>
-          <p class="text-white/40 text-sm leading-relaxed">面试官到底在考什么？怎么学才有效？建立正确的分析思维。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch02.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">02</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">进入鲜食记场景</h3>
-          <p class="text-white/40 text-sm leading-relaxed">产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch03.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">03</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">该盯哪些指标</h3>
-          <p class="text-white/40 text-sm leading-relaxed">用AARRR框架拆解用户旅程，建立指标体系。先搭体系再找原因。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch04.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">04</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">排查异动</h3>
-          <p class="text-white/40 text-sm leading-relaxed">按时间、渠道、用户行为逐步缩小范围，定位到小红书种草内容的根因。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch05.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-blue font-bold shrink-0">05</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-blue transition-colors">AB实验设计</h3>
-          <p class="text-white/40 text-sm leading-relaxed">设计新用户引导流程的AB实验，计算样本量、定义指标、规划实验周期。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-blue group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch06.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">06</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">落地策略</h3>
-          <p class="text-white/40 text-sm leading-relaxed">灰度发布、持续监控、回退方案。从分析到决策到执行的完整闭环。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch07.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">07</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">用户画像与分层运营</h3>
-          <p class="text-white/40 text-sm leading-relaxed">从三层穿透到RFM，不只是给用户贴标签，而是找到不同群体对策略的反应差异。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch08.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">08</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">留存分析与生命周期</h3>
-          <p class="text-white/40 text-sm leading-relaxed">留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch09.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">09</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">数据预测与目标拆解</h3>
-          <p class="text-white/40 text-sm leading-relaxed">订阅收入=流量×转化率×客单价。拆解目标，给出多个路径，考虑不确定性。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch10.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">10</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">辛普森悖论</h3>
-          <p class="text-white/40 text-sm leading-relaxed">为什么整体趋势和分组趋势完全相反？拆维度时一定要看各组的占比变化。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch11.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-blue font-bold shrink-0">11</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-blue transition-colors">P值与样本量</h3>
-          <p class="text-white/40 text-sm leading-relaxed">P值到底是什么？样本量怎么算？常见面试陷阱：偷看P值、多重检验、不显著≠没效果。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-blue group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch12.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">12</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">因果推断入门</h3>
-          <p class="text-white/40 text-sm leading-relaxed">相关不等于因果。DID、RDD、PSM三种准实验方法的简明介绍和面试回答模板。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch13.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">13</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">AI辅助数据分析</h3>
-          <p class="text-white/40 text-sm leading-relaxed">AI不能替代分析师下结论。四层架构：指标口径→异常检测→归因下钻→AI总结。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch14.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">14</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">商业模式拆解</h3>
-          <p class="text-white/40 text-sm leading-relaxed">广告、订阅、抽成、增值，四种互联网商业模式。鲜食记的订阅模式拆解。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch15.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">15</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">自我介绍与简历</h3>
-          <p class="text-white/40 text-sm leading-relaxed">四段式自我介绍模板。简历不要列职责要写成果。STAR法则描述项目经历。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch16.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">16</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">一面vs二面</h3>
-          <p class="text-white/40 text-sm leading-relaxed">一面考技术（SQL+统计学+分析思路），二面考业务（方案+落地+跨部门协作）。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch17.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-blue font-bold shrink-0">17</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-blue transition-colors">面试真题·指标体系</h3>
-          <p class="text-white/40 text-sm leading-relaxed">鲜食记直播业务健康度指标体系。OSM模型+反向指标+三级指标分级。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-blue group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch18.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">18</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">面试真题·异动分析</h3>
-          <p class="text-white/40 text-sm leading-relaxed">某内容社区DAU下跌15%怎么分析？四步流程+内容社区的特殊性+加分项。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch19.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">19</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">费米估算</h3>
-          <p class="text-white/40 text-sm leading-relaxed">鲜食记首月有多少付费用户？拆解+假设+估算+敏感性分析。费米估算考的是过程不是结果。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch20.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">20</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">从零做项目</h3>
-          <p class="text-white/40 text-sm leading-relaxed">三步做一个有含金量的项目。STAR法则写进简历。鲜食记案例本身就是你的项目。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch21.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-amber font-bold shrink-0">21</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-amber transition-colors">面试录音（上）</h3>
-          <p class="text-white/40 text-sm leading-relaxed">还原真实数据分析师面试对话，看面试官怎么追问、候选人怎么应对。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-amber group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch22.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-purple font-bold shrink-0">22</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-purple transition-colors">策略评估案例</h3>
-          <p class="text-white/40 text-sm leading-relaxed">腾讯视频打击账号共享的面试真题拆解。三层分析：算账→看行为→生态影响。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-purple group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch23.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-cyan font-bold shrink-0">23</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-cyan transition-colors">SQL面试必备</h3>
-          <p class="text-white/40 text-sm leading-relaxed">留存率计算、JOIN选择、窗口函数。SQL面试中的高频考点和常见错误。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-cyan group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-    <a href="articles/ch24.html" class="glass reveal block p-6 transition-all duration-300 cursor-pointer group no-underline">
-      <div class="flex items-center gap-5">
-        <span class="font-mono text-2xl text-accent-blue font-bold shrink-0">24</span>
-        <div class="flex-1 min-w-0">
-          <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-blue transition-colors">行业与职业</h3>
-          <p class="text-white/40 text-sm leading-relaxed">不同行业数据分析师的差异、入行建议、职业发展三大方向。</p>
-        </div>
-        <span class="text-white/20 group-hover:text-accent-blue group-hover:translate-x-1 transition-all shrink-0">→</span>
-      </div>
-    </a>
-  </div>
-  <div class="reveal" style="margin-top:64px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center">
-    <p style="color:rgba(255,255,255,0.3);font-size:14px">建议按顺序阅读，每一章都建立在前一章的基础上。</p>
-  </div>
-</main>
-<script src="assets/main.js"></script>
-</body>
-</html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="通过一条完整业务主线、核心课程、机器学习扩展和沉浸案例训练真实业务判断能力。">
+<title>数据分析面试速通课</title><link rel="stylesheet" href="assets/style.css"><link rel="icon" href="data:,"></head>
+<body data-page="home">
+<div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div>
+<nav class="topnav"><a href="home.html" class="topnav-logo">DATA ANALYSIS</a><div class="topnav-links"><a class="active" href="#course-map">课程</a><a href="stories/index.html">案例故事</a></div></nav>
+<main class="home-page">
+  <section class="home-hero">
+    <div class="home-kicker">LEARN · PRACTICE · REVIEW</div>
+    <h1>把分析思路<br><span>练成面试答案</span></h1>
+    <p>一条完整业务主线，24 章核心课程，4 章机器学习决策扩展，26 个沉浸式案例。既学习成功路径，也审查失败方案。</p>
+    <div class="home-actions"><a class="primary" href="index.html">开始系统学习</a><a href="stories/index.html">进入案例故事库</a></div>
+    <div class="home-stats"><div><strong>24</strong><span>核心课程</span></div><div><strong>4</strong><span>ML扩展</span></div><div><strong>26</strong><span>业务案例</span></div><div><strong>5</strong><span>能力阶段</span></div></div>
+  </section>
+  <section class="experience-map">
+    <div class="experience-step"><span>01</span><strong>课程学习</strong><p>建立稳定、可复用的分析框架。</p></div>
+    <i>→</i><div class="experience-step"><span>02</span><strong>案例训练</strong><p>在陌生业务中独立判断下一步。</p></div>
+    <i>→</i><div class="experience-step"><span>03</span><strong>速览复习</strong><p>沉淀90秒答案、追问和失分点。</p></div>
+  </section>
+  <section class="home-section" id="course-map"><header class="home-section-heading"><span>COURSE MAP</span><h2>五个阶段，从业务分析走向模型决策</h2><p>前四个阶段建立分析与表达主线；机器学习作为可选扩展，先训练问题判断、失败识别和行动闭环。</p></header><div class="module-grid">
+<a class="module-card" href="#module-business-loop" style="--module-card-theme:#5eead4">
+  <div class="module-card-top"><span>MODULE 01</span><em>6 章</em></div>
+  <h3>完成第一场业务分析</h3>
+  <p>以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。</p>
+  <strong>完成一段可以在面试中讲清楚的端到端业务项目。</strong>
+</a>
+<a class="module-card" href="#module-analysis-toolbox" style="--module-card-theme:#60a5fa">
+  <div class="module-card-top"><span>MODULE 02</span><em>8 章</em></div>
+  <h3>高频分析工具箱</h3>
+  <p>掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。</p>
+  <strong>面对不同业务问题，能够选择合适方法并说明使用条件。</strong>
+</a>
+<a class="module-card" href="#module-interview-output" style="--module-card-theme:#a78bfa">
+  <div class="module-card-top"><span>MODULE 03</span><em>6 章</em></div>
+  <h3>把分析变成面试答案</h3>
+  <p>把已有分析能力组织成自我介绍、项目经历和结构化面试回答。</p>
+  <strong>形成30秒、90秒和3分钟三个层次的面试表达。</strong>
+</a>
+<a class="module-card" href="#module-mock-career" style="--module-card-theme:#fbbf24">
+  <div class="module-card-top"><span>MODULE 04</span><em>4 章</em></div>
+  <h3>模拟面试与职业迁移</h3>
+  <p>通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。</p>
+  <strong>在陌生问题中稳定拆解、追问、表达并迁移方法。</strong>
+</a>
+<a class="module-card" href="#module-ml-decision" style="--module-card-theme:#fb7185">
+  <div class="module-card-top"><span>MODULE 05</span><em>4 章</em></div>
+  <h3>机器学习：先判断，再建模</h3>
+  <p>不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。</p>
+  <strong>能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。</strong>
+</a></div></section>
+
+<section class="course-module" id="module-business-loop">
+  <header><div><span>MODULE 01 · 主线实战</span><h2>完成第一场业务分析</h2><p>以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。</p></div><strong>完成一段可以在面试中讲清楚的端到端业务项目。</strong></header>
+  <div class="course-list">
+<a href="index.html" class="course-card reveal" style="--card-theme:#5eead4">
+  <div class="course-card-num">01</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>指南</span><em>6 分钟</em></div><h3>学习指南</h3><p>面试官到底在考什么？怎么学才有效？建立正确的分析思维。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch02.html" class="course-card reveal" style="--card-theme:#fbbf24">
+  <div class="course-card-num">02</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>9 分钟</em></div><h3>进入鲜食记场景</h3><p>产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch03.html" class="course-card reveal" style="--card-theme:#5eead4">
+  <div class="course-card-num">03</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>10 分钟</em></div><h3>该盯哪些指标</h3><p>用AARRR框架拆解用户旅程，建立指标体系。先搭体系再找原因。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch04.html" class="course-card reveal" style="--card-theme:#a78bfa">
+  <div class="course-card-num">04</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>13 分钟</em></div><h3>排查异动</h3><p>按时间、渠道、用户行为逐步缩小范围，定位到小红书种草内容的根因。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch05.html" class="course-card reveal" style="--card-theme:#60a5fa">
+  <div class="course-card-num">05</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>13 分钟</em></div><h3>AB实验设计</h3><p>设计新用户引导流程的AB实验，计算样本量、定义指标、规划实验周期。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch06.html" class="course-card reveal" style="--card-theme:#fbbf24">
+  <div class="course-card-num">06</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>10 分钟</em></div><h3>落地策略</h3><p>灰度发布、持续监控、回退方案。从分析到决策到执行的完整闭环。</p></div>
+  <span class="course-card-arrow">→</span>
+</a></div>
+</section>
+<section class="course-module" id="module-analysis-toolbox">
+  <header><div><span>MODULE 02 · 方法进阶</span><h2>高频分析工具箱</h2><p>掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。</p></div><strong>面对不同业务问题，能够选择合适方法并说明使用条件。</strong></header>
+  <div class="course-list">
+<a href="articles/ch07.html" class="course-card reveal" style="--card-theme:#a78bfa">
+  <div class="course-card-num">07</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>11 分钟</em></div><h3>用户画像与分层运营</h3><p>从三层穿透到RFM，不只是给用户贴标签，而是找到不同群体对策略的反应差异。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch08.html" class="course-card reveal" style="--card-theme:#5eead4">
+  <div class="course-card-num">08</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>12 分钟</em></div><h3>留存分析与生命周期</h3><p>留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch09.html" class="course-card reveal" style="--card-theme:#fbbf24">
+  <div class="course-card-num">09</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>12 分钟</em></div><h3>数据预测与目标拆解</h3><p>订阅收入=流量×转化率×客单价。拆解目标，给出多个路径，考虑不确定性。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch10.html" class="course-card reveal" style="--card-theme:#a78bfa">
+  <div class="course-card-num">10</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>10 分钟</em></div><h3>辛普森悖论</h3><p>为什么整体趋势和分组趋势完全相反？拆维度时一定要看各组的占比变化。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch11.html" class="course-card reveal" style="--card-theme:#60a5fa">
+  <div class="course-card-num">11</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>15 分钟</em></div><h3>P值与样本量</h3><p>P值到底是什么？样本量怎么算？常见面试陷阱：偷看P值、多重检验、不显著≠没效果。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch12.html" class="course-card reveal" style="--card-theme:#5eead4">
+  <div class="course-card-num">12</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>13 分钟</em></div><h3>因果推断入门</h3><p>相关不等于因果。DID、RDD、PSM三种准实验方法的简明介绍和面试回答模板。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch13.html" class="course-card reveal" style="--card-theme:#a78bfa">
+  <div class="course-card-num">13</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>11 分钟</em></div><h3>AI辅助数据分析</h3><p>AI不能替代分析师下结论。四层架构：指标口径→异常检测→归因下钻→AI总结。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch14.html" class="course-card reveal" style="--card-theme:#fbbf24">
+  <div class="course-card-num">14</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>12 分钟</em></div><h3>商业模式拆解</h3><p>广告、订阅、抽成、增值，四种互联网商业模式。鲜食记的订阅模式拆解。</p></div>
+  <span class="course-card-arrow">→</span>
+</a></div>
+</section>
+<section class="course-module" id="module-interview-output">
+  <header><div><span>MODULE 03 · 表达训练</span><h2>把分析变成面试答案</h2><p>把已有分析能力组织成自我介绍、项目经历和结构化面试回答。</p></div><strong>形成30秒、90秒和3分钟三个层次的面试表达。</strong></header>
+  <div class="course-list">
+<a href="articles/ch15.html" class="course-card reveal" style="--card-theme:#5eead4">
+  <div class="course-card-num">15</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>10 分钟</em></div><h3>自我介绍与简历</h3><p>四段式自我介绍模板。简历不要列职责要写成果。STAR法则描述项目经历。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch16.html" class="course-card reveal" style="--card-theme:#a78bfa">
+  <div class="course-card-num">16</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>9 分钟</em></div><h3>一面vs二面</h3><p>一面考技术（SQL+统计学+分析思路），二面考业务（方案+落地+跨部门协作）。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch17.html" class="course-card reveal" style="--card-theme:#60a5fa">
+  <div class="course-card-num">17</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>12 分钟</em></div><h3>面试真题·指标体系</h3><p>鲜食记直播业务健康度指标体系。OSM模型+反向指标+三级指标分级。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch18.html" class="course-card reveal" style="--card-theme:#fbbf24">
+  <div class="course-card-num">18</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>13 分钟</em></div><h3>面试真题·异动分析</h3><p>某内容社区DAU下跌15%怎么分析？四步流程+内容社区的特殊性+加分项。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch19.html" class="course-card reveal" style="--card-theme:#5eead4">
+  <div class="course-card-num">19</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>11 分钟</em></div><h3>费米估算</h3><p>鲜食记首月有多少付费用户？拆解+假设+估算+敏感性分析。费米估算考的是过程不是结果。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch20.html" class="course-card reveal" style="--card-theme:#a78bfa">
+  <div class="course-card-num">20</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>10 分钟</em></div><h3>从零做项目</h3><p>三步做一个有含金量的项目。STAR法则写进简历。鲜食记案例本身就是你的项目。</p></div>
+  <span class="course-card-arrow">→</span>
+</a></div>
+</section>
+<section class="course-module" id="module-mock-career">
+  <header><div><span>MODULE 04 · 综合演练</span><h2>模拟面试与职业迁移</h2><p>通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。</p></div><strong>在陌生问题中稳定拆解、追问、表达并迁移方法。</strong></header>
+  <div class="course-list">
+<a href="articles/ch21.html" class="course-card reveal" style="--card-theme:#fbbf24">
+  <div class="course-card-num">21</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>15 分钟</em></div><h3>完整模拟面试</h3><p>经历一场从自我介绍、项目深挖到业务案例和反问的完整模拟面试。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch22.html" class="course-card reveal" style="--card-theme:#a78bfa">
+  <div class="course-card-num">22</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>14 分钟</em></div><h3>策略评估案例</h3><p>腾讯视频打击账号共享的面试真题拆解。三层分析：算账→看行为→生态影响。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch23.html" class="course-card reveal" style="--card-theme:#5eead4">
+  <div class="course-card-num">23</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>12 分钟</em></div><h3>SQL面试必备</h3><p>留存率计算、JOIN选择、窗口函数。SQL面试中的高频考点和常见错误。</p></div>
+  <span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ch24.html" class="course-card reveal" style="--card-theme:#60a5fa">
+  <div class="course-card-num">24</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>职业迁移</span><em>14 分钟</em></div><h3>行业与职业</h3><p>不同行业数据分析师的差异、入行建议、职业发展三大方向。</p></div>
+  <span class="course-card-arrow">→</span>
+</a></div>
+</section>
+<section class="course-module" id="module-ml-decision">
+  <header><div><span>MODULE 05 · 可选扩展</span><h2>机器学习：先判断，再建模</h2><p>不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。</p></div><strong>能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。</strong></header>
+  <div class="course-list">
+<a href="articles/ml01.html" class="course-card reveal has-visual" style="--card-theme:#fb7185">
+  <div class="course-card-num">ML01</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>18 分钟</em></div><h3>先判断，再建模</h3><p>用四类真实需求判断该做分析、规则、实验还是预测；学会拒绝一个定义错误的模型项目。</p></div>
+  <div class="course-card-visual"><img src="assets/visuals/ml01-decision-routes.svg" alt="分析、规则、实验和预测四条业务决策路径" loading="lazy" decoding="async"></div><span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ml02.html" class="course-card reveal has-visual" style="--card-theme:#60a5fa">
+  <div class="course-card-num">ML02</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>20 分钟</em></div><h3>履约风险决策</h3><p>在明确预测时点和处理能力后，比较规则、分类模型与人工策略，而不是只追求更高分数。</p></div>
+  <div class="course-card-visual"><img src="assets/visuals/ml02-fulfillment-command-center.svg" alt="三万笔订单经过风险、可干预性和容量筛选形成行动名单" loading="lazy" decoding="async"></div><span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ml03.html" class="course-card reveal has-visual" style="--card-theme:#fbbf24">
+  <div class="course-card-num">ML03</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>20 分钟</em></div><h3>需求预测陷阱</h3><p>从门店补货进入时间预测，识别随机切分、缺货截断、促销变化和平均指标掩盖局部失败。</p></div>
+  <div class="course-card-visual"><img src="assets/visuals/ml03-observed-sales-vs-demand.svg" alt="缺货时可观察销量与潜在需求发生背离" loading="lazy" decoding="async"></div><span class="course-card-arrow">→</span>
+</a>
+<a href="articles/ml04.html" class="course-card reveal has-visual" style="--card-theme:#a78bfa">
+  <div class="course-card-num">ML04</div>
+  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>22 分钟</em></div><h3>模型失败复盘</h3><p>拆解泄漏、错目标、行动瓶颈、反馈回路与环境变化，建立模型叫停、修复和降级机制。</p></div>
+  <div class="course-card-visual"><img src="assets/visuals/ml04-model-failure-stack.svg" alt="模型失败六层故障栈与事故处置闭环" loading="lazy" decoding="async"></div><span class="course-card-arrow">→</span>
+</a></div>
+</section>
+  <section class="home-section featured-stories"><header class="home-section-heading"><span>IMMERSIVE CASES</span><h2>换一个问题，检验你是否真的会用</h2><p>案例不会重复讲概念，而是让你面对数据、做出判断并承担分析顺序带来的后果。</p></header><div class="story-library-grid">
+<a class="story-library-card reveal story-library-card-featured" href="stories/model-score-trap.html" data-category="机器学习决策" data-title="0.94 分的模型，为什么被叫停？ 模型失败 数据泄漏 行动容量 上线复盘">
+  <div class="story-card-head"><span>CASE 26</span><em>进阶 · 16 分钟</em></div>
+  <div class="story-card-visual"><img src="assets/visuals/story-26-incident-console.svg" alt="模型离线得分优秀，但运营容量不足且投诉上升的事故控制台" loading="lazy" decoding="async"><span>MODEL INCIDENT · LIVE</span></div><h3>0.94 分的模型，为什么被叫停？</h3><p>分数漂亮、名单精准，运营却发现超时订单更多了。问题究竟藏在哪里？</p>
+  <div class="story-card-tags"><span>模型失败</span><span>数据泄漏</span><span>行动容量</span></div><strong>开始分析 <i>→</i></strong>
+</a>
+<a class="story-library-card reveal" href="stories/gmv-up-profit-down.html" data-category="经营诊断" data-title="GMV涨了，利润降低了 指标拆解 利润分析 促销评估">
+  <div class="story-card-head"><span>CASE 01</span><em>入门 · 12 分钟</em></div>
+  <h3>GMV涨了，利润降低了</h3><p>表面增长与真实价值为什么会背离？</p>
+  <div class="story-card-tags"><span>指标拆解</span><span>利润分析</span><span>促销评估</span></div><strong>开始分析 <i>→</i></strong>
+</a>
+<a class="story-library-card reveal" href="stories/reports-business-does-not-use.html" data-category="指标与治理" data-title="报表做了100张，业务说没用 需求分析 指标优先级 报表设计">
+  <div class="story-card-head"><span>CASE 02</span><em>入门 · 11 分钟</em></div>
+  <h3>报表做了100张，业务说没用</h3><p>从“交付报表”转向“支持决策”。</p>
+  <div class="story-card-tags"><span>需求分析</span><span>指标优先级</span><span>报表设计</span></div><strong>开始分析 <i>→</i></strong>
+</a>
+<a class="story-library-card reveal" href="stories/conversion-rate-drop.html" data-category="经营诊断" data-title="转化率跌了，问题在哪？ 漏斗分析 异动排查 行为分析">
+  <div class="story-card-head"><span>CASE 04</span><em>入门 · 13 分钟</em></div>
+  <h3>转化率跌了，问题在哪？</h3><p>用漏斗和维度下钻定位转化问题。</p>
+  <div class="story-card-tags"><span>漏斗分析</span><span>异动排查</span><span>行为分析</span></div><strong>开始分析 <i>→</i></strong>
+</a>
+<a class="story-library-card reveal" href="stories/kpi-metric-conflict.html" data-category="指标与治理" data-title="一个指标引发的血案 指标体系 KPI 反向指标">
+  <div class="story-card-head"><span>CASE 07</span><em>进阶 · 12 分钟</em></div>
+  <h3>一个指标引发的血案</h3><p>当单一KPI扭曲团队行为，如何重建指标体系？</p>
+  <div class="story-card-tags"><span>指标体系</span><span>KPI</span><span>反向指标</span></div><strong>开始分析 <i>→</i></strong>
+</a>
+<a class="story-library-card reveal" href="stories/new-user-retention.html" data-category="用户分析" data-title="新用户为什么留不住？ 新用户 激活 留存分析">
+  <div class="story-card-head"><span>CASE 09</span><em>入门 · 12 分钟</em></div>
+  <h3>新用户为什么留不住？</h3><p>沿着新用户路径找到激活与留存的断点。</p>
+  <div class="story-card-tags"><span>新用户</span><span>激活</span><span>留存分析</span></div><strong>开始分析 <i>→</i></strong>
+</a></div><div class="center-action"><a href="stories/index.html">查看全部案例 →</a></div></section>
+</main><script src="assets/main.js"></script></body></html>

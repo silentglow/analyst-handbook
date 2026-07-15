@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" role="img" aria-labelledby="title desc">
+<title id="title">大促履约风险作战室</title>
+<desc id="desc">三万笔未发货订单先经过风险、可干预性和运营容量三道筛选，最终形成两千笔可执行行动名单，而不是把全部高风险订单直接交给运营。</desc>
+<defs>
+ <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b1016"/><stop offset="1" stop-color="#07100e"/></linearGradient>
+ <linearGradient id="flow2" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#60a5fa"/><stop offset=".55" stop-color="#fbbf24"/><stop offset="1" stop-color="#5eead4"/></linearGradient>
+ <filter id="shadow2"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000" flood-opacity=".35"/></filter>
+ <style>text{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.ey{font-size:11px;font-weight:700;letter-spacing:2px;fill:#8490a6}.h{font-size:28px;font-weight:800;fill:#f8fafc}.s{font-size:14px;fill:#9ba6b8}.label{font-size:12px;font-weight:700;letter-spacing:1px}.big{font-size:32px;font-weight:800}.ct{font-size:19px;font-weight:800;fill:#fff}.cp{font-size:13px;fill:#a8b2c2}.mono{font-family:ui-monospace,SFMono-Regular,monospace}.line{stroke:#344154;stroke-width:2;stroke-dasharray:5 7}</style>
+</defs>
+<rect width="720" height="720" rx="32" fill="url(#bg2)"/>
+<circle cx="625" cy="100" r="160" fill="#5eead4" fill-opacity=".035"/><circle cx="70" cy="540" r="170" fill="#60a5fa" fill-opacity=".035"/>
+<text x="42" y="45" class="ey">FULFILLMENT COMMAND CENTER · 11.11</text><text x="42" y="82" class="h">风险分不是行动名单</text><text x="42" y="108" class="s">名单要同时穿过风险、可干预性与处理容量三道门。</text>
+
+<g transform="translate(42 145)" filter="url(#shadow2)"><rect width="636" height="112" rx="21" fill="#101822" stroke="#60a5fa" stroke-opacity=".25"/><g transform="translate(25 21)"><path d="M0 26L38 4l38 22v42H0z" fill="#60a5fa" fill-opacity=".12" stroke="#60a5fa" stroke-opacity=".75"/><path d="M8 29h60M18 42h11v12H18zm20 0h11v12H38zm20 0h8v12h-8z" fill="none" stroke="#8cc3ff" stroke-width="3"/></g><text x="125" y="44" class="label mono" fill="#79b8ff">待处理订单池</text><text x="125" y="82" class="big mono" fill="#fff">30,000</text><text x="305" y="46" class="cp">大促支付完成，但尚未发货</text><text x="305" y="73" class="cp">预计超时 <tspan fill="#fb7185" font-weight="800">4,800</tspan> 笔</text><g fill="#60a5fa"> <circle cx="540" cy="39" r="6"/><circle cx="560" cy="39" r="6" opacity=".7"/><circle cx="580" cy="39" r="6" opacity=".45"/><circle cx="600" cy="39" r="6" opacity=".25"/><circle cx="550" cy="60" r="6" opacity=".8"/><circle cx="570" cy="60" r="6" opacity=".55"/><circle cx="590" cy="60" r="6" opacity=".3"/><circle cx="540" cy="81" r="6" opacity=".65"/><circle cx="560" cy="81" r="6" opacity=".4"/><circle cx="580" cy="81" r="6" opacity=".2"/></g></g>
+
+<path d="M360 257V291" stroke="url(#flow2)" stroke-width="4"/><path d="M354 284l6 9 6-9" fill="none" stroke="#8da0b5" stroke-width="3"/>
+<g transform="translate(42 294)"><rect width="636" height="154" rx="22" fill="#0f151d" stroke="#fff" stroke-opacity=".09"/><text x="25" y="31" class="label mono" fill="#aab4c4">三道行动闸门</text>
+<g transform="translate(25 49)"><rect width="177" height="80" rx="15" fill="#60a5fa" fill-opacity=".07" stroke="#60a5fa" stroke-opacity=".32"/><circle cx="26" cy="27" r="13" fill="#60a5fa" fill-opacity=".16"/><text x="26" y="32" text-anchor="middle" class="label" fill="#86c1ff">1</text><text x="49" y="31" class="ct">风险</text><text x="17" y="59" class="cp">未来 48 小时会超时吗？</text></g>
+<path d="M212 89h18" class="line"/>
+<g transform="translate(230 49)"><rect width="177" height="80" rx="15" fill="#fbbf24" fill-opacity=".07" stroke="#fbbf24" stroke-opacity=".32"/><circle cx="26" cy="27" r="13" fill="#fbbf24" fill-opacity=".16"/><text x="26" y="32" text-anchor="middle" class="label" fill="#ffd45f">2</text><text x="49" y="31" class="ct">可干预</text><text x="17" y="59" class="cp">今天催办能改变结果吗？</text></g>
+<path d="M417 89h18" class="line"/>
+<g transform="translate(435 49)"><rect width="176" height="80" rx="15" fill="#5eead4" fill-opacity=".07" stroke="#5eead4" stroke-opacity=".32"/><circle cx="26" cy="27" r="13" fill="#5eead4" fill-opacity=".16"/><text x="26" y="32" text-anchor="middle" class="label" fill="#74f3df">3</text><text x="49" y="31" class="ct">容量</text><text x="17" y="59" class="cp">运营今天最多处理多少？</text></g></g>
+
+<path d="M360 448V482" stroke="url(#flow2)" stroke-width="4"/><path d="M354 475l6 9 6-9" fill="none" stroke="#8da0b5" stroke-width="3"/>
+<g transform="translate(42 485)" filter="url(#shadow2)"><rect width="636" height="150" rx="22" fill="#10201f" stroke="#5eead4" stroke-opacity=".42"/><rect x="1" y="1" width="9" height="148" rx="7" fill="#5eead4"/><text x="30" y="38" class="label mono" fill="#73f2de">今日行动名单</text><text x="30" y="84" class="big mono" fill="#fff">TOP 2,000</text><text x="30" y="112" class="cp">按可挽救损失排序，而不是只按风险概率排序</text>
+<g transform="translate(397 26)"><rect width="208" height="98" rx="16" fill="#081311" stroke="#5eead4" stroke-opacity=".18"/><text x="17" y="27" class="label" fill="#90a69f">每一笔都要回答</text><path d="M18 46h11l5 5 9-12" fill="none" stroke="#5eead4" stroke-width="3" stroke-linecap="round"/><text x="54" y="50" class="cp">谁来处理</text><path d="M18 69h11l5 5 9-12" fill="none" stroke="#5eead4" stroke-width="3" stroke-linecap="round"/><text x="54" y="73" class="cp">采取什么动作</text><path d="M18 92h11l5 5 9-12" fill="none" stroke="#5eead4" stroke-width="3" stroke-linecap="round"/><text x="54" y="96" class="cp">何时检查结果</text></g></g>
+
+<g transform="translate(101 659)"><rect width="518" height="34" rx="17" fill="#fb7185" fill-opacity=".08"/><circle cx="18" cy="17" r="5" fill="#fb7185"/><text x="33" y="22" class="label" fill="#ff9aaa">失败信号：命中很多“高风险”，却没有减少一笔真实超时</text></g>
+</svg>

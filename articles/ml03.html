@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="从门店补货进入时间预测，识别随机切分、缺货截断、促销变化和平均指标掩盖局部失败。">
+<title>需求预测：销量不等于需求 · 数据分析面试速通课</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:,">
+<style>:root { --theme: #fbbf24; --theme-rgb: 251,191,36; --module-theme: #fb7185; }</style>
+</head>
+<body data-page="lesson" data-default-mode="learn">
+<a class="skip-link" href="#lesson-content">跳到正文</a>
+<div class="site-progress" style="--lesson-progress:75%"><span></span></div>
+<div class="ambient-bg" aria-hidden="true">
+  <div class="orb orb-one" style="background:radial-gradient(circle,rgba(251,191,36,0.12),transparent 70%)"></div>
+  <div class="orb orb-two"></div><div class="orb orb-three"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links"><a href="../home.html">课程</a><a href="../stories/index.html">案例故事</a></div>
+</nav>
+<main class="page lesson-page" id="lesson-content">
+  <header class="lesson-header">
+    <div class="module-line"><span>MODULE 05</span><strong>机器学习：先判断，再建模</strong><em>3/4</em></div>
+    <div class="ch-badge">ML03 / 回归与时间</div>
+    <h1 class="ch-title static-title">需求预测：销量不等于需求</h1>
+    <p class="ch-subtitle lesson-description">从门店补货进入时间预测，识别随机切分、缺货截断、促销变化和平均指标掩盖局部失败。</p>
+    <div class="mode-switch" role="group" aria-label="阅读模式">
+      <button type="button" class="active" data-mode-target="learn"><span>沉浸学习</span><small>完整案例与推导</small></button>
+      <button type="button" data-mode-target="review"><span>速览复习</span><small>框架与面试答案</small></button>
+    </div>
+  </header>
+
+  <div id="learn-mode" class="learning-mode active">
+
+<section class="lesson-brief reveal">
+  <div class="lesson-brief-main">
+    <div class="section-eyebrow">MISSION BRIEF</div>
+    <h2>完成这一章，你应该能够</h2>
+    <ul><li>区分可观察销量与无法完整观察的真实需求</li><li>使用时间回测、分群误差和业务成本评价预测方案</li></ul>
+  </div>
+  <div class="lesson-brief-side">
+    <span>20 MIN</span>
+    <strong>业务实战</strong>
+  </div>
+</section>
+    <div class="lesson-body"><div class="content-kicker reveal">周一 08:30 · 补货计划会</div>
+<p class="p reveal">120 家门店要决定未来 7 天的补货量。模型报告显示总体误差只有 8%，但生鲜品类连续三周缺货。问题不是模型不会拟合，而是团队从一开始把<strong>历史销量当成了完整需求</strong>。</p>
+
+<div class="metric-ribbon reveal">
+  <div><span>总体 WAPE</span><strong>8%</strong></div><div><span>生鲜缺货率</span><strong>19%</strong></div><div><span>积压成本</span><strong>+12%</strong></div><div><span>投诉</span><strong>+27%</strong></div>
+</div>
+
+<div class="content-kicker reveal">失败案例：卖了 20 件，不代表只需要 20 件</div>
+<div class="failure-scene reveal">
+  <div class="failure-scene-mark">FAILURE / 02</div>
+  <h3>库存上限把真实需求截断了</h3>
+  <p>某门店周五上午有 20 盒草莓，11 点全部售罄。系统记录当天销量为 20；模型据此认为周五需求大约是 20。实际上，下午还有多少顾客想买却没有买，系统并不知道。</p>
+  <div class="failure-fix"><span>错误链条</span><p>缺货 → 观察销量偏低 → 下周预测偏低 → 补货仍少 → 再次缺货。模型把业务系统造成的缺失，当成了真实偏好。</p></div>
+</div>
+
+
+<figure class="lesson-visual reveal">
+  <div class="visual-prompt"><span>观察曲线</span>缺货发生后，为什么销量归零，而潜在需求仍可能上升？</div>
+  <img src="../assets/visuals/ml03-observed-sales-vs-demand.svg" alt="促销期间潜在需求持续上升，但库存售罄后可观察销量被截断并归零，说明销量不等于完整需求" loading="lazy" decoding="async">
+  <figcaption><strong>阅读重点</strong> 模型只能学习系统记录下来的销量；缺货后的未满足需求如果不被标记，会形成“越缺货、预测越低”的循环。</figcaption>
+</figure>
+
+<div class="card card-accent reveal" data-question>
+  <div class="card-label"><span class="dot"></span>第一项判断</div>
+  <div class="card-title">面对缺货日，最不应该直接做什么？</div>
+  <div class="option" data-correct="false" data-feedback="保留缺货标记能让后续评估知道哪些销量受到库存约束，是必要动作。"><span class="option-label">A</span><span class="option-text">记录售罄时间和缺货标记</span></div>
+  <div class="option" data-correct="true" data-feedback="正确。直接把销量当需求，会持续低估缺货商品。即使暂时无法恢复真实需求，也应标记不完整观测并做区间或相似日修正。"><span class="option-label">B</span><span class="option-text">把当天销量20直接作为完整需求标签</span></div>
+  <div class="option" data-correct="false" data-feedback="相似门店、相似日期和售罄前速度可以提供需求下限之外的信息，虽然仍需标注假设。"><span class="option-label">C</span><span class="option-text">用相似门店和售罄前销售速度估计需求范围</span></div>
+</div>
+
+<div class="content-kicker reveal">第二次失败：随机切分得到虚假的好成绩</div>
+<div class="comparison-table reveal" role="table" aria-label="验证方式比较">
+  <div class="comparison-row head" role="row"><span>验证方式</span><span>误差</span><span>看见了什么</span><span>结论</span></div>
+  <div class="comparison-row" role="row"><strong>随机拆分历史记录</strong><span>8%</span><span>相邻日期与同场促销混在两侧</span><span>虚高</span></div>
+  <div class="comparison-row winner" role="row"><strong>按周滚动回测</strong><span>17%</span><span>只用过去预测真正未来</span><span>可信</span></div>
+  <div class="comparison-row" role="row"><strong>下一次大促专项</strong><span>31%</span><span>活动机制发生变化</span><span>高风险</span></div>
+</div>
+<p class="p reveal">更差但更真实的验证结果，比漂亮但无法复现的数字更有价值。时间任务必须模拟真实决策：在当时，只能看到过去。</p>
+
+<div class="content-kicker reveal">第三次失败：平均误差掩盖关键人群</div>
+<div class="segment-grid reveal">
+  <article><span>稳定日用品</span><strong>6%</strong><p>历史规律稳定，朴素移动平均已经足够。</p></article>
+  <article><span>生鲜短保</span><strong>24%</strong><p>天气、损耗和缺货造成明显偏差。</p></article>
+  <article><span>大促商品</span><strong>33%</strong><p>促销力度与资源位发生变化，历史不可直接复制。</p></article>
+  <article><span>新品</span><strong>41%</strong><p>没有自身历史，需要相似商品和人工计划共同判断。</p></article>
+</div>
+<p class="p reveal">总体误差被大量稳定商品稀释。如果业务最关心的生鲜、大促和新品持续失败，总体 8% 没有决策意义。</p>
+
+<div class="content-kicker reveal">不要让一个模型包办所有商品</div>
+<div class="route-matrix reveal">
+  <article><span>A</span><h3>稳定商品</h3><p>使用移动平均或季节朴素基线。</p><strong>简单、透明、维护成本低</strong></article>
+  <article><span>B</span><h3>促销商品</h3><p>加入折扣、资源位、活动机制和人工计划。</p><strong>模型 + 业务输入</strong></article>
+  <article><span>C</span><h3>缺货商品</h3><p>标记不完整观测，估计需求区间。</p><strong>不把销量硬当需求</strong></article>
+  <article><span>D</span><h3>新品</h3><p>相似品映射、小批量试销、快速更新。</p><strong>承认不确定性</strong></article>
+</div>
+
+<div class="content-kicker reveal">评价要回到补货后果</div>
+<div class="card card-blue reveal">
+  <div class="card-label"><span class="dot"></span>业务成本</div>
+  <div class="card-body"><p><strong>低估：</strong>缺货、流失销售、用户体验受损。</p><p><strong>高估：</strong>库存占用、折价清仓、生鲜损耗。</p><p>两者成本不同，因此同样 10 件误差不能简单视为一样。最终补货量还需要结合安全库存、到货周期、最小订货量和门店容量。</p></div>
+</div>
+
+<div class="glow-box reveal"><p>预测不是寻找唯一正确数字。<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,.58)">先说明哪些需求没有被完整观察，再让不同商品走不同策略。</span></p></div>
+</div>
+
+<section class="related-stories reveal">
+  <div class="section-eyebrow">TRANSFER PRACTICE</div>
+  <div class="related-heading">
+    <div><h2>把方法迁移到另一个业务问题</h2><p>课程负责建立框架，案例负责检验你能否独立使用。</p></div>
+    <a href="../stories/index.html">查看全部案例 →</a>
+  </div>
+  <div class="related-story-grid">
+<a class="related-story-card" href="../stories/hidden-cost-of-inventory.html">
+  <div class="related-story-num">CASE 15</div>
+  <h3>库存积压的隐形损失</h3>
+  <p>把库存周转、资金占用和损耗放进同一张账。</p>
+  <div class="related-story-meta"><span>库存周转</span><span>成本</span><em>11 分钟</em></div>
+</a>
+<a class="related-story-card" href="../stories/product-abc-analysis.html">
+  <div class="related-story-num">CASE 13</div>
+  <h3>20%的商品贡献80%的GMV</h3>
+  <p>用ABC与XYZ分析优化商品结构。</p>
+  <div class="related-story-meta"><span>ABC分类</span><span>商品结构</span><em>13 分钟</em></div>
+</a>
+<a class="related-story-card" href="../stories/new-product-pricing.html">
+  <div class="related-story-num">CASE 16</div>
+  <h3>新品上架，如何定价？</h3>
+  <p>结合竞品、弹性和利润模拟形成定价建议。</p>
+  <div class="related-story-meta"><span>定价</span><span>价格弹性</span><em>14 分钟</em></div>
+</a></div>
+</section>
+  </div>
+  <div id="review-mode" class="learning-mode">
+<section class="review-sheet" aria-label="速览复习">
+  <div class="review-kicker">QUICK REVIEW · 20 分钟课程的 2 分钟回顾</div>
+  <h2>先记住这条主线</h2>
+  <div class="framework-track"><div class="framework-node"><span>01</span><strong>确认决策周期</strong></div><div class="framework-node"><span>02</span><strong>建立朴素基线</strong></div><div class="framework-node"><span>03</span><strong>按时间回测</strong></div><div class="framework-node"><span>04</span><strong>修正缺货偏差</strong></div><div class="framework-node"><span>05</span><strong>分群检查误差</strong></div><div class="framework-node"><span>06</span><strong>转成补货策略</strong></div></div>
+  <div class="review-grid">
+    <article class="review-card review-card-answer">
+      <div class="review-label">90 秒回答核心</div>
+      <p>需求预测不能把历史销量直接等同于需求。门店缺货时销量被库存上限截断，因此我会保留缺货标记、按时间滚动回测，并分别检查新品、促销品和长尾商品的误差，最后用缺货与积压成本决定预测如何进入补货策略。</p>
+    </article>
+    <article class="review-card">
+      <div class="review-label">本章学习目标</div>
+      <ul class="review-list"><li>区分可观察销量与无法完整观察的真实需求</li><li>使用时间回测、分群误差和业务成本评价预测方案</li></ul>
+    </article>
+    <article class="review-card review-card-warning">
+      <div class="review-label">常见失分点</div>
+      <ul class="review-list"><li>随机打乱时间数据导致验证结果虚高</li><li>只看总体平均误差而忽略关键商品</li><li>库存为零时仍把销量当作完整需求</li></ul>
+    </article>
+  </div>
+  <div class="review-actions">
+    <button class="mode-link" type="button" data-mode-target="learn">返回沉浸学习</button>
+    <a class="mode-link secondary" href="../home.html">查看完整课程地图</a>
+  </div>
+</section></div>
+  <nav class="course-bottom-nav"><a class="course-nav-link prev" href="ml02.html"><span>上一章</span><strong>← 履约风险决策</strong></a><a class="course-nav-link next" href="ml04.html"><span>下一章</span><strong>模型失败复盘 →</strong></a></nav>
+</main>
+<button id="toc-toggle" class="toc-toggle" type="button">课程目录</button>
+<aside id="toc-panel" class="toc-panel" aria-label="课程目录"></aside>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+window.TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "href": "../index.html", "module": "business-loop"}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "href": "ch02.html", "module": "business-loop"}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "href": "ch03.html", "module": "business-loop"}, {"num": "04", "title": "排查异动", "slug": "ch04", "href": "ch04.html", "module": "business-loop"}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "href": "ch05.html", "module": "business-loop"}, {"num": "06", "title": "落地策略", "slug": "ch06", "href": "ch06.html", "module": "business-loop"}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "href": "ch07.html", "module": "analysis-toolbox"}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "href": "ch08.html", "module": "analysis-toolbox"}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "href": "ch09.html", "module": "analysis-toolbox"}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "href": "ch10.html", "module": "analysis-toolbox"}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "href": "ch11.html", "module": "analysis-toolbox"}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "href": "ch12.html", "module": "analysis-toolbox"}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "href": "ch13.html", "module": "analysis-toolbox"}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "href": "ch14.html", "module": "analysis-toolbox"}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "href": "ch15.html", "module": "interview-output"}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "href": "ch16.html", "module": "interview-output"}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "href": "ch17.html", "module": "interview-output"}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "href": "ch18.html", "module": "interview-output"}, {"num": "19", "title": "费米估算", "slug": "ch19", "href": "ch19.html", "module": "interview-output"}, {"num": "20", "title": "从零做项目", "slug": "ch20", "href": "ch20.html", "module": "interview-output"}, {"num": "21", "title": "完整模拟面试", "slug": "ch21", "href": "ch21.html", "module": "mock-career"}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "href": "ch22.html", "module": "mock-career"}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "href": "ch23.html", "module": "mock-career"}, {"num": "24", "title": "行业与职业", "slug": "ch24", "href": "ch24.html", "module": "mock-career"}, {"num": "ML01", "title": "先判断，再建模", "slug": "ml01", "href": "ml01.html", "module": "ml-decision"}, {"num": "ML02", "title": "履约风险决策", "slug": "ml02", "href": "ml02.html", "module": "ml-decision"}, {"num": "ML03", "title": "需求预测陷阱", "slug": "ml03", "href": "ml03.html", "module": "ml-decision"}, {"num": "ML04", "title": "模型失败复盘", "slug": "ml04", "href": "ml04.html", "module": "ml-decision"}];
+window.TOC_CURRENT = "ml03";
+window.COURSE_MODULES = [{"id": "business-loop", "num": "01", "title": "完成第一场业务分析", "eyebrow": "主线实战", "description": "以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。", "theme": "#5eead4", "outcome": "完成一段可以在面试中讲清楚的端到端业务项目。"}, {"id": "analysis-toolbox", "num": "02", "title": "高频分析工具箱", "eyebrow": "方法进阶", "description": "掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。", "theme": "#60a5fa", "outcome": "面对不同业务问题，能够选择合适方法并说明使用条件。"}, {"id": "interview-output", "num": "03", "title": "把分析变成面试答案", "eyebrow": "表达训练", "description": "把已有分析能力组织成自我介绍、项目经历和结构化面试回答。", "theme": "#a78bfa", "outcome": "形成30秒、90秒和3分钟三个层次的面试表达。"}, {"id": "mock-career", "num": "04", "title": "模拟面试与职业迁移", "eyebrow": "综合演练", "description": "通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。", "theme": "#fbbf24", "outcome": "在陌生问题中稳定拆解、追问、表达并迁移方法。"}, {"id": "ml-decision", "num": "05", "title": "机器学习：先判断，再建模", "eyebrow": "可选扩展", "description": "不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。", "theme": "#fb7185", "outcome": "能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。"}];
+</script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="拆解泄漏、错目标、行动瓶颈、反馈回路与环境变化，建立模型叫停、修复和降级机制。">
+<title>模型失败复盘：高分为什么没价值 · 数据分析面试速通课</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:,">
+<style>:root { --theme: #a78bfa; --theme-rgb: 167,139,250; --module-theme: #fb7185; }</style>
+</head>
+<body data-page="lesson" data-default-mode="learn">
+<a class="skip-link" href="#lesson-content">跳到正文</a>
+<div class="site-progress" style="--lesson-progress:100%"><span></span></div>
+<div class="ambient-bg" aria-hidden="true">
+  <div class="orb orb-one" style="background:radial-gradient(circle,rgba(167,139,250,0.12),transparent 70%)"></div>
+  <div class="orb orb-two"></div><div class="orb orb-three"></div>
+</div>
+<div class="grid-bg"></div>
+<nav class="topnav">
+  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <div class="topnav-links"><a href="../home.html">课程</a><a href="../stories/index.html">案例故事</a></div>
+</nav>
+<main class="page lesson-page" id="lesson-content">
+  <header class="lesson-header">
+    <div class="module-line"><span>MODULE 05</span><strong>机器学习：先判断，再建模</strong><em>4/4</em></div>
+    <div class="ch-badge">ML04 / 上线复盘</div>
+    <h1 class="ch-title static-title">模型失败复盘：高分为什么没价值</h1>
+    <p class="ch-subtitle lesson-description">拆解泄漏、错目标、行动瓶颈、反馈回路与环境变化，建立模型叫停、修复和降级机制。</p>
+    <div class="mode-switch" role="group" aria-label="阅读模式">
+      <button type="button" class="active" data-mode-target="learn"><span>沉浸学习</span><small>完整案例与推导</small></button>
+      <button type="button" data-mode-target="review"><span>速览复习</span><small>框架与面试答案</small></button>
+    </div>
+  </header>
+
+  <div id="learn-mode" class="learning-mode active">
+
+<section class="lesson-brief reveal">
+  <div class="lesson-brief-main">
+    <div class="section-eyebrow">MISSION BRIEF</div>
+    <h2>完成这一章，你应该能够</h2>
+    <ul><li>从目标、数据、验证、行动和监控五个层面复盘模型失败</li><li>为模型设计叫停条件、规则降级和重新验证方案</li></ul>
+  </div>
+  <div class="lesson-brief-side">
+    <span>22 MIN</span>
+    <strong>业务实战</strong>
+  </div>
+</section>
+    <div class="lesson-body"><div class="content-kicker reveal">上线第 14 天 · 紧急复盘</div>
+<p class="p reveal">一个模型离线得分很高，上线后没有价值，通常不是一句“数据漂移”能够解释。你需要沿着<strong>目标、数据、验证、行动、监控</strong>五层逐一定位，而不是立即换成更复杂的算法。</p>
+
+
+<figure class="lesson-visual reveal">
+  <div class="visual-prompt"><span>事故地图</span>先定位失败层级，再决定是修模型、改流程，还是重写目标。</div>
+  <img src="../assets/visuals/ml04-model-failure-stack.svg" alt="模型事故可分为目标、数据、验证、行动、环境和指标六层；处置流程是先止损降级，再保存现场、定位层级并小流量重测" loading="lazy" decoding="async">
+  <figcaption><strong>阅读重点</strong> “模型不准”只是表象。业务已经受损时，第一步不是换算法，而是止损并降级到稳定规则。</figcaption>
+</figure>
+
+<div class="failure-grid reveal">
+  <article class="failure-card"><div class="failure-head"><span>01</span><strong>目标失败</strong></div><h3>预测对了错误的结果</h3><p>优惠券模型准确预测购买，却没有识别增量购买；客服模型复制了历史错误分单。</p><dl><div><dt>信号</dt><dd>模型指标稳定，业务收益不动。</dd></div><div><dt>修复</dt><dd>重写决策目标，必要时改为实验。</dd></div></dl></article>
+  <article class="failure-card"><div class="failure-head"><span>02</span><strong>数据失败</strong></div><h3>离线拥有线上没有的信息</h3><p>投诉、退款、最终处理结果等未来字段进入训练，离线高分无法在线复现。</p><dl><div><dt>信号</dt><dd>上线当天性能骤降。</dd></div><div><dt>修复</dt><dd>按预测时点重放数据，建立字段时间契约。</dd></div></dl></article>
+  <article class="failure-card"><div class="failure-head"><span>03</span><strong>验证失败</strong></div><h3>测试环境比现实简单</h3><p>随机切分时间数据、同一用户同时出现在训练测试、只验证平日不验证大促。</p><dl><div><dt>信号</dt><dd>特定时间或新对象明显失效。</dd></div><div><dt>修复</dt><dd>按真实上线方式做时间、对象和场景回测。</dd></div></dl></article>
+  <article class="failure-card"><div class="failure-head"><span>04</span><strong>行动失败</strong></div><h3>名单没人用或无法处理</h3><p>模型给出九千条风险，运营只能处理八百条；预测到的问题本身也无法被行动改变。</p><dl><div><dt>信号</dt><dd>高风险名单命中，但业务结果不改善。</dd></div><div><dt>修复</dt><dd>围绕容量、成本和可干预性重做排序。</dd></div></dl></article>
+  <article class="failure-card"><div class="failure-head"><span>05</span><strong>环境失败</strong></div><h3>模型改变了它所预测的世界</h3><p>高风险对象被持续干预后，标签分布变化；商家开始针对规则调整行为。</p><dl><div><dt>信号</dt><dd>上线一段时间后逐步衰减。</dd></div><div><dt>修复</dt><dd>保留对照、监控分布、定期重训并防止策略博弈。</dd></div></dl></article>
+  <article class="failure-card"><div class="failure-head"><span>06</span><strong>指标失败</strong></div><h3>平均分掩盖局部伤害</h3><p>总体准确率提升，但新品、偏远地区或低频商家被系统性误判。</p><dl><div><dt>信号</dt><dd>总体稳定，局部投诉或损失上升。</dd></div><div><dt>修复</dt><dd>分群监控、保护规则与人工复核。</dd></div></dl></article>
+</div>
+
+<div class="content-kicker reveal">不要先问“换哪个模型”</div>
+<div class="card card-accent reveal" data-question>
+  <div class="card-label"><span class="dot"></span>紧急处置</div>
+  <div class="card-title">上线模型导致高价值订单投诉快速上升，第一步应该是什么？</div>
+  <div class="option" data-correct="false" data-feedback="更复杂的模型需要重新验证，无法阻止当前损失，也可能掩盖真正的目标或流程错误。"><span class="option-label">A</span><span class="option-text">马上训练更复杂的模型覆盖现有版本</span></div>
+  <div class="option" data-correct="true" data-feedback="正确。先保护业务，再定位问题。暂停高风险自动动作、降级到已验证规则，同时保留日志用于复现。"><span class="option-label">B</span><span class="option-text">停止高风险自动动作，降级到规则或人工，并保存现场</span></div>
+  <div class="option" data-correct="false" data-feedback="继续扩大流量可能放大不可逆损失。没有叫停条件的模型不应上线。"><span class="option-label">C</span><span class="option-text">继续观察一周，等待数据量充分</span></div>
+</div>
+
+<div class="content-kicker reveal">失败复盘的六步闭环</div>
+<div class="decision-gate reveal">
+  <div><span>01</span><p><strong>止损</strong>暂停自动动作或限制影响范围。</p></div>
+  <div><span>02</span><p><strong>复现</strong>固定版本、数据、阈值与操作日志。</p></div>
+  <div><span>03</span><p><strong>分层</strong>按时间、人群、地区、商品拆解失败。</p></div>
+  <div><span>04</span><p><strong>归层</strong>判断目标、数据、验证、行动或环境问题。</p></div>
+  <div><span>05</span><p><strong>重测</strong>与规则基线公平比较，小流量重新上线。</p></div>
+  <div><span>06</span><p><strong>预警</strong>把本次失败变成监控与叫停条件。</p></div>
+</div>
+
+<div class="content-kicker reveal">四个行业，同一种错误不会长得一样</div>
+<div class="scenario-strip reveal">
+  <article><span>客服</span><strong>自动路由</strong><p>复制历史错分标签；解决方法是抽样复核与低置信度人工兜底。</p></article>
+  <article><span>供应链</span><strong>需求预测</strong><p>缺货导致销量截断；解决方法是标记不可完整观测并做区间估计。</p></article>
+  <article><span>营销</span><strong>优惠券投放</strong><p>购买概率不等于增量效果；解决方法是随机实验和因果评价。</p></article>
+  <article><span>内容</span><strong>质量分发</strong><p>曝光机制影响互动标签；解决方法是识别选择偏差与探索流量。</p></article>
+</div>
+
+<div class="content-kicker reveal">上线前必须写下的失败预案</div>
+<div class="card card-purple reveal">
+  <div class="card-body"><p><strong>什么现象意味着失败：</strong>业务结果恶化、关键人群损失、数据延迟或字段缺失。</p><p><strong>谁有权叫停：</strong>明确业务与技术负责人，不把决定留给临时会议。</p><p><strong>如何降级：</strong>回到规则、人工或上一稳定版本。</p><p><strong>怎样保留证据：</strong>保存模型版本、输入快照、阈值、输出与实际动作。</p><p><strong>如何重新上线：</strong>修复后先影子运行，再小流量、带对照地扩大。</p></div>
+</div>
+
+<div class="glow-box reveal"><p>真正成熟的模型系统，不是从不失败。<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,.58)">而是知道何时不该建、何时必须停，以及怎样从失败中恢复。</span></p></div>
+</div>
+
+<section class="related-stories reveal">
+  <div class="section-eyebrow">TRANSFER PRACTICE</div>
+  <div class="related-heading">
+    <div><h2>把方法迁移到另一个业务问题</h2><p>课程负责建立框架，案例负责检验你能否独立使用。</p></div>
+    <a href="../stories/index.html">查看全部案例 →</a>
+  </div>
+  <div class="related-story-grid">
+<a class="related-story-card" href="../stories/model-score-trap.html">
+  <div class="related-story-num">CASE 26</div>
+  <h3>0.94 分的模型，为什么被叫停？</h3>
+  <p>分数漂亮、名单精准，运营却发现超时订单更多了。问题究竟藏在哪里？</p>
+  <div class="related-story-meta"><span>模型失败</span><span>数据泄漏</span><em>16 分钟</em></div>
+</a>
+<a class="related-story-card" href="../stories/reports-business-does-not-use.html">
+  <div class="related-story-num">CASE 02</div>
+  <h3>报表做了100张，业务说没用</h3>
+  <p>从“交付报表”转向“支持决策”。</p>
+  <div class="related-story-meta"><span>需求分析</span><span>指标优先级</span><em>11 分钟</em></div>
+</a>
+<a class="related-story-card" href="../stories/failed-live-commerce.html">
+  <div class="related-story-num">CASE 19</div>
+  <h3>一场失败的直播带货</h3>
+  <p>从直播漏斗定位流量、停留和转化问题。</p>
+  <div class="related-story-meta"><span>直播</span><span>漏斗分析</span><em>11 分钟</em></div>
+</a></div>
+</section>
+  </div>
+  <div id="review-mode" class="learning-mode">
+<section class="review-sheet" aria-label="速览复习">
+  <div class="review-kicker">QUICK REVIEW · 22 分钟课程的 2 分钟回顾</div>
+  <h2>先记住这条主线</h2>
+  <div class="framework-track"><div class="framework-node"><span>01</span><strong>确认失败现象</strong></div><div class="framework-node"><span>02</span><strong>定位失败层级</strong></div><div class="framework-node"><span>03</span><strong>阻断继续损失</strong></div><div class="framework-node"><span>04</span><strong>回到业务基线</strong></div><div class="framework-node"><span>05</span><strong>修复并重测</strong></div><div class="framework-node"><span>06</span><strong>沉淀预警</strong></div></div>
+  <div class="review-grid">
+    <article class="review-card review-card-answer">
+      <div class="review-label">90 秒回答核心</div>
+      <p>模型失败不能只归因于算法。我会先判断是目标定义、数据泄漏、验证方式、行动承接还是环境变化出了问题；立即设置保护阈值或降级到规则，再用分群和时间回测复现问题，确认修复方案后小流量重启，并持续监控数据、策略和业务结果。</p>
+    </article>
+    <article class="review-card">
+      <div class="review-label">本章学习目标</div>
+      <ul class="review-list"><li>从目标、数据、验证、行动和监控五个层面复盘模型失败</li><li>为模型设计叫停条件、规则降级和重新验证方案</li></ul>
+    </article>
+    <article class="review-card review-card-warning">
+      <div class="review-label">常见失分点</div>
+      <ul class="review-list"><li>分数下降就直接更换更复杂的模型</li><li>只监控模型指标，不监控实际业务结果</li><li>上线失败后继续扩大流量等待模型自行恢复</li></ul>
+    </article>
+  </div>
+  <div class="review-actions">
+    <button class="mode-link" type="button" data-mode-target="learn">返回沉浸学习</button>
+    <a class="mode-link secondary" href="../home.html">查看完整课程地图</a>
+  </div>
+</section></div>
+  <nav class="course-bottom-nav"><a class="course-nav-link prev" href="ml03.html"><span>上一章</span><strong>← 需求预测陷阱</strong></a><a class="course-nav-link next" href="../stories/index.html"><span>继续训练</span><strong>进入案例故事库 →</strong></a></nav>
+</main>
+<button id="toc-toggle" class="toc-toggle" type="button">课程目录</button>
+<aside id="toc-panel" class="toc-panel" aria-label="课程目录"></aside>
+<div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script>
+<script>
+window.TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "href": "../index.html", "module": "business-loop"}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "href": "ch02.html", "module": "business-loop"}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "href": "ch03.html", "module": "business-loop"}, {"num": "04", "title": "排查异动", "slug": "ch04", "href": "ch04.html", "module": "business-loop"}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "href": "ch05.html", "module": "business-loop"}, {"num": "06", "title": "落地策略", "slug": "ch06", "href": "ch06.html", "module": "business-loop"}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "href": "ch07.html", "module": "analysis-toolbox"}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "href": "ch08.html", "module": "analysis-toolbox"}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "href": "ch09.html", "module": "analysis-toolbox"}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "href": "ch10.html", "module": "analysis-toolbox"}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "href": "ch11.html", "module": "analysis-toolbox"}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "href": "ch12.html", "module": "analysis-toolbox"}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "href": "ch13.html", "module": "analysis-toolbox"}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "href": "ch14.html", "module": "analysis-toolbox"}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "href": "ch15.html", "module": "interview-output"}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "href": "ch16.html", "module": "interview-output"}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "href": "ch17.html", "module": "interview-output"}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "href": "ch18.html", "module": "interview-output"}, {"num": "19", "title": "费米估算", "slug": "ch19", "href": "ch19.html", "module": "interview-output"}, {"num": "20", "title": "从零做项目", "slug": "ch20", "href": "ch20.html", "module": "interview-output"}, {"num": "21", "title": "完整模拟面试", "slug": "ch21", "href": "ch21.html", "module": "mock-career"}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "href": "ch22.html", "module": "mock-career"}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "href": "ch23.html", "module": "mock-career"}, {"num": "24", "title": "行业与职业", "slug": "ch24", "href": "ch24.html", "module": "mock-career"}, {"num": "ML01", "title": "先判断，再建模", "slug": "ml01", "href": "ml01.html", "module": "ml-decision"}, {"num": "ML02", "title": "履约风险决策", "slug": "ml02", "href": "ml02.html", "module": "ml-decision"}, {"num": "ML03", "title": "需求预测陷阱", "slug": "ml03", "href": "ml03.html", "module": "ml-decision"}, {"num": "ML04", "title": "模型失败复盘", "slug": "ml04", "href": "ml04.html", "module": "ml-decision"}];
+window.TOC_CURRENT = "ml04";
+window.COURSE_MODULES = [{"id": "business-loop", "num": "01", "title": "完成第一场业务分析", "eyebrow": "主线实战", "description": "以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。", "theme": "#5eead4", "outcome": "完成一段可以在面试中讲清楚的端到端业务项目。"}, {"id": "analysis-toolbox", "num": "02", "title": "高频分析工具箱", "eyebrow": "方法进阶", "description": "掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。", "theme": "#60a5fa", "outcome": "面对不同业务问题，能够选择合适方法并说明使用条件。"}, {"id": "interview-output", "num": "03", "title": "把分析变成面试答案", "eyebrow": "表达训练", "description": "把已有分析能力组织成自我介绍、项目经历和结构化面试回答。", "theme": "#a78bfa", "outcome": "形成30秒、90秒和3分钟三个层次的面试表达。"}, {"id": "mock-career", "num": "04", "title": "模拟面试与职业迁移", "eyebrow": "综合演练", "description": "通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。", "theme": "#fbbf24", "outcome": "在陌生问题中稳定拆解、追问、表达并迁移方法。"}, {"id": "ml-decision", "num": "05", "title": "机器学习：先判断，再建模", "eyebrow": "可选扩展", "description": "不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。", "theme": "#fb7185", "outcome": "能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。"}];
+</script>
+</body>
+</html>

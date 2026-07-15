@@ -1,21 +1,64 @@
-  <p class="p reveal">面试到了尾声，总监突然换了个话题：<strong>"鲜食记的整体打卡率从45%跌到了33%，跌了12个百分点。请当场给我一个分析框架。"</strong> 这道题考的不是你会不会"找原因"——而是你会不会<strong>结构化地展示你的思维过程。</strong></p>
+  <div class="content-kicker reveal">INTERVIEW ROOM · 现场作答</div>
+  <div class="dialogue reveal">面试官：“某内容社区昨天的 DAU 同比下降 15%。你会怎么分析？先不用算数据，给你 90 秒组织思路。”</div>
 
+  <div class="answer-timer reveal"><strong>先暂停，不要立刻往下看。用纸写出你的前 4 个动作。</strong><span>01:30</span></div>
+  <p class="p reveal">这道题没有给出足够数据，因此优秀回答不是猜中某个原因，而是展示：你会先确认什么、如何缩小范围、根据什么改变下一步，以及最后怎样验证和处置。</p>
+
+  <div class="content-kicker reveal">STEP 01 · 先补问题，不急着答</div>
   <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>你的回答</div>
-    <div class="step"><span class="step-num">01</span><div class="step-desc"><strong>"第一步，我先确认数据本身有没有问题。打卡率的定义最近有没有变？计算任务有没有正常跑？如果是口径变更导致的数据波动，后续分析全是白费。"</strong></div></div>
-    <div class="step"><span class="step-num">02</span><div class="step-desc"><strong>"第二步，看时间趋势。拉出D-14到D-1的每日数据——不是某一天突然崩的，是D-7开始持续下滑。排除系统故障，更像是业务因素。"</strong></div></div>
-    <div class="step"><span class="step-num">03</span><div class="step-desc"><strong>"第三步，拆渠道。应用商店48%→46%、抖音44%→42%，波动不大。小红书42%→28%，暴跌14个百分点，且占比从30%飙到68%。问题定位：小红书渠道。"</strong></div></div>
-    <div class="step"><span class="step-num">04</span><div class="step-desc"><strong>"第四步，看用户行为找根因。小红书用户的食谱收藏率反而从75%升到80%，但首次课程完成率从24%暴跌到11%。兴趣有，行动没有——典型预期落差。结合D-7上线的新种草内容（"7天练出马甲线"），根因定位：种草内容吸引来的用户预期是健身，产品给的是饮食记录。"</strong></div></div>
+    <div class="card-label"><span class="dot"></span>开场 15 秒</div>
+    <div class="card-body"><p>“我会先确认几个背景：这里的 DAU 口径和同比基准是否一致，下降是全日数据还是截至当前时点，是否存在节假日或活动错位，以及这次分析更关注快速止损还是完整归因。确认后，我会按真实性、时间与范围、指标构成、业务假设四层排查。”</p></div>
+  </div>
+  <div class="content-note reveal">开场提问不是拖延，而是在声明你的分析边界。尤其是“同比下降 15%”，必须确认比较日期是否可比、数据是否完整。</div>
+
+  <div class="content-kicker reveal">STEP 02 · 给出有分支的主线</div>
+  <div class="card card-purple reveal">
+    <div class="step"><span class="step-num">01</span><div><div class="step-title">确认异常真实</div><div class="step-desc">核对 DAU 定义、去重逻辑、埋点上报、离线任务和数据完整性；确认同比日期、星期和活动是否可比。</div></div></div>
+    <div class="step"><span class="step-num">02</span><div><div class="step-title">定位发生时间与影响范围</div><div class="step-desc">看小时和日趋势，判断骤降还是缓降；拆平台、版本、地区、新老用户与流量来源，找到异常集中区域。</div></div></div>
+    <div class="step"><span class="step-num">03</span><div><div class="step-title">沿 DAU 构成继续下钻</div><div class="step-desc">把 DAU 拆为新增激活、老用户留存和沉默召回；再沿“曝光—打开—消费—互动—回访”定位断点。</div></div></div>
+    <div class="step"><span class="step-num">04</span><div><div class="step-title">形成假设并交叉验证</div><div class="step-desc">把异常时间、人群与版本发布、推荐改动、内容供给、Push、外部竞品事件对齐，用对照组和行为数据验证。</div></div></div>
+    <div class="step"><span class="step-num">05</span><div><div class="step-title">给出止损、长期动作和监控</div><div class="step-desc">数据故障则修复回补；版本问题则回滚；供给或分发问题则恢复策略，并持续监控 DAU 及质量护栏。</div></div></div>
   </div>
 
+  <div class="content-kicker reveal">STEP 03 · 加入内容社区的业务特殊性</div>
+  <p class="p reveal">只说“按渠道、地区、用户拆分”是合格模板；要更进一步，你需要说明内容社区为什么会掉 DAU。</p>
+  <div class="mini-grid reveal">
+    <article class="mini-card"><span>SUPPLY</span><h3>内容供给</h3><p>核心创作者停更、审核变严、热点内容减少，可能先降低有效内容数量与新鲜度。</p></article>
+    <article class="mini-card"><span>DISTRIBUTION</span><h3>内容分发</h3><p>推荐模型、召回策略或冷启动调整，可能导致曝光集中、相关性下降和首屏体验变差。</p></article>
+    <article class="mini-card"><span>CONSUMPTION</span><h3>消费体验</h3><p>崩溃、加载速度、播放失败或广告密度上升，会直接压低打开后的消费深度。</p></article>
+    <article class="mini-card"><span>RETURN</span><h3>回访触达</h3><p>Push 发送失败、关注流异常、活动结束或外部热点迁移，会影响用户回访意愿。</p></article>
+  </div>
+
+  <div class="content-kicker reveal">90-SECOND ANSWER · 标准示范</div>
   <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>总监追加提问</div>
-    <div class="card-title">"你怎么验证你的假设？怎么确定问题出在种草内容，而不是产品本身？"</div>
     <div class="card-body">
-      <p>"三个方面交叉验证：一是<strong>时间吻合</strong>——打卡率开始跌的日子和种草内容上线的日子完全一致（D-7）。二是<strong>渠道聚焦</strong>——只有小红书渠道在跌，其他渠道稳定，说明不是产品整体的问题。三是<strong>用户行为印证</strong>——收藏率涨、浏览数涨、但完成率暴跌，正面了预期落差。三个方向指向同一个结论。"</p>
+      <p>“我会先确认 DAU 口径、数据完整性和同比日期是否可比，排除埋点、任务延迟及节假日错位。异常真实后，我先看小时与日趋势，判断是突然下降还是逐步恶化，再按端、版本、地区、渠道和新老用户定位影响范围。”</p>
+      <p>“接着我会拆 DAU 的来源：新增激活、老用户留存和召回分别贡献了多少；并沿曝光、打开、内容消费、互动到回访的行为链寻找断点。内容社区还要重点检查内容供给、推荐分发、客户端体验和 Push 触达。”</p>
+      <p>“定位到异常人群和环节后，我会把时间点与版本发布、算法调整、审核变化、活动结束等事件对齐，再用未受影响版本、地区或用户作为对照验证。如果确认根因，短期先回滚或止损，长期修复机制，并监控 DAU 恢复、留存、消费时长和投诉等护栏指标。”</p>
     </div>
   </div>
 
+  <div class="content-kicker reveal">FOLLOW-UP · 面试官追问</div>
+  <div class="card card-accent reveal" data-question>
+    <div class="card-title">“你发现 Android 新版本用户 DAU 下降最明显，能否直接判断是版本问题？”</div>
+    <div class="option" data-correct="false" data-feedback="相关性很强，但新版本用户可能同时集中于某些渠道或地区，仍需排除用户结构和同期事件。"><span class="option-label">A</span><span class="option-text">可以，异常集中在新版本已经足够</span></div>
+    <div class="option" data-correct="true" data-feedback="正确。先看升级前后的同一批用户，再与未升级用户做趋势对照，并检查崩溃、启动和关键行为，才能把版本相关性推进到因果判断。"><span class="option-label">B</span><span class="option-text">不能；要做升级前后与未升级用户对照，并检查技术和行为指标</span></div>
+  </div>
+
+  <div class="card card-purple reveal">
+    <div class="card-label"><span class="dot"></span>追问回答</div>
+    <div class="card-body"><p>“还不能直接下结论。我会先排除新版本用户结构差异，比较同一批用户升级前后变化，并用相似但未升级的用户做对照。如果 DAU 下降同时伴随启动失败、崩溃率或首屏加载时长恶化，而且回滚或热修后恢复，就能形成更完整的证据链。”</p></div>
+  </div>
+
+  <div class="content-kicker reveal">SELF CHECK · 20 分评分表</div>
+  <div class="score-table reveal">
+    <div class="score-row"><strong>问题澄清</strong><p>口径、比较基准、数据完整性和业务目标</p><span>4 分</span></div>
+    <div class="score-row"><strong>结构顺序</strong><p>先真实性，再范围，再机制，避免原因清单</p><span>5 分</span></div>
+    <div class="score-row"><strong>业务理解</strong><p>能拆 DAU，并覆盖内容供给、分发、消费和回访</p><span>4 分</span></div>
+    <div class="score-row"><strong>验证意识</strong><p>区分相关与根因，提出对照和交叉证据</p><span>4 分</span></div>
+    <div class="score-row"><strong>行动闭环</strong><p>说明止损、长期策略、监控和风险</p><span>3 分</span></div>
+  </div>
+
   <div class="glow-box reveal">
-    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">面试真题练的是"在时间压力下结构化地展示思考"。不管什么行业的分析题：先确认数据→看时间趋势→拆维度→用行为数据验证——四步框架不变。如果能额外提到辛普森悖论或多重检验等统计学陷阱，直接从"合格"跳到"优秀"。</span></p>
+    <p>失分答案会列出十个原因；<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,.52)">优秀答案让面试官听见你如何一步步排除它们。</span></p>
   </div>

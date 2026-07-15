@@ -3,44 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>留存分析与生命周期</title>
+<meta name="description" content="留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。">
+<title>留存分析与生命周期 · 数据分析面试速通课</title>
 <link rel="stylesheet" href="../assets/style.css">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          surface: { 900: '#06070a', 800: '#0c0d12' },
-          accent: { cyan: '#5eead4', purple: '#a78bfa', blue: '#60a5fa', amber: '#fbbf24' },
-        }
-      }
-    }
-  }
-</script>
-<style>:root { --theme: #5eead4; --theme-rgb: 94,234,212; }</style>
+<link rel="icon" href="data:,">
+<style>:root { --theme: #5eead4; --theme-rgb: 94,234,212; --module-theme: #60a5fa; }</style>
 </head>
-<body>
-<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
-  <div class="orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(94,234,212,0.12),transparent 70%);top:-200px;left:-100px"></div>
-  <div class="orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(167,139,250,0.10),transparent 70%);top:30%;right:-150px;animation-delay:-3s"></div>
-  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(96,165,250,0.06),transparent 70%);bottom:-100px;left:30%;animation-delay:-6s"></div>
+<body data-page="lesson" data-default-mode="learn">
+<a class="skip-link" href="#lesson-content">跳到正文</a>
+<div class="site-progress" style="--lesson-progress:25%"><span></span></div>
+<div class="ambient-bg" aria-hidden="true">
+  <div class="orb orb-one" style="background:radial-gradient(circle,rgba(94,234,212,0.12),transparent 70%)"></div>
+  <div class="orb orb-two"></div><div class="orb orb-three"></div>
 </div>
 <div class="grid-bg"></div>
 <nav class="topnav">
   <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
-  <div class="topnav-links">
-    <a href="../home.html">目录</a>
-    <a href="#">笔记</a>
-  </div>
+  <div class="topnav-links"><a href="../home.html">课程</a><a href="../stories/index.html">案例故事</a></div>
 </nav>
-<main class="page">
-  <header style="margin-bottom:48px">
+<main class="page lesson-page" id="lesson-content">
+  <header class="lesson-header">
+    <div class="module-line"><span>MODULE 02</span><strong>高频分析工具箱</strong><em>2/8</em></div>
     <div class="ch-badge">CH08 / 留存分析</div>
-    <h1 class="ch-title" id="typewriter"></h1>
-    
+    <h1 class="ch-title static-title">留存分析与生命周期</h1>
+    <p class="ch-subtitle lesson-description">留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。</p>
+    <div class="mode-switch" role="group" aria-label="阅读模式">
+      <button type="button" class="active" data-mode-target="learn"><span>沉浸学习</span><small>完整案例与推导</small></button>
+      <button type="button" data-mode-target="review"><span>速览复习</span><small>框架与面试答案</small></button>
+    </div>
   </header>
-    <p class="p reveal">产品负责人陈总把一张表拍在你桌上。<strong>"各渠道的新用户留存天差地别——应用商店的次日留存48%，小红书只有28%。你给我解释一下：是小红书渠道本身有问题，还是我们产品哪里没接住？"</strong></p>
+
+  <div id="learn-mode" class="learning-mode active">
+
+<section class="lesson-brief reveal">
+  <div class="lesson-brief-main">
+    <div class="section-eyebrow">MISSION BRIEF</div>
+    <h2>完成这一章，你应该能够</h2>
+    <ul><li>正确构建留存队列并解读曲线</li><li>区分渠道质量与产品承接问题</li></ul>
+  </div>
+  <div class="lesson-brief-side">
+    <span>12 MIN</span>
+    <strong>方法理解</strong>
+  </div>
+</section>
+    <div class="lesson-body">  <p class="p reveal">产品负责人陈总把一张表拍在你桌上。<strong>"各渠道的新用户留存天差地别——应用商店的次日留存48%，小红书只有28%。你给我解释一下：是小红书渠道本身有问题，还是我们产品哪里没接住？"</strong></p>
 
   <div class="card reveal">
     <div class="card-label"><span class="dot"></span>三渠道新用户留存对比</div>
@@ -80,23 +86,75 @@
 
   <div class="glow-box reveal">
     <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">留存分析的核心方法适用于所有互联网产品——只是"留存"的定义不同而已。电商看复购率，内容看次日回访率，社交看登录频率。但分析框架完全一样：明确分母→拆维度（渠道/用户群/时段）→看行为（流失发生在哪个环节）→结合业务变化形成假设。面试时把鲜食记的案例讲透，换任何行业的场景都能用这套逻辑。</span></p>
+  </div></div>
+
+<section class="related-stories reveal">
+  <div class="section-eyebrow">TRANSFER PRACTICE</div>
+  <div class="related-heading">
+    <div><h2>把方法迁移到另一个业务问题</h2><p>课程负责建立框架，案例负责检验你能否独立使用。</p></div>
+    <a href="../stories/index.html">查看全部案例 →</a>
   </div>
-    <div class="prev-ch reveal" style="margin-bottom:48px">
-    <a href="ch07.html" class="next-link" style="font-size:16px"><span class="arr" style="transform:rotate(180deg);display:inline-block">→</span> 上一章 · 用户画像与分层运营</a>
+  <div class="related-story-grid">
+<a class="related-story-card" href="../stories/repurchase-user-story.html">
+  <div class="related-story-num">CASE 06</div>
+  <h3>复购率背后的用户故事</h3>
+  <p>从整体复购率进入不同用户群的行为差异。</p>
+  <div class="related-story-meta"><span>复购率</span><span>用户分群</span><em>13 分钟</em></div>
+</a>
+<a class="related-story-card" href="../stories/new-user-retention.html">
+  <div class="related-story-num">CASE 09</div>
+  <h3>新用户为什么留不住？</h3>
+  <p>沿着新用户路径找到激活与留存的断点。</p>
+  <div class="related-story-meta"><span>新用户</span><span>激活</span><em>12 分钟</em></div>
+</a>
+<a class="related-story-card" href="../stories/existing-user-churn.html">
+  <div class="related-story-num">CASE 10</div>
+  <h3>老用户正在悄悄离开</h3>
+  <p>先定义“多久未购买”，再讨论征兆、预警和召回边界。</p>
+  <div class="related-story-meta"><span>流失口径</span><span>观察窗口</span><em>15 分钟</em></div>
+</a>
+<a class="related-story-card" href="../stories/customer-lifetime-value.html">
+  <div class="related-story-num">CASE 11</div>
+  <h3>用户生命周期价值几何？</h3>
+  <p>从LTV计算到渠道ROI和用户分层。</p>
+  <div class="related-story-meta"><span>LTV</span><span>渠道质量</span><em>14 分钟</em></div>
+</a></div>
+</section>
   </div>
-  <div class="next-ch reveal">
-    <div class="next-label">下一章</div>
-    <a href="ch09.html" class="next-link">第九章 · 数据预测与目标拆解 <span class="arr">→</span></a>
+  <div id="review-mode" class="learning-mode">
+<section class="review-sheet" aria-label="速览复习">
+  <div class="review-kicker">QUICK REVIEW · 12 分钟课程的 2 分钟回顾</div>
+  <h2>先记住这条主线</h2>
+  <div class="framework-track"><div class="framework-node"><span>01</span><strong>定义留存行为</strong></div><div class="framework-node"><span>02</span><strong>建立Cohort</strong></div><div class="framework-node"><span>03</span><strong>比较曲线形态</strong></div><div class="framework-node"><span>04</span><strong>下钻关键行为</strong></div><div class="framework-node"><span>05</span><strong>制定召回或激活策略</strong></div></div>
+  <div class="review-grid">
+    <article class="review-card review-card-answer">
+      <div class="review-label">90 秒回答核心</div>
+      <p>留存分析要统一用户起点和留存行为，使用Cohort比较不同人群，再结合关键行为判断问题发生在获客质量还是产品承接。</p>
+    </article>
+    <article class="review-card">
+      <div class="review-label">本章学习目标</div>
+      <ul class="review-list"><li>正确构建留存队列并解读曲线</li><li>区分渠道质量与产品承接问题</li></ul>
+    </article>
+    <article class="review-card review-card-warning">
+      <div class="review-label">常见失分点</div>
+      <ul class="review-list"><li>只比较总体留存率</li><li>不同注册时间和渠道用户直接混在一起</li></ul>
+    </article>
   </div>
+  <div class="review-actions">
+    <button class="mode-link" type="button" data-mode-target="learn">返回沉浸学习</button>
+    <a class="mode-link secondary" href="../home.html">查看完整课程地图</a>
+  </div>
+</section></div>
+  <nav class="course-bottom-nav"><a class="course-nav-link prev" href="ch07.html"><span>上一章</span><strong>← 用户画像与分层运营</strong></a><a class="course-nav-link next" href="ch09.html"><span>下一章</span><strong>数据预测与目标拆解 →</strong></a></nav>
 </main>
-<div id="toc-toggle" class="toc-toggle">目录</div>
-<div id="toc-panel" class="toc-panel"></div>
+<button id="toc-toggle" class="toc-toggle" type="button">课程目录</button>
+<aside id="toc-panel" class="toc-panel" aria-label="课程目录"></aside>
 <div id="toc-overlay" class="toc-overlay"></div>
 <script src="../assets/main.js"></script>
 <script>
-const TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "is_root": true}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "is_root": false}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "is_root": false}, {"num": "04", "title": "排查异动", "slug": "ch04", "is_root": false}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "is_root": false}, {"num": "06", "title": "落地策略", "slug": "ch06", "is_root": false}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "is_root": false}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "is_root": false}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "is_root": false}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "is_root": false}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "is_root": false}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "is_root": false}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "is_root": false}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "is_root": false}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "is_root": false}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "is_root": false}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "is_root": false}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "is_root": false}, {"num": "19", "title": "费米估算", "slug": "ch19", "is_root": false}, {"num": "20", "title": "从零做项目", "slug": "ch20", "is_root": false}, {"num": "21", "title": "面试录音（上）", "slug": "ch21", "is_root": false}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "is_root": false}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "is_root": false}, {"num": "24", "title": "行业与职业", "slug": "ch24", "is_root": false}];
-const TOC_CURRENT = "ch08";
-initTypewriter('typewriter', ["留存分析", "怎么算怎么看怎么用"]);
+window.TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "href": "../index.html", "module": "business-loop"}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "href": "ch02.html", "module": "business-loop"}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "href": "ch03.html", "module": "business-loop"}, {"num": "04", "title": "排查异动", "slug": "ch04", "href": "ch04.html", "module": "business-loop"}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "href": "ch05.html", "module": "business-loop"}, {"num": "06", "title": "落地策略", "slug": "ch06", "href": "ch06.html", "module": "business-loop"}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "href": "ch07.html", "module": "analysis-toolbox"}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "href": "ch08.html", "module": "analysis-toolbox"}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "href": "ch09.html", "module": "analysis-toolbox"}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "href": "ch10.html", "module": "analysis-toolbox"}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "href": "ch11.html", "module": "analysis-toolbox"}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "href": "ch12.html", "module": "analysis-toolbox"}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "href": "ch13.html", "module": "analysis-toolbox"}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "href": "ch14.html", "module": "analysis-toolbox"}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "href": "ch15.html", "module": "interview-output"}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "href": "ch16.html", "module": "interview-output"}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "href": "ch17.html", "module": "interview-output"}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "href": "ch18.html", "module": "interview-output"}, {"num": "19", "title": "费米估算", "slug": "ch19", "href": "ch19.html", "module": "interview-output"}, {"num": "20", "title": "从零做项目", "slug": "ch20", "href": "ch20.html", "module": "interview-output"}, {"num": "21", "title": "完整模拟面试", "slug": "ch21", "href": "ch21.html", "module": "mock-career"}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "href": "ch22.html", "module": "mock-career"}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "href": "ch23.html", "module": "mock-career"}, {"num": "24", "title": "行业与职业", "slug": "ch24", "href": "ch24.html", "module": "mock-career"}, {"num": "ML01", "title": "先判断，再建模", "slug": "ml01", "href": "ml01.html", "module": "ml-decision"}, {"num": "ML02", "title": "履约风险决策", "slug": "ml02", "href": "ml02.html", "module": "ml-decision"}, {"num": "ML03", "title": "需求预测陷阱", "slug": "ml03", "href": "ml03.html", "module": "ml-decision"}, {"num": "ML04", "title": "模型失败复盘", "slug": "ml04", "href": "ml04.html", "module": "ml-decision"}];
+window.TOC_CURRENT = "ch08";
+window.COURSE_MODULES = [{"id": "business-loop", "num": "01", "title": "完成第一场业务分析", "eyebrow": "主线实战", "description": "以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。", "theme": "#5eead4", "outcome": "完成一段可以在面试中讲清楚的端到端业务项目。"}, {"id": "analysis-toolbox", "num": "02", "title": "高频分析工具箱", "eyebrow": "方法进阶", "description": "掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。", "theme": "#60a5fa", "outcome": "面对不同业务问题，能够选择合适方法并说明使用条件。"}, {"id": "interview-output", "num": "03", "title": "把分析变成面试答案", "eyebrow": "表达训练", "description": "把已有分析能力组织成自我介绍、项目经历和结构化面试回答。", "theme": "#a78bfa", "outcome": "形成30秒、90秒和3分钟三个层次的面试表达。"}, {"id": "mock-career", "num": "04", "title": "模拟面试与职业迁移", "eyebrow": "综合演练", "description": "通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。", "theme": "#fbbf24", "outcome": "在陌生问题中稳定拆解、追问、表达并迁移方法。"}, {"id": "ml-decision", "num": "05", "title": "机器学习：先判断，再建模", "eyebrow": "可选扩展", "description": "不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。", "theme": "#fb7185", "outcome": "能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。"}];
 </script>
 </body>
 </html>

@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>故事15：库存积压的隐形损失</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+:root {
+  --primary: #0C2340;
+  --primary-mid: #2E5090;
+  --primary-light: #D6E4F0;
+  --accent-amber: #F0A500;
+  --accent-red: #C0392B;
+  --accent-green: #27AE60;
+  --bg: #F4F6F9;
+  --card-bg: #EDF1F7;
+  --card-header: #0C2340;
+  --text: #1A1A2E;
+  --text-muted: #5A6A7A;
+  --border: #C8D6E5;
+  --shadow: rgba(12,35,64,0.08);
+  --font-title: 'Noto Serif SC', serif;
+  --font-body: 'Noto Sans SC', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary-mid); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* Reading Progress Bar */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px; z-index: 1000;
+  background: linear-gradient(90deg, var(--primary), var(--primary-mid), var(--accent-amber));
+  width: 0%; transition: width 0.1s linear;
+}
+
+/* Right Navigation Dots */
+#nav-dots {
+  position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+  z-index: 999; display: flex; flex-direction: column; gap: 12px;
+}
+.nav-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--border); border: 2px solid var(--primary-mid);
+  cursor: pointer; transition: all 0.3s ease; position: relative;
+}
+.nav-dot.active { background: var(--accent-amber); border-color: var(--accent-amber); transform: scale(1.3); }
+.nav-dot:hover { background: var(--primary-mid); }
+.nav-dot .dot-label {
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  background: var(--primary); color: #fff; padding: 4px 12px; border-radius: 4px;
+  font-size: 12px; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.nav-dot:hover .dot-label { opacity: 1; }
+
+/* Container */
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+/* Hero Section */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--primary) 0%, #1A3A6A 40%, var(--primary-mid) 100%);
+  position: relative; overflow: hidden; text-align: center; color: #fff;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 70%, rgba(240,165,0,0.08) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(46,80,144,0.3) 0%, transparent 50%);
+}
+.hero-content { position: relative; z-index: 1; padding: 40px 24px; }
+.hero-badge {
+  display: inline-block; background: rgba(240,165,0,0.2); border: 1px solid var(--accent-amber);
+  color: var(--accent-amber); padding: 6px 20px; border-radius: 20px; font-size: 14px;
+  margin-bottom: 24px; letter-spacing: 2px;
+}
+.hero h1 {
+  font-family: var(--font-title); font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700; line-height: 1.3; margin-bottom: 20px;
+}
+.hero .subtitle {
+  font-size: 1.1rem; color: rgba(255,255,255,0.75); max-width: 600px; margin: 0 auto 32px;
+}
+.hero-meta { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; font-size: 14px; color: rgba(255,255,255,0.6); }
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  animation: bounce 2s infinite; color: rgba(255,255,255,0.5); font-size: 28px;
+}
+@keyframes bounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* Sections */
+.section {
+  padding: 80px 0; opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.section.visible { opacity: 1; transform: translateY(0); }
+
+.section-title {
+  font-family: var(--font-title); font-size: 1.8rem; color: var(--primary);
+  margin-bottom: 8px; position: relative; padding-bottom: 16px;
+}
+.section-title::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 60px; height: 3px; background: var(--accent-amber); border-radius: 2px;
+}
+.section-subtitle {
+  color: var(--text-muted); font-size: 1rem; margin-bottom: 32px;
+}
+
+/* TOC */
+.toc-card {
+  background: #fff; border-radius: 12px; padding: 32px 40px;
+  box-shadow: 0 2px 16px var(--shadow); border-left: 4px solid var(--primary-mid);
+}
+.toc-card h3 { font-family: var(--font-title); color: var(--primary); margin-bottom: 20px; font-size: 1.3rem; }
+.toc-list { list-style: none; counter-reset: toc; }
+.toc-list li {
+  counter-increment: toc; padding: 10px 0; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; cursor: pointer;
+  transition: color 0.2s;
+}
+.toc-list li:last-child { border-bottom: none; }
+.toc-list li:hover { color: var(--primary-mid); }
+.toc-list li::before {
+  content: counter(toc, decimal-leading-zero); font-family: var(--font-title);
+  font-weight: 700; color: var(--primary-mid); font-size: 1.1rem; min-width: 32px;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 12px var(--shadow); margin-bottom: 24px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px var(--shadow); }
+.card-header {
+  background: var(--card-header); color: #fff; padding: 14px 24px;
+  font-family: var(--font-title); font-size: 1.05rem; font-weight: 600;
+}
+.card-body { padding: 24px; }
+
+/* Quote / Callout Cards */
+.callout {
+  border-radius: 10px; padding: 20px 24px; margin: 20px 0;
+  border-left: 4px solid; position: relative;
+}
+.callout-danger { background: #FDF2F2; border-color: var(--accent-red); }
+.callout-warning { background: #FFFBF0; border-color: var(--accent-amber); }
+.callout-info { background: #F0F7FF; border-color: var(--primary-mid); }
+.callout-tip { background: #F0FFF4; border-color: var(--accent-green); }
+.callout-quote { background: var(--card-bg); border-color: var(--primary-mid); font-style: italic; }
+.callout-question { background: #FFF8F0; border-color: #E67E22; }
+.callout-label {
+  font-weight: 600; font-size: 0.85rem; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.callout-danger .callout-label { color: var(--accent-red); }
+.callout-warning .callout-label { color: var(--accent-amber); }
+.callout-info .callout-label { color: var(--primary-mid); }
+.callout-tip .callout-label { color: var(--accent-green); }
+.callout-quote .callout-label { color: var(--primary-mid); }
+.callout-question .callout-label { color: #E67E22; }
+
+/* Tables */
+.data-table-wrapper { overflow-x: auto; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 12px var(--shadow); }
+.data-table {
+  width: 100%; border-collapse: collapse; background: #fff; font-size: 0.95rem;
+}
+.data-table thead th {
+  background: var(--primary); color: #fff; padding: 12px 16px;
+  text-align: left; font-weight: 600; font-size: 0.9rem; white-space: nowrap;
+}
+.data-table tbody td {
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: rgba(46,80,144,0.04); }
+.data-table tfoot td {
+  background: var(--primary-light); font-weight: 700; padding: 12px 16px;
+  border-top: 2px solid var(--primary-mid);
+}
+
+/* Strong / Highlight */
+strong { color: var(--primary-light); font-weight: 600; }
+.highlight-term {
+  color: var(--accent-amber); text-decoration: underline;
+  text-decoration-color: rgba(240,165,0,0.4); text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+/* Money display */
+.money {
+  font-family: var(--font-title); font-weight: 700;
+  color: var(--accent-amber); font-size: 1.1em;
+}
+.money-red { color: var(--accent-red); }
+.money-green { color: var(--accent-green); }
+
+/* Progress bar */
+.health-bar { margin: 6px 0; }
+.health-bar-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; }
+.health-bar-track {
+  height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
+}
+.health-bar-fill {
+  height: 100%; border-radius: 4px; transition: width 1.2s ease;
+  width: 0%;
+}
+.health-green { background: linear-gradient(90deg, var(--accent-green), #2ECC71); }
+.health-amber { background: linear-gradient(90deg, var(--accent-amber), #F39C12); }
+.health-red { background: linear-gradient(90deg, var(--accent-red), #E74C3C); }
+
+/* Chart containers */
+.chart-box {
+  background: #fff; border-radius: 12px; padding: 24px;
+  box-shadow: 0 2px 12px var(--shadow); margin: 24px 0;
+}
+.chart-box h4 {
+  font-family: var(--font-title); color: var(--primary); margin-bottom: 16px;
+  font-size: 1.05rem;
+}
+.chart-container { width: 100%; height: 380px; }
+.chart-container-tall { width: 100%; height: 440px; }
+
+/* Code blocks */
+.code-block {
+  background: var(--primary); color: #E8E8E8; padding: 20px 24px;
+  border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.9rem;
+  line-height: 1.7; overflow-x: auto; margin: 16px 0;
+}
+
+/* Formula */
+.formula {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 24px; margin: 16px 0; text-align: center;
+  font-family: 'Courier New', monospace; font-size: 1.05rem; color: var(--primary);
+}
+
+/* Summary section */
+.summary-section {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+  color: #fff; border-radius: 16px; padding: 48px 40px; margin-top: 40px;
+  text-align: center;
+}
+.summary-section h2 { font-family: var(--font-title); font-size: 1.8rem; margin-bottom: 24px; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-top: 32px; }
+.summary-stat {
+  background: rgba(255,255,255,0.1); border-radius: 12px; padding: 24px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.summary-stat .stat-value {
+  font-family: var(--font-title); font-size: 2rem; font-weight: 700;
+  color: var(--accent-amber);
+}
+.summary-stat .stat-label { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+/* Checklist */
+.checklist { list-style: none; margin: 12px 0; }
+.checklist li { padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; }
+.checklist li::before { content: ''; flex-shrink: 0; }
+.check-yes::before { content: '\2705'; }
+.check-no::before { content: '\2B1C'; }
+
+/* Tags */
+.tag {
+  display: inline-block; background: var(--primary-light); color: var(--primary-mid);
+  padding: 3px 12px; border-radius: 12px; font-size: 0.8rem; margin: 2px 4px;
+}
+
+/* Footer */
+.footer {
+  text-align: center; padding: 40px 24px; color: var(--text-muted);
+  font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #nav-dots { display: none; }
+  .hero h1 { font-size: 1.8rem; }
+  .section { padding: 48px 0; }
+  .summary-section { padding: 32px 20px; }
+  .chart-container { height: 300px; }
+  .chart-container-tall { height: 360px; }
+  .data-table { font-size: 0.85rem; }
+  .data-table thead th, .data-table tbody td { padding: 8px 10px; }
+}
+</style>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../assets/story-shell.css">
+</head>
+<body>
+
+<!-- Reading Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Navigation Dots -->
+<nav id="nav-dots">
+  <div class="nav-dot" data-target="hero"><span class="dot-label">封面</span></div>
+  <div class="nav-dot" data-target="toc"><span class="dot-label">目录</span></div>
+  <div class="nav-dot" data-target="sec-background"><span class="dot-label">故事背景</span></div>
+  <div class="nav-dot" data-target="sec-problem"><span class="dot-label">问题定义</span></div>
+  <div class="nav-dot" data-target="sec-cost-def"><span class="dot-label">成本定义</span></div>
+  <div class="nav-dot" data-target="sec-cost-structure"><span class="dot-label">成本构成</span></div>
+  <div class="nav-dot" data-target="sec-cost-calc"><span class="dot-label">成本计算</span></div>
+  <div class="nav-dot" data-target="sec-turnover"><span class="dot-label">周转分析</span></div>
+  <div class="nav-dot" data-target="sec-slow"><span class="dot-label">滞销分析</span></div>
+  <div class="nav-dot" data-target="sec-stockout"><span class="dot-label">缺货分析</span></div>
+  <div class="nav-dot" data-target="sec-findings"><span class="dot-label">关键发现</span></div>
+  <div class="nav-dot" data-target="sec-suggestions"><span class="dot-label">业务建议</span></div>
+  <div class="nav-dot" data-target="sec-method"><span class="dot-label">方法论</span></div>
+  <div class="nav-dot" data-target="sec-summary"><span class="dot-label">总结</span></div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">STORY 15</div>
+    <h1>库存积压的隐形损失</h1>
+    <p class="subtitle">库存持有成本量化分析与库存优化策略 -- 当仓库里的商品变成沉默的成本黑洞</p>
+    <div class="hero-meta">
+      <span>库存分析</span>
+      <span>成本核算</span>
+      <span>库存周转</span>
+      <span>滞销管理</span>
+    </div>
+  </div>
+  <div class="hero-scroll">&#8595;</div>
+</section>
+
+<!-- ==================== TOC ==================== -->
+<section class="section" id="toc">
+  <div class="container">
+    <div class="toc-card">
+      <h3>目录导航</h3>
+      <ol class="toc-list">
+        <li onclick="scrollTo_('sec-background')">故事背景 -- 财务总监的疑问</li>
+        <li onclick="scrollTo_('sec-problem')">问题定义 -- 从业务到分析</li>
+        <li onclick="scrollTo_('sec-cost-def')">库存持有成本定义</li>
+        <li onclick="scrollTo_('sec-cost-structure')">库存持有成本构成</li>
+        <li onclick="scrollTo_('sec-cost-calc')">库存成本计算与库龄分析</li>
+        <li onclick="scrollTo_('sec-turnover')">第一步：库存周转分析</li>
+        <li onclick="scrollTo_('sec-slow')">第二步：滞销库存分析</li>
+        <li onclick="scrollTo_('sec-stockout')">第三步：缺货损失分析</li>
+        <li onclick="scrollTo_('sec-findings')">关键发现</li>
+        <li onclick="scrollTo_('sec-suggestions')">业务建议 -- 短期与长期</li>
+        <li onclick="scrollTo_('sec-method')">方法论总结</li>
+        <li onclick="scrollTo_('sec-summary')">全文总结</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 1. 故事背景 ==================== -->
+<section class="section" id="sec-background">
+  <div class="container">
+    <h2 class="section-title">一、故事背景</h2>
+    <p class="section-subtitle">一个看似简单的问题，揭开库存管理的深层隐患</p>
+
+    <div class="callout callout-quote">
+      <div class="callout-label">财务总监</div>
+      <p>"我们仓库里有大量库存，占用了很多资金。你帮我算算，这些库存到底有多大损失？"</p>
+    </div>
+
+    <p style="margin-top:20px;">小林打开库存数据，发现有 <span class="highlight-term">3000万</span> 的库存，其中 <span class="highlight-term">1000万</span> 是超过90天的滞销库存。这个数字远超预期 -- 仓库里沉睡的不只是商品，还有持续燃烧的资金成本。</p>
+
+    <div class="callout callout-question" style="margin-top:24px;">
+      <div class="callout-label">核心问题</div>
+      <p>库存积压的真实成本是多少？如何优化库存？</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 2. 问题定义 ==================== -->
+<section class="section" id="sec-problem">
+  <div class="container">
+    <h2 class="section-title">二、问题定义</h2>
+    <p class="section-subtitle">将模糊的业务担忧转化为可量化的分析课题</p>
+
+    <div class="card">
+      <div class="card-header">业务问题</div>
+      <div class="card-body">
+        <p>库存积压严重，需要解决三个核心问题：</p>
+        <ol style="margin-top:12px;padding-left:20px;">
+          <li>计算库存持有成本</li>
+          <li>识别滞销库存</li>
+          <li>制定库存优化策略</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header">分析问题转化</div>
+      <div class="card-body">
+        <ul class="checklist">
+          <li class="check-no"><strong>成本核算问题</strong> -- 库存持有成本包括哪些？</li>
+          <li class="check-no"><strong>风险评估问题</strong> -- 不同库龄的库存风险如何？</li>
+          <li class="check-no"><strong>优化策略问题</strong> -- 如何优化库存结构？</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 3. 库存持有成本定义 ==================== -->
+<section class="section" id="sec-cost-def">
+  <div class="container">
+    <h2 class="section-title">三、库存持有成本定义</h2>
+    <p class="section-subtitle">理解库存的真实代价</p>
+
+    <div class="callout callout-info">
+      <div class="callout-label">库存持有成本定义</div>
+      <p><strong>库存持有成本</strong>（Inventory Holding Cost）是指企业为持有库存而付出的全部代价，包括资金占用成本、仓储成本、损耗成本和降价风险等。通常以库存金额的百分比表示。</p>
+    </div>
+
+    <div class="formula">
+      C<sub>hold</sub> = C<sub>capital</sub> + C<sub>storage</sub> + C<sub>damage</sub> + C<sub>obsolescence</sub>
+    </div>
+
+    <p style="margin-top:12px;color:var(--text-muted);font-size:0.9rem;">
+      其中 C<sub>capital</sub> 为资金占用成本，C<sub>storage</sub> 为仓储成本，C<sub>damage</sub> 为损耗成本，C<sub>obsolescence</sub> 为过时降价风险。
+    </p>
+
+    <div class="card" style="margin-top:24px;">
+      <div class="card-header">适用场景</div>
+      <div class="card-body">
+        <ul class="checklist">
+          <li class="check-yes">库存优化 -- 降低库存成本</li>
+          <li class="check-yes">采购决策 -- 指导采购计划</li>
+          <li class="check-yes">资金管理 -- 优化资金占用</li>
+          <li class="check-yes">供应链管理 -- 提升供应链效率</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-warning" style="margin-top:16px;">
+      <div class="callout-label">注意事项</div>
+      <ul style="padding-left:18px;">
+        <li>不同行业的库存持有成本率差异很大（零售业通常在20%-35%）</li>
+        <li>需要根据企业实际情况核算各项成本占比</li>
+        <li>降价风险是隐性成本，容易被低估</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 4. 库存持有成本构成 ==================== -->
+<section class="section" id="sec-cost-structure">
+  <div class="container">
+    <h2 class="section-title">库存持有成本构成</h2>
+    <p class="section-subtitle">四类成本层层叠加，年化成本率高达50%</p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>成本类型</th>
+            <th>计算方式</th>
+            <th>占比</th>
+            <th>说明</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>资金占用成本</td>
+            <td>库存金额 x 资金成本率</td>
+            <td><strong>15%</strong></td>
+            <td>机会成本</td>
+            <td>&#9888;&#65039; 隐性成本</td>
+          </tr>
+          <tr>
+            <td>仓储成本</td>
+            <td>库存数量 x 单位仓储费</td>
+            <td><strong>10%</strong></td>
+            <td>仓库租金、管理费</td>
+            <td>&#9888;&#65039; 显性成本</td>
+          </tr>
+          <tr>
+            <td>损耗成本</td>
+            <td>库存金额 x 损耗率</td>
+            <td><strong>5%</strong></td>
+            <td>过季、损坏、丢失</td>
+            <td>&#9888;&#65039; 部分隐性</td>
+          </tr>
+          <tr>
+            <td>降价风险</td>
+            <td>库存金额 x 降价比例</td>
+            <td><strong>20%</strong></td>
+            <td>清仓降价损失</td>
+            <td style="color:var(--accent-red);font-weight:600;">最大风险</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>合计</td>
+            <td>-</td>
+            <td><strong>50%</strong></td>
+            <td>年化成本</td>
+            <td style="color:var(--accent-red);font-weight:600;">成本极高</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Chart 1: Cost Composition Donut -->
+    <div class="chart-box">
+      <h4>库存持有成本构成</h4>
+      <div class="chart-container" id="chart-cost-composition"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 5. 库存成本计算 ==================== -->
+<section class="section" id="sec-cost-calc">
+  <div class="container">
+    <h2 class="section-title">库存成本计算</h2>
+    <p class="section-subtitle">按库龄分层计算，揭示滞销库存的惊人成本</p>
+
+    <p>当前库存结构如下，按库龄分为四个区间，各区间对应不同的年化成本率：</p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>库龄</th>
+            <th>库存金额</th>
+            <th>占比</th>
+            <th>年化成本率</th>
+            <th>年成本</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0-30天</td>
+            <td class="money">1200万</td>
+            <td>40%</td>
+            <td>20%</td>
+            <td class="money">240万</td>
+            <td style="color:var(--accent-green);">&#9989; 健康</td>
+          </tr>
+          <tr>
+            <td>31-60天</td>
+            <td class="money">800万</td>
+            <td>27%</td>
+            <td>35%</td>
+            <td class="money">280万</td>
+            <td>&#9888;&#65039; 偏高</td>
+          </tr>
+          <tr>
+            <td>61-90天</td>
+            <td class="money">500万</td>
+            <td>17%</td>
+            <td>50%</td>
+            <td class="money">250万</td>
+            <td style="color:var(--accent-red);">&#128308; 风险较高</td>
+          </tr>
+          <tr>
+            <td>&gt;90天</td>
+            <td class="money">500万</td>
+            <td>17%</td>
+            <td>70%</td>
+            <td class="money money-red">350万</td>
+            <td style="color:var(--accent-red);">&#128308; 严重风险</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>合计</td>
+            <td class="money">3000万</td>
+            <td>100%</td>
+            <td>-</td>
+            <td class="money money-red">1120万</td>
+            <td style="color:var(--accent-red);font-weight:600;">总成本过高</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Chart 2: Inventory Age Distribution & Cost -->
+    <div class="chart-box">
+      <h4>库龄分布与年化持有成本</h4>
+      <div class="chart-container" id="chart-age-cost"></div>
+    </div>
+
+    <div class="callout callout-danger" style="margin-top:24px;">
+      <div class="callout-label">关键发现</div>
+      <ul style="padding-left:18px;">
+        <li>库存年化持有成本高达 <span class="highlight-term">1120万</span></li>
+        <li>滞销库存（&gt;90天）虽然只占17%，但成本占比 <span class="highlight-term">31%</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 6. 库存周转分析 ==================== -->
+<section class="section" id="sec-turnover">
+  <div class="container">
+    <h2 class="section-title">第一步：库存周转分析</h2>
+    <p class="section-subtitle">衡量库存管理效率的核心指标</p>
+
+    <div class="callout callout-info">
+      <div class="callout-label">库存周转率定义</div>
+      <p><strong>库存周转率</strong>是衡量库存管理效率的核心指标，反映一定时期内库存被消耗的次数。</p>
+    </div>
+
+    <div class="formula">
+      库存周转率 = 销售成本 / 平均库存<br>
+      库存周转天数 = 365 / 库存周转率
+    </div>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>品类</th>
+            <th>库存金额</th>
+            <th>月销售成本</th>
+            <th>周转天数</th>
+            <th>健康度</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>T恤</td>
+            <td class="money">500万</td>
+            <td class="money">200万</td>
+            <td>75天</td>
+            <td>偏高</td>
+            <td>&#9888;&#65039; 需优化</td>
+          </tr>
+          <tr>
+            <td>外套</td>
+            <td class="money">800万</td>
+            <td class="money">150万</td>
+            <td style="color:var(--accent-red);font-weight:700;">160天</td>
+            <td style="color:var(--accent-red);">过高</td>
+            <td style="color:var(--accent-red);">&#128308; 严重偏高</td>
+          </tr>
+          <tr>
+            <td>裤装</td>
+            <td class="money">600万</td>
+            <td class="money">180万</td>
+            <td>100天</td>
+            <td>偏高</td>
+            <td>&#9888;&#65039; 需优化</td>
+          </tr>
+          <tr>
+            <td>配饰</td>
+            <td class="money">400万</td>
+            <td class="money">120万</td>
+            <td>100天</td>
+            <td>偏高</td>
+            <td>&#9888;&#65039; 需优化</td>
+          </tr>
+          <tr>
+            <td>其他</td>
+            <td class="money">700万</td>
+            <td class="money">100万</td>
+            <td style="color:var(--accent-red);font-weight:700;">210天</td>
+            <td style="color:var(--accent-red);">过高</td>
+            <td style="color:var(--accent-red);">&#128308; 严重偏高</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chart 3: Turnover Days by Category -->
+    <div class="chart-box">
+      <h4>各品类库存周转天数</h4>
+      <div class="chart-container" id="chart-turnover"></div>
+    </div>
+
+    <div class="callout callout-danger">
+      <div class="callout-label">关键发现</div>
+      <p>外套和其他品类库存周转过慢，是库存积压的主要来源。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 7. 滞销库存分析 ==================== -->
+<section class="section" id="sec-slow">
+  <div class="container">
+    <h2 class="section-title">第二步：滞销库存分析</h2>
+    <p class="section-subtitle">库龄超过90天的库存，正在持续产生损失</p>
+
+    <p><strong>滞销库存定义</strong>：库龄 &gt; 90天的库存</p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>库龄</th>
+            <th>库存金额</th>
+            <th>SKU数</th>
+            <th>平均降价幅度</th>
+            <th>预计损失</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>91-120天</td>
+            <td class="money">200万</td>
+            <td>150</td>
+            <td>30%</td>
+            <td class="money">60万</td>
+            <td style="color:var(--accent-red);">&#128308; 需促销</td>
+          </tr>
+          <tr>
+            <td>121-180天</td>
+            <td class="money">180万</td>
+            <td>120</td>
+            <td>50%</td>
+            <td class="money money-red">90万</td>
+            <td style="color:var(--accent-red);">&#128308; 需清仓</td>
+          </tr>
+          <tr>
+            <td>&gt;180天</td>
+            <td class="money">120万</td>
+            <td>80</td>
+            <td>70%</td>
+            <td class="money money-red">84万</td>
+            <td style="color:var(--accent-red);">&#128308; 需立即处理</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>合计</td>
+            <td class="money money-red">500万</td>
+            <td>350</td>
+            <td>-</td>
+            <td class="money money-red">234万</td>
+            <td style="color:var(--accent-red);font-weight:600;">损失严重</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Chart 4: Slow-moving Inventory Waterfall -->
+    <div class="chart-box">
+      <h4>滞销库存损失瀑布图</h4>
+      <div class="chart-container-tall" id="chart-waterfall"></div>
+    </div>
+
+    <div class="callout callout-danger">
+      <div class="callout-label">关键发现</div>
+      <p>滞销库存预计损失 <span class="highlight-term">234万</span>，且库龄越长降价幅度越大，损失呈加速趋势。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 8. 缺货损失分析 ==================== -->
+<section class="section" id="sec-stockout">
+  <div class="container">
+    <h2 class="section-title">第三步：缺货损失分析</h2>
+    <p class="section-subtitle">库存不足同样在吞噬利润</p>
+
+    <p><strong>缺货损失</strong>：因库存不足导致的销售损失</p>
+
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>品类</th>
+            <th>缺货天数</th>
+            <th>预计损失销售</th>
+            <th>损失金额</th>
+            <th>判断</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>T恤</td>
+            <td style="color:var(--accent-red);font-weight:700;">15天</td>
+            <td class="money">100万</td>
+            <td class="money money-red">30万</td>
+            <td style="color:var(--accent-red);">&#128308; 损失最大</td>
+          </tr>
+          <tr>
+            <td>外套</td>
+            <td>10天</td>
+            <td class="money">50万</td>
+            <td class="money">15万</td>
+            <td>&#9888;&#65039; 需关注</td>
+          </tr>
+          <tr>
+            <td>裤装</td>
+            <td>8天</td>
+            <td class="money">48万</td>
+            <td class="money">14万</td>
+            <td>&#9888;&#65039; 需关注</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>合计</td>
+            <td>-</td>
+            <td>-</td>
+            <td class="money money-red">59万</td>
+            <td style="color:var(--accent-red);font-weight:600;">总损失不小</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Chart 5: Stockout Loss Comparison -->
+    <div class="chart-box">
+      <h4>各品类缺货损失对比</h4>
+      <div class="chart-container" id="chart-stockout"></div>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">关键发现</div>
+      <p>缺货损失 <span class="highlight-term">59万</span>，主要是热销商品（T恤）断货所致。库存管理需要在积压与缺货之间找到平衡。</p>
+    </div>
+
+    <!-- Problem Summary -->
+    <div class="card" style="margin-top:32px;">
+      <div class="card-header">问题总结</div>
+      <div class="card-body">
+        <div class="data-table-wrapper" style="box-shadow:none;margin:0;">
+          <table class="data-table">
+            <thead>
+              <tr><th>问题</th><th>影响</th><th>金额</th><th>判断</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>滞销库存积压</td>
+                <td>持有成本+降价损失</td>
+                <td class="money money-red">584万/年</td>
+                <td style="color:var(--accent-red);font-weight:600;">最严重</td>
+              </tr>
+              <tr>
+                <td>热销商品缺货</td>
+                <td>销售损失</td>
+                <td class="money">59万/季</td>
+                <td>&#9888;&#65039; 不容忽视</td>
+              </tr>
+              <tr>
+                <td>库存结构不合理</td>
+                <td>资金占用</td>
+                <td class="money">3000万</td>
+                <td style="color:var(--accent-red);font-weight:600;">资金效率低</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 9. 关键发现 ==================== -->
+<section class="section" id="sec-findings">
+  <div class="container">
+    <h2 class="section-title">关键发现</h2>
+    <p class="section-subtitle">三个核心发现揭示库存管理的深层问题</p>
+
+    <div class="callout callout-danger">
+      <div class="callout-label">发现1：库存持有成本被低估</div>
+      <ul style="padding-left:18px;">
+        <li>年化持有成本高达 <span class="highlight-term">37%</span></li>
+        <li>滞销库存成本更高，&gt;90天库龄年化成本率达70%</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-danger">
+      <div class="callout-label">发现2：库存结构失衡</div>
+      <ul style="padding-left:18px;">
+        <li>滞销库存占用大量资金（<span class="highlight-term">500万</span>）</li>
+        <li>热销商品反而缺货，形成"该有的没有，不该有的堆满"的困局</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">发现3：缺货损失不容忽视</div>
+      <ul style="padding-left:18px;">
+        <li>热销商品断货导致销售损失 <span class="highlight-term">59万/季</span></li>
+        <li>需要平衡库存与缺货风险</li>
+      </ul>
+    </div>
+
+    <!-- Chart 6: Optimization Effect Prediction -->
+    <div class="chart-box" style="margin-top:32px;">
+      <h4>库存优化效果预测（实施前后对比）</h4>
+      <div class="chart-container" id="chart-optimization"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 10. 业务建议 ==================== -->
+<section class="section" id="sec-suggestions">
+  <div class="container">
+    <h2 class="section-title">业务建议</h2>
+    <p class="section-subtitle">从短期清理到长期机制建设的完整策略</p>
+
+    <div class="callout callout-tip">
+      <div class="callout-label">短期建议</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">1. 清理滞销库存</div>
+      <div class="card-body">
+        <div style="display:grid;gap:16px;">
+          <div>
+            <div class="health-bar-label">
+              <span>库龄 &gt; 180天 -- 5折清仓</span>
+              <span style="color:var(--accent-red);">120万库存</span>
+            </div>
+            <div class="health-bar"><div class="health-bar-track"><div class="health-bar-fill health-red" data-width="70"></div></div></div>
+          </div>
+          <div>
+            <div class="health-bar-label">
+              <span>库龄 120-180天 -- 6-7折促销</span>
+              <span style="color:var(--accent-amber);">180万库存</span>
+            </div>
+            <div class="health-bar"><div class="health-bar-track"><div class="health-bar-fill health-amber" data-width="50"></div></div></div>
+          </div>
+          <div>
+            <div class="health-bar-label">
+              <span>库龄 90-120天 -- 8折处理</span>
+              <span style="color:var(--accent-green);">200万库存</span>
+            </div>
+            <div class="health-bar"><div class="health-bar-track"><div class="health-bar-fill health-green" data-width="30"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">2. 保障热销商品库存</div>
+      <div class="card-body">
+        <ul style="padding-left:18px;">
+          <li>设置安全库存</li>
+          <li>建立补货预警</li>
+          <li>缩短补货周期</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:24px;">
+      <div class="callout-label">长期建议</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">1. 建立库存预警机制</div>
+      <div class="card-body">
+        <ul style="padding-left:18px;">
+          <li><strong>库龄预警</strong>：&gt;60天预警</li>
+          <li><strong>周转预警</strong>：周转天数 &gt; 90天预警</li>
+          <li><strong>缺货预警</strong>：库存 &lt; 安全库存预警</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">2. 优化采购策略</div>
+      <div class="card-body">
+        <ul style="padding-left:18px;">
+          <li>小批量、多批次</li>
+          <li>基于销售预测采购</li>
+          <li>动态调整采购计划</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout callout-warning" style="margin-top:16px;">
+      <div class="callout-label">注意事项</div>
+      <ul style="padding-left:18px;">
+        <li>清仓促销需注意节奏，避免集中抛售影响品牌形象</li>
+        <li>安全库存设置需考虑季节性波动</li>
+        <li>采购策略调整需与供应商协商</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 11. 方法论总结 ==================== -->
+<section class="section" id="sec-method">
+  <div class="container">
+    <h2 class="section-title">方法论总结</h2>
+    <p class="section-subtitle">库存分析的核心方法与关键指标</p>
+
+    <div class="callout callout-info">
+      <div class="callout-label">核心方法：库存分析</div>
+      <p><strong>库存分析</strong>是通过量化库存持有成本、周转效率和缺货风险，全面评估库存健康状况的分析方法。核心指标包括库存周转率、库存周转天数、库存持有成本率和缺货率。</p>
+    </div>
+
+    <div class="formula">
+      库存周转率 = COGS / Average Inventory<br>
+      库存持有成本率 = (C<sub>capital</sub> + C<sub>storage</sub> + C<sub>damage</sub> + C<sub>obsolescence</sub>) / Average Inventory x 100%
+    </div>
+
+    <div class="data-table-wrapper" style="margin-top:24px;">
+      <table class="data-table">
+        <thead>
+          <tr><th>指标</th><th>计算公式</th><th>健康标准</th><th>判断</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>库存周转率</td>
+            <td>销售成本/平均库存</td>
+            <td>&gt; 6次/年</td>
+            <td style="color:var(--accent-green);">&#9989; 达标</td>
+          </tr>
+          <tr>
+            <td>库存周转天数</td>
+            <td>365/周转率</td>
+            <td>&lt; 60天</td>
+            <td style="color:var(--accent-green);">&#9989; 健康</td>
+          </tr>
+          <tr>
+            <td>库存持有成本</td>
+            <td>各项成本之和</td>
+            <td>&lt; 25%</td>
+            <td style="color:var(--accent-amber);">&#9888;&#65039; 当前超标</td>
+          </tr>
+          <tr>
+            <td>缺货率</td>
+            <td>缺货次数/总需求</td>
+            <td>&lt; 5%</td>
+            <td style="color:var(--accent-green);">&#9989; 可接受</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-warning" style="margin-top:20px;">
+      <div class="callout-label">注意事项</div>
+      <ul style="padding-left:18px;">
+        <li>库存周转率并非越高越好，需平衡缺货风险</li>
+        <li>不同品类的健康标准不同，需分类管理</li>
+        <li>滞销库存的降价损失是隐性成本，容易被忽视</li>
+      </ul>
+    </div>
+
+    <!-- Health Dashboard -->
+    <div class="card" style="margin-top:24px;">
+      <div class="card-header">库存健康度仪表盘</div>
+      <div class="card-body">
+        <div style="display:grid;gap:20px;">
+          <div>
+            <div class="health-bar-label">
+              <span>库存周转率达标度</span>
+              <span>3.6次/年 / 目标 6次</span>
+            </div>
+            <div class="health-bar"><div class="health-bar-track"><div class="health-bar-fill health-red" data-width="60"></div></div></div>
+          </div>
+          <div>
+            <div class="health-bar-label">
+              <span>库存持有成本率</span>
+              <span>37% / 目标 &lt;25%</span>
+            </div>
+            <div class="health-bar"><div class="health-bar-track"><div class="health-bar-fill health-red" data-width="85"></div></div></div>
+          </div>
+          <div>
+            <div class="health-bar-label">
+              <span>滞销库存占比</span>
+              <span>17% / 目标 &lt;10%</span>
+            </div>
+            <div class="health-bar"><div class="health-bar-track"><div class="health-bar-fill health-amber" data-width="70"></div></div></div>
+          </div>
+          <div>
+            <div class="health-bar-label">
+              <span>缺货率</span>
+              <span>3.2% / 目标 &lt;5%</span>
+            </div>
+            <div class="health-bar"><div class="health-bar-track"><div class="health-bar-fill health-green" data-width="64"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 12. 总结 ==================== -->
+<section class="section" id="sec-summary">
+  <div class="container">
+    <div class="summary-section">
+      <h2>全文总结</h2>
+      <p style="max-width:640px;margin:0 auto;color:rgba(255,255,255,0.85);line-height:1.9;">
+        库存积压的损失远不止表面看到的数字。<span class="highlight-term" style="color:#F0A500;text-decoration-color:rgba(240,165,0,0.6);">年化持有成本1120万</span>、滞销降价损失234万、缺货销售损失59万 -- 这些隐形成本正在持续侵蚀企业利润。通过建立科学的库存分析体系，实施分层清理策略和预警机制，企业有望将库存持有成本降低30%以上，释放大量被占用的资金。
+      </p>
+      <div class="summary-grid">
+        <div class="summary-stat">
+          <div class="stat-value">3000万</div>
+          <div class="stat-label">总库存金额</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-value">1120万</div>
+          <div class="stat-label">年化持有成本</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-value">234万</div>
+          <div class="stat-label">滞销降价损失</div>
+        </div>
+        <div class="summary-stat">
+          <div class="stat-value">59万</div>
+          <div class="stat-label">季度缺货损失</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>故事15：库存积压的隐形损失 | 数据分析故事合集</p>
+  <p style="margin-top:4px;">下一篇：故事16 -- 新品上架，如何定价？</p>
+</footer>
+
+<script>
+// ========== Scroll to helper ==========
+function scrollTo_(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+// ========== Reading Progress Bar ==========
+window.addEventListener('scroll', function() {
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var progress = (scrollTop / scrollHeight) * 100;
+  document.getElementById('progress-bar').style.width = progress + '%';
+});
+
+// ========== Navigation Dots ==========
+var navDots = document.querySelectorAll('.nav-dot');
+navDots.forEach(function(dot) {
+  dot.addEventListener('click', function() {
+    var target = this.getAttribute('data-target');
+    document.getElementById(target).scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ========== IntersectionObserver for animations ==========
+var observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+
+      // Animate health bars inside this section
+      var bars = entry.target.querySelectorAll('.health-bar-fill[data-width]');
+      bars.forEach(function(bar) {
+        setTimeout(function() {
+          bar.style.width = bar.getAttribute('data-width') + '%';
+        }, 300);
+      });
+
+      // Update active nav dot
+      var id = entry.target.id;
+      navDots.forEach(function(d) {
+        d.classList.remove('active');
+        if (d.getAttribute('data-target') === id) {
+          d.classList.add('active');
+        }
+      });
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.section').forEach(function(sec) {
+  observer.observe(sec);
+});
+
+// ========== ECharts ==========
+// Common theme colors
+var COLORS = ['#2E5090', '#F0A500', '#C0392B', '#27AE60', '#5DADE2', '#8E44AD'];
+
+// Chart 1: Cost Composition Donut
+(function() {
+  var chart = echarts.init(document.getElementById('chart-cost-composition'));
+  var option = {
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c}% ({d}%)'
+    },
+    legend: {
+      bottom: 10,
+      textStyle: { fontFamily: 'Noto Sans SC', fontSize: 13 }
+    },
+    series: [{
+      type: 'pie',
+      radius: ['45%', '72%'],
+      center: ['50%', '45%'],
+      avoidLabelOverlap: true,
+      itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 3 },
+      label: {
+        show: true,
+        formatter: '{b}\n{c}%',
+        fontFamily: 'Noto Sans SC',
+        fontSize: 13
+      },
+      emphasis: {
+        label: { show: true, fontSize: 16, fontWeight: 'bold' },
+        itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0,0,0,0.2)' }
+      },
+      data: [
+        { value: 15, name: '资金占用成本', itemStyle: { color: '#2E5090' } },
+        { value: 10, name: '仓储成本', itemStyle: { color: '#5DADE2' } },
+        { value: 5, name: '损耗成本', itemStyle: { color: '#F0A500' } },
+        { value: 20, name: '降价风险', itemStyle: { color: '#C0392B' } }
+      ]
+    }]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', function() { chart.resize(); });
+})();
+
+// Chart 2: Inventory Age Distribution & Cost (Stacked Bar)
+(function() {
+  var chart = echarts.init(document.getElementById('chart-age-cost'));
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      formatter: function(params) {
+        var tip = '<b>' + params[0].name + '</b><br/>';
+        params.forEach(function(p) {
+          tip += p.marker + ' ' + p.seriesName + ': ' + p.value + '万<br/>';
+        });
+        return tip;
+      }
+    },
+    legend: {
+      data: ['库存金额', '年化持有成本'],
+      bottom: 0,
+      textStyle: { fontFamily: 'Noto Sans SC' }
+    },
+    grid: { left: 60, right: 40, top: 40, bottom: 50 },
+    xAxis: {
+      type: 'category',
+      data: ['0-30天', '31-60天', '61-90天', '>90天'],
+      axisLabel: { fontFamily: 'Noto Sans SC', fontSize: 13 }
+    },
+    yAxis: {
+      type: 'value',
+      name: '万元',
+      nameTextStyle: { fontFamily: 'Noto Sans SC' },
+      axisLabel: { fontFamily: 'Noto Sans SC' }
+    },
+    series: [
+      {
+        name: '库存金额',
+        type: 'bar',
+        stack: 'total',
+        data: [1200, 800, 500, 500],
+        itemStyle: { color: '#2E5090', borderRadius: [0,0,0,0] },
+        label: { show: true, position: 'inside', color: '#fff', fontFamily: 'Noto Sans SC', formatter: '{c}万' }
+      },
+      {
+        name: '年化持有成本',
+        type: 'bar',
+        stack: 'total',
+        data: [240, 280, 250, 350],
+        itemStyle: { color: '#C0392B', borderRadius: [4,4,0,0] },
+        label: { show: true, position: 'inside', color: '#fff', fontFamily: 'Noto Sans SC', formatter: '{c}万' }
+      }
+    ]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', function() { chart.resize(); });
+})();
+
+// Chart 3: Turnover Days by Category (Horizontal Bar)
+(function() {
+  var chart = echarts.init(document.getElementById('chart-turnover'));
+  var categories = ['其他', '外套', '裤装', '配饰', 'T恤'];
+  var values = [210, 160, 100, 100, 75];
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      formatter: function(params) {
+        return params[0].name + ': ' + params[0].value + '天';
+      }
+    },
+    grid: { left: 80, right: 60, top: 20, bottom: 40 },
+    xAxis: {
+      type: 'value',
+      name: '天数',
+      nameTextStyle: { fontFamily: 'Noto Sans SC' },
+      axisLabel: { fontFamily: 'Noto Sans SC' }
+    },
+    yAxis: {
+      type: 'category',
+      data: categories,
+      axisLabel: { fontFamily: 'Noto Sans SC', fontSize: 13 }
+    },
+    series: [
+      {
+        type: 'bar',
+        data: values.map(function(v) {
+          var color = v >= 150 ? '#C0392B' : v >= 90 ? '#F0A500' : '#27AE60';
+          return { value: v, itemStyle: { color: color, borderRadius: [0, 4, 4, 0] } };
+        }),
+        label: { show: true, position: 'right', fontFamily: 'Noto Sans SC', formatter: '{c}天', fontWeight: 'bold' },
+        barWidth: 28
+      },
+      {
+        type: 'bar',
+        data: [60, 60, 60, 60, 60],
+        itemStyle: { color: 'transparent', borderColor: '#C0392B', borderWidth: 2, borderType: 'dashed', borderRadius: [0, 4, 4, 0] },
+        barWidth: 28,
+        z: 1,
+        tooltip: { show: false },
+        label: { show: true, position: 'insideLeft', formatter: '健康线 60天', color: '#C0392B', fontFamily: 'Noto Sans SC', fontSize: 11 }
+      }
+    ]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', function() { chart.resize(); });
+})();
+
+// Chart 4: Slow-moving Inventory Waterfall
+(function() {
+  var chart = echarts.init(document.getElementById('chart-waterfall'));
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      formatter: function(params) {
+        return params[0].name + '<br/>损失: ' + params[0].value + '万';
+      }
+    },
+    grid: { left: 100, right: 60, top: 30, bottom: 60 },
+    xAxis: {
+      type: 'value',
+      name: '损失金额（万元）',
+      nameTextStyle: { fontFamily: 'Noto Sans SC' },
+      axisLabel: { fontFamily: 'Noto Sans SC' }
+    },
+    yAxis: {
+      type: 'category',
+      data: ['91-120天\n(150 SKU)', '121-180天\n(120 SKU)', '>180天\n(80 SKU)', '合计损失'],
+      axisLabel: { fontFamily: 'Noto Sans SC', fontSize: 12, lineHeight: 18 }
+    },
+    series: [{
+      type: 'bar',
+      data: [
+        { value: 60, itemStyle: { color: '#F0A500' } },
+        { value: 90, itemStyle: { color: '#E67E22' } },
+        { value: 84, itemStyle: { color: '#C0392B' } },
+        { value: 234, itemStyle: { color: '#8B0000' } }
+      ],
+      label: {
+        show: true, position: 'right',
+        fontFamily: 'Noto Sans SC', fontWeight: 'bold', fontSize: 14,
+        formatter: function(p) { return p.value + '万'; }
+      },
+      barWidth: 32,
+      itemStyle: { borderRadius: [0, 4, 4, 0] }
+    }]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', function() { chart.resize(); });
+})();
+
+// Chart 5: Stockout Loss Comparison
+(function() {
+  var chart = echarts.init(document.getElementById('chart-stockout'));
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      formatter: function(params) {
+        var tip = '<b>' + params[0].name + '</b><br/>';
+        params.forEach(function(p) {
+          tip += p.marker + ' ' + p.seriesName + ': ' + p.value + (p.seriesIndex === 0 ? '天' : '万') + '<br/>';
+        });
+        return tip;
+      }
+    },
+    legend: {
+      data: ['缺货天数', '损失金额'],
+      bottom: 0,
+      textStyle: { fontFamily: 'Noto Sans SC' }
+    },
+    grid: { left: 60, right: 60, top: 30, bottom: 50 },
+    xAxis: {
+      type: 'category',
+      data: ['T恤', '外套', '裤装'],
+      axisLabel: { fontFamily: 'Noto Sans SC', fontSize: 13 }
+    },
+    yAxis: [
+      {
+        type: 'value', name: '天数', position: 'left',
+        nameTextStyle: { fontFamily: 'Noto Sans SC' },
+        axisLabel: { fontFamily: 'Noto Sans SC' }
+      },
+      {
+        type: 'value', name: '万元', position: 'right',
+        nameTextStyle: { fontFamily: 'Noto Sans SC' },
+        axisLabel: { fontFamily: 'Noto Sans SC' }
+      }
+    ],
+    series: [
+      {
+        name: '缺货天数',
+        type: 'bar',
+        data: [
+          { value: 15, itemStyle: { color: '#C0392B' } },
+          { value: 10, itemStyle: { color: '#F0A500' } },
+          { value: 8, itemStyle: { color: '#F0A500' } }
+        ],
+        label: { show: true, position: 'top', fontFamily: 'Noto Sans SC', formatter: '{c}天' },
+        barWidth: 36
+      },
+      {
+        name: '损失金额',
+        type: 'bar',
+        yAxisIndex: 1,
+        data: [
+          { value: 30, itemStyle: { color: '#E74C3C' } },
+          { value: 15, itemStyle: { color: '#F39C12' } },
+          { value: 14, itemStyle: { color: '#F39C12' } }
+        ],
+        label: { show: true, position: 'top', fontFamily: 'Noto Sans SC', formatter: '{c}万' },
+        barWidth: 36
+      }
+    ]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', function() { chart.resize(); });
+})();
+
+// Chart 6: Optimization Effect Prediction
+(function() {
+  var chart = echarts.init(document.getElementById('chart-optimization'));
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' }
+    },
+    legend: {
+      data: ['当前', '优化后'],
+      bottom: 0,
+      textStyle: { fontFamily: 'Noto Sans SC' }
+    },
+    grid: { left: 120, right: 40, top: 30, bottom: 50 },
+    xAxis: {
+      type: 'value',
+      name: '万元',
+      nameTextStyle: { fontFamily: 'Noto Sans SC' },
+      axisLabel: { fontFamily: 'Noto Sans SC' }
+    },
+    yAxis: {
+      type: 'category',
+      data: ['库存持有成本', '滞销降价损失', '缺货损失', '库存总金额'],
+      axisLabel: { fontFamily: 'Noto Sans SC', fontSize: 13 }
+    },
+    series: [
+      {
+        name: '当前',
+        type: 'bar',
+        data: [
+          { value: 1120, itemStyle: { color: '#C0392B', borderRadius: [4,0,0,4] } },
+          { value: 234, itemStyle: { color: '#C0392B', borderRadius: [4,0,0,4] } },
+          { value: 59, itemStyle: { color: '#C0392B', borderRadius: [4,0,0,4] } },
+          { value: 3000, itemStyle: { color: '#C0392B', borderRadius: [4,0,0,4] } }
+        ],
+        label: { show: true, position: 'left', fontFamily: 'Noto Sans SC', formatter: '{c}万', color: '#C0392B' },
+        barWidth: 24
+      },
+      {
+        name: '优化后',
+        type: 'bar',
+        data: [
+          { value: 680, itemStyle: { color: '#27AE60', borderRadius: [0,4,4,0] } },
+          { value: 80, itemStyle: { color: '#27AE60', borderRadius: [0,4,4,0] } },
+          { value: 15, itemStyle: { color: '#27AE60', borderRadius: [0,4,4,0] } },
+          { value: 2000, itemStyle: { color: '#27AE60', borderRadius: [0,4,4,0] } }
+        ],
+        label: { show: true, position: 'right', fontFamily: 'Noto Sans SC', formatter: '{c}万', color: '#27AE60' },
+        barWidth: 24
+      }
+    ]
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', function() { chart.resize(); });
+})();
+</script>
+<script>window.STORY_META = {"id": "story-15", "num": "15", "title": "库存积压的隐形损失", "subtitle": "把库存周转、资金占用和损耗放进同一张账。", "category": "商品与经营", "duration": 11, "tags": ["库存周转", "成本", "经营效率"], "indexHref": "index.html", "homeHref": "../home.html", "relatedChapters": [{"num": "14", "title": "商业模式拆解", "href": "../articles/ch14.html"}, {"num": "ML02", "title": "履约风险决策", "href": "../articles/ml02.html"}, {"num": "ML03", "title": "需求预测陷阱", "href": "../articles/ml03.html"}], "storyCount": 26, "prev": {"title": "爆款是怎么炼成的？", "href": "how-hit-products-emerge.html"}, "next": {"title": "新品上架，如何定价？", "href": "new-product-pricing.html"}};</script>
+<script src="../assets/story-shell.js"></script>
+</body>
+</html>

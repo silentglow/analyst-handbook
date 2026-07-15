@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>0.94 分的模型，为什么被叫停？</title>
+<style>
+:root{--bg:#080a0f;--panel:#10131b;--text:#f7f8fb;--muted:#8b93a7;--rose:#fb7185;--blue:#60a5fa;--amber:#fbbf24;--green:#5eead4}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;overflow-x:hidden}.mls-grid{position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,#000,transparent 85%)}.mls-main{position:relative;max-width:980px;margin:auto;padding:120px 30px 80px}.mls-hero{min-height:72vh;display:flex;flex-direction:column;justify-content:center}.mls-kicker{color:var(--rose);font:700 11px/1.2 ui-monospace,SFMono-Regular,monospace;letter-spacing:2px}.mls-hero h1{max-width:850px;margin:20px 0 14px;font-size:clamp(42px,8vw,82px);line-height:1.08;letter-spacing:-3px}.mls-hero h1 span{color:var(--rose)}.mls-lead{max-width:700px;color:#b4bac8;font-size:18px}.mls-alert{display:flex;align-items:center;gap:12px;width:max-content;max-width:100%;margin-top:30px;padding:11px 15px;border:1px solid rgba(251,113,133,.25);border-radius:999px;background:rgba(251,113,133,.08);color:#ffd7de;font-size:13px}.mls-alert i{width:8px;height:8px;border-radius:50%;background:var(--rose);box-shadow:0 0 12px var(--rose);animation:pulse 1.5s infinite}@keyframes pulse{50%{opacity:.35}}.mls-section{padding:70px 0;border-top:1px solid rgba(255,255,255,.08)}.mls-time{color:var(--blue);font:700 11px/1.2 ui-monospace,SFMono-Regular,monospace;letter-spacing:1.5px}.mls-section h2{margin:12px 0 12px;font-size:clamp(26px,4vw,42px);line-height:1.25}.mls-section>p{max-width:760px;color:#aab1c0}.mls-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin:28px 0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden}.mls-metrics div{padding:20px;background:var(--panel)}.mls-metrics span{display:block;color:var(--muted);font-size:11px}.mls-metrics strong{display:block;margin-top:7px;color:var(--green);font:700 21px/1.2 ui-monospace,SFMono-Regular,monospace}.mls-message{margin:28px 0;padding:22px;border-left:3px solid var(--amber);border-radius:0 14px 14px 0;background:rgba(251,191,36,.06)}.mls-message span{color:var(--amber);font-size:11px}.mls-message p{margin:7px 0 0;color:#e2e5eb}.mls-choice{margin:28px 0;padding:25px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(255,255,255,.025)}.mls-choice h3{margin:0 0 16px;font-size:18px}.mls-choice button{display:flex;width:100%;gap:13px;margin:9px 0;padding:15px;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:#0b0e14;color:#c8ced9;text-align:left;cursor:pointer;transition:.2s}.mls-choice button:hover,.mls-choice button:focus-visible{border-color:rgba(96,165,250,.55);transform:translateX(4px);outline:none}.mls-choice button span{flex:0 0 28px;color:var(--blue);font-weight:700}.mls-choice button.good{border-color:rgba(94,234,212,.55);background:rgba(94,234,212,.07)}.mls-choice button.bad{border-color:rgba(251,113,133,.45);background:rgba(251,113,133,.06)}.mls-feedback{display:none;margin-top:14px;padding:14px;border-radius:10px;background:rgba(255,255,255,.04);color:#c6ccd8;font-size:13px}.mls-feedback.show{display:block}.mls-table{margin:25px 0;border:1px solid rgba(255,255,255,.09);border-radius:15px;overflow:hidden}.mls-row{display:grid;grid-template-columns:1.3fr .8fr .8fr;padding:14px 17px;border-bottom:1px solid rgba(255,255,255,.07);color:#aab1c0;font-size:13px}.mls-row:last-child{border:0}.mls-row.head{color:#6f778a;font-size:10px;text-transform:uppercase}.mls-row.danger{background:rgba(251,113,133,.07);color:#ffd4dc}.mls-reveal{margin:30px 0;padding:28px;border:1px solid rgba(251,113,133,.25);border-radius:18px;background:linear-gradient(135deg,rgba(251,113,133,.09),rgba(255,255,255,.02))}.mls-reveal .mark{color:var(--rose);font:700 10px/1.2 ui-monospace,SFMono-Regular,monospace;letter-spacing:1.5px}.mls-reveal h3{margin:10px 0;font-size:24px}.mls-reveal p{color:#b9bfcb}.mls-split{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}.mls-split article{padding:20px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.022)}.mls-split span{color:var(--amber);font:700 10px/1.2 ui-monospace,SFMono-Regular,monospace}.mls-split h3{margin:8px 0;font-size:17px}.mls-split p{margin:0;color:#989fb0;font-size:13px}.mls-verdict{padding:60px 30px;text-align:center;border:1px solid rgba(94,234,212,.18);border-radius:24px;background:radial-gradient(circle at 50% 0,rgba(94,234,212,.12),transparent 55%)}.mls-verdict span{color:var(--green);font:700 10px/1.2 ui-monospace,SFMono-Regular,monospace;letter-spacing:2px}.mls-verdict h2{max-width:720px;margin:15px auto;font-size:clamp(28px,5vw,48px)}.mls-verdict p{max-width:700px;margin:auto;color:#aeb5c2}.mls-next{display:inline-block;margin-top:24px;color:var(--green);text-decoration:none;border-bottom:1px solid rgba(94,234,212,.4)}.mls-visual{margin:30px 0 34px;overflow:hidden;border:1px solid rgba(96,165,250,.16);border-radius:20px;background:#0c0f16;box-shadow:0 22px 70px rgba(0,0,0,.24)}.mls-visual-prompt{display:flex;align-items:center;gap:11px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);color:#aeb6c5;font-size:12px}.mls-visual-prompt span{flex:0 0 auto;padding:4px 7px;border-radius:999px;background:rgba(96,165,250,.1);color:var(--blue);font:700 9px/1.2 ui-monospace,SFMono-Regular,monospace;letter-spacing:1px}.mls-visual img{display:block;width:100%;height:auto;background:#090c11}.mls-visual figcaption{padding:14px 17px;border-top:1px solid rgba(255,255,255,.07);color:#8f98aa;font-size:12px;line-height:1.7}.mls-visual figcaption strong{margin-right:8px;color:#d6dae3}.mls-visual+ .mls-message{margin-top:30px}@media(max-width:700px){.mls-main{padding:100px 18px 60px}.mls-hero{min-height:65vh}.mls-hero h1{letter-spacing:-1.5px}.mls-metrics{grid-template-columns:1fr 1fr}.mls-split{grid-template-columns:1fr}.mls-table{overflow-x:auto}.mls-row{min-width:570px}.mls-verdict{padding:45px 18px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.mls-alert i{animation:none}.mls-choice button{transition:none}}
+</style>
+</head>
+<body>
+<div class="mls-grid"></div>
+<main class="mls-main">
+<section class="mls-hero">
+  <div class="mls-kicker">MODEL INCIDENT · 10:20</div>
+  <h1>0.94 分的模型，<br><span>为什么被叫停？</span></h1>
+  <p class="mls-lead">它在测试集上表现出色，也准确圈出了大量高风险订单。但上线两周后，履约超时没有下降，重点商家投诉反而增加。你被临时叫进事故复盘会。</p>
+  <div class="mls-alert"><i></i>影响仍在扩大 · 你有 30 分钟决定继续、降级还是下线</div>
+</section>
+
+<section class="mls-section">
+  <div class="mls-time">10:23 · 第一份证据</div><h2>所有人都在看那张漂亮的模型报告</h2>
+  <div class="mls-metrics"><div><span>离线 AUC</span><strong>0.94</strong></div><div><span>召回率</span><strong>81%</strong></div><div><span>每日名单</span><strong>9,200</strong></div><div><span>运营容量</span><strong>800</strong></div></div>
+  <figure class="mls-visual">
+    <div class="mls-visual-prompt"><span>LIVE VIEW</span>先不要看 AUC，观察名单容量与业务结果是否同向。</div>
+    <img src="../assets/visuals/story-26-incident-console.svg" alt="模型事故控制台显示离线 AUC 0.94，但每天九千二百条名单远超八百条运营容量，同时超时未改善且投诉上升" loading="lazy" decoding="async">
+    <figcaption><strong>现场信号</strong> 模型分数仍然漂亮，但容量缺口和投诉曲线已经说明系统没有产生业务价值。</figcaption>
+  </figure>
+  <div class="mls-message"><span>模型负责人</span><p>“指标没有问题，可能只是运营执行不到位。建议扩大流量，多积累一周数据。”</p></div>
+  <div class="mls-choice" data-choice><h3>你先做什么？</h3>
+    <button data-result="bad" data-text="继续扩大流量会放大损失。当前已经出现投诉上升，先保护业务比补充样本更重要。"><span>A</span>扩大流量，等数据稳定</button>
+    <button data-result="bad" data-text="单看AUC无法解释为什么业务结果变差，也无法判断名单有没有被处理。"><span>B</span>重新计算一次 AUC，确认报告</button>
+    <button data-result="good" data-text="正确。先暂停高风险自动动作、降级到旧规则，同时保存模型输入、输出和运营操作记录。"><span>C</span>限制影响范围，保存现场并检查预测时点与实际行动</button>
+    <div class="mls-feedback" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="mls-section">
+  <div class="mls-time">10:31 · 字段时间审查</div><h2>最重要的特征，在预测时根本不存在</h2>
+  <p>任务要求在支付后 10 分钟输出风险。但你把训练数据中的字段按产生时间重新排列后，发现了异常。</p>
+  <div class="mls-table">
+    <div class="mls-row head"><span>字段</span><span>产生时间</span><span>重要性排名</span></div>
+    <div class="mls-row"><span>商家近30天超时率</span><span>支付前</span><span>#4</span></div>
+    <div class="mls-row"><span>仓库当前积压量</span><span>支付时</span><span>#7</span></div>
+    <div class="mls-row danger"><span>首次揽收扫描距支付时长</span><span>数小时后</span><span>#1</span></div>
+    <div class="mls-row danger"><span>用户是否发起催单</span><span>次日</span><span>#2</span></div>
+  </div>
+  <div class="mls-reveal"><div class="mark">FAILURE 01 · DATA LEAKAGE</div><h3>模型不是预测得准，而是偷看了结果正在发生的过程</h3><p>训练脚本把订单最终形成的完整记录直接拼到样本中。离线模型拥有未来信息，线上只能用缺失值代替，因此 0.94 从来不是线上可达到的能力。</p></div>
+</section>
+
+<section class="mls-section">
+  <div class="mls-time">10:40 · 运营操作日志</div><h2>即使没有泄漏，这份名单也无法工作</h2>
+  <p>每天 9,200 条高风险订单进入工作台，但运营只有能力处理 800 条。名单没有说明优先级，也没有区分“高风险但无法挽救”和“能够通过催办改善”的订单。</p>
+  <div class="mls-split">
+    <article><span>预测正确但不可行动</span><h3>偏远地区预售订单</h3><p>确实容易超时，但当天催办无法改变仓配线路。模型命中不等于业务可挽救。</p></article>
+    <article><span>值得行动却被淹没</span><h3>仓库可加急订单</h3><p>风险分数略低，但一次升级即可避免超时；在九千条名单中没有被优先展示。</p></article>
+  </div>
+  <div class="mls-reveal"><div class="mark">FAILURE 02 · ACTION BOTTLENECK</div><h3>模型优化的是风险概率，业务需要的是有限资源下的可挽救损失</h3><p>如果运营只能处理 800 笔，评价就应该关注前 800 笔的命中、可干预比例、处理成本和最终减少的超时，而不是把全量召回率当成交付。</p></div>
+</section>
+
+<section class="mls-section">
+  <div class="mls-time">10:48 · 最后一项选择</div><h2>事故会的结论应该是什么？</h2>
+  <div class="mls-choice" data-choice><h3>选择一个可以执行的方案</h3>
+    <button data-result="bad" data-text="删除字段只修复了泄漏，没有解决名单容量、可干预性与效果验证。"><span>A</span>删除两个未来字段，明天全量重新上线</button>
+    <button data-result="good" data-text="正确。先止损，再按真实时点重建；保留规则基线和对照，验证的是超时减少而不是名单看起来有多准。"><span>B</span>下线当前版本，恢复规则；重建样本并用800笔容量小流量验证</button>
+    <button data-result="bad" data-text="更复杂的算法仍会学习泄漏信息，也不会自动理解运营容量。"><span>C</span>换成更复杂的深度学习模型</button>
+    <div class="mls-feedback" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="mls-verdict">
+  <span>INCIDENT VERDICT</span><h2>问题不是模型不够复杂，而是项目从定义和验证开始就错了</h2>
+  <p>这次失败同时包含两个层级：离线数据穿越了真实预测时点；模型输出也没有进入一个可执行的业务流程。正确修复不是调参，而是回到决策、时点、容量、行动和对照。</p>
+  <a class="mls-next" href="../articles/ml04.html">回到 ML04 · 模型失败复盘 →</a>
+</section>
+</main>
+<script>
+document.querySelectorAll('[data-choice]').forEach(group=>{group.querySelectorAll('button').forEach(button=>{button.addEventListener('click',()=>{group.querySelectorAll('button').forEach(item=>item.classList.remove('good','bad'));button.classList.add(button.dataset.result);const feedback=group.querySelector('.mls-feedback');feedback.textContent=button.dataset.text;feedback.classList.add('show');});});});
+</script>
+</body>
+</html>

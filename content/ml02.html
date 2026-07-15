@@ -1,0 +1,72 @@
+<div class="content-kicker reveal">22:10 · 大促作战室</div>
+<p class="p reveal">系统里有 30,000 笔已支付未发货订单，履约运营今晚最多重点处理 2,000 笔。你的任务不是提交一个模型分数，而是交付一份<strong>来得及处理、值得处理、处理方式明确</strong>的订单名单。</p>
+
+<div class="metric-ribbon reveal">
+  <div><span>待处理订单</span><strong>30,000</strong></div><div><span>预计超时</span><strong>4,800</strong></div><div><span>运营容量</span><strong>2,000</strong></div><div><span>决策时间</span><strong>30 min</strong></div>
+</div>
+
+
+<figure class="lesson-visual lesson-visual-wide reveal">
+  <div class="visual-prompt"><span>作战视角</span>从 30,000 笔订单到 2,000 笔名单，中间不能只按风险分截断。</div>
+  <img src="../assets/visuals/ml02-fulfillment-command-center.svg" alt="三万笔待发货订单依次经过风险、可干预性和运营容量筛选，最终形成两千笔明确责任与动作的行动名单" loading="lazy" decoding="async">
+  <figcaption><strong>阅读重点</strong> 高风险不等于值得处理；只有风险、可干预性和容量同时成立，预测才有行动出口。</figcaption>
+</figure>
+
+<div class="content-kicker reveal">先冻结时间</div>
+<div class="card card-blue reveal">
+  <div class="card-label"><span class="dot"></span>业务定义卡</div>
+  <div class="card-title">支付后 10 分钟预测，48 小时后核验</div>
+  <div class="data-row"><span class="data-label">样本</span><span class="data-value">一笔已支付订单</span></div>
+  <div class="data-row"><span class="data-label">可用信息</span><span class="data-value">商家、仓库、地区、商品、历史履约、当前积压</span></div>
+  <div class="data-row"><span class="data-label">结果</span><span class="data-value">支付后 48 小时是否发货</span></div>
+  <div class="data-row"><span class="data-label">动作</span><span class="data-value">商家提醒、仓库升级、人工联系</span></div>
+</div>
+
+<div class="card card-accent reveal" data-question>
+  <div class="card-label"><span class="dot"></span>字段审查</div>
+  <div class="card-title">下面哪组信息可以在预测时使用？</div>
+  <div class="option" data-correct="true" data-feedback="这些字段在支付后十分钟已经存在，同时与履约能力和当前负荷有关，可以进入候选特征。"><span class="option-label">A</span><span class="option-text">商家近30天超时率、仓库当前积压、地区、商品类型</span></div>
+  <div class="option" data-correct="false" data-feedback="投诉和退款通常发生在预测之后。它们可能非常“准”，但属于未来信息。"><span class="option-label">B</span><span class="option-text">用户后续投诉、订单最终退款状态、实际发货时间</span></div>
+  <div class="option" data-correct="false" data-feedback="首次揽收扫描发生后，订单已经进入履约过程；如果任务要求支付后十分钟预测，这个字段不可用。"><span class="option-label">C</span><span class="option-text">首次揽收时间、物流后续轨迹、最终签收时长</span></div>
+</div>
+
+<div class="content-kicker reveal">模型不是第一个对手</div>
+<p class="p reveal">先建立一条透明规则：商家近 30 天超时率高、仓库积压超过阈值、特殊商品处理时间长时提高优先级。这条规则是基线，也是模型失效时的降级方案。</p>
+<div class="comparison-table reveal" role="table" aria-label="候选方案比较">
+  <div class="comparison-row head" role="row"><span>方案</span><span>前2000笔命中超时</span><span>可解释性</span><span>维护成本</span></div>
+  <div class="comparison-row" role="row"><strong>随机抽取</strong><span>320</span><span>高</span><span>低</span></div>
+  <div class="comparison-row" role="row"><strong>业务规则</strong><span>760</span><span>很高</span><span>低</span></div>
+  <div class="comparison-row" role="row"><strong>逻辑回归</strong><span>890</span><span>较高</span><span>中</span></div>
+  <div class="comparison-row winner" role="row"><strong>树模型</strong><span>960</span><span>中</span><span>较高</span></div>
+</div>
+<p class="p reveal">总体 AUC 可以辅助比较，但业务每天只看名单前 2,000 笔，因此更关键的是<strong>固定容量下能命中多少真正超时订单</strong>，以及这些订单能否通过行动被挽救。</p>
+
+<div class="content-kicker reveal">阈值不是 0.5</div>
+<div class="card card-amber reveal" data-question>
+  <div class="card-label"><span class="dot"></span>第二项判断</div>
+  <div class="card-title">模型给出 0—1 风险分数，应该怎样确定处理线？</div>
+  <div class="option" data-correct="false" data-feedback="0.5只是数学上的默认值，不知道运营容量，也不知道不同错误的业务损失。"><span class="option-label">A</span><span class="option-text">统一使用 0.5，超过就处理</span></div>
+  <div class="option" data-correct="true" data-feedback="正确。名单长度来自可执行资源，再结合订单价值和可干预性排序，阈值是业务与模型共同决定的。"><span class="option-label">B</span><span class="option-text">根据2,000笔容量取风险最高名单，并结合损失和可干预性排序</span></div>
+  <div class="option" data-correct="false" data-feedback="全部输出会把筛选责任转嫁给运营，名单很快过期，也无法稳定复盘。"><span class="option-label">C</span><span class="option-text">输出全部30,000笔及分数，让运营自行判断</span></div>
+</div>
+
+<div class="content-kicker reveal">一次失败的小流量试运行</div>
+<div class="failure-scene reveal">
+  <div class="failure-scene-mark">FAILURE / 01</div>
+  <h3>命中了高风险订单，超时率却没有下降</h3>
+  <p>复盘发现，模型前 2,000 名里有大量“偏远地区预售商品”。这些订单确实容易超时，但运营今晚无法改变仓配线路，也无法提前发货。模型预测对了，却选中了大量<strong>不可干预对象</strong>。</p>
+  <div class="failure-fix"><span>修复</span><p>把“发生风险的概率”与“行动可能挽救的概率”分开。第一阶段排除无法即时处理的订单，第二阶段再按风险与预期损失排序。</p></div>
+</div>
+
+<div class="content-kicker reveal">第二次试运行：保留对照</div>
+<div class="route-matrix reveal">
+  <article><span>800</span><h3>模型名单 + 干预</h3><p>运营按策略催办，观察真实改善。</p><strong>回答模型与行动的组合效果</strong></article>
+  <article><span>200</span><h3>模型名单 + 不干预</h3><p>保留小规模对照，估计这些订单原本会怎样。</p><strong>避免把自然恢复当作干预效果</strong></article>
+  <article><span>800</span><h3>规则名单 + 干预</h3><p>与可解释的简单基线公平比较。</p><strong>确认复杂模型是否值得维护</strong></article>
+  <article><span>200</span><h3>安全与异常检查</h3><p>检查重点商家、地区和订单价值是否异常集中。</p><strong>保护业务边界</strong></article>
+</div>
+
+<div class="card card-purple reveal">
+  <div class="card-label"><span class="dot"></span>最终交付</div>
+  <div class="card-body"><p>不是“树模型 AUC 0.86”，而是：<strong>今晚优先处理 2,000 笔可干预订单，预计命中 960 笔潜在超时；首轮保留规则组与不干预组，明早按超时减少量、处理成本和投诉变化复盘。</strong></p></div>
+</div>

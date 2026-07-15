@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" role="img" aria-labelledby="title desc">
+<title id="title">业务问题的四条决策路径</title>
+<desc id="desc">业务决策审查后，问题可以进入诊断分析、透明规则、随机实验或机器学习预测，也可以因为定义不清而退回需求定义。</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#10131b"/><stop offset="1" stop-color="#080a10"/></linearGradient>
+  <radialGradient id="core"><stop stop-color="#8268ff" stop-opacity=".35"/><stop offset="1" stop-color="#8268ff" stop-opacity="0"/></radialGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#657087"/></marker>
+  <style>
+    text{font-family:Inter,"PingFang SC","Microsoft YaHei",sans-serif}.eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;fill:#8f98ad}.title{font-size:27px;font-weight:800;fill:#f8fafc}.sub{font-size:14px;fill:#9aa3b7}.card-title{font-size:21px;font-weight:800;fill:#f8fafc}.card-copy{font-size:13px;fill:#a7afc0}.num{font-size:12px;font-weight:800;letter-spacing:1px}.core-title{font-size:23px;font-weight:800;fill:#fff}.core-copy{font-size:13px;fill:#c3bfdc}.chip{font-size:12px;font-weight:700}.route{fill:none;stroke:#657087;stroke-width:2;stroke-dasharray:4 7;marker-end:url(#arrow)}
+  </style>
+</defs>
+<rect width="720" height="720" rx="32" fill="url(#bg)"/>
+<path d="M0 72H720M0 144H720M0 216H720M0 288H720M0 360H720M0 432H720M0 504H720M0 576H720M0 648H720M72 0V720M144 0V720M216 0V720M288 0V720M360 0V720M432 0V720M504 0V720M576 0V720M648 0V720" stroke="#fff" stroke-opacity=".025"/>
+<text x="42" y="45" class="eyebrow">ML DECISION MAP · 先判断，再建模</text>
+<text x="42" y="80" class="title">同一个“业务问题”，不一定都要走向预测</text>
+<text x="42" y="105" class="sub">先还原谁在何时做什么决定，再选择最短、最可信的解法。</text>
+
+<path class="route" d="M290 317C245 296 226 263 214 231"/><path class="route" d="M430 317C475 296 494 263 506 231"/>
+<path class="route" d="M290 403C245 426 226 463 214 492"/><path class="route" d="M430 403C475 426 494 463 506 492"/>
+
+<g transform="translate(54 144)"><rect width="275" height="112" rx="19" fill="#111927" stroke="#60a5fa" stroke-opacity=".42"/><rect x="17" y="17" width="42" height="25" rx="12" fill="#60a5fa" fill-opacity=".13"/><text x="38" y="34" text-anchor="middle" class="num" fill="#77b7ff">01</text><text x="18" y="70" class="card-title">诊断分析</text><text x="18" y="94" class="card-copy">先回答“为什么发生”</text><path d="M215 31h34M215 47h24M215 63h42" stroke="#60a5fa" stroke-width="5" stroke-linecap="round" opacity=".75"/></g>
+<g transform="translate(391 144)"><rect width="275" height="112" rx="19" fill="#171625" stroke="#c084fc" stroke-opacity=".42"/><rect x="17" y="17" width="42" height="25" rx="12" fill="#c084fc" fill-opacity=".13"/><text x="38" y="34" text-anchor="middle" class="num" fill="#d09aff">02</text><text x="18" y="70" class="card-title">透明规则</text><text x="18" y="94" class="card-copy">边界稳定、解释优先</text><path d="M219 28h34v34h-34zM227 36l8 8 13-15" fill="none" stroke="#c084fc" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+
+<circle cx="360" cy="360" r="140" fill="url(#core)"/>
+<g filter="url(#glow)"><rect x="270" y="281" width="180" height="158" rx="30" fill="#171528" stroke="#9b87ff" stroke-opacity=".8"/><circle cx="360" cy="327" r="22" fill="#8b75ff" fill-opacity=".18" stroke="#a696ff"/><path d="M350 327l7 7 15-17" fill="none" stroke="#c4bbff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><text x="360" y="373" text-anchor="middle" class="core-title">业务决策审查</text><text x="360" y="400" text-anchor="middle" class="core-copy">对象 · 时点 · 动作 · 结果</text></g>
+
+<g transform="translate(54 464)"><rect width="275" height="112" rx="19" fill="#181812" stroke="#fbbf24" stroke-opacity=".42"/><rect x="17" y="17" width="42" height="25" rx="12" fill="#fbbf24" fill-opacity=".13"/><text x="38" y="34" text-anchor="middle" class="num" fill="#ffd45f">03</text><text x="18" y="70" class="card-title">随机实验</text><text x="18" y="94" class="card-copy">验证动作有没有增量</text><circle cx="227" cy="43" r="17" fill="none" stroke="#fbbf24" stroke-width="3"/><path d="M227 27v32M211 43h32" stroke="#fbbf24" stroke-width="3"/></g>
+<g transform="translate(391 464)"><rect width="275" height="112" rx="19" fill="#101b1c" stroke="#5eead4" stroke-opacity=".42"/><rect x="17" y="17" width="42" height="25" rx="12" fill="#5eead4" fill-opacity=".13"/><text x="38" y="34" text-anchor="middle" class="num" fill="#75f2df">04</text><text x="18" y="70" class="card-title">机器学习预测</text><text x="18" y="94" class="card-copy">预测能改变下一步行动</text><path d="M215 60l10-13 11 7 18-28" fill="none" stroke="#5eead4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="254" cy="26" r="4" fill="#5eead4"/></g>
+
+<g transform="translate(113 618)"><rect width="494" height="62" rx="18" fill="#fb7185" fill-opacity=".065" stroke="#fb7185" stroke-opacity=".28"/><circle cx="31" cy="31" r="12" fill="#fb7185" fill-opacity=".17"/><path d="M26 26l10 10m0-10L26 36" stroke="#fb7185" stroke-width="3" stroke-linecap="round"/><text x="56" y="27" class="chip" fill="#ff9aaa">定义不清、结果不可核验、没有行动出口</text><text x="56" y="47" class="sub">退回需求定义，而不是硬造一个模型分数</text></g>
+</svg>
