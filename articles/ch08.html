@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="icon" href="data:,">
 <style>:root { --theme: #5eead4; --theme-rgb: 94,234,212; --module-theme: #60a5fa; }</style>
+<link rel="stylesheet" href="../assets/editorial.css">
 </head>
 <body data-page="lesson" data-default-mode="learn">
 <a class="skip-link" href="#lesson-content">跳到正文</a>
@@ -18,18 +19,18 @@
 </div>
 <div class="grid-bg"></div>
 <nav class="topnav">
-  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <a href="../home.html" class="topnav-logo">分析手册</a>
   <div class="topnav-links"><a href="../home.html">系统课程</a><a href="../topics/index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div>
 </nav>
 <main class="page lesson-page" id="lesson-content">
   <header class="lesson-header">
-    <div class="module-line"><span>MODULE 02</span><strong>高频分析工具箱</strong><em>2/8</em></div>
+    <div class="module-line"><span>阶段 02</span><strong>高频分析工具箱</strong><em>2/8</em></div>
     <div class="ch-badge">CH08 / 留存分析</div>
     <h1 class="ch-title static-title">留存分析与生命周期</h1>
     <p class="ch-subtitle lesson-description">留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。</p>
     <div class="mode-switch" role="group" aria-label="阅读模式">
-      <button type="button" class="active" data-mode-target="learn"><span>沉浸学习</span><small>完整案例与推导</small></button>
-      <button type="button" data-mode-target="review"><span>速览复习</span><small>框架与面试答案</small></button>
+      <button type="button" class="active" data-mode-target="learn"><span>完整学习</span><small>案例、原理与推导</small></button>
+      <button type="button" data-mode-target="review"><span>面试速览</span><small>主线、答案与失分点</small></button>
     </div>
   </header>
 
@@ -37,7 +38,7 @@
 
 <section class="lesson-brief reveal">
   <div class="lesson-brief-main">
-    <div class="section-eyebrow">MISSION BRIEF</div>
+    <div class="section-eyebrow">本章目标</div>
     <h2>完成这一章，你应该能够</h2>
     <ul><li>正确构建留存队列并解读曲线</li><li>区分渠道质量与产品承接问题</li></ul>
   </div>
@@ -87,43 +88,10 @@
   <div class="glow-box reveal">
     <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">留存分析的核心方法适用于所有互联网产品——只是"留存"的定义不同而已。电商看复购率，内容看次日回访率，社交看登录频率。但分析框架完全一样：明确分母→拆维度（渠道/用户群/时段）→看行为（流失发生在哪个环节）→结合业务变化形成假设。面试时把鲜食记的案例讲透，换任何行业的场景都能用这套逻辑。</span></p>
   </div></div>
-
-<section class="related-stories reveal">
-  <div class="section-eyebrow">TRANSFER PRACTICE</div>
-  <div class="related-heading">
-    <div><h2>把方法迁移到另一个业务问题</h2><p>课程负责建立框架，案例负责检验你能否独立使用。</p></div>
-    <a href="../stories/index.html">查看全部案例 →</a>
-  </div>
-  <div class="related-story-grid">
-<a class="related-story-card" href="../stories/repurchase-user-story.html">
-  <div class="related-story-num">CASE 06</div>
-  <h3>复购率背后的用户故事</h3>
-  <p>从整体复购率进入不同用户群的行为差异。</p>
-  <div class="related-story-meta"><span>复购率</span><span>用户分群</span><em>13 分钟</em></div>
-</a>
-<a class="related-story-card" href="../stories/new-user-retention.html">
-  <div class="related-story-num">CASE 09</div>
-  <h3>新用户为什么留不住？</h3>
-  <p>沿着新用户路径找到激活与留存的断点。</p>
-  <div class="related-story-meta"><span>新用户</span><span>激活</span><em>12 分钟</em></div>
-</a>
-<a class="related-story-card" href="../stories/existing-user-churn.html">
-  <div class="related-story-num">CASE 10</div>
-  <h3>老用户正在悄悄离开</h3>
-  <p>先定义“多久未购买”，再讨论征兆、预警和召回边界。</p>
-  <div class="related-story-meta"><span>流失口径</span><span>观察窗口</span><em>15 分钟</em></div>
-</a>
-<a class="related-story-card" href="../stories/customer-lifetime-value.html">
-  <div class="related-story-num">CASE 11</div>
-  <h3>用户生命周期价值几何？</h3>
-  <p>从LTV计算到渠道ROI和用户分层。</p>
-  <div class="related-story-meta"><span>LTV</span><span>渠道质量</span><em>14 分钟</em></div>
-</a></div>
-</section>
   </div>
   <div id="review-mode" class="learning-mode">
-<section class="review-sheet" aria-label="速览复习">
-  <div class="review-kicker">QUICK REVIEW · 12 分钟课程的 2 分钟回顾</div>
+<section class="review-sheet" aria-label="面试速览">
+  <div class="review-kicker">INTERVIEW REVIEW · 12 分钟课程 · 2 分钟回顾</div>
   <h2>先记住这条主线</h2>
   <div class="framework-track"><div class="framework-node"><span>01</span><strong>定义留存行为</strong></div><div class="framework-node"><span>02</span><strong>建立Cohort</strong></div><div class="framework-node"><span>03</span><strong>比较曲线形态</strong></div><div class="framework-node"><span>04</span><strong>下钻关键行为</strong></div><div class="framework-node"><span>05</span><strong>制定召回或激活策略</strong></div></div>
   <div class="review-grid">
@@ -141,7 +109,7 @@
     </article>
   </div>
   <div class="review-actions">
-    <button class="mode-link" type="button" data-mode-target="learn">返回沉浸学习</button>
+    <button class="mode-link" type="button" data-mode-target="learn">返回完整学习</button>
     <a class="mode-link secondary" href="../home.html">查看完整课程地图</a>
   </div>
 </section></div>

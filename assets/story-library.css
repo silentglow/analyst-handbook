@@ -1,29 +1,26 @@
-/* Story library page */
-.story-library-page { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 142px 40px 100px; }
-.story-library-hero { max-width: 900px; padding-bottom: 76px; }
-.story-library-hero h1 { font-size: clamp(52px,8vw,86px); }
-.library-guide { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; margin-bottom: 100px; overflow: hidden; border: 1px solid rgba(255,255,255,.075); border-radius: 18px; background: rgba(255,255,255,.07); }
-.library-guide article { min-height: 160px; padding: 24px; background: #090a0f; }
-.library-guide span { color: #5eead4; font: 700 10px/1 "SF Mono","Fira Code",monospace; }
-.library-guide strong { display: block; margin: 16px 0 7px; color: rgba(255,255,255,.84); font-size: 15px; }
-.library-guide p { color: rgba(255,255,255,.38); font-size: 12px; line-height: 1.7; }
-.story-catalog { scroll-margin-top: 92px; }
-.catalog-toolbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 22px; }
-.catalog-toolbar > div > span { color: #5eead4; font: 700 10px/1 "SF Mono","Fira Code",monospace; letter-spacing: 2px; }
-.catalog-toolbar h2 { margin-top: 10px; color: #fff; font-size: clamp(28px,4vw,42px); letter-spacing: -.04em; }
-.story-search { width: min(310px,100%); }
-.story-search span { display: block; margin-bottom: 8px; color: rgba(255,255,255,.3); font-size: 10px; }
-.story-search input { width: 100%; border: 1px solid rgba(255,255,255,.09); border-radius: 10px; outline: none; padding: 11px 13px; background: rgba(255,255,255,.025); color: #fff; font-size: 13px; }
-.story-search input:focus { border-color: rgba(94,234,212,.35); box-shadow: 0 0 0 3px rgba(94,234,212,.06); }
-.story-search input::placeholder { color: rgba(255,255,255,.22); }
-.story-filters { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 26px; }
-.story-filters button { border: 1px solid rgba(255,255,255,.08); border-radius: 999px; padding: 7px 11px; background: transparent; color: rgba(255,255,255,.42); font-size: 11px; cursor: pointer; transition: .2s; }
-.story-filters button:hover, .story-filters button.active { border-color: rgba(94,234,212,.28); background: rgba(94,234,212,.07); color: #5eead4; }
-.story-library-card.filtered-out { display: none; }
-.story-empty { padding: 60px 0; color: rgba(255,255,255,.4); text-align: center; }
-@media (max-width: 760px) {
-  .story-library-page { padding: 106px 20px 70px; }
-  .library-guide { grid-template-columns: repeat(2,1fr); }
-  .catalog-toolbar { align-items: flex-start; flex-direction: column; }
-}
-@media (max-width: 480px) { .library-guide { grid-template-columns: 1fr; } }
+/* 业务案例目录：保持阅读感，不做仪表盘。 */
+.story-library-page { position:relative; z-index:1; width:min(1120px,calc(100% - 48px)); margin:0 auto; padding:138px 0 110px; }
+.story-library-hero { max-width:860px; padding:46px 0 72px; border-bottom:1px solid #b9b1a4; }
+.story-library-hero h1 { margin:0; color:#182124; font:600 clamp(48px,7vw,78px)/1.12 "Songti SC","Noto Serif SC",serif; letter-spacing:-.045em; }
+.story-library-hero h1 span { color:#17494b; background:none; -webkit-text-fill-color:currentColor; }
+.story-library-hero > p { max-width:700px; margin:26px 0 30px; color:#3f494c; font-size:16px; line-height:1.9; }
+.library-guide { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin:62px 0 112px; border-top:1px solid #b9b1a4; border-bottom:1px solid #b9b1a4; }
+.library-guide article { min-height:150px; padding:24px 24px 24px 0; background:transparent; }
+.library-guide article + article { border-left:1px solid #d8d2c7; padding-left:24px; }
+.library-guide span { color:#17494b; font:700 10px/1 "SF Mono",monospace; }
+.library-guide strong { display:block; margin:17px 0 7px; color:#182124; font-size:14px; }
+.library-guide p { margin:0; color:#737a7a; font-size:12px; line-height:1.75; }
+.story-catalog { scroll-margin-top:92px; }
+.catalog-toolbar { display:flex; align-items:flex-end; justify-content:space-between; gap:30px; margin-bottom:24px; }
+.catalog-toolbar > div > span { color:#17494b; font:700 10px/1 "SF Mono",monospace; letter-spacing:.1em; }
+.catalog-toolbar h2 { margin:10px 0 0; color:#182124; font:600 clamp(32px,4vw,48px)/1.25 "Songti SC","Noto Serif SC",serif; letter-spacing:-.03em; }
+.story-search { width:min(310px,100%); }
+.story-search span { display:block; margin-bottom:8px; color:#737a7a; font-size:10px; }
+.story-search input { width:100%; border:0; border-bottom:1px solid #b9b1a4; border-radius:0; outline:none; padding:10px 0; background:transparent; color:#182124; font-size:13px; }
+.story-search input:focus { border-color:#17494b; box-shadow:none; }.story-search input::placeholder { color:#969b98; }
+.story-filters { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:28px; }
+.story-filters button { border:1px solid #c9c2b7; border-radius:999px; padding:7px 11px; background:transparent; color:#657071; font-size:11px; cursor:pointer; transition:.18s; }
+.story-filters button:hover,.story-filters button.active { border-color:#17494b; background:#dfeae7; color:#17494b; }
+.story-library-card.filtered-out { display:none; }.story-empty { padding:60px 0; color:#737a7a; text-align:center; }
+@media (max-width:760px) { .story-library-page { width:min(100% - 28px,1120px); padding:96px 0 72px; }.story-library-hero { padding-top:28px; }.library-guide { grid-template-columns:repeat(2,1fr); margin-bottom:80px; }.library-guide article:nth-child(3) { border-left:0; border-top:1px solid #d8d2c7; }.library-guide article:nth-child(4) { border-top:1px solid #d8d2c7; }.catalog-toolbar { align-items:flex-start; flex-direction:column; }.story-search { width:100%; } }
+@media (max-width:480px) { .story-library-hero h1 { font-size:42px; }.library-guide { grid-template-columns:1fr; }.library-guide article,.library-guide article + article { min-height:0; border-left:0; border-top:1px solid #d8d2c7; padding:20px 0; }.library-guide article:first-child { border-top:0; } }

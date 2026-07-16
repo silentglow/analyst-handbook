@@ -1,40 +1,17 @@
-/* Site shell injected into standalone immersive stories. All selectors are prefixed. */
+/* 注入独立案例页的轻量阅读外壳。 */
 html { overflow-x:hidden!important; }
-#site-story-shell-root, .site-story-debrief { --site-shell-accent:#5eead4; font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; }
-.site-story-bar { position:fixed; top:14px; left:50%; z-index:2147483000; display:flex; align-items:center; gap:7px; width:min(920px,calc(100vw - 28px)); transform:translateX(-50%); border:1px solid rgba(255,255,255,.16); border-radius:14px; padding:7px; background:rgba(8,10,16,.84); box-shadow:0 12px 44px rgba(0,0,0,.22); backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%); color:#fff; }
-.site-story-bar a { display:inline-flex; align-items:center; min-height:36px; border-radius:9px; padding:0 11px; color:rgba(255,255,255,.7)!important; font:500 12px/1.2 "Noto Sans SC",sans-serif!important; letter-spacing:0!important; text-decoration:none!important; background:transparent!important; transition:.2s; }
-.site-story-bar a:hover { background:rgba(255,255,255,.08)!important; color:#fff!important; }
-.site-story-bar__back { color:var(--site-shell-accent)!important; }
-.site-story-bar__identity { display:flex; min-width:0; flex:1; align-items:center; gap:10px; padding:0 9px; border-left:1px solid rgba(255,255,255,.1); }
-.site-story-bar__identity span { flex:none; color:var(--site-shell-accent); font:700 10px/1 "SF Mono",monospace; letter-spacing:1px; }
-.site-story-bar__identity strong { overflow:hidden; color:rgba(255,255,255,.82); font-size:12px; font-weight:550; text-overflow:ellipsis; white-space:nowrap; }
-.site-story-bar__nav { display:flex; gap:3px; }
-.site-story-bar__nav a[aria-disabled="true"] { opacity:.25; pointer-events:none; }
-.site-story-debrief { position:relative; z-index:2; width:min(920px,calc(100% - 40px)); margin:70px auto 40px; border:1px solid rgba(15,26,61,.13); border-radius:22px; padding:34px; background:linear-gradient(145deg,#0b1020,#11182c); box-shadow:0 18px 60px rgba(15,26,61,.14); color:#fff; text-align:left; }
-.site-story-debrief * { box-sizing:border-box; }
-.site-story-debrief__kicker { color:var(--site-shell-accent); font:700 10px/1 "SF Mono",monospace; letter-spacing:2px; }
-.site-story-debrief h2 { margin:12px 0 8px!important; color:#fff!important; font:650 clamp(24px,4vw,36px)/1.3 "Noto Sans SC",sans-serif!important; letter-spacing:-.03em!important; }
-.site-story-debrief__subtitle { margin:0 0 22px!important; color:rgba(255,255,255,.52)!important; font:400 14px/1.8 "Noto Sans SC",sans-serif!important; }
-.site-story-debrief__tags { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:25px; }
-.site-story-debrief__tags span { border:1px solid rgba(94,234,212,.16); border-radius:999px; padding:5px 9px; background:rgba(94,234,212,.06); color:#9ef2e1; font-size:11px; }
-.site-story-debrief__courses { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
-.site-story-debrief__courses a { display:flex; align-items:center; gap:12px; min-height:62px; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:12px 14px; color:rgba(255,255,255,.72)!important; font:500 13px/1.5 "Noto Sans SC",sans-serif!important; text-decoration:none!important; background:rgba(255,255,255,.025)!important; }
-.site-story-debrief__courses a span { color:var(--site-shell-accent); font:700 11px/1 "SF Mono",monospace; }
-.site-story-debrief__courses a:hover { border-color:rgba(94,234,212,.27); }
-.site-story-debrief__actions { display:flex; justify-content:space-between; gap:10px; margin-top:25px; padding-top:20px; border-top:1px solid rgba(255,255,255,.08); }
-.site-story-debrief__actions a { border-radius:10px; padding:10px 13px; color:rgba(255,255,255,.68)!important; font:500 12px/1.2 "Noto Sans SC",sans-serif!important; text-decoration:none!important; background:rgba(255,255,255,.05)!important; }
-.site-story-debrief__actions a:last-child { color:var(--site-shell-accent)!important; }
-@media (max-width:640px) {
-  .site-story-bar { top:8px; width:calc(100vw - 16px); }
-  .site-story-bar__back { padding:0 9px!important; font-size:0!important; }
-  .site-story-bar__back::after { content:"案例库"; font-size:11px; }
-  .site-story-bar__identity { border-left:0; padding-left:2px; }
-  .site-story-bar__identity strong { display:none; }
-  .site-story-bar__nav a { padding:0 8px; font-size:0!important; }
-  .site-story-bar__nav a:first-child::after { content:"←"; font-size:14px; }
-  .site-story-bar__nav a:last-child::after { content:"→"; font-size:14px; }
-  .site-story-debrief { width:calc(100% - 24px); padding:25px 20px; }
-  .site-story-debrief__courses { grid-template-columns:1fr; }
-  .story-metric-grid { grid-template-columns:1fr!important; }
-}
-@media print { .site-story-bar { display:none!important; } }
+#site-story-shell-root,.site-story-debrief { --site-shell-accent:#17494b; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans SC",sans-serif; }
+.site-story-bar { position:fixed; top:12px; left:50%; z-index:2147483000; display:flex; align-items:center; gap:6px; width:min(940px,calc(100vw - 28px)); transform:translateX(-50%); border:1px solid rgba(24,33,36,.14); border-radius:5px; padding:6px; background:rgba(255,253,248,.94); box-shadow:0 12px 38px rgba(24,33,36,.1); backdrop-filter:blur(16px); color:#182124; }
+.site-story-bar a { display:inline-flex; align-items:center; min-height:36px; border-radius:3px; padding:0 11px; color:#657071!important; font:500 12px/1.2 inherit!important; letter-spacing:0!important; text-decoration:none!important; background:transparent!important; transition:.18s; }
+.site-story-bar a:hover { background:#edf1ec!important; color:#17494b!important; }.site-story-bar__back { color:#17494b!important; }
+.site-story-bar__identity { display:flex; min-width:0; flex:1; align-items:center; gap:10px; padding:0 10px; border-left:1px solid #d8d2c7; }
+.site-story-bar__identity span { flex:none; color:#17494b; font:700 10px/1 "SF Mono",monospace; letter-spacing:.06em; }.site-story-bar__identity strong { overflow:hidden; color:#3f494c; font-size:12px; font-weight:600; text-overflow:ellipsis; white-space:nowrap; }
+.site-story-bar__nav { display:flex; gap:2px; }.site-story-bar__nav a[aria-disabled="true"] { opacity:.3; pointer-events:none; }
+.site-story-debrief { position:relative; z-index:2; width:min(920px,calc(100% - 40px)); margin:72px auto 44px; border:1px solid #d8d2c7; border-radius:5px; padding:42px; background:#fffdf8; box-shadow:0 18px 55px rgba(43,42,36,.08); color:#182124; text-align:left; }
+.site-story-debrief * { box-sizing:border-box; }.site-story-debrief__kicker { color:#17494b; font:700 10px/1 "SF Mono",monospace; letter-spacing:.1em; }
+.site-story-debrief h2 { margin:13px 0 10px!important; color:#182124!important; font:600 clamp(27px,4vw,40px)/1.35 "Songti SC","Noto Serif SC",serif!important; letter-spacing:-.025em!important; }
+.site-story-debrief__subtitle { max-width:730px!important; margin:0 0 18px!important; color:#657071!important; font:400 14px/1.9 inherit!important; }.site-story-debrief__tags { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:26px; }.site-story-debrief__tags span { border:1px solid #d8d2c7; border-radius:999px; padding:5px 9px; background:transparent; color:#657071; font-size:11px; }
+.site-story-debrief__questions { margin:0; padding:0; list-style:none; border-top:1px solid #b9b1a4; }.site-story-debrief__questions li { display:grid; grid-template-columns:36px 1fr; gap:12px; padding:17px 0; border-bottom:1px solid #d8d2c7; color:#3f494c; font-size:13px; line-height:1.75; }.site-story-debrief__questions b { color:#17494b; font:700 10px/1.8 "SF Mono",monospace; }
+.site-story-debrief__actions { display:flex; justify-content:space-between; gap:10px; margin-top:26px; }.site-story-debrief__actions a { padding:9px 0; color:#657071!important; font:600 12px/1.4 inherit!important; text-decoration:none!important; background:transparent!important; }.site-story-debrief__actions a:last-child { color:#17494b!important; }
+@media (max-width:640px) { .site-story-bar { top:8px; width:calc(100vw - 16px); }.site-story-bar__back { padding:0 9px!important; font-size:0!important; }.site-story-bar__back::after { content:"案例库"; font-size:11px; }.site-story-bar__identity { border-left:0; padding-left:2px; }.site-story-bar__identity strong { display:none; }.site-story-bar__nav a { padding:0 8px; font-size:0!important; }.site-story-bar__nav a:first-child::after { content:"←"; font-size:14px; }.site-story-bar__nav a:last-child::after { content:"→"; font-size:14px; }.site-story-debrief { width:calc(100% - 24px); padding:28px 20px; }.site-story-debrief__actions { align-items:flex-start; flex-direction:column; }.story-metric-grid { grid-template-columns:1fr!important; } }
+@media print { .site-story-bar { display:none!important; }.site-story-debrief { box-shadow:none; } }

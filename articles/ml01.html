@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="icon" href="data:,">
 <style>:root { --theme: #fb7185; --theme-rgb: 251,113,133; --module-theme: #fb7185; }</style>
+<link rel="stylesheet" href="../assets/editorial.css">
 </head>
 <body data-page="lesson" data-default-mode="learn">
 <a class="skip-link" href="#lesson-content">跳到正文</a>
@@ -18,18 +19,18 @@
 </div>
 <div class="grid-bg"></div>
 <nav class="topnav">
-  <a href="../home.html" class="topnav-logo">DATA ANALYSIS</a>
+  <a href="../home.html" class="topnav-logo">分析手册</a>
   <div class="topnav-links"><a href="../home.html">系统课程</a><a href="../topics/index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div>
 </nav>
 <main class="page lesson-page" id="lesson-content">
   <header class="lesson-header">
-    <div class="module-line"><span>MODULE 05</span><strong>机器学习：先判断，再建模</strong><em>1/4</em></div>
+    <div class="module-line"><span>阶段 05</span><strong>机器学习：先判断，再建模</strong><em>1/4</em></div>
     <div class="ch-badge">ML01 / 问题审查</div>
     <h1 class="ch-title static-title">先别建模：审查业务问题</h1>
     <p class="ch-subtitle lesson-description">用四类真实需求判断该做分析、规则、实验还是预测；学会拒绝一个定义错误的模型项目。</p>
     <div class="mode-switch" role="group" aria-label="阅读模式">
-      <button type="button" class="active" data-mode-target="learn"><span>沉浸学习</span><small>完整案例与推导</small></button>
-      <button type="button" data-mode-target="review"><span>速览复习</span><small>框架与面试答案</small></button>
+      <button type="button" class="active" data-mode-target="learn"><span>完整学习</span><small>案例、原理与推导</small></button>
+      <button type="button" data-mode-target="review"><span>面试速览</span><small>主线、答案与失分点</small></button>
     </div>
   </header>
 
@@ -37,7 +38,7 @@
 
 <section class="lesson-brief reveal">
   <div class="lesson-brief-main">
-    <div class="section-eyebrow">MISSION BRIEF</div>
+    <div class="section-eyebrow">本章目标</div>
     <h2>完成这一章，你应该能够</h2>
     <ul><li>判断业务问题是否具备清晰对象、时点、结果和动作</li><li>识别目标错误、标签模糊、验证失真和无行动出口四类失败</li></ul>
   </div>
@@ -129,37 +130,10 @@
   <div class="card-body"><p><strong>用户流失：</strong>退回定义，不作为基础建模案例。</p><p><strong>订单履约：</strong>进入规则基线与小规模预测验证。</p><p><strong>优惠券：</strong>先做随机实验，回答增量问题。</p><p><strong>客服路由：</strong>先审核标签质量，再做人机协同分类。</p></div>
 </div>
 </div>
-
-<section class="related-stories reveal">
-  <div class="section-eyebrow">TRANSFER PRACTICE</div>
-  <div class="related-heading">
-    <div><h2>把方法迁移到另一个业务问题</h2><p>课程负责建立框架，案例负责检验你能否独立使用。</p></div>
-    <a href="../stories/index.html">查看全部案例 →</a>
-  </div>
-  <div class="related-story-grid">
-<a class="related-story-card" href="../stories/model-score-trap.html">
-  <div class="related-story-num">CASE 26</div>
-  <h3>0.94 分的模型，为什么被叫停？</h3>
-  <p>分数漂亮、名单精准，运营却发现超时订单更多了。问题究竟藏在哪里？</p>
-  <div class="related-story-meta"><span>模型失败</span><span>数据泄漏</span><em>16 分钟</em></div>
-</a>
-<a class="related-story-card" href="../stories/reports-business-does-not-use.html">
-  <div class="related-story-num">CASE 02</div>
-  <h3>报表做了100张，业务说没用</h3>
-  <p>从“交付报表”转向“支持决策”。</p>
-  <div class="related-story-meta"><span>需求分析</span><span>指标优先级</span><em>11 分钟</em></div>
-</a>
-<a class="related-story-card" href="../stories/coupon-incrementality.html">
-  <div class="related-story-num">CASE 18</div>
-  <h3>优惠券发还是不发？</h3>
-  <p>区分被补贴的自然转化与真正增量。</p>
-  <div class="related-story-meta"><span>优惠券</span><span>增量评估</span><em>12 分钟</em></div>
-</a></div>
-</section>
   </div>
   <div id="review-mode" class="learning-mode">
-<section class="review-sheet" aria-label="速览复习">
-  <div class="review-kicker">QUICK REVIEW · 18 分钟课程的 2 分钟回顾</div>
+<section class="review-sheet" aria-label="面试速览">
+  <div class="review-kicker">INTERVIEW REVIEW · 18 分钟课程 · 2 分钟回顾</div>
   <h2>先记住这条主线</h2>
   <div class="framework-track"><div class="framework-node"><span>01</span><strong>还原决策</strong></div><div class="framework-node"><span>02</span><strong>固定时点</strong></div><div class="framework-node"><span>03</span><strong>定义结果</strong></div><div class="framework-node"><span>04</span><strong>寻找动作</strong></div><div class="framework-node"><span>05</span><strong>比较替代方案</strong></div><div class="framework-node"><span>06</span><strong>决定是否建模</strong></div></div>
   <div class="review-grid">
@@ -177,7 +151,7 @@
     </article>
   </div>
   <div class="review-actions">
-    <button class="mode-link" type="button" data-mode-target="learn">返回沉浸学习</button>
+    <button class="mode-link" type="button" data-mode-target="learn">返回完整学习</button>
     <a class="mode-link secondary" href="../home.html">查看完整课程地图</a>
   </div>
 </section></div>

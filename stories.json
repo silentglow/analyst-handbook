@@ -15,13 +15,6 @@
     "duration": 12,
     "source": "story-01-gmv-up-profit-down.html",
     "output": "gmv-up-profit-down.html",
-    "related_chapters": [
-      "ch04",
-      "ch09",
-      "ch14",
-      "ch20",
-      "ch24"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -41,15 +34,6 @@
     "duration": 11,
     "source": "story-02-reports-business-does-not-use.html",
     "output": "reports-business-does-not-use.html",
-    "related_chapters": [
-      "guide",
-      "ch03",
-      "ch15",
-      "ch02",
-      "ch13",
-      "ml01",
-      "ml04"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -69,13 +53,6 @@
     "duration": 12,
     "source": "story-03-data-definition-conflict.html",
     "output": "data-definition-conflict.html",
-    "related_chapters": [
-      "ch03",
-      "ch10",
-      "ch23",
-      "ch13",
-      "ch21"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -95,10 +72,6 @@
     "duration": 13,
     "source": "story-04-conversion-rate-drop.html",
     "output": "conversion-rate-drop.html",
-    "related_chapters": [
-      "ch04",
-      "ch18"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -118,10 +91,6 @@
     "duration": 13,
     "source": "story-05-increase-average-order-value.html",
     "output": "increase-average-order-value.html",
-    "related_chapters": [
-      "ch09",
-      "ch14"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -141,10 +110,6 @@
     "duration": 13,
     "source": "story-06-repurchase-user-story.html",
     "output": "repurchase-user-story.html",
-    "related_chapters": [
-      "ch07",
-      "ch08"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -164,13 +129,6 @@
     "duration": 12,
     "source": "story-07-kpi-metric-conflict.html",
     "output": "kpi-metric-conflict.html",
-    "related_chapters": [
-      "ch03",
-      "ch17",
-      "guide",
-      "ch16",
-      "ch21"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -190,9 +148,6 @@
     "duration": 12,
     "source": "story-08-identify-vip-users.html",
     "output": "identify-vip-users.html",
-    "related_chapters": [
-      "ch07"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -212,10 +167,6 @@
     "duration": 12,
     "source": "story-09-new-user-retention.html",
     "output": "new-user-retention.html",
-    "related_chapters": [
-      "ch08",
-      "ch23"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -235,10 +186,6 @@
     "duration": 15,
     "source": "story-10-existing-user-churn.html",
     "output": "existing-user-churn.html",
-    "related_chapters": [
-      "ch08",
-      "ch18"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -258,11 +205,6 @@
     "duration": 14,
     "source": "story-11-customer-lifetime-value.html",
     "output": "customer-lifetime-value.html",
-    "related_chapters": [
-      "ch08",
-      "ch09",
-      "ch19"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -282,9 +224,6 @@
     "duration": 14,
     "source": "story-12-user-personas.html",
     "output": "user-personas.html",
-    "related_chapters": [
-      "ch07"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -304,10 +243,6 @@
     "duration": 13,
     "source": "story-13-product-abc-analysis.html",
     "output": "product-abc-analysis.html",
-    "related_chapters": [
-      "ch14",
-      "ml03"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -327,9 +262,6 @@
     "duration": 13,
     "source": "story-14-how-hit-products-emerge.html",
     "output": "how-hit-products-emerge.html",
-    "related_chapters": [
-      "ch14"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -349,11 +281,6 @@
     "duration": 11,
     "source": "story-15-hidden-cost-of-inventory.html",
     "output": "hidden-cost-of-inventory.html",
-    "related_chapters": [
-      "ch14",
-      "ml02",
-      "ml03"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -373,11 +300,6 @@
     "duration": 14,
     "source": "story-16-new-product-pricing.html",
     "output": "new-product-pricing.html",
-    "related_chapters": [
-      "ch05",
-      "ch09",
-      "ml03"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -397,11 +319,6 @@
     "duration": 15,
     "source": "story-17-double-eleven-review.html",
     "output": "double-eleven-review.html",
-    "related_chapters": [
-      "ch06",
-      "ch22",
-      "ml02"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -421,13 +338,6 @@
     "duration": 12,
     "source": "story-18-coupon-incrementality.html",
     "output": "coupon-incrementality.html",
-    "related_chapters": [
-      "ch05",
-      "ch11",
-      "ch12",
-      "ch22",
-      "ml01"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -447,11 +357,6 @@
     "duration": 11,
     "source": "story-19-failed-live-commerce.html",
     "output": "failed-live-commerce.html",
-    "related_chapters": [
-      "ch17",
-      "ch18",
-      "ml04"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -471,10 +376,6 @@
     "duration": 11,
     "source": "story-20-membership-day-growth.html",
     "output": "membership-day-growth.html",
-    "related_chapters": [
-      "ch06",
-      "ch22"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -494,11 +395,6 @@
     "duration": 14,
     "source": "story-21-advertising-roi.html",
     "output": "advertising-roi.html",
-    "related_chapters": [
-      "ch10",
-      "ch22",
-      "ch24"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -518,10 +414,6 @@
     "duration": 14,
     "source": "story-22-multi-touch-attribution.html",
     "output": "multi-touch-attribution.html",
-    "related_chapters": [
-      "ch12",
-      "ch22"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -541,10 +433,6 @@
     "duration": 12,
     "source": "story-23-organic-vs-paid-traffic.html",
     "output": "organic-vs-paid-traffic.html",
-    "related_chapters": [
-      "ch14",
-      "ch24"
-    ],
     "featured": false,
     "status": "published"
   },
@@ -564,14 +452,6 @@
     "duration": 14,
     "source": "story-24-sales-down-diagnosis.html",
     "output": "sales-down-diagnosis.html",
-    "related_chapters": [
-      "ch02",
-      "ch04",
-      "ch18",
-      "ch20",
-      "ch15",
-      "ch21"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -591,14 +471,6 @@
     "duration": 15,
     "source": "story-25-annual-growth-strategy.html",
     "output": "annual-growth-strategy.html",
-    "related_chapters": [
-      "ch06",
-      "ch09",
-      "ch16",
-      "ch24",
-      "ch19",
-      "ch20"
-    ],
     "featured": true,
     "status": "published"
   },
@@ -619,11 +491,6 @@
     "duration": 16,
     "source": "story-26-model-score-trap.html",
     "output": "model-score-trap.html",
-    "related_chapters": [
-      "ml01",
-      "ml02",
-      "ml04"
-    ],
     "featured": true,
     "status": "published",
     "featured_rank": 0,

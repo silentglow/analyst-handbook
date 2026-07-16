@@ -36,10 +36,6 @@
     "pitfalls": [
       "只背框架名称，不解释分析顺序",
       "只讲结论，不说明证据和验证过程"
-    ],
-    "related_stories": [
-      "story-02",
-      "story-07"
     ]
   },
   {
@@ -76,10 +72,6 @@
     "pitfalls": [
       "看到数据就直接解释原因",
       "没有确认业务方真正要做的决策"
-    ],
-    "related_stories": [
-      "story-02",
-      "story-24"
     ]
   },
   {
@@ -116,11 +108,6 @@
     "pitfalls": [
       "把指标定义当作默认共识",
       "一开始就同时拆很多无关维度"
-    ],
-    "related_stories": [
-      "story-03",
-      "story-07",
-      "story-02"
     ]
   },
   {
@@ -158,11 +145,6 @@
     "pitfalls": [
       "找到相关维度就宣布根因",
       "忽略渠道结构变化造成的整体波动"
-    ],
-    "related_stories": [
-      "story-01",
-      "story-04",
-      "story-24"
     ]
   },
   {
@@ -200,10 +182,6 @@
     "pitfalls": [
       "实验中途频繁查看并提前停止",
       "只看转化提升，不看投诉或留存等护栏指标"
-    ],
-    "related_stories": [
-      "story-18",
-      "story-16"
     ]
   },
   {
@@ -241,11 +219,6 @@
     "pitfalls": [
       "把汇报完成当成项目结束",
       "只有成功方案，没有风险和回退预案"
-    ],
-    "related_stories": [
-      "story-17",
-      "story-20",
-      "story-25"
     ]
   },
   {
@@ -282,11 +255,6 @@
     "pitfalls": [
       "标签很多但无法指导动作",
       "只看行为表象，不区分购买动机"
-    ],
-    "related_stories": [
-      "story-08",
-      "story-12",
-      "story-06"
     ]
   },
   {
@@ -324,12 +292,6 @@
     "pitfalls": [
       "只比较总体留存率",
       "不同注册时间和渠道用户直接混在一起"
-    ],
-    "related_stories": [
-      "story-06",
-      "story-09",
-      "story-10",
-      "story-11"
     ]
   },
   {
@@ -367,13 +329,6 @@
     "pitfalls": [
       "只给单一路径和单点预测",
       "假设没有基线或业务依据"
-    ],
-    "related_stories": [
-      "story-05",
-      "story-16",
-      "story-25",
-      "story-01",
-      "story-11"
     ]
   },
   {
@@ -411,10 +366,6 @@
     "pitfalls": [
       "只报整体平均数",
       "分组后仍忽略各组样本占比变化"
-    ],
-    "related_stories": [
-      "story-03",
-      "story-21"
     ]
   },
   {
@@ -452,9 +403,6 @@
     "pitfalls": [
       "把P值理解为策略无效的概率",
       "反复偷看结果并提前停止实验"
-    ],
-    "related_stories": [
-      "story-18"
     ]
   },
   {
@@ -492,10 +440,6 @@
     "pitfalls": [
       "看到相关性就归因",
       "只说方法名称，不说明识别假设"
-    ],
-    "related_stories": [
-      "story-18",
-      "story-22"
     ]
   },
   {
@@ -533,10 +477,6 @@
     "pitfalls": [
       "直接相信模型生成的数字和结论",
       "把敏感数据和业务权限问题交给模型忽略"
-    ],
-    "related_stories": [
-      "story-02",
-      "story-03"
     ]
   },
   {
@@ -574,14 +514,6 @@
     "pitfalls": [
       "只讲收入，不分析成本和单位经济模型",
       "所有产品都套用同一套增长指标"
-    ],
-    "related_stories": [
-      "story-01",
-      "story-13",
-      "story-15",
-      "story-23",
-      "story-05",
-      "story-14"
     ]
   },
   {
@@ -619,10 +551,6 @@
     "pitfalls": [
       "按简历顺序逐条念经历",
       "只罗列工具，没有业务结果"
-    ],
-    "related_stories": [
-      "story-02",
-      "story-24"
     ]
   },
   {
@@ -659,10 +587,6 @@
     "pitfalls": [
       "所有面试轮次使用同一套回答",
       "二面继续只讲SQL和方法细节"
-    ],
-    "related_stories": [
-      "story-07",
-      "story-25"
     ]
   },
   {
@@ -700,10 +624,6 @@
     "pitfalls": [
       "上来就罗列大量指标",
       "只有增长指标，没有质量和风险指标"
-    ],
-    "related_stories": [
-      "story-07",
-      "story-19"
     ]
   },
   {
@@ -741,12 +661,6 @@
     "pitfalls": [
       "回答变成可能原因清单",
       "没有说明如何从相关线索验证到根因"
-    ],
-    "related_stories": [
-      "story-04",
-      "story-10",
-      "story-24",
-      "story-19"
     ]
   },
   {
@@ -784,10 +698,6 @@
     "pitfalls": [
       "直接猜最终数字",
       "假设很多但不解释来源和量级"
-    ],
-    "related_stories": [
-      "story-11",
-      "story-25"
     ]
   },
   {
@@ -825,11 +735,6 @@
     "pitfalls": [
       "虚构业务结果或个人职责",
       "只展示图表，没有问题和决策"
-    ],
-    "related_stories": [
-      "story-01",
-      "story-24",
-      "story-25"
     ]
   },
   {
@@ -867,11 +772,6 @@
     "pitfalls": [
       "第一轮回答就讲得过长",
       "面对追问不断改变原始口径"
-    ],
-    "related_stories": [
-      "story-03",
-      "story-07",
-      "story-24"
     ]
   },
   {
@@ -909,13 +809,6 @@
     "pitfalls": [
       "用上线前后对比直接认定效果",
       "忽略策略导致的用户迁移和长期副作用"
-    ],
-    "related_stories": [
-      "story-17",
-      "story-18",
-      "story-20",
-      "story-21",
-      "story-22"
     ]
   },
   {
@@ -953,10 +846,6 @@
     "pitfalls": [
       "直接写SQL但没有确认粒度",
       "JOIN造成重复后仍继续聚合"
-    ],
-    "related_stories": [
-      "story-03",
-      "story-09"
     ]
   },
   {
@@ -995,12 +884,6 @@
     "pitfalls": [
       "只按公司知名度选择岗位",
       "准备大量行业术语却没有通用分析框架"
-    ],
-    "related_stories": [
-      "story-01",
-      "story-21",
-      "story-25",
-      "story-23"
     ]
   },
   {
@@ -1040,11 +923,6 @@
       "把业务名词直接当作标签，例如笼统定义用户流失",
       "默认机器学习一定优于规则、分析或实验",
       "只讨论离线分数，不确认预测结果由谁使用"
-    ],
-    "related_stories": [
-      "story-26",
-      "story-02",
-      "story-18"
     ],
     "visual": "assets/visuals/ml01-decision-routes.svg",
     "visual_alt": "分析、规则、实验和预测四条业务决策路径"
@@ -1087,11 +965,6 @@
       "用默认0.5阈值而不考虑运营容量",
       "把识别高风险等同于干预一定有效"
     ],
-    "related_stories": [
-      "story-26",
-      "story-15",
-      "story-17"
-    ],
     "visual": "assets/visuals/ml02-fulfillment-command-center.svg",
     "visual_alt": "三万笔订单经过风险、可干预性和容量筛选形成行动名单"
   },
@@ -1132,11 +1005,6 @@
       "随机打乱时间数据导致验证结果虚高",
       "只看总体平均误差而忽略关键商品",
       "库存为零时仍把销量当作完整需求"
-    ],
-    "related_stories": [
-      "story-15",
-      "story-13",
-      "story-16"
     ],
     "visual": "assets/visuals/ml03-observed-sales-vs-demand.svg",
     "visual_alt": "缺货时可观察销量与潜在需求发生背离"
@@ -1179,11 +1047,6 @@
       "分数下降就直接更换更复杂的模型",
       "只监控模型指标，不监控实际业务结果",
       "上线失败后继续扩大流量等待模型自行恢复"
-    ],
-    "related_stories": [
-      "story-26",
-      "story-02",
-      "story-19"
     ],
     "visual": "assets/visuals/ml04-model-failure-stack.svg",
     "visual_alt": "模型失败六层故障栈与事故处置闭环"
