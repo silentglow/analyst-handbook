@@ -44,8 +44,7 @@ def write_output(path: Path, content: str) -> None:
 
 
 def chapter_href(ch: dict, from_article: bool = False) -> str:
-    if ch.get("is_root"):
-        return "../index.html" if from_article else "index.html"
+    """All lessons live in articles; return a path for the current directory."""
     return f"{ch['slug']}.html" if from_article else f"articles/{ch['slug']}.html"
 
 
@@ -80,7 +79,7 @@ def build_review(ch: dict) -> str:
   </div>
   <div class="review-actions">
     <button class="mode-link" type="button" data-mode-target="learn">返回完整学习</button>
-    <a class="mode-link secondary" href="{'home.html' if ch.get('is_root') else '../home.html'}">查看完整课程地图</a>
+    <a class="mode-link secondary" href="{'courses.html' if ch.get('is_root') else '../courses.html'}">查看完整课程地图</a>
   </div>
 </section>'''
 
@@ -90,7 +89,8 @@ def build_chapter_page(ch: dict, idx: int, chapters: list[dict], modules_by_id: 
     is_root = ch.get("is_root", False)
     from_article = not is_root
     asset_path = "../assets/" if from_article else "assets/"
-    home_link = "../home.html" if from_article else "home.html"
+    home_link = "../index.html" if from_article else "index.html"
+    courses_link = "../courses.html" if from_article else "courses.html"
     stories_link = "../stories/index.html" if from_article else "stories/index.html"
     module = modules_by_id[ch["module"]]
     content = (BASE / "content" / f"{ch['slug']}.html").read_text(encoding="utf-8")
@@ -144,6 +144,7 @@ def build_chapter_page(ch: dict, idx: int, chapters: list[dict], modules_by_id: 
 {SITE_ICON}
 <style>:root {{ --theme: {esc(ch['theme'])}; --theme-rgb: {esc(ch['theme_rgb'])}; --module-theme: {esc(module['theme'])}; }}</style>
 <link rel="stylesheet" href="{asset_path}editorial.css">
+<link rel="stylesheet" href="{asset_path}experience.css">
 </head>
 <body data-page="lesson" data-default-mode="learn">
 <a class="skip-link" href="#lesson-content">跳到正文</a>
@@ -155,7 +156,7 @@ def build_chapter_page(ch: dict, idx: int, chapters: list[dict], modules_by_id: 
 <div class="grid-bg"></div>
 <nav class="topnav">
   <a href="{home_link}" class="topnav-logo">分析手册</a>
-  <div class="topnav-links"><a href="{home_link}">系统课程</a><a href="{'../topics/index.html' if from_article else 'topics/index.html'}">专题课程</a><a href="{stories_link}">业务案例</a></div>
+  <div class="topnav-links"><a class="active" href="{courses_link}">系统课程</a><a href="{'../topics/index.html' if from_article else 'topics/index.html'}">专题课程</a><a href="{stories_link}">业务案例</a></div>
 </nav>
 <main class="page lesson-page" id="lesson-content">
   <header class="lesson-header">
@@ -171,6 +172,7 @@ def build_chapter_page(ch: dict, idx: int, chapters: list[dict], modules_by_id: 
 
   <div id="learn-mode" class="learning-mode active">
     {learning_intro}
+    {build_framework_visual(ch)}
     <div class="lesson-body">{content}</div>
   </div>
   <div id="review-mode" class="learning-mode">{review_html}</div>
@@ -189,6 +191,17 @@ window.COURSE_MODULES = {json.dumps(list(modules_by_id.values()), ensure_ascii=F
 </html>'''
 
 
+def build_framework_visual(ch: dict) -> str:
+    nodes = "".join(
+        f'<li><span>{idx:02d}</span><strong>{esc(item)}</strong></li>'
+        for idx, item in enumerate(ch.get("framework", []), 1)
+    )
+    return f'''<section class="lesson-framework reveal" aria-label="本章判断路径">
+  <div class="lesson-framework__intro"><span>本章判断路径</span><p>先理解顺序，再进入细节。每一步都应该缩小问题，而不是增加术语。</p></div>
+  <ol>{nodes}</ol>
+</section>'''
+
+
 def module_card(module: dict, chapters: list[dict]) -> str:
     return f'''
 <a class="module-card" href="#module-{esc(module['id'])}" style="--module-card-theme:{esc(module['theme'])}">
@@ -201,35 +214,58 @@ def module_card(module: dict, chapters: list[dict]) -> str:
 
 def chapter_card(ch: dict) -> str:
     type_names = {"guide":"指南","case":"业务实战","concept":"方法理解","interview":"面试训练","career":"职业迁移"}
-    visual = ""
-    card_class = "course-card reveal"
-    if ch.get("visual"):
-        card_class += " has-visual"
-        visual = f'<div class="course-card-visual"><img src="{esc(ch["visual"])}" alt="{esc(ch.get("visual_alt", ""))}" loading="lazy" decoding="async"></div>'
+    steps = "".join(f"<i title=\"{esc(item)}\"></i>" for item in ch.get("framework", [])[:5])
     return f'''
-<a href="{chapter_href(ch)}" class="{card_class}" style="--card-theme:{esc(ch['theme'])}">
+<a href="{chapter_href(ch)}" class="course-card reveal" style="--card-theme:{esc(ch['theme'])}">
   <div class="course-card-num">{esc(ch['num'])}</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>{esc(type_names.get(ch.get('content_type'),'课程'))}</span><em>{esc(ch.get('duration',10))} 分钟</em></div><h3>{esc(ch['short_title'])}</h3><p>{esc(ch['description'])}</p></div>
-  {visual}<span class="course-card-arrow">→</span>
+  <div class="course-card-content"><div class="course-card-meta"><span>{esc(type_names.get(ch.get('content_type'),'课程'))}</span><em>{esc(ch.get('duration',10))} 分钟</em></div><h3>{esc(ch['short_title'])}</h3><p>{esc(ch['description'])}</p><div class="course-card-path" aria-label="{len(ch.get('framework', []))}步学习路径">{steps}</div></div>
+  <span class="course-card-arrow">→</span>
 </a>'''
 
 
 def story_card(story: dict, href_prefix="stories/", show_visual: bool = False) -> str:
     tags = "".join(f"<span>{esc(tag)}</span>" for tag in story["tags"][:3])
-    card_class = "story-library-card reveal"
-    visual = ""
-    if show_visual and story.get("visual"):
-        card_class += " story-library-card-featured"
-        visual = f'<div class="story-card-visual"><img src="{esc(story["visual"])}" alt="{esc(story.get("visual_alt", ""))}" loading="lazy" decoding="async"><span>MODEL INCIDENT · LIVE</span></div>'
+    n = int(story["num"])
+    values = [26 + ((n * 17 + i * 23) % 58) for i in range(7)]
+    bars = "".join(f'<i style="--v:{v}%"></i>' for v in values)
+    visual = f'''<div class="story-card-signal" aria-hidden="true"><div><span>{esc(story['category'])}</span><b>CASE {esc(story['num'])}</b></div><div class="story-card-bars">{bars}</div><em>?</em></div>'''
     return f'''
-<a class="{card_class}" href="{href_prefix}{esc(story['output'])}" data-category="{esc(story['category'])}" data-title="{esc(story['title'])} {' '.join(story['tags'])}">
+<a class="story-library-card reveal" href="{href_prefix}{esc(story['output'])}" data-category="{esc(story['category'])}" data-title="{esc(story['title'])} {' '.join(story['tags'])}">
   <div class="story-card-head"><span>案例 {esc(story['num'])}</span><em>{esc(story['difficulty'])} · {esc(story['duration'])} 分钟</em></div>
   {visual}<h3>{esc(story['title'])}</h3><p>{esc(story['subtitle'])}</p>
-  <div class="story-card-tags">{tags}</div><strong>开始分析 <i>→</i></strong>
+  <div class="story-card-tags">{tags}</div><strong>进入现场 <i>→</i></strong>
 </a>'''
 
 
-def build_home(chapters: list[dict], modules: list[dict], stories: list[dict], topics: list[dict]) -> str:
+def build_landing(chapters: list[dict], modules: list[dict], stories: list[dict], topics: list[dict]) -> str:
+    first_lesson = chapter_href(chapters[0])
+    return f'''<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="在真实业务问题中练习定义、验证、决策与表达。"><title>分析手册 · 练习在不确定中做判断</title>
+<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/editorial.css"><link rel="stylesheet" href="assets/experience.css">{SITE_ICON}</head>
+<body data-page="landing"><a class="skip-link" href="#main">跳到正文</a>
+<nav class="topnav"><a href="index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="courses.html">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div></nav>
+<main class="landing" id="main">
+  <section class="landing-hero">
+    <div class="landing-hero__copy"><p class="landing-eyebrow">ANALYST HANDBOOK · 2026</p><h1>在不确定中，<br><span>练习做判断。</span></h1><p class="landing-lead">不是背更多框架，而是学习如何把模糊问题变成证据、选择与行动。系统课建立方法，专题拆透机制，业务案例检验你是否真的会用。</p><div class="home-actions"><a class="primary" href="courses.html">开始建立框架</a><a href="stories/index.html">直接进入案例</a></div></div>
+    <div class="landing-hero__canvas" aria-label="从异常信号到业务判断的过程示意">
+      <div class="canvas-head"><span>LIVE BRIEF · 09:30</span><strong>新用户次日打卡率异常</strong></div>
+      <div class="canvas-signal"><span>45%</span><i></i><i></i><i></i><i></i><i class="fall"></i><i class="fall"></i><i class="fall"></i><b>33%</b></div>
+      <ol class="canvas-reasoning"><li class="done"><b>01</b><span>异常是真的吗？</span><em>口径与埋点已确认</em></li><li class="active"><b>02</b><span>问题发生在哪？</span><em>正在检查渠道结构</em></li><li><b>03</b><span>为什么发生？</span><em>等待行为证据</em></li></ol>
+      <div class="canvas-note"><span>当前判断</span><strong>先缩小范围，不急着宣布根因。</strong></div>
+    </div>
+  </section>
+  <section class="landing-modes" aria-labelledby="modes-title"><header><p>一个系统 · 三种学习模式</p><h2 id="modes-title">不同内容，应该带来不同的学习动作</h2></header><div class="mode-grid">
+    <a class="mode-card mode-card--course" href="courses.html"><span>01 · 建立框架</span><h3>系统课程</h3><p>沿一条完整业务主线，理解问题定义、分析顺序、方法选择与面试表达。</p><div class="mode-course-visual"><i></i><i></i><i></i><i></i><i></i></div><strong>{len(chapters)} 章 · 连续学习 →</strong></a>
+    <a class="mode-card mode-card--topic" href="topics/index.html"><span>02 · 拆透方法</span><h3>专题课程</h3><p>播放过程、改变参数、观察边界。让 SQL、实验和机器学习真正“发生”在眼前。</p><div class="mode-topic-visual"><i>A</i><b>→</b><i>B</i><b>→</b><i>?</i></div><strong>{len(topics)} 个专题 · 过程演示 →</strong></a>
+    <a class="mode-card mode-card--case" href="stories/index.html"><span>03 · 进入现场</span><h3>业务案例</h3><p>接收有限证据，面对误导线索，做出选择并看到判断带来的后果。</p><div class="mode-case-visual"><span>证据 01</span><span>证据 02</span><em>你的判断？</em></div><strong>{len(stories)} 个案例 · 决策训练 →</strong></a>
+  </div></section>
+  <section class="learning-loop"><div><p>学习闭环</p><h2>内容不是被“看完”的，<br>而是被反复调用的。</h2></div><ol><li><span>01</span><strong>理解</strong><p>建立概念和判断顺序。</p></li><li><span>02</span><strong>观察</strong><p>看证据如何改变结论。</p></li><li><span>03</span><strong>决策</strong><p>在限制条件下选择行动。</p></li><li><span>04</span><strong>复盘</strong><p>解释误判、边界与迁移。</p></li></ol></section>
+  <section class="landing-start"><p>如果你第一次来到这里</p><h2>先完成第一章，建立这套手册的使用方式。</h2><a href="{first_lesson}">开始第 01 章 <span>→</span></a></section>
+</main><footer class="site-footer"><span>分析手册</span><p>为真实业务判断而设计，不为堆积知识而设计。</p></footer><script src="assets/main.js"></script></body></html>'''
+
+
+def build_course_index(chapters: list[dict], modules: list[dict], stories: list[dict], topics: list[dict]) -> str:
     module_sections = []
     module_cards = []
     for module in modules:
@@ -240,45 +276,16 @@ def build_home(chapters: list[dict], modules: list[dict], stories: list[dict], t
   <header><div><span>阶段 {esc(module['num'])} · {esc(module['eyebrow'])}</span><h2>{esc(module['title'])}</h2><p>{esc(module['description'])}</p></div><strong>{esc(module['outcome'])}</strong></header>
   <div class="course-list">{''.join(chapter_card(ch) for ch in items)}</div>
 </section>''')
-    topic_rows = []
-    for topic in topics:
-        topic_rows.append(f'''
-<a class="home-topic-row" href="topics/{esc(topic['output'])}">
-  <span>{esc(topic['num'])}</span>
-  <div><small>{esc(topic['category'])}</small><h3>{esc(topic['title'])}</h3><p>{esc(topic['subtitle'])}</p></div>
-  <strong>{esc(topic['duration'])} 分钟 →</strong>
-</a>''')
-    featured = sorted(
-        (story for story in stories if story.get("featured")),
-        key=lambda story: (story.get("featured_rank", 99), int(story["num"]))
-    )[:3]
     return f'''<!DOCTYPE html>
-<html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="从业务问题出发，系统学习数据分析、实验设计、机器学习与面试表达。">
-<title>分析手册 · 数据分析学习与面试训练</title>
-<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/editorial.css">{SITE_ICON}</head>
-<body data-page="home">
-<nav class="topnav"><a href="home.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a class="active" href="#course-map">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div></nav>
-<main class="home-page">
-  <section class="home-hero">
-    <div class="home-hero-main"><div class="home-kicker">数据分析 · 业务判断 · 面试表达</div><h1>从业务问题出发，<br><span>练习如何做判断</span></h1><p>这不是一份软件说明书，也不是算法清单。课程保留必要的知识讲解，再用过程演示、失败案例和面试追问，帮助你把“知道”变成能够解释、验证和行动。</p><div class="home-actions"><a class="primary" href="index.html">从系统课程开始</a><a href="topics/index.html">查看专题课程</a></div></div>
-    <aside class="home-hero-visual" aria-label="业务异常分析过程示意">
-      <div class="visual-window-head"><span><i></i><i></i><i></i></span><strong>DECISION LAB · LIVE CASE</strong><em>09:42</em></div>
-      <div class="visual-window-body">
-        <div class="signal-summary"><div><span>异常信号</span><small>支付转化率 · 过去 2 小时</small></div><strong>−18.6%</strong></div>
-        <div class="signal-chart" aria-hidden="true"><span style="--h:34%"></span><span style="--h:48%"></span><span style="--h:44%"></span><span style="--h:61%"></span><span style="--h:58%"></span><span style="--h:72%"></span><span style="--h:67%"></span><span class="drop" style="--h:39%"></span><span class="drop" style="--h:31%"></span><span class="drop" style="--h:26%"></span><b>版本 4.8 发布</b></div>
-        <div class="evidence-path"><article class="done"><b>01</b><span>数据可信？</span><em>已确认</em></article><article class="active"><b>02</b><span>范围在哪？</span><em>定位中</em></article><article><b>03</b><span>机制是什么？</span><em>待验证</em></article></div>
-        <div class="visual-conclusion"><span>下一步</span><strong>检查 Android 4.8 的授权链路</strong><i>→</i></div>
-      </div>
-    </aside>
-  </section>
-  <nav class="home-compass" aria-label="选择学习方式"><a href="#course-map"><b>01</b><div><span>第一次系统学习</span><strong>按阶段建立完整框架</strong><p>适合从头梳理业务分析与面试表达。</p></div></a><a href="#topics"><b>02</b><div><span>针对薄弱点深入</span><strong>进入专题课程</strong><p>保留详细原理、过程演示和失败边界。</p></div></a><a href="stories/index.html"><b>03</b><div><span>直接练习业务判断</span><strong>进入案例库</strong><p>面对证据，判断先查什么、为何这样查。</p></div></a></nav>
-  <section class="home-section" id="course-map"><header class="home-section-heading"><span>系统课程</span><h2>五个阶段，建立稳定的分析能力</h2><p>前四个阶段连接业务分析、方法选择与表达；机器学习不是附加算法清单，而是从问题定义、上线条件和失败复盘开始。</p></header><div class="module-grid">{''.join(module_cards)}</div></section>
-  {''.join(module_sections)}
-  <section class="home-section" id="topics"><header class="home-section-heading"><span>专题深入</span><h2>把关键知识讲透，而不是只留下结论</h2><p>SQL 聚焦业务数据结构与高频题型，Python 进入综合分析，实验与机器学习保留原理、判断过程和面试追问。</p></header><div class="home-topic-list">{''.join(topic_rows)}</div><div class="center-action"><a href="topics/index.html">查看全部专题 →</a></div></section>
-  <section class="home-section featured-stories"><header class="home-section-heading"><span>业务案例</span><h2>换一个问题，检验你是否真的会用</h2><p>案例不会替你重复概念，而是给出不完整信息，让你观察证据、识别误判，并说明下一步行动。</p></header><div class="story-library-grid">{''.join(story_card(s, show_visual=True) for s in featured)}</div><div class="center-action"><a href="stories/index.html">进入全部案例 →</a></div></section>
-</main><script src="assets/main.js"></script></body></html>'''
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="28章系统课程：从业务问题、分析方法到机器学习与面试表达。"><title>系统课程 · 分析手册</title>
+<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/editorial.css"><link rel="stylesheet" href="assets/experience.css">{SITE_ICON}</head>
+<body data-page="courses"><nav class="topnav"><a href="index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a class="active" href="courses.html">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div></nav>
+<main class="course-index">
+<header class="course-index-hero"><div><p>系统课程 · {len(chapters)} 章</p><h1>先建立一条<br>稳定的判断路径</h1></div><div><p>课程不是 28 篇彼此独立的文章。它从一场业务异常开始，逐步进入方法选择、面试表达和机器学习决策。</p><a href="{chapter_href(chapters[0])}">从第 01 章开始 →</a></div></header>
+<nav class="module-grid" aria-label="课程阶段">{''.join(module_cards)}</nav>
+{''.join(module_sections)}
+</main><footer class="site-footer"><span>系统课程</span><p>问题 → 证据 → 方法 → 决策 → 表达</p></footer><script src="assets/main.js"></script></body></html>'''
 
 
 def build_story_index(stories: list[dict]) -> str:
@@ -291,11 +298,11 @@ def build_story_index(stories: list[dict]) -> str:
     return f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="{story_count}个沉浸式业务案例，覆盖指标、用户、商品、活动、经营诊断与机器学习决策。">
-<title>业务案例 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/story-library.css"><link rel="stylesheet" href="../assets/editorial.css">{SITE_ICON}</head>
+<title>业务案例 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/story-library.css"><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css">{SITE_ICON}</head>
 <body data-page="story-library"><div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div>
-<nav class="topnav"><a href="../home.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../home.html">系统课程</a><a href="../topics/index.html">专题课程</a><a class="active" href="index.html">业务案例</a></div></nav>
+<nav class="topnav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../courses.html">系统课程</a><a href="../topics/index.html">专题课程</a><a class="active" href="index.html">业务案例</a></div></nav>
 <main class="story-library-page">
-  <header class="story-library-hero"><div class="story-hero-copy"><div class="home-kicker">业务案例</div><h1>信息并不完整，<br><span>你仍然要做判断</span></h1><p>先接收任务，再观察证据、选择方向、验证假设。案例不会替你重复概念，而是让你真正经历一次业务分析。</p><div class="home-actions"><a class="primary" href="{esc(stories[0]['output'])}">进入第一个案例</a><a href="#story-catalog">浏览全部案例</a></div></div><div class="case-preview" aria-label="案例任务示意"><div class="case-preview-head"><span>CASE 07</span><em>限时决策</em></div><h2>大促 GMV 上升，<br>为什么利润反而下降？</h2><div class="case-clues"><span>客单价 <b>+12%</b></span><span>毛利率 <b>−8.4%</b></span><span>退款率 <b>+5.7%</b></span></div><div class="case-preview-action"><i></i><span>还有 3 条证据尚未查看</span><b>→</b></div></div></header>
+  <header class="story-library-hero"><div class="story-hero-copy"><div class="home-kicker">业务案例</div><h1>信息并不完整，<br><span>你仍然要做判断</span></h1><p>先接收任务，再观察证据、选择方向、验证假设。案例不会替你重复概念，而是让你真正经历一次业务分析。</p><div class="home-actions"><a class="primary" href="{esc(stories[0]['output'])}">进入第一个案例</a><a href="#story-catalog">浏览全部案例</a></div></div><div class="case-preview" aria-label="案例任务示意"><div class="case-preview-head"><span>CASE 01</span><em>限时决策</em></div><h2>大促 GMV 上升，<br>为什么利润反而下降？</h2><div class="case-clues"><span>客单价 <b>+12%</b></span><span>毛利率 <b>−8.4%</b></span><span>退款率 <b>+5.7%</b></span></div><div class="case-preview-action"><i></i><span>还有 3 条证据尚未查看</span><b>→</b></div></div></header>
   <section class="library-guide"><article><span>01</span><strong>进入任务</strong><p>明确角色、时限和业务交付。</p></article><article><span>02</span><strong>查看证据</strong><p>从数据与业务事件中寻找线索。</p></article><article><span>03</span><strong>形成判断</strong><p>区分相关、假设和已验证根因。</p></article><article><span>04</span><strong>迁移复盘</strong><p>记录误判、证据与下一步行动。</p></article></section>
   <section class="story-catalog" id="story-catalog"><div class="catalog-toolbar"><div><span>案例目录 · 共 {story_count} 篇</span><h2>选择一个业务问题</h2></div><label class="story-search"><span>搜索</span><input id="story-search" type="search" placeholder="标题、能力或标签"></label></div><div class="story-filters" role="group" aria-label="案例分类">{filters}</div><div id="story-grid" class="story-library-grid">{''.join(story_card(s, '') for s in stories)}</div><p id="story-empty" class="story-empty" hidden>没有找到匹配案例，换一个关键词试试。</p></section>
 </main><script src="../assets/main.js"></script><script src="../assets/story-library.js"></script></body></html>'''
@@ -315,8 +322,8 @@ def build_topic_index(topics: list[dict]) -> str:
     return f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="围绕业务 SQL、Python 综合分析、机器学习和 A/B 测试组织的专题课程。">
-<title>专题课程 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css"><link rel="stylesheet" href="../assets/editorial.css">{SITE_ICON}</head>
-<body class="topic-body" data-page="topic-index"><nav class="topnav topic-nav"><a href="../home.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../home.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
+<title>专题课程 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css"><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css">{SITE_ICON}</head>
+<body class="topic-body" data-page="topic-index"><nav class="topnav topic-nav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../courses.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
 <main class="topic-index"><header class="topic-index-hero"><div class="topic-index-copy"><p>专题课程</p><h1>看见方法<br>如何发生</h1><div>这里不按软件菜单或算法名堆知识。每一节从一个具体问题开始，用连续演示解释判断过程、实现方法、失败边界和面试表达。</div></div><div class="topic-index-visual" aria-hidden="true"><span class="topic-orbit orbit-one">SQL</span><span class="topic-orbit orbit-two">Python</span><span class="topic-orbit orbit-three">实验</span><span class="topic-orbit orbit-four">ML</span><strong>业务<br>问题</strong><i></i></div></header>
 <section class="topic-list" aria-label="专题课程列表">{''.join(rows)}</section>
 <section class="topic-note"><h2>内容怎么读</h2><p>先看过程演示，理解为什么这样判断；再读下方的知识解释和失败案例。动画是正文的一部分，不是装饰，也不会代替完整文字。</p></section>
@@ -341,9 +348,9 @@ def build_topic_page(topic: dict, idx: int, topics: list[dict]) -> str:
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="{esc(topic['subtitle'])}"><title>{esc(topic['title'])} · 专题课程</title>
 <link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css">{SITE_ICON}
-<style>:root{{--theme:{esc(topic['theme'])};--theme-rgb:{esc(topic['theme_rgb'])}}}</style><link rel="stylesheet" href="../assets/editorial.css"></head>
+<style>:root{{--theme:{esc(topic['theme'])};--theme-rgb:{esc(topic['theme_rgb'])}}}</style><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css"></head>
 <body class="topic-body" data-page="topic"><a class="skip-link" href="#topic-content">跳到正文</a>
-<nav class="topnav topic-nav"><a href="../home.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../home.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
+<nav class="topnav topic-nav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../courses.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
 <main class="topic-page" id="topic-content"><header class="topic-hero"><div class="topic-breadcrumb"><a href="index.html">专题课程</a><span>/</span><span>{esc(topic['category'])}</span></div><p class="topic-number">{esc(topic['num'])} · {esc(topic['level'])} · {esc(topic['duration'])} 分钟</p><h1>{esc(topic['title'])}</h1><div class="topic-lead">{esc(topic['subtitle'])}</div></header>
 <section class="topic-objectives" aria-labelledby="objectives-title"><h2 id="objectives-title">这一节要解决什么</h2><ol>{objectives}</ol></section>
 {content}
@@ -351,13 +358,17 @@ def build_topic_page(topic: dict, idx: int, topics: list[dict]) -> str:
 <script src="../assets/topic-course.js"></script></body></html>'''
 
 def inject_story_shell(source: str, story: dict, prev_story: dict | None, next_story: dict | None, story_count: int) -> str:
-    head_extra = '<link rel="icon" href="data:,">\n<link rel="stylesheet" href="../assets/story-shell.css">\n'
+    head_extra = '<link rel="icon" href="data:,">\n<link rel="stylesheet" href="../assets/story-shell.css">\n<link rel="stylesheet" href="../assets/experience-story.css">\n'
     if "</head>" in source:
         source = source.replace("</head>", head_extra + "</head>", 1)
+    if "<body>" in source:
+        source = source.replace("<body>", f'<body class="case-story" data-story="{esc(story["id"])}">', 1)
+    elif re.search(r"<body\s+", source, flags=re.I):
+        source = re.sub(r"<body\s+", f'<body class="case-story" data-story="{esc(story["id"])}" ', source, count=1, flags=re.I)
     meta = {
         "id": story["id"], "num": story["num"], "title": story["title"], "subtitle": story["subtitle"],
         "category": story["category"], "duration": story["duration"], "tags": story["tags"],
-        "indexHref": "index.html", "homeHref": "../home.html", "storyCount": story_count,
+        "indexHref": "index.html", "homeHref": "../index.html", "storyCount": story_count,
         "prev": {"title": prev_story["title"], "href": prev_story["output"]} if prev_story else None,
         "next": {"title": next_story["title"], "href": next_story["output"]} if next_story else None,
     }
@@ -382,11 +393,13 @@ def build():
     (BASE / "topics").mkdir(exist_ok=True)
 
     for idx, ch in enumerate(chapters):
-        output = BASE / ("index.html" if ch.get("is_root") else f"articles/{ch['slug']}.html")
+        output = BASE / f"articles/{ch['slug']}.html"
         write_output(output, build_chapter_page(ch, idx, chapters, modules_by_id))
         print(f"  COURSE {ch['num']} · {ch['short_title']}")
 
-    write_output(BASE / "home.html", build_home(chapters, modules, stories, topics))
+    write_output(BASE / "index.html", build_landing(chapters, modules, stories, topics))
+    write_output(BASE / "home.html", build_landing(chapters, modules, stories, topics))
+    write_output(BASE / "courses.html", build_course_index(chapters, modules, stories, topics))
     write_output(BASE / "stories/index.html", build_story_index(stories))
     write_output(BASE / "topics/index.html", build_topic_index(topics))
 

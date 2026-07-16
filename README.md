@@ -2,7 +2,7 @@
 
 > 不背标准答案，而是在真实业务问题中练习：如何定义问题、寻找证据、做出判断，并把结论讲清楚。
 
-[系统课程](https://silentglow.github.io/analyst-handbook/home.html) · [专题课程](https://silentglow.github.io/analyst-handbook/topics/) · [业务案例](https://silentglow.github.io/analyst-handbook/stories/)
+[系统课程](https://silentglow.github.io/analyst-handbook/courses.html) · [专题课程](https://silentglow.github.io/analyst-handbook/topics/) · [业务案例](https://silentglow.github.io/analyst-handbook/stories/)
 
 ## 这是什么
 
@@ -29,7 +29,7 @@
 
 ### 第一次系统学习
 
-从[课程首页](https://silentglow.github.io/analyst-handbook/home.html)开始，按五个阶段依次学习。先建立完整分析框架，再根据自己的薄弱点选择专题或业务案例，不必一次读完全部内容。
+从[课程首页](https://silentglow.github.io/analyst-handbook/courses.html)开始，按五个阶段依次学习。先建立完整分析框架，再根据自己的薄弱点选择专题或业务案例，不必一次读完全部内容。
 
 ### 面试前快速复习
 
@@ -79,7 +79,7 @@
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-然后打开 `http://127.0.0.1:8765/home.html`。普通学习者不需要运行构建脚本。
+然后打开 `http://127.0.0.1:8765/`。普通学习者不需要运行构建脚本。
 
 ## 参与维护
 
@@ -97,7 +97,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 python3 build.py
 ```
 
-`home.html`、`index.html`、`articles/`、`topics/` 和 `stories/` 中的页面会由构建器统一生成。关于新内容应该写成课程、故事、知识卡还是练习，以及机器学习案例的准入规则，请阅读 [CONTENT_GUIDE.md](CONTENT_GUIDE.md)。
+`index.html`、`home.html`、`courses.html`、`articles/`、`topics/` 和 `stories/` 中的页面会由构建器统一生成。关于新内容应该写成课程、故事、知识卡还是练习，以及机器学习案例的准入规则，请阅读 [CONTENT_GUIDE.md](CONTENT_GUIDE.md)。
 
 ## 内容原则
 

@@ -1,145 +1,24 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="面试官到底在考什么？怎么学才有效？建立正确的分析思维。">
-<title>数据分析面试速通课 · 学习指南 · 数据分析面试速通课</title>
-<link rel="stylesheet" href="assets/style.css">
-<link rel="icon" href="data:,">
-<style>:root { --theme: #5eead4; --theme-rgb: 94,234,212; --module-theme: #5eead4; }</style>
-<link rel="stylesheet" href="assets/editorial.css">
-</head>
-<body data-page="lesson" data-default-mode="learn">
-<a class="skip-link" href="#lesson-content">跳到正文</a>
-<div class="site-progress" style="--lesson-progress:17%"><span></span></div>
-<div class="ambient-bg" aria-hidden="true">
-  <div class="orb orb-one" style="background:radial-gradient(circle,rgba(94,234,212,0.12),transparent 70%)"></div>
-  <div class="orb orb-two"></div><div class="orb orb-three"></div>
-</div>
-<div class="grid-bg"></div>
-<nav class="topnav">
-  <a href="home.html" class="topnav-logo">分析手册</a>
-  <div class="topnav-links"><a href="home.html">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div>
-</nav>
-<main class="page lesson-page" id="lesson-content">
-  <header class="lesson-header">
-    <div class="module-line"><span>阶段 01</span><strong>完成第一场业务分析</strong><em>1/6</em></div>
-    <div class="ch-badge">CH01 / 学习指南</div>
-    <h1 class="ch-title static-title">数据分析面试速通课 · 学习指南</h1>
-    <p class="ch-subtitle lesson-description">面试官到底在考什么？怎么学才有效？建立正确的分析思维。</p>
-    <div class="mode-switch" role="group" aria-label="阅读模式">
-      <button type="button" class="active" data-mode-target="learn"><span>完整学习</span><small>案例、原理与推导</small></button>
-      <button type="button" data-mode-target="review"><span>面试速览</span><small>主线、答案与失分点</small></button>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="在真实业务问题中练习定义、验证、决策与表达。"><title>分析手册 · 练习在不确定中做判断</title>
+<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/editorial.css"><link rel="stylesheet" href="assets/experience.css"><link rel="icon" href="data:,"></head>
+<body data-page="landing"><a class="skip-link" href="#main">跳到正文</a>
+<nav class="topnav"><a href="index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="courses.html">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div></nav>
+<main class="landing" id="main">
+  <section class="landing-hero">
+    <div class="landing-hero__copy"><p class="landing-eyebrow">ANALYST HANDBOOK · 2026</p><h1>在不确定中，<br><span>练习做判断。</span></h1><p class="landing-lead">不是背更多框架，而是学习如何把模糊问题变成证据、选择与行动。系统课建立方法，专题拆透机制，业务案例检验你是否真的会用。</p><div class="home-actions"><a class="primary" href="courses.html">开始建立框架</a><a href="stories/index.html">直接进入案例</a></div></div>
+    <div class="landing-hero__canvas" aria-label="从异常信号到业务判断的过程示意">
+      <div class="canvas-head"><span>LIVE BRIEF · 09:30</span><strong>新用户次日打卡率异常</strong></div>
+      <div class="canvas-signal"><span>45%</span><i></i><i></i><i></i><i></i><i class="fall"></i><i class="fall"></i><i class="fall"></i><b>33%</b></div>
+      <ol class="canvas-reasoning"><li class="done"><b>01</b><span>异常是真的吗？</span><em>口径与埋点已确认</em></li><li class="active"><b>02</b><span>问题发生在哪？</span><em>正在检查渠道结构</em></li><li><b>03</b><span>为什么发生？</span><em>等待行为证据</em></li></ol>
+      <div class="canvas-note"><span>当前判断</span><strong>先缩小范围，不急着宣布根因。</strong></div>
     </div>
-  </header>
-
-  <div id="learn-mode" class="learning-mode active">
-
-<section class="lesson-brief reveal">
-  <div class="lesson-brief-main">
-    <div class="section-eyebrow">本章目标</div>
-    <h2>完成这一章，你应该能够</h2>
-    <ul><li>理解数据分析面试真正评估的四类能力</li><li>学会使用课程、案例故事与复习模式</li></ul>
-  </div>
-  <div class="lesson-brief-side">
-    <span>6 MIN</span>
-    <strong>学习指南</strong>
-  </div>
-</section>
-    <div class="lesson-body">  <div class="content-kicker reveal">START HERE · 先看清终点</div>
-  <h2 class="content-title reveal">你不是来“看完 24 章”的，而是来建立一套稳定的业务分析动作。</h2>
-  <p class="p reveal">数据分析面试最让人不舒服的地方，是题目看起来每次都不一样：留存下降、活动复盘、用户分层、AB 实验、商业化增长……但面试官真正观察的，始终是你如何把一个模糊问题变成一条可信的决策链。</p>
-
-  <div class="mini-grid reveal">
-    <article class="mini-card"><span>01 · 定义</span><h3>把问题问准确</h3><p>明确业务目标、指标口径、时间范围和限制条件，不急着猜原因。</p></article>
-    <article class="mini-card"><span>02 · 拆解</span><h3>给出有顺序的框架</h3><p>从整体到局部、从现象到机制，让每一步都能缩小问题范围。</p></article>
-    <article class="mini-card"><span>03 · 验证</span><h3>用证据淘汰假设</h3><p>区分线索、假设和根因，说明还需要什么数据才能确认判断。</p></article>
-    <article class="mini-card"><span>04 · 决策</span><h3>让分析进入行动</h3><p>把结论转成策略、优先级、风险和监控，而不是停在“数据有变化”。</p></article>
-  </div>
-
-  <div class="glow-box reveal">
-    <p>好的面试回答不是“我知道多少”，<br>而是“我能否让你跟得上我的判断”。</p>
-  </div>
-
-  <div class="content-kicker reveal">THREE EXPERIENCES · 三种学习体验</div>
-  <h2 class="content-title reveal">沉浸感不等于一直看特效，而是每一步都知道自己为什么继续。</h2>
-  <p class="p reveal">这套内容把“理解、迁移、记忆”分开处理。你不需要在每个页面承受同样的信息密度，也不必把所有内容都硬塞进课程正文。</p>
-
-  <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>核心课程 · 建立主线</div>
-    <div class="card-title">跟着一个完整任务，学习分析顺序</div>
-    <div class="card-body"><p>28 章课程分为五个阶段：完成第一场业务分析、高频分析工具箱、把分析变成面试答案、模拟面试与职业迁移。这里追求的是结构稳定，不追求把每个知识点都讲到最深。</p></div>
-  </div>
-
-  <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>案例故事 · 练习判断</div>
-    <div class="card-title">进入另一个业务现场，在答案出现前先做选择</div>
-    <div class="card-body"><p>26 个案例覆盖经营、用户、商品、营销和增长。故事不会机械重复课程，而是故意改变行业、数据和约束，检验你能否把同一个方法迁移过去。</p></div>
-  </div>
-
-  <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>面试速览 · 压缩表达</div>
-    <div class="card-title">只保留框架、90 秒回答和常见失分点</div>
-    <div class="card-body"><p>每章顶部都可以切换到“面试速览”。第一次学习用完整模式，面试前回顾则直接看主线，避免重新阅读全部正文造成疲惫。</p></div>
-  </div>
-
-  <div class="content-note reveal"><strong>建议节奏：</strong>第一次进入一章时先完成完整学习；完成一个阶段后，自行选择一个陌生业务案例检验判断；隔一天只用面试速览复述 90 秒答案。看懂、做过、说出，是三个不同动作。</div>
-
-  <div class="content-kicker reveal">FIVE STAGES · 课程地图</div>
-  <h2 class="content-title reveal">先完成业务闭环，再扩充工具，最后训练面试输出。</h2>
-
-  <div class="card reveal">
-    <div class="step"><span class="step-num">M01</span><div><div class="step-title">完成第一场业务分析</div><div class="step-desc">从理解业务、搭指标、排查异动，到设计实验和落地策略，走完一条完整分析链。</div></div></div>
-    <div class="step"><span class="step-num">M02</span><div><div class="step-title">高频分析工具箱</div><div class="step-desc">补齐漏斗、留存、用户分层、归因、实验和统计陷阱等高频能力。</div></div></div>
-    <div class="step"><span class="step-num">M03</span><div><div class="step-title">把分析变成面试答案</div><div class="step-desc">在时间限制下组织异动分析、费米估算、产品与商业题的表达。</div></div></div>
-    <div class="step"><span class="step-num">M04</span><div><div class="step-title">模拟面试与职业迁移</div><div class="step-desc">完成整场模拟，形成个人项目故事，并把方法迁移到新的行业和岗位。</div></div></div>
-  </div>
-
-  <div class="content-kicker reveal">YOUR OUTPUT · 你最终要带走什么</div>
-  <div class="card card-accent reveal">
-    <div class="card-title">学完后，请不要只留下“已读”状态。</div>
-    <div class="card-body">
-      <p>你应该留下四份可以反复使用的成果：一套通用分析主线、一组代表性业务案例、若干 90 秒口头答案，以及一份能够讲清楚价值的个人项目故事。</p>
-      <p><strong>判断自己是否真正掌握的方法很简单：</strong>关闭页面后，你能否独立说明“先做什么、为什么、看到什么后改变方向、最后如何行动”。</p>
-    </div>
-  </div>
-</div>
-  </div>
-  <div id="review-mode" class="learning-mode">
-<section class="review-sheet" aria-label="面试速览">
-  <div class="review-kicker">INTERVIEW REVIEW · 6 分钟课程 · 2 分钟回顾</div>
-  <h2>先记住这条主线</h2>
-  <div class="framework-track"><div class="framework-node"><span>01</span><strong>定义问题</strong></div><div class="framework-node"><span>02</span><strong>结构化拆解</strong></div><div class="framework-node"><span>03</span><strong>用数据验证</strong></div><div class="framework-node"><span>04</span><strong>形成业务决策</strong></div><div class="framework-node"><span>05</span><strong>清晰表达</strong></div></div>
-  <div class="review-grid">
-    <article class="review-card review-card-answer">
-      <div class="review-label">90 秒回答核心</div>
-      <p>面试官不只看工具熟练度，更关注你能否把模糊业务问题转化为可验证的分析，并推动形成决策。</p>
-    </article>
-    <article class="review-card">
-      <div class="review-label">本章学习目标</div>
-      <ul class="review-list"><li>理解数据分析面试真正评估的四类能力</li><li>学会使用课程、案例故事与复习模式</li></ul>
-    </article>
-    <article class="review-card review-card-warning">
-      <div class="review-label">常见失分点</div>
-      <ul class="review-list"><li>只背框架名称，不解释分析顺序</li><li>只讲结论，不说明证据和验证过程</li></ul>
-    </article>
-  </div>
-  <div class="review-actions">
-    <button class="mode-link" type="button" data-mode-target="learn">返回完整学习</button>
-    <a class="mode-link secondary" href="home.html">查看完整课程地图</a>
-  </div>
-</section></div>
-  <nav class="course-bottom-nav"><a class="course-nav-link next" href="articles/ch02.html"><span>下一章</span><strong>进入鲜食记场景 →</strong></a></nav>
-</main>
-<button id="toc-toggle" class="toc-toggle" type="button">课程目录</button>
-<aside id="toc-panel" class="toc-panel" aria-label="课程目录"></aside>
-<div id="toc-overlay" class="toc-overlay"></div>
-<script src="assets/main.js"></script>
-<script>
-window.TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "href": "index.html", "module": "business-loop"}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "href": "articles/ch02.html", "module": "business-loop"}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "href": "articles/ch03.html", "module": "business-loop"}, {"num": "04", "title": "排查异动", "slug": "ch04", "href": "articles/ch04.html", "module": "business-loop"}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "href": "articles/ch05.html", "module": "business-loop"}, {"num": "06", "title": "落地策略", "slug": "ch06", "href": "articles/ch06.html", "module": "business-loop"}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "href": "articles/ch07.html", "module": "analysis-toolbox"}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "href": "articles/ch08.html", "module": "analysis-toolbox"}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "href": "articles/ch09.html", "module": "analysis-toolbox"}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "href": "articles/ch10.html", "module": "analysis-toolbox"}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "href": "articles/ch11.html", "module": "analysis-toolbox"}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "href": "articles/ch12.html", "module": "analysis-toolbox"}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "href": "articles/ch13.html", "module": "analysis-toolbox"}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "href": "articles/ch14.html", "module": "analysis-toolbox"}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "href": "articles/ch15.html", "module": "interview-output"}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "href": "articles/ch16.html", "module": "interview-output"}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "href": "articles/ch17.html", "module": "interview-output"}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "href": "articles/ch18.html", "module": "interview-output"}, {"num": "19", "title": "费米估算", "slug": "ch19", "href": "articles/ch19.html", "module": "interview-output"}, {"num": "20", "title": "从零做项目", "slug": "ch20", "href": "articles/ch20.html", "module": "interview-output"}, {"num": "21", "title": "完整模拟面试", "slug": "ch21", "href": "articles/ch21.html", "module": "mock-career"}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "href": "articles/ch22.html", "module": "mock-career"}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "href": "articles/ch23.html", "module": "mock-career"}, {"num": "24", "title": "行业与职业", "slug": "ch24", "href": "articles/ch24.html", "module": "mock-career"}, {"num": "ML01", "title": "先判断，再建模", "slug": "ml01", "href": "articles/ml01.html", "module": "ml-decision"}, {"num": "ML02", "title": "履约风险决策", "slug": "ml02", "href": "articles/ml02.html", "module": "ml-decision"}, {"num": "ML03", "title": "需求预测陷阱", "slug": "ml03", "href": "articles/ml03.html", "module": "ml-decision"}, {"num": "ML04", "title": "模型失败复盘", "slug": "ml04", "href": "articles/ml04.html", "module": "ml-decision"}];
-window.TOC_CURRENT = "guide";
-window.COURSE_MODULES = [{"id": "business-loop", "num": "01", "title": "完成第一场业务分析", "eyebrow": "主线实战", "description": "以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。", "theme": "#5eead4", "outcome": "完成一段可以在面试中讲清楚的端到端业务项目。"}, {"id": "analysis-toolbox", "num": "02", "title": "高频分析工具箱", "eyebrow": "方法进阶", "description": "掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。", "theme": "#60a5fa", "outcome": "面对不同业务问题，能够选择合适方法并说明使用条件。"}, {"id": "interview-output", "num": "03", "title": "把分析变成面试答案", "eyebrow": "表达训练", "description": "把已有分析能力组织成自我介绍、项目经历和结构化面试回答。", "theme": "#a78bfa", "outcome": "形成30秒、90秒和3分钟三个层次的面试表达。"}, {"id": "mock-career", "num": "04", "title": "模拟面试与职业迁移", "eyebrow": "综合演练", "description": "通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。", "theme": "#fbbf24", "outcome": "在陌生问题中稳定拆解、追问、表达并迁移方法。"}, {"id": "ml-decision", "num": "05", "title": "机器学习：先判断，再建模", "eyebrow": "可选扩展", "description": "不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。", "theme": "#fb7185", "outcome": "能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。"}];
-</script>
-</body>
-</html>
+  </section>
+  <section class="landing-modes" aria-labelledby="modes-title"><header><p>一个系统 · 三种学习模式</p><h2 id="modes-title">不同内容，应该带来不同的学习动作</h2></header><div class="mode-grid">
+    <a class="mode-card mode-card--course" href="courses.html"><span>01 · 建立框架</span><h3>系统课程</h3><p>沿一条完整业务主线，理解问题定义、分析顺序、方法选择与面试表达。</p><div class="mode-course-visual"><i></i><i></i><i></i><i></i><i></i></div><strong>28 章 · 连续学习 →</strong></a>
+    <a class="mode-card mode-card--topic" href="topics/index.html"><span>02 · 拆透方法</span><h3>专题课程</h3><p>播放过程、改变参数、观察边界。让 SQL、实验和机器学习真正“发生”在眼前。</p><div class="mode-topic-visual"><i>A</i><b>→</b><i>B</i><b>→</b><i>?</i></div><strong>5 个专题 · 过程演示 →</strong></a>
+    <a class="mode-card mode-card--case" href="stories/index.html"><span>03 · 进入现场</span><h3>业务案例</h3><p>接收有限证据，面对误导线索，做出选择并看到判断带来的后果。</p><div class="mode-case-visual"><span>证据 01</span><span>证据 02</span><em>你的判断？</em></div><strong>26 个案例 · 决策训练 →</strong></a>
+  </div></section>
+  <section class="learning-loop"><div><p>学习闭环</p><h2>内容不是被“看完”的，<br>而是被反复调用的。</h2></div><ol><li><span>01</span><strong>理解</strong><p>建立概念和判断顺序。</p></li><li><span>02</span><strong>观察</strong><p>看证据如何改变结论。</p></li><li><span>03</span><strong>决策</strong><p>在限制条件下选择行动。</p></li><li><span>04</span><strong>复盘</strong><p>解释误判、边界与迁移。</p></li></ol></section>
+  <section class="landing-start"><p>如果你第一次来到这里</p><h2>先完成第一章，建立这套手册的使用方式。</h2><a href="articles/guide.html">开始第 01 章 <span>→</span></a></section>
+</main><footer class="site-footer"><span>分析手册</span><p>为真实业务判断而设计，不为堆积知识而设计。</p></footer><script src="assets/main.js"></script></body></html>

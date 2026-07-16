@@ -169,7 +169,7 @@
 ## 七、构建原则
 
 - `story-src/` 和 `content/` 是内容源，尽量保持可读、可迁移。
-- `articles/`、`stories/`、`index.html`、`home.html` 是构建产物。
+- `articles/`、`stories/`、`topics/`、`index.html`、`home.html`、`courses.html` 是构建产物。
 - 公共导航、双模式和故事复盘由 `build.py` 注入。
 - 不直接修改构建产物；所有长期修改都应回到源文件或构建器。
 

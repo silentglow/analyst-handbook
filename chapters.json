@@ -12,7 +12,7 @@
       "面试速通"
     ],
     "description": "面试官到底在考什么？怎么学才有效？建立正确的分析思维。",
-    "is_root": true,
+    "is_root": false,
     "next": {
       "label": "准备好了？",
       "link": "articles/ch02.html",
