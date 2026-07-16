@@ -263,7 +263,15 @@ def build_home(chapters: list[dict], modules: list[dict], stories: list[dict], t
 <main class="home-page">
   <section class="home-hero">
     <div class="home-hero-main"><div class="home-kicker">数据分析 · 业务判断 · 面试表达</div><h1>从业务问题出发，<br><span>练习如何做判断</span></h1><p>这不是一份软件说明书，也不是算法清单。课程保留必要的知识讲解，再用过程演示、失败案例和面试追问，帮助你把“知道”变成能够解释、验证和行动。</p><div class="home-actions"><a class="primary" href="index.html">从系统课程开始</a><a href="topics/index.html">查看专题课程</a></div></div>
-    <aside class="home-hero-note"><span>阅读建议</span><ol><li><b>01</b><div><strong>先建立分析主线</strong><small>从问题定义到结果表达，完整走一遍。</small></div></li><li><b>02</b><div><strong>再深入关键专题</strong><small>补 SQL、Python、实验与机器学习。</small></div></li><li><b>03</b><div><strong>最后进入案例</strong><small>在不完整信息中独立做出判断。</small></div></li></ol></aside>
+    <aside class="home-hero-visual" aria-label="业务异常分析过程示意">
+      <div class="visual-window-head"><span><i></i><i></i><i></i></span><strong>DECISION LAB · LIVE CASE</strong><em>09:42</em></div>
+      <div class="visual-window-body">
+        <div class="signal-summary"><div><span>异常信号</span><small>支付转化率 · 过去 2 小时</small></div><strong>−18.6%</strong></div>
+        <div class="signal-chart" aria-hidden="true"><span style="--h:34%"></span><span style="--h:48%"></span><span style="--h:44%"></span><span style="--h:61%"></span><span style="--h:58%"></span><span style="--h:72%"></span><span style="--h:67%"></span><span class="drop" style="--h:39%"></span><span class="drop" style="--h:31%"></span><span class="drop" style="--h:26%"></span><b>版本 4.8 发布</b></div>
+        <div class="evidence-path"><article class="done"><b>01</b><span>数据可信？</span><em>已确认</em></article><article class="active"><b>02</b><span>范围在哪？</span><em>定位中</em></article><article><b>03</b><span>机制是什么？</span><em>待验证</em></article></div>
+        <div class="visual-conclusion"><span>下一步</span><strong>检查 Android 4.8 的授权链路</strong><i>→</i></div>
+      </div>
+    </aside>
   </section>
   <nav class="home-compass" aria-label="选择学习方式"><a href="#course-map"><b>01</b><div><span>第一次系统学习</span><strong>按阶段建立完整框架</strong><p>适合从头梳理业务分析与面试表达。</p></div></a><a href="#topics"><b>02</b><div><span>针对薄弱点深入</span><strong>进入专题课程</strong><p>保留详细原理、过程演示和失败边界。</p></div></a><a href="stories/index.html"><b>03</b><div><span>直接练习业务判断</span><strong>进入案例库</strong><p>面对证据，判断先查什么、为何这样查。</p></div></a></nav>
   <section class="home-section" id="course-map"><header class="home-section-heading"><span>系统课程</span><h2>五个阶段，建立稳定的分析能力</h2><p>前四个阶段连接业务分析、方法选择与表达；机器学习不是附加算法清单，而是从问题定义、上线条件和失败复盘开始。</p></header><div class="module-grid">{''.join(module_cards)}</div></section>
@@ -287,7 +295,7 @@ def build_story_index(stories: list[dict]) -> str:
 <body data-page="story-library"><div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div>
 <nav class="topnav"><a href="../home.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../home.html">系统课程</a><a href="../topics/index.html">专题课程</a><a class="active" href="index.html">业务案例</a></div></nav>
 <main class="story-library-page">
-  <header class="story-library-hero"><div class="home-kicker">业务案例</div><h1>在不完整的信息里，<br><span>练习做判断</span></h1><p>这里不再替你讲一遍方法。你会先看到不完整的信息，选择分析方向，再用数据验证自己的判断。</p><div class="home-actions"><a class="primary" href="{esc(stories[0]['output'])}">从案例 01 开始</a><a href="#story-catalog">按能力选择案例</a></div></header>
+  <header class="story-library-hero"><div class="story-hero-copy"><div class="home-kicker">业务案例</div><h1>信息并不完整，<br><span>你仍然要做判断</span></h1><p>先接收任务，再观察证据、选择方向、验证假设。案例不会替你重复概念，而是让你真正经历一次业务分析。</p><div class="home-actions"><a class="primary" href="{esc(stories[0]['output'])}">进入第一个案例</a><a href="#story-catalog">浏览全部案例</a></div></div><div class="case-preview" aria-label="案例任务示意"><div class="case-preview-head"><span>CASE 07</span><em>限时决策</em></div><h2>大促 GMV 上升，<br>为什么利润反而下降？</h2><div class="case-clues"><span>客单价 <b>+12%</b></span><span>毛利率 <b>−8.4%</b></span><span>退款率 <b>+5.7%</b></span></div><div class="case-preview-action"><i></i><span>还有 3 条证据尚未查看</span><b>→</b></div></div></header>
   <section class="library-guide"><article><span>01</span><strong>进入任务</strong><p>明确角色、时限和业务交付。</p></article><article><span>02</span><strong>查看证据</strong><p>从数据与业务事件中寻找线索。</p></article><article><span>03</span><strong>形成判断</strong><p>区分相关、假设和已验证根因。</p></article><article><span>04</span><strong>迁移复盘</strong><p>记录误判、证据与下一步行动。</p></article></section>
   <section class="story-catalog" id="story-catalog"><div class="catalog-toolbar"><div><span>案例目录 · 共 {story_count} 篇</span><h2>选择一个业务问题</h2></div><label class="story-search"><span>搜索</span><input id="story-search" type="search" placeholder="标题、能力或标签"></label></div><div class="story-filters" role="group" aria-label="案例分类">{filters}</div><div id="story-grid" class="story-library-grid">{''.join(story_card(s, '') for s in stories)}</div><p id="story-empty" class="story-empty" hidden>没有找到匹配案例，换一个关键词试试。</p></section>
 </main><script src="../assets/main.js"></script><script src="../assets/story-library.js"></script></body></html>'''
@@ -309,7 +317,7 @@ def build_topic_index(topics: list[dict]) -> str:
 <meta name="description" content="围绕业务 SQL、Python 综合分析、机器学习和 A/B 测试组织的专题课程。">
 <title>专题课程 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css"><link rel="stylesheet" href="../assets/editorial.css">{SITE_ICON}</head>
 <body class="topic-body" data-page="topic-index"><nav class="topnav topic-nav"><a href="../home.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../home.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
-<main class="topic-index"><header class="topic-index-hero"><p>专题课程</p><h1>从真实问题进入方法</h1><div>这里不按软件菜单或算法名堆知识。每一节从一个具体问题开始，解释判断过程、实现方法、失败边界和面试表达。</div></header>
+<main class="topic-index"><header class="topic-index-hero"><div class="topic-index-copy"><p>专题课程</p><h1>看见方法<br>如何发生</h1><div>这里不按软件菜单或算法名堆知识。每一节从一个具体问题开始，用连续演示解释判断过程、实现方法、失败边界和面试表达。</div></div><div class="topic-index-visual" aria-hidden="true"><span class="topic-orbit orbit-one">SQL</span><span class="topic-orbit orbit-two">Python</span><span class="topic-orbit orbit-three">实验</span><span class="topic-orbit orbit-four">ML</span><strong>业务<br>问题</strong><i></i></div></header>
 <section class="topic-list" aria-label="专题课程列表">{''.join(rows)}</section>
 <section class="topic-note"><h2>内容怎么读</h2><p>先看过程演示，理解为什么这样判断；再读下方的知识解释和失败案例。动画是正文的一部分，不是装饰，也不会代替完整文字。</p></section>
 </main><script src="../assets/main.js"></script></body></html>'''
