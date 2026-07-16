@@ -8,11 +8,13 @@
 - stories.json: 案例故事目录与关联
 - content/*.html: 课程正文
 - story-src/*.html: 原始沉浸式故事
+- topics.json / topics-src/*.html: 专题课程
 
 输出：
 - index.html / articles/*.html
 - home.html
 - stories/index.html / stories/*.html
+- topics/index.html / topics/*.html
 """
 from __future__ import annotations
 
@@ -181,7 +183,7 @@ def build_chapter_page(ch: dict, idx: int, chapters: list[dict], modules_by_id: 
 <div class="grid-bg"></div>
 <nav class="topnav">
   <a href="{home_link}" class="topnav-logo">DATA ANALYSIS</a>
-  <div class="topnav-links"><a href="{'../learn/index.html' if from_article else 'learn/index.html'}">学习中心</a><a href="{home_link}">原课程</a><a href="{stories_link}">案例</a></div>
+  <div class="topnav-links"><a href="{home_link}">系统课程</a><a href="{'../topics/index.html' if from_article else 'topics/index.html'}">专题课程</a><a href="{stories_link}">业务案例</a></div>
 </nav>
 <main class="page lesson-page" id="lesson-content">
   <header class="lesson-header">
@@ -282,13 +284,13 @@ def build_home(chapters: list[dict], modules: list[dict], stories: list[dict]) -
 <title>数据分析面试速通课</title><link rel="stylesheet" href="assets/style.css">{SITE_ICON}</head>
 <body data-page="home">
 <div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div>
-<nav class="topnav"><a href="learn/index.html" class="topnav-logo">DATA ANALYSIS</a><div class="topnav-links"><a href="learn/index.html">学习中心</a><a class="active" href="#course-map">原课程</a><a href="stories/index.html">案例</a></div></nav>
+<nav class="topnav"><a href="home.html" class="topnav-logo">DATA ANALYSIS</a><div class="topnav-links"><a class="active" href="#course-map">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div></nav>
 <main class="home-page">
   <section class="home-hero">
     <div class="home-kicker">LEARN · PRACTICE · REVIEW</div>
     <h1>把分析思路<br><span>练成面试答案</span></h1>
     <p>一条完整业务主线，{core_count} 章核心课程，{extension_count} 章机器学习决策扩展，{story_count} 个沉浸式案例。既学习成功路径，也审查失败方案。</p>
-    <div class="home-actions"><a class="primary" href="learn/index.html">进入我的学习中心</a><a href="index.html">继续原有主线</a></div>
+    <div class="home-actions"><a class="primary" href="index.html">开始系统学习</a><a href="stories/index.html">进入案例故事库</a></div>
     <div class="home-stats"><div><strong>{core_count}</strong><span>核心课程</span></div><div><strong>{extension_count}</strong><span>ML扩展</span></div><div><strong>{story_count}</strong><span>业务案例</span></div><div><strong>{module_count}</strong><span>能力阶段</span></div></div>
   </section>
   <section class="experience-map">
@@ -314,7 +316,7 @@ def build_story_index(stories: list[dict]) -> str:
 <meta name="description" content="{story_count}个沉浸式业务案例，覆盖指标、用户、商品、活动、经营诊断与机器学习决策。">
 <title>案例故事库 · 数据分析面试速通课</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/story-library.css">{SITE_ICON}</head>
 <body data-page="story-library"><div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div>
-<nav class="topnav"><a href="../learn/index.html" class="topnav-logo">DATA ANALYSIS</a><div class="topnav-links"><a href="../learn/index.html">学习中心</a><a href="../home.html">原课程</a><a class="active" href="index.html">案例</a></div></nav>
+<nav class="topnav"><a href="../home.html" class="topnav-logo">DATA ANALYSIS</a><div class="topnav-links"><a href="../home.html">系统课程</a><a href="../topics/index.html">专题课程</a><a class="active" href="index.html">业务案例</a></div></nav>
 <main class="story-library-page">
   <header class="story-library-hero"><div class="home-kicker">BUSINESS STORY LAB</div><h1>{story_count} 个真实业务问题<br><span>等你来拆解</span></h1><p>这里不再替你讲一遍方法。你会先看到不完整的信息，选择分析方向，再用数据验证自己的判断。</p><div class="home-actions"><a class="primary" href="{esc(stories[0]['output'])}">从案例 01 开始</a><a href="#story-catalog">按能力选择案例</a></div></header>
   <section class="library-guide"><article><span>01</span><strong>进入任务</strong><p>明确角色、时限和业务交付。</p></article><article><span>02</span><strong>查看证据</strong><p>从数据与业务事件中寻找线索。</p></article><article><span>03</span><strong>形成判断</strong><p>区分相关、假设和已验证根因。</p></article><article><span>04</span><strong>迁移复盘</strong><p>回到课程框架和面试表达。</p></article></section>
@@ -322,70 +324,54 @@ def build_story_index(stories: list[dict]) -> str:
 </main><script src="../assets/main.js"></script><script src="../assets/story-library.js"></script></body></html>'''
 
 
-def build_lab_page(lesson: dict, idx: int, lessons: list[dict], tracks_by_id: dict) -> str:
-    track = tracks_by_id[lesson["track"]]
-    content = (BASE / "labs-src" / lesson["source"]).read_text(encoding="utf-8")
-    objectives = "".join(f"<li>{esc(item)}</li>" for item in lesson["objectives"])
-    sources = "".join(f"<li>{esc(item)}</li>" for item in lesson["sources"])
-    prev_lesson = lessons[idx - 1] if idx else None
-    next_lesson = lessons[idx + 1] if idx + 1 < len(lessons) else None
-    related_labels = ["关联课程", "迁移案例"]
-    related = "".join(f'<a href="{esc(href)}">{related_labels[i] if i < len(related_labels) else "继续学习"} →</a>' for i, href in enumerate(lesson.get("related", [])))
-    nav = []
-    if prev_lesson:
-        nav.append(f'<a href="{esc(prev_lesson["output"])}">← 上一实验 · {esc(prev_lesson["title"])}</a>')
-    else:
-        nav.append('<a href="../learn/index.html">← 返回学习中心</a>')
-    if next_lesson:
-        nav.append(f'<a href="{esc(next_lesson["output"])}">下一实验 · {esc(next_lesson["title"])} →</a>')
-    else:
-        nav.append('<a href="../stories/index.html">进入业务案例库 →</a>')
-    return f'''<!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="{esc(lesson['subtitle'])}"><title>{esc(lesson['title'])} · 数据分析学习中心</title>
-<link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/lesson-player.css">{SITE_ICON}
-<style>:root{{--theme:{esc(lesson['theme'])};--theme-rgb:{esc(lesson['theme_rgb'])}}}</style></head>
-<body data-page="lab"><div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div>
-<nav class="topnav"><a href="../learn/index.html" class="topnav-logo">MY LEARNING</a><div class="topnav-links"><a class="active" href="../learn/index.html">学习中心</a><a href="../home.html">原课程</a><a href="../stories/index.html">案例</a></div></nav>
-<main class="lab-page"><div class="lab-breadcrumb"><a href="../learn/index.html">学习中心</a><span>/</span><span>{esc(track['title'])}</span></div>
-<header class="lab-hero"><div class="lab-kicker">{esc(lesson['num'])} · {esc(track['title'])}</div><h1>{esc(lesson['title'])}</h1><p>{esc(lesson['subtitle'])}</p><div class="lab-meta"><span>{esc(lesson['duration'])} 分钟</span><span>{esc(lesson['level'])}</span><span>原生 HTML 动画</span><span>进度自动保存</span></div></header>
-<section class="lab-objectives"><strong>LEARNING GOALS</strong><ul>{objectives}</ul></section>
-{content}
-<div class="lab-content"><section class="lab-section source-map"><h3>来源映射 · 不是截图搬运</h3><p>本课从以下文档提取知识逻辑，去除软件界面、讲师信息与重复口述，再重建为可播放动画、业务判断、失败案例和面试题。</p><ul>{sources}</ul><div class="lab-next">{related}</div></section><nav class="lab-next">{''.join(nav)}</nav></div>
-</main><script src="../assets/main.js"></script><script src="../assets/lesson-player.js"></script></body></html>'''
 
-
-def build_learning_center(tracks: list[dict], lessons: list[dict], ledger: dict) -> str:
-    track_cards = []
-    for track in tracks:
-        modules = "".join(f"<span>{esc(item)}</span>" for item in track["modules"])
-        track_cards.append(f'''<article class="track-card" style="--track-theme:{esc(track['theme'])}"><div class="track-num">{esc(track['num'])}</div><div><h3>{esc(track['title'])}</h3><p>{esc(track['description'])}</p></div><div class="track-modules">{modules}</div><div class="track-status">{esc(track['source_range'])}</div></article>''')
-    lab_cards = []
-    for idx, lesson in enumerate(lessons):
-        featured = " lab-card-featured" if idx == 0 else ""
-        lab_cards.append(f'''<article class="lab-card{featured}" data-lab-card="{esc(lesson['id'])}" data-scenes="5" style="--lab-rgb:{esc(lesson['theme_rgb'])}"><a class="lab-card-hit" href="../labs/{esc(lesson['output'])}" aria-label="开始课程：{esc(lesson['title'])}"></a><div class="lab-card-top"><span>{esc(lesson['num'])}</span><span>{esc(lesson['level'])} · {esc(lesson['duration'])} MIN</span></div><button class="bookmark" type="button" data-bookmark aria-label="收藏课程" aria-pressed="false">★</button><h3>{esc(lesson['title'])}</h3><p>{esc(lesson['subtitle'])}</p><div class="lab-card-bottom"><div class="lab-card-progress"><span data-card-progress>尚未开始</span><i></i></div><b class="lab-card-arrow">→</b></div></article>''')
-    summary = ledger["summary"]
-    return f'''<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="个人数据分析学习中心：继续学习、系统路径、HTML 动画实验与来源改革账本。"><title>我的学习中心 · 数据分析</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/learning-center.css">{SITE_ICON}</head>
-<body data-page="learning-center"><div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div><nav class="topnav"><a class="topnav-logo" href="index.html">MY LEARNING</a><div class="topnav-links"><a class="active" href="index.html">学习中心</a><a href="../home.html">原课程</a><a href="../stories/index.html">案例</a></div></nav>
-<main class="learning-center"><header class="center-hero"><div><div class="center-kicker">PERSONAL LEARNING WORKSPACE</div><h1>今天继续<br><span>学会一个判断</span></h1><p>这里不按文件顺序堆资料。每份文档都有去向，知识被重排为系统课程、业务案例、面试题与可连续播放的 HTML 动画。</p></div><div class="center-overview"><div><strong>{summary['document_count']}</strong><span>已编目源文档</span></div><div><strong>{len(tracks)}</strong><span>系统学习路径</span></div><div><strong>{len(lessons)}</strong><span>首批动画样板</span></div><div><strong data-complete-count>0</strong><span>已完成实验</span></div></div></header>
-<section class="dashboard"><article class="dashboard-card continue-card"><span>CONTINUE LEARNING</span><h2 data-continue-title>指标突然下跌，先查什么？</h2><p data-continue-text>从第一个业务判断实验开始，学习进度会保存在当前浏览器。</p><div class="dashboard-progress" data-continue-bar style="--value:0%"><i></i></div><a data-continue-link href="../labs/incident-analysis.html">开始这一课</a></article><article class="dashboard-card"><span>BOOKMARKS</span><h3><b data-bookmark-count>0</b> 个收藏</h3><p>在课程卡片点亮星标，建立自己的复习清单。</p></article><article class="dashboard-card"><span>REVIEW</span><h3>先复盘失败方向</h3><p>每个样板都包含错误方案、失败原因与面试追问，不只展示正确答案。</p></article></section>
-<section class="center-section" id="labs"><header class="center-heading"><div><span>ANIMATED LABS</span><h2>先体验五种内容改革</h2></div><p>所有画面由 HTML、CSS 与 SVG 重建；可播放、暂停、逐步切换、变速、重播，并支持减少动态效果。</p></header><div class="lab-grid">{''.join(lab_cards)}</div></section>
-<section class="center-section" id="tracks"><header class="center-heading"><div><span>ZERO TO ONE</span><h2>不是一条无限变长的课程主线</h2></div><p>机器学习和 A/B 测试保留完整深度；SQL 与 Python 按真实业务任务重新组织。</p></header><div class="track-grid">{''.join(track_cards)}</div></section>
-<section class="center-section"><a class="reform-link" href="../reform/index.html"><div><span>SOURCE REFORM LEDGER</span><h3>查看 {summary['document_count']} 份文档分别去了哪里</h3><p>每份材料都有保留、合并、拆分或转型的理由；原始大图和 DOCX 不进入发布仓库。</p></div><strong>打开改革账本 →</strong></a></section>
-</main><script src="../assets/main.js"></script><script src="../assets/learning-center.js"></script></body></html>'''
-
-
-def build_reform_page(ledger: dict) -> str:
-    docs = ledger["documents"]
-    summary = ledger["summary"]
-    categories = list(summary["counts_by_category"])
-    options = "".join(f'<option value="{esc(item)}">{esc(item)} · {summary["counts_by_category"][item]}</option>' for item in categories)
+def build_topic_index(topics: list[dict]) -> str:
     rows = []
-    for item in docs:
-        search = f"{item['source_file']} {item['category']} {item['disposition']} {item['target_collection']}".lower()
-        rows.append(f'''<tr data-ledger-row data-category="{esc(item['category'])}" data-search="{esc(search)}"><td>{esc(item['ledger_id'])}</td><td>{esc(item['source_file'])}</td><td>{esc(item['category'])}</td><td>{esc(item['target_collection'])}</td><td>{esc(item['disposition'])}</td><td>{esc(item['rationale'])}</td></tr>''')
-    return f'''<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="313 份数据分析课程文档的内容改革去向与取舍理由。"><title>内容改革账本 · 数据分析学习中心</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/learning-center.css">{SITE_ICON}</head><body data-page="reform"><div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div><nav class="topnav"><a class="topnav-logo" href="../learn/index.html">MY LEARNING</a><div class="topnav-links"><a href="../learn/index.html">学习中心</a><a class="active" href="index.html">改革账本</a></div></nav><main class="reform-page"><header class="reform-hero"><div class="center-kicker">CONTENT REFORM LEDGER</div><h1>每一份文档<br>都有去向和理由</h1><p>{esc(summary['policy'])} 这不是面向学习者的课程主线，而是用于验收内容是否遗漏、为什么取舍以及后续制作状态的质量控制页。</p></header><section class="reform-stats"><div><strong>{summary['document_count']}</strong><span>源文档全部编目</span></div><div><strong>10,160</strong><span>原截图不直接发布</span></div><div><strong>{summary['animation_candidates']}</strong><span>首轮动画候选</span></div><div><strong>{len(categories)}</strong><span>来源内容分类</span></div></section><section><div class="center-heading"><div><span>ALL SOURCES</span><h2>检索材料去向</h2></div><p>第一轮已完成自动编目；制作时会继续补充最终页面、审校人与状态。</p></div><div class="ledger-toolbar"><input data-ledger-search type="search" placeholder="搜索文件名、去向或处理方式" aria-label="搜索改革账本"><select data-ledger-category aria-label="按分类筛选"><option value="all">全部分类 · {len(docs)}</option>{options}</select></div><div class="ledger-table-wrap"><table class="ledger-table"><thead><tr><th>ID</th><th>源文档</th><th>分类</th><th>最终去向</th><th>处理方式</th><th>取舍理由</th></tr></thead><tbody>{''.join(rows)}</tbody></table><p class="ledger-empty" data-ledger-empty hidden>没有找到匹配的材料。</p></div></section></main><script src="../assets/main.js"></script><script src="../assets/reform-ledger.js"></script></body></html>'''
+    for topic in topics:
+        objectives = " / ".join(topic["objectives"][:2])
+        rows.append(f'''
+<a class="topic-row" href="{esc(topic['output'])}" style="--theme:{esc(topic['theme'])};--theme-rgb:{esc(topic['theme_rgb'])}">
+  <span class="topic-row-num">{esc(topic['num'])}</span>
+  <div><small>{esc(topic['category'])}</small><h2>{esc(topic['title'])}</h2><p>{esc(topic['subtitle'])}</p><em>{esc(objectives)}</em></div>
+  <strong>{esc(topic['duration'])} 分钟&nbsp; →</strong>
+</a>''')
+    return f'''<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="围绕业务 SQL、Python 综合分析、机器学习和 A/B 测试组织的专题课程。">
+<title>专题课程 · 数据分析面试速通课</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css">{SITE_ICON}</head>
+<body class="topic-body" data-page="topic-index"><nav class="topnav topic-nav"><a href="../home.html" class="topnav-logo">DATA ANALYSIS</a><div class="topnav-links"><a href="../home.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
+<main class="topic-index"><header class="topic-index-hero"><p>专题课程</p><h1>从真实问题进入方法</h1><div>这里不按软件菜单或算法名堆知识。每一节从一个具体问题开始，解释判断过程、实现方法、失败边界和面试表达。</div></header>
+<section class="topic-list" aria-label="专题课程列表">{''.join(rows)}</section>
+<section class="topic-note"><h2>内容怎么读</h2><p>先看过程演示，理解为什么这样判断；再读下方的知识解释和失败案例。动画是正文的一部分，不是装饰，也不会代替完整文字。</p></section>
+</main><script src="../assets/main.js"></script></body></html>'''
 
+
+def build_topic_page(topic: dict, idx: int, topics: list[dict]) -> str:
+    content = (BASE / "topics-src" / topic["source"]).read_text(encoding="utf-8")
+    objectives = "".join(f"<li>{esc(item)}</li>" for item in topic["objectives"])
+    links = []
+    if idx:
+        prev = topics[idx - 1]
+        links.append(f'<a href="{esc(prev["output"])}"><span>上一节</span><strong>← {esc(prev["title"])}</strong></a>')
+    else:
+        links.append('<a href="index.html"><span>课程目录</span><strong>← 返回专题课程</strong></a>')
+    if idx + 1 < len(topics):
+        nxt = topics[idx + 1]
+        links.append(f'<a href="{esc(nxt["output"])}"><span>下一节</span><strong>{esc(nxt["title"])} →</strong></a>')
+    else:
+        links.append('<a href="index.html"><span>完成本组</span><strong>返回专题课程 →</strong></a>')
+    return f'''<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="{esc(topic['subtitle'])}"><title>{esc(topic['title'])} · 专题课程</title>
+<link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css">{SITE_ICON}
+<style>:root{{--theme:{esc(topic['theme'])};--theme-rgb:{esc(topic['theme_rgb'])}}}</style></head>
+<body class="topic-body" data-page="topic"><a class="skip-link" href="#topic-content">跳到正文</a>
+<nav class="topnav topic-nav"><a href="../home.html" class="topnav-logo">DATA ANALYSIS</a><div class="topnav-links"><a href="../home.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
+<main class="topic-page" id="topic-content"><header class="topic-hero"><div class="topic-breadcrumb"><a href="index.html">专题课程</a><span>/</span><span>{esc(topic['category'])}</span></div><p class="topic-number">{esc(topic['num'])} · {esc(topic['level'])} · {esc(topic['duration'])} 分钟</p><h1>{esc(topic['title'])}</h1><div class="topic-lead">{esc(topic['subtitle'])}</div></header>
+<section class="topic-objectives" aria-labelledby="objectives-title"><h2 id="objectives-title">这一节要解决什么</h2><ol>{objectives}</ol></section>
+{content}
+<nav class="topic-pagination" aria-label="专题课程翻页">{''.join(links)}</nav></main>
+<script src="../assets/topic-course.js"></script></body></html>'''
 
 def inject_story_shell(source: str, story: dict, prev_story: dict | None, next_story: dict | None, chapters_by_slug: dict, story_count: int) -> str:
     head_extra = '<link rel="icon" href="data:,">\n<link rel="stylesheet" href="../assets/story-shell.css">\n'
@@ -416,19 +402,14 @@ def build():
     chapters = load_json("chapters.json")
     modules = load_json("modules.json")
     stories = load_json("stories.json")
-    tracks = load_json("tracks.json")
-    lab_lessons = load_json("lab-lessons.json")
-    ledger = load_json("data/content-reform-ledger.json")
+    topics = load_json("topics.json")
     modules_by_id = {m["id"]: m for m in modules}
     stories_by_id = {s["id"]: s for s in stories}
     chapters_by_slug = {c["slug"]: c for c in chapters}
-    tracks_by_id = {t["id"]: t for t in tracks}
 
     (BASE / "articles").mkdir(exist_ok=True)
     (BASE / "stories").mkdir(exist_ok=True)
-    (BASE / "labs").mkdir(exist_ok=True)
-    (BASE / "learn").mkdir(exist_ok=True)
-    (BASE / "reform").mkdir(exist_ok=True)
+    (BASE / "topics").mkdir(exist_ok=True)
 
     for idx, ch in enumerate(chapters):
         output = BASE / ("index.html" if ch.get("is_root") else f"articles/{ch['slug']}.html")
@@ -437,12 +418,11 @@ def build():
 
     write_output(BASE / "home.html", build_home(chapters, modules, stories))
     write_output(BASE / "stories/index.html", build_story_index(stories))
-    write_output(BASE / "learn/index.html", build_learning_center(tracks, lab_lessons, ledger))
-    write_output(BASE / "reform/index.html", build_reform_page(ledger))
+    write_output(BASE / "topics/index.html", build_topic_index(topics))
 
-    for idx, lesson in enumerate(lab_lessons):
-        write_output(BASE / "labs" / lesson["output"], build_lab_page(lesson, idx, lab_lessons, tracks_by_id))
-        print(f"  LAB    {lesson['num']} · {lesson['title']}")
+    for idx, topic in enumerate(topics):
+        write_output(BASE / "topics" / topic["output"], build_topic_page(topic, idx, topics))
+        print(f"  TOPIC  {topic['num']} · {topic['title']}")
 
     for idx, story in enumerate(stories):
         source = (BASE / "story-src" / story["source"]).read_text(encoding="utf-8")
@@ -450,7 +430,7 @@ def build():
         write_output(BASE / "stories" / story["output"], rendered)
         print(f"  STORY  {story['num']} · {story['title']}")
 
-    print(f"\nDONE · {len(chapters)} lessons + {len(stories)} stories + {len(lab_lessons)} labs + 4 indexes")
+    print(f"\nDONE · {len(chapters)} lessons + {len(stories)} stories + {len(topics)} topics + 3 indexes")
 
 
 if __name__ == "__main__":

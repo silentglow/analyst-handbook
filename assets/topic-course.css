@@ -1,0 +1,188 @@
+/* 专题课程：阅读优先，动画只承担过程解释。 */
+.topic-body {
+  --topic-bg:#0d0f12;
+  --topic-surface:#14171b;
+  --topic-surface-2:#181c21;
+  --topic-border:#2a2f36;
+  --topic-text:#edf0f3;
+  --topic-muted:#9aa2ad;
+  background:var(--topic-bg);
+  color:var(--topic-text);
+}
+.topic-body::before { content:none; }
+.topic-body .topic-nav { background:rgba(13,15,18,.94); border-bottom:1px solid rgba(255,255,255,.07); backdrop-filter:blur(10px); }
+.topic-body .topnav-logo { color:var(--topic-text); letter-spacing:1.4px; }
+.topic-body .topnav-links a::after { background:var(--theme,#d5dae0); }
+
+.topic-index,.topic-page { position:relative; z-index:1; width:min(1040px,calc(100% - 40px)); margin:0 auto; padding:130px 0 96px; }
+.topic-index { width:min(960px,calc(100% - 40px)); }
+.topic-index-hero { max-width:760px; padding:42px 0 54px; border-bottom:1px solid var(--topic-border); }
+.topic-index-hero > p,.topic-number { margin:0 0 15px; color:var(--topic-muted); font:600 12px/1.5 "SF Mono","Fira Code",monospace; letter-spacing:.08em; }
+.topic-index-hero h1 { margin:0; font-size:clamp(38px,6vw,64px); line-height:1.08; letter-spacing:-.045em; }
+.topic-index-hero > div { max-width:680px; margin-top:24px; color:var(--topic-muted); font-size:17px; line-height:1.85; }
+.topic-list { margin-top:10px; }
+.topic-row { display:grid; grid-template-columns:94px 1fr auto; gap:28px; align-items:start; padding:34px 4px; border-bottom:1px solid var(--topic-border); color:inherit; text-decoration:none; }
+.topic-row:hover h2,.topic-row:focus-visible h2 { color:var(--theme); }
+.topic-row:focus-visible { outline:2px solid var(--theme); outline-offset:5px; }
+.topic-row-num { padding-top:5px; color:var(--topic-muted); font:600 11px/1.5 "SF Mono",monospace; }
+.topic-row small { color:var(--theme); font-size:12px; }
+.topic-row h2 { margin:7px 0 10px; font-size:24px; line-height:1.35; transition:color .2s ease; }
+.topic-row p { margin:0; color:var(--topic-muted); font-size:14px; line-height:1.8; }
+.topic-row em { display:block; margin-top:12px; color:#6f7782; font-size:11px; font-style:normal; line-height:1.7; }
+.topic-row > strong { padding-top:30px; color:var(--topic-muted); font-size:12px; font-weight:500; white-space:nowrap; }
+.topic-note { max-width:720px; margin-top:70px; padding-top:28px; border-top:1px solid var(--topic-border); }
+.topic-note h2 { margin:0 0 12px; font-size:18px; }
+.topic-note p { margin:0; color:var(--topic-muted); line-height:1.9; }
+
+.topic-hero { max-width:820px; padding:34px 0 52px; }
+.topic-breadcrumb { display:flex; align-items:center; gap:9px; margin-bottom:44px; color:#707985; font-size:12px; }
+.topic-breadcrumb a { color:var(--topic-muted); text-decoration:none; }
+.topic-breadcrumb a:hover { color:var(--topic-text); }
+.topic-hero h1 { margin:0; max-width:850px; font-size:clamp(38px,5.4vw,62px); line-height:1.12; letter-spacing:-.045em; }
+.topic-lead { max-width:760px; margin-top:24px; color:var(--topic-muted); font-size:18px; line-height:1.85; }
+.topic-objectives { display:grid; grid-template-columns:180px 1fr; gap:32px; margin-bottom:34px; padding:28px 0; border-top:1px solid var(--topic-border); border-bottom:1px solid var(--topic-border); }
+.topic-objectives h2 { margin:0; font-size:14px; font-weight:600; }
+.topic-objectives ol { display:grid; gap:12px; margin:0; padding:0; list-style:none; counter-reset:objective; }
+.topic-objectives li { position:relative; padding-left:32px; color:#c4cad1; font-size:14px; line-height:1.7; counter-increment:objective; }
+.topic-objectives li::before { content:counter(objective,decimal-leading-zero); position:absolute; left:0; color:var(--theme); font:600 10px/1.8 "SF Mono",monospace; }
+
+/* 连续过程演示 */
+.lesson-player { position:relative; overflow:hidden; margin-top:34px; border:1px solid var(--topic-border); border-radius:10px; background:#101318; }
+.lesson-player::before { content:""; position:absolute; z-index:5; inset:0 auto auto 0; width:var(--player-progress,20%); height:2px; background:var(--theme); transition:width .25s ease; }
+.player-head { display:flex; justify-content:space-between; gap:20px; padding:16px 20px; border-bottom:1px solid var(--topic-border); }
+.player-head span { display:block; color:#707985; font:600 9px/1.5 "SF Mono",monospace; letter-spacing:.08em; }
+.player-head strong { display:block; overflow:hidden; margin-top:4px; color:#cbd1d8; font-size:12px; text-overflow:ellipsis; white-space:nowrap; }
+.player-counter { color:var(--theme); font:600 11px/1 "SF Mono",monospace; white-space:nowrap; }
+.player-stage,.lesson-scene { min-height:500px; }
+.lesson-scene { padding:44px clamp(24px,5vw,56px); animation:topic-scene-in .28s ease both; }
+.lesson-scene[hidden] { display:none; }
+.scene-layout { display:grid; grid-template-columns:minmax(0,.88fr) minmax(320px,1.15fr); gap:clamp(30px,6vw,70px); align-items:center; min-height:410px; }
+.scene-copy em { color:var(--theme); font:600 10px/1.5 "SF Mono",monospace; letter-spacing:.08em; font-style:normal; }
+.scene-copy h2 { margin:13px 0 17px; font-size:clamp(27px,3.8vw,42px); line-height:1.15; letter-spacing:-.035em; }
+.scene-copy p { margin:0; color:#aeb5be; font-size:14px; line-height:1.9; }
+.scene-copy ul { margin:19px 0 0; padding-left:18px; }
+.scene-copy li { padding:4px 0; color:#aeb5be; font-size:13px; line-height:1.7; }
+.scene-copy li::marker { color:var(--theme); }
+.scene-visual { position:relative; min-height:320px; padding:22px; overflow:hidden; border:1px solid var(--topic-border); border-radius:8px; background:#0b0e12; }
+.visual-title { display:flex; justify-content:space-between; margin-bottom:20px; color:#69717c; font:600 9px/1.4 "SF Mono",monospace; letter-spacing:.06em; }
+.player-controls { display:grid; grid-template-columns:auto auto auto 1fr auto auto; align-items:center; gap:8px; padding:13px 16px; border-top:1px solid var(--topic-border); background:#0d1014; }
+.player-controls button,.player-controls select { min-height:36px; padding:0 12px; border:1px solid #343a43; border-radius:6px; color:#bdc4cc; background:#15191e; font:500 11px/1 sans-serif; cursor:pointer; }
+.player-controls button:hover:not(:disabled),.player-controls button:focus-visible,.player-controls select:focus-visible { border-color:#747e8a; color:#fff; outline:none; }
+.player-controls button:disabled { opacity:.28; cursor:not-allowed; }
+.player-controls [data-player-play] { min-width:62px; color:#0b0d10; border-color:var(--theme); background:var(--theme); }
+.player-progress { width:100%; accent-color:var(--theme); cursor:pointer; }
+.speed-label { display:flex; align-items:center; gap:7px; color:#747d88; font-size:10px; }
+.speed-label select { min-height:32px; padding:0 6px; }
+
+/* 图解组件 */
+.flow-stack { display:grid; gap:9px; }
+.flow-node { display:grid; grid-template-columns:34px 1fr auto; gap:11px; align-items:center; padding:11px; border:1px solid #272d34; border-radius:7px; background:#11151a; }
+.flow-node span { display:grid; place-items:center; width:28px; height:28px; border-radius:5px; color:var(--theme); background:rgba(var(--theme-rgb),.1); font:600 10px/1 "SF Mono",monospace; }
+.flow-node strong { font-size:12px; }
+.flow-node small { color:#6f7883; font-size:10px; }
+.flow-node.active { border-color:rgba(var(--theme-rgb),.52); background:rgba(var(--theme-rgb),.07); }
+.metric-panel { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.metric-panel div { padding:13px 10px; border:1px solid #272d34; border-radius:7px; background:#11151a; }
+.metric-panel span { display:block; color:#747d88; font-size:9px; }
+.metric-panel strong { display:block; margin-top:7px; font:600 17px/1 "SF Mono",monospace; }
+.metric-down { color:#fb7185; } .metric-ok { color:#5eead4; } .metric-warn { color:#fbbf24; }
+.evidence-chip { display:inline-flex; align-items:center; gap:7px; margin:10px 5px 0 0; padding:6px 8px; border:1px solid #2a3038; border-radius:5px; color:#aeb5be; font-size:10px; }
+.evidence-chip::before { content:""; width:5px; height:5px; border-radius:50%; background:var(--theme); }
+.data-table { width:100%; border-collapse:collapse; font-size:10px; }
+.data-table th { padding:8px; color:#717a85; text-align:left; border-bottom:1px solid #2b3138; font-weight:600; }
+.data-table td { padding:9px 8px; border-bottom:1px solid #20252b; color:#aeb5be; }
+.data-table tr td:first-child { color:var(--theme); font-family:"SF Mono",monospace; }
+.data-table tr.duplicate td { color:#ff9aaa; background:rgba(251,113,133,.08); }
+.join-arrow { display:grid; place-items:center; height:42px; color:var(--theme); font:600 10px/1 "SF Mono",monospace; }
+.sql-code { margin:16px 0 0; padding:14px 16px; overflow:auto; border:1px solid #282e35; border-radius:6px; color:#c5ceda; background:#080a0d; font:11px/1.75 "SF Mono","Fira Code",monospace; white-space:pre; }
+.sql-code mark { color:#ff9aaa; background:rgba(251,113,133,.09); }
+.pipeline { display:flex; align-items:stretch; gap:7px; }
+.pipeline-node { flex:1; display:grid; place-items:center; min-height:70px; padding:9px; border:1px solid #282e35; border-radius:6px; color:#8f98a3; text-align:center; font-size:10px; line-height:1.5; }
+.pipeline-node.active { color:#fff; border-color:rgba(var(--theme-rgb),.6); background:rgba(var(--theme-rgb),.07); }
+.pipeline-arrow { align-self:center; color:#565e68; }
+.code-cell { margin-top:17px; overflow:hidden; border:1px solid #282e35; border-radius:6px; }
+.code-cell label { display:block; padding:8px 12px; color:#747d88; border-bottom:1px solid #282e35; font:600 9px/1 "SF Mono",monospace; }
+.code-cell pre { margin:0; padding:14px; overflow:auto; color:#c7d2fe; font:10px/1.75 "SF Mono",monospace; }
+.segment-bars { display:grid; gap:12px; margin-top:18px; }
+.segment-bar { display:grid; grid-template-columns:74px 1fr 40px; gap:10px; align-items:center; color:#8f98a3; font-size:10px; }
+.segment-bar i { height:6px; background:linear-gradient(90deg,var(--theme) var(--value),#242a31 var(--value)); }
+.split-rail { position:relative; height:106px; margin:32px 0 8px; }
+.split-line { position:absolute; left:8%; right:8%; top:50%; height:2px; background:linear-gradient(90deg,#60a5fa 0 48%,#414852 48% 52%,#fb7185 52%); }
+.split-user { position:absolute; left:var(--left); top:50%; display:grid; place-items:center; width:20px; height:20px; transform:translate(-50%,-50%); border-radius:50%; color:#071014; background:var(--color); font:700 8px/1 "SF Mono",monospace; }
+.hypothesis-card { padding:16px; border:1px solid rgba(var(--theme-rgb),.35); border-radius:7px; background:rgba(var(--theme-rgb),.06); }
+.hypothesis-card span { color:var(--theme); font:600 9px/1.4 "SF Mono",monospace; }
+.hypothesis-card p { margin:8px 0 0; color:#c1c7ce; font-size:12px; line-height:1.7; }
+.decision-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:14px; }
+.decision-grid div { padding:12px; border:1px solid #282e35; border-radius:6px; }
+.decision-grid span { display:block; color:#747d88; font-size:9px; }
+.decision-grid strong { display:block; margin-top:6px; font-size:12px; }
+
+/* 正文 */
+.topic-content { width:min(820px,100%); margin:72px auto 0; }
+.topic-section { margin:0 0 64px; scroll-margin-top:90px; }
+.topic-section > span { color:var(--theme); font:600 10px/1.5 "SF Mono",monospace; letter-spacing:.08em; }
+.topic-section h2 { margin:10px 0 20px; font-size:clamp(27px,4vw,38px); line-height:1.3; letter-spacing:-.03em; }
+.topic-section > p { color:#aeb5be; font-size:15px; line-height:1.95; }
+.knowledge-grid,.failure-list,.question-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:22px; }
+.knowledge-card,.failure-item,.question-card { padding:20px; border-top:1px solid var(--topic-border); background:transparent; }
+.knowledge-card strong,.failure-item strong,.question-card strong { display:block; margin-bottom:9px; font-size:14px; }
+.knowledge-card p,.failure-item p,.question-card p { margin:0; color:#9ea6b0; font-size:12px; line-height:1.8; }
+.failure-item { border-top-color:rgba(251,113,133,.5); }
+.failure-item b { display:block; margin-top:12px; color:#e78496; font-size:10px; line-height:1.65; }
+.question-card details { margin-top:13px; }
+.question-card summary { color:var(--theme); font-size:11px; cursor:pointer; }
+.question-card details p { margin-top:11px; }
+.topic-pagination { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:80px; padding-top:26px; border-top:1px solid var(--topic-border); }
+.topic-pagination a { padding:18px 0; color:inherit; text-decoration:none; }
+.topic-pagination a:last-child { text-align:right; }
+.topic-pagination span { display:block; color:#707985; font-size:10px; }
+.topic-pagination strong { display:block; margin-top:7px; color:#c8ced5; font-size:13px; }
+.topic-pagination a:hover strong { color:var(--theme); }
+
+@keyframes topic-scene-in { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+@media (max-width:760px) {
+  .topic-index,.topic-page { width:min(100% - 28px,1040px); padding-top:102px; }
+  .topic-index-hero { padding-top:22px; }
+  .topic-row { grid-template-columns:1fr auto; gap:10px 18px; padding:27px 0; }
+  .topic-row-num { grid-column:1/-1; }
+  .topic-row > strong { padding-top:28px; }
+  .topic-row em { display:none; }
+  .topic-objectives { grid-template-columns:1fr; gap:18px; }
+  .scene-layout { grid-template-columns:1fr; min-height:auto; }
+  .lesson-scene,.player-stage { min-height:690px; }
+  .scene-visual { min-height:275px; }
+  .player-controls { grid-template-columns:repeat(4,auto); }
+  .player-progress { grid-column:1/-1; grid-row:1; }
+  .speed-label { margin-left:auto; }
+  .knowledge-grid,.failure-list,.question-grid { grid-template-columns:1fr; }
+  .pipeline { display:grid; grid-template-columns:repeat(3,1fr); }
+  .pipeline-arrow { display:none; }
+}
+@media (max-width:480px) {
+  .topic-index,.topic-page { width:min(100% - 22px,1040px); }
+  .topic-body .topnav { padding-inline:14px; }
+  .topic-body .topnav-links { gap:13px; }
+  .topic-body .topnav-links a { font-size:11px; }
+  .topic-body .topnav-logo { font-size:11px; }
+  .topic-index-hero h1,.topic-hero h1 { font-size:36px; }
+  .topic-row { grid-template-columns:1fr; }
+  .topic-row > strong { padding-top:0; }
+  .topic-breadcrumb { margin-bottom:32px; }
+  .topic-lead { font-size:16px; }
+  .lesson-player { border-radius:7px; }
+  .player-head { padding:14px; }
+  .lesson-scene { padding:28px 14px; }
+  .lesson-scene,.player-stage { min-height:715px; }
+  .scene-visual { padding:13px; }
+  .player-controls { gap:6px; padding:11px 8px; }
+  .player-controls button { padding:0 8px; }
+  .speed-label > span { display:none; }
+  .metric-panel { grid-template-columns:1fr; }
+  .pipeline { grid-template-columns:repeat(2,1fr); }
+  .topic-pagination { grid-template-columns:1fr; }
+  .topic-pagination a:last-child { text-align:left; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .lesson-player::before { transition:none; }
+  .lesson-scene { animation:none; }
+}

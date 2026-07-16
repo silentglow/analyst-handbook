@@ -1,0 +1,72 @@
+[
+  {
+    "id": "incident-analysis",
+    "num": "专题 01",
+    "category": "业务分析",
+    "title": "指标异动：建立有证据的排查顺序",
+    "subtitle": "不要急着解释原因。先确认数据可信，再从范围、结构和业务链路逐层缩小问题。",
+    "theme": "#5eead4",
+    "theme_rgb": "94,234,212",
+    "duration": 18,
+    "level": "基础",
+    "source": "incident-analysis.html",
+    "output": "incident-analysis.html",
+    "objectives": ["区分数据异常、口径变化与真实业务变化", "用范围—结构—链路组织排查顺序", "把猜测改写成可以被证伪的验证任务"]
+  },
+  {
+    "id": "sql-grain",
+    "num": "专题 02",
+    "category": "业务 SQL",
+    "title": "SQL 业务建模：先定义粒度，再写 JOIN",
+    "subtitle": "SQL 语法并不难，真正困难的是先说清一行代表什么，以及结果表准备回答什么问题。",
+    "theme": "#60a5fa",
+    "theme_rgb": "96,165,250",
+    "duration": 22,
+    "level": "高频面试",
+    "source": "sql-grain.html",
+    "output": "sql-grain.html",
+    "objectives": ["识别订单表与明细表的不同粒度", "解释 JOIN 后重复计算的来源", "先设计结果数据结构，再选择查询方法"]
+  },
+  {
+    "id": "python-customer-value",
+    "num": "专题 03",
+    "category": "Python 综合案例",
+    "title": "从订单到策略：识别值得经营的用户",
+    "subtitle": "用一个完整案例串起数据清洗、用户粒度建模、价值分层、策略设计和结果验证。",
+    "theme": "#fbbf24",
+    "theme_rgb": "251,191,36",
+    "duration": 32,
+    "level": "综合实战",
+    "source": "python-customer-value.html",
+    "output": "python-customer-value.html",
+    "objectives": ["把订单数据转换为用户粒度分析表", "建立可解释的价值分层，而不是只输出标签", "形成带有限制条件和验证方案的经营建议"]
+  },
+  {
+    "id": "kmeans",
+    "num": "专题 04",
+    "category": "机器学习",
+    "title": "KMeans：从算法收敛到可用分群",
+    "subtitle": "看懂中心如何移动，也判断技术上分得开的群组能不能真正支持业务动作。",
+    "theme": "#a78bfa",
+    "theme_rgb": "167,139,250",
+    "duration": 28,
+    "level": "从 0 到 1",
+    "source": "kmeans.html",
+    "output": "kmeans.html",
+    "objectives": ["解释分配与更新如何交替收敛", "理解初始化、特征尺度和 K 值的影响", "用技术指标与业务可行动性共同评估结果"]
+  },
+  {
+    "id": "ab-test",
+    "num": "专题 05",
+    "category": "A/B 测试",
+    "title": "A/B 测试：从假设到上线决策",
+    "subtitle": "完整走过假设、指标、样本量、随机分流、结果解释和上线判断，而不是只计算一个 P 值。",
+    "theme": "#fb7185",
+    "theme_rgb": "251,113,133",
+    "duration": 35,
+    "level": "完整专题",
+    "source": "ab-test-flow.html",
+    "output": "ab-test.html",
+    "objectives": ["把业务想法写成可检验假设", "区分统计显著、效应大小与业务价值", "识别污染、提前偷看和护栏缺失等失败原因"]
+  }
+]

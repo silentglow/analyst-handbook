@@ -2,17 +2,18 @@
 
 > 不背标准答案，而是在真实业务问题中练习：如何定义问题、寻找证据、做出判断，并把结论讲清楚。
 
-[进入我的学习中心](https://silentglow.github.io/analyst-handbook/learn/) · [查看原有课程](https://silentglow.github.io/analyst-handbook/home.html) · [进入沉浸式案例库](https://silentglow.github.io/analyst-handbook/stories/) · [查看内容维护指南](CONTENT_GUIDE.md)
+[系统课程](https://silentglow.github.io/analyst-handbook/home.html) · [专题课程](https://silentglow.github.io/analyst-handbook/topics/) · [业务案例](https://silentglow.github.io/analyst-handbook/stories/)
 
 ## 这是什么
 
 这是一套面向数据分析学习者和求职者的开放式静态课程。它不把知识点堆成一份越来越长的题库，而是用三种互相配合的方式训练真正可迁移的能力：
 
 - **课程建立框架**：从指标、异动、实验到面试表达，形成完整分析主线；
+- **专题讲透方法**：围绕业务 SQL、Python 综合分析、机器学习和 A/B 测试，把原理、实现、失败边界和面试问答放在同一节课中；
 - **案例训练判断**：进入有角色、目标、数据与冲突的业务现场，先选择，再复盘；
 - **速览帮助复习**：在面试前快速回顾核心框架、90 秒回答和常见失分点。
 
-目前包括 **24 章核心课程、4 章机器学习扩展、26 个业务故事和 5 个原生 HTML 动画实验**。另有 313 份源文档进入改革账本，分别规划到机器学习从 0 到 1、A/B 测试、业务 SQL、Python 综合案例等路径。
+目前包括 **24 章核心课程、4 章机器学习扩展、5 节专题课程和 26 个业务故事**，支持桌面端与手机端阅读。
 
 ## 学习地图
 
@@ -28,7 +29,7 @@
 
 ### 第一次系统学习
 
-从[我的学习中心](https://silentglow.github.io/analyst-handbook/learn/)开始，先体验动画实验，再按五条系统路径继续。原有面试主线仍可从[课程首页](https://silentglow.github.io/analyst-handbook/home.html)进入，按五个阶段依次学习。每学完一个框架，就进入关联故事做一次判断练习，不必一次读完全部内容。
+从[课程首页](https://silentglow.github.io/analyst-handbook/home.html)开始，按五个阶段依次学习。先建立完整分析框架，再根据自己的薄弱点选择专题或业务案例，不必一次读完全部内容。
 
 ### 面试前快速复习
 
@@ -37,6 +38,10 @@
 1. 能否不看答案说出分析框架；
 2. 能否在 90 秒内讲清业务判断；
 3. 能否主动说明假设、风险和下一步行动。
+
+### 按专题深入
+
+[专题课程](https://silentglow.github.io/analyst-handbook/topics/)不重复铺陈基础语法，而是集中处理五类典型问题：指标异动、SQL 数据粒度、Python 综合分析、KMeans 业务分群和 A/B 测试。每节课都包含过程演示、完整解释、失败案例和面试问答。
 
 ### 学习机器学习业务应用
 
@@ -61,11 +66,9 @@
 ## 课程体验
 
 - **沉浸学习 / 速览复习双模式**：分别服务于理解和记忆；
-- **课程与案例双向关联**：学完方法可以立即练习，做完案例可以返回框架；
+- **三类内容各司其职**：系统课程建立主线，专题课程讲透方法，业务案例训练判断；
 - **真实失败案例**：不仅讲成功方案，也拆解目标、数据、验证、行动和环境层面的失败；
-- **教学型视觉内容**：使用决策路径、业务现场、数据机制和事故复盘图，而不是无关配图；
-- **原生 HTML 连续动画**：截图中的表格、流程、代码与图表被重建为可暂停、逐步、变速和重播的语义动画；
-- **个人学习进度**：继续学习、动画步骤和收藏保存在当前浏览器；
+- **克制的教学视觉**：只在过程、结构或状态变化难以用文字讲清时使用图解和动画；
 - **纯静态、响应式页面**：无需安装前端框架，手机和电脑都可以直接使用。
 
 ## 在本地阅读
@@ -76,7 +79,7 @@
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-然后打开 `http://127.0.0.1:8765/learn/`。普通学习者不需要运行构建脚本。
+然后打开 `http://127.0.0.1:8765/home.html`。普通学习者不需要运行构建脚本。
 
 ## 参与维护
 
@@ -84,10 +87,8 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 - 课程正文：`content/`
 - 故事正文：`story-src/`
-- 动画实验正文：`labs-src/`
-- 学习路径与实验信息：`tracks.json`、`lab-lessons.json`
-- 课程与故事信息：`chapters.json`、`stories.json`
-- 来源改革账本：`data/content-reform-ledger.json`（由 `tools/build_source_catalog.py` 生成）
+- 专题正文：`topics-src/`
+- 课程、故事与专题信息：`chapters.json`、`stories.json`、`topics.json`
 - 视觉与交互：`assets/`
 
 修改完成后运行：
@@ -96,7 +97,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 python3 build.py
 ```
 
-`home.html`、`index.html`、`articles/`、`stories/`、`labs/`、`learn/` 和 `reform/` 中的页面会由构建器统一生成。关于新内容应该写成课程、故事、知识卡还是练习，以及机器学习案例的准入规则，请阅读 [CONTENT_GUIDE.md](CONTENT_GUIDE.md)。
+`home.html`、`index.html`、`articles/`、`topics/` 和 `stories/` 中的页面会由构建器统一生成。关于新内容应该写成课程、故事、知识卡还是练习，以及机器学习案例的准入规则，请阅读 [CONTENT_GUIDE.md](CONTENT_GUIDE.md)。
 
 ## 内容原则
 
