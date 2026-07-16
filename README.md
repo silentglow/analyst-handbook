@@ -1,117 +1,103 @@
-# 数据分析师面试速通课
+# 数据分析师面试与业务实战手册
 
-> 用课程建立框架，用案例练习判断，用速览完成复习。
+> 不背标准答案，而是在真实业务问题中练习：如何定义问题、寻找证据、做出判断，并把结论讲清楚。
 
-这是一个无需安装前端框架的纯静态学习站点。目前包含：
+[在线开始学习](https://silentglow.github.io/analyst-handbook/home.html) · [进入沉浸式案例库](https://silentglow.github.io/analyst-handbook/stories/) · [查看内容维护指南](CONTENT_GUIDE.md)
 
-- 24 章核心课程，按 4 个能力模块组织
-- 4 章机器学习决策扩展：问题审查、履约风险、需求预测与失败复盘
-- 26 个沉浸式业务案例
-- “沉浸学习 / 速览复习”双阅读模式
-- 课程与案例之间的双向关联
-- 可持续新增内容的元数据与收件箱目录
+## 这是什么
 
-## 快速开始
+这是一套面向数据分析学习者和求职者的开放式静态课程。它不把知识点堆成一份越来越长的题库，而是用三种互相配合的方式训练真正可迁移的能力：
 
-在项目目录运行：
+- **课程建立框架**：从指标、异动、实验到面试表达，形成完整分析主线；
+- **案例训练判断**：进入有角色、目标、数据与冲突的业务现场，先选择，再复盘；
+- **速览帮助复习**：在面试前快速回顾核心框架、90 秒回答和常见失分点。
+
+目前包括 **24 章核心课程、4 章机器学习扩展和 26 个业务故事**，支持桌面端与手机端阅读。
+
+## 学习地图
+
+| 阶段 | 你要解决的问题 | 主要内容 |
+|---|---|---|
+| 01 · 完成第一场业务分析 | 怎样从一个模糊现象走到可执行方案？ | 指标体系、异动排查、A/B 实验、策略落地 |
+| 02 · 高频分析工具箱 | 面对不同问题，应该选什么方法？ | 用户分层、留存、预测、统计、因果与商业模式 |
+| 03 · 把分析变成面试答案 | 会分析，怎样让面试官听懂并相信？ | 自我介绍、项目表达、指标题、异动题与费米估算 |
+| 04 · 模拟面试与职业迁移 | 遇到陌生行业和追问，怎样稳定发挥？ | 完整模拟、策略评估、SQL 与行业迁移 |
+| 05 · 机器学习：先判断，再建模 | 什么时候需要模型，什么时候应该拒绝？ | 问题审查、履约风险、需求预测与模型失败复盘 |
+
+## 选择适合你的学习方式
+
+### 第一次系统学习
+
+从[课程首页](https://silentglow.github.io/analyst-handbook/home.html)开始，按五个阶段依次学习。每学完一个框架，就进入关联故事做一次判断练习，不必一次读完全部内容。
+
+### 面试前快速复习
+
+进入任意章节后切换到“速览复习”，重点检查三件事：
+
+1. 能否不看答案说出分析框架；
+2. 能否在 90 秒内讲清业务判断；
+3. 能否主动说明假设、风险和下一步行动。
+
+### 学习机器学习业务应用
+
+建议依次学习 [问题审查](https://silentglow.github.io/analyst-handbook/articles/ml01.html)、[履约风险](https://silentglow.github.io/analyst-handbook/articles/ml02.html)、[需求预测](https://silentglow.github.io/analyst-handbook/articles/ml03.html)和[模型失败复盘](https://silentglow.github.io/analyst-handbook/articles/ml04.html)，最后完成案例：[0.94 分的模型，为什么被叫停？](https://silentglow.github.io/analyst-handbook/stories/model-score-trap.html)
+
+机器学习部分不会从算法清单开始，也不会把“用户流失预测”当作默认入门题。重点是先确认业务对象、决策时点、可执行动作和错误成本，再判断规则、实验、分析或模型哪一种方案更合适。
+
+## 在案例里练什么
+
+案例不是装饰性故事，而是一组需要你亲自做决定的业务演练。例如：
+
+- [GMV 涨了，利润为什么反而降低？](https://silentglow.github.io/analyst-handbook/stories/gmv-up-profit-down.html)
+- [转化率跌了，问题究竟在哪里？](https://silentglow.github.io/analyst-handbook/stories/conversion-rate-drop.html)
+- [优惠券带来的是真增量，还是补贴了自然转化？](https://silentglow.github.io/analyst-handbook/stories/coupon-incrementality.html)
+- [双十一 GMV 达标，就代表活动成功了吗？](https://silentglow.github.io/analyst-handbook/stories/double-eleven-review.html)
+- [模型分数很漂亮，为什么上线后却被紧急叫停？](https://silentglow.github.io/analyst-handbook/stories/model-score-trap.html)
+
+[![模型评分陷阱案例中的事故控制台：模型分数、业务后果与处置动作并不总是一致](assets/visuals/story-26-incident-console.svg)](https://silentglow.github.io/analyst-handbook/stories/model-score-trap.html)
+
+每个故事都尽量让你经历“看到现象—提出假设—选择证据—形成动作—复盘错误”的完整过程。错误选项也会说明为什么看似合理、又为什么可能把分析带偏。
+
+## 课程体验
+
+- **沉浸学习 / 速览复习双模式**：分别服务于理解和记忆；
+- **课程与案例双向关联**：学完方法可以立即练习，做完案例可以返回框架；
+- **真实失败案例**：不仅讲成功方案，也拆解目标、数据、验证、行动和环境层面的失败；
+- **教学型视觉内容**：使用决策路径、业务现场、数据机制和事故复盘图，而不是无关配图；
+- **纯静态、响应式页面**：无需安装前端框架，手机和电脑都可以直接使用。
+
+## 在本地阅读
+
+仓库已经包含生成好的页面。下载项目后，在项目目录启动一个本地服务：
 
 ```bash
-python3 build.py
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-然后访问：
+然后打开 `http://127.0.0.1:8765/home.html`。普通学习者不需要运行构建脚本。
 
-- 课程总首页：`http://127.0.0.1:8765/home.html`
-- 第一章：`http://127.0.0.1:8765/index.html`
-- 案例故事库：`http://127.0.0.1:8765/stories/index.html`
+## 参与维护
 
-也可以直接打开 HTML 文件，但通过本地服务访问更接近正式部署效果。
+如果你要修改课程或增加新知识，请优先编辑内容源，而不是直接修改生成页面：
 
-## 内容结构
+- 课程正文：`content/`
+- 故事正文：`story-src/`
+- 课程与故事信息：`chapters.json`、`stories.json`
+- 视觉与交互：`assets/`
 
-```text
-analyst-handbook/
-├── build.py                 # 统一构建器
-├── modules.json             # 四个核心模块 + 一个机器学习扩展
-├── chapters.json            # 24 章核心课程 + 4 章扩展元数据
-├── stories.json             # 26 个故事元数据
-├── content/                 # 内容源
-│   ├── guide.html           # CH01 正文源
-│   ├── ch02.html ...        # 其余课程正文源
-│   ├── inbox/               # 尚未判断归属的新材料
-│   ├── knowledge/           # 可复用知识卡与方法补充
-│   ├── drills/              # 小练习、追问题、评分题
-│   └── updates/             # 时效性内容与行业更新
-├── story-src/               # 沉浸式故事原始源文件
-├── templates/               # 新内容写作说明
-├── assets/                  # 全站样式、交互与本地视觉素材
-│   └── visuals/             # 课程图解、业务现场图与事故图
-├── home.html                # 生成：课程总首页
-├── index.html               # 生成：CH01
-├── articles/                # 生成：CH02—CH24 与 ML01—ML04
-└── stories/                 # 生成：故事库首页与 26 个故事
-```
-
-### 源文件与生成文件
-
-日常修改应发生在以下位置：
-
-- 课程正文：`content/*.html`
-- 课程结构：`chapters.json`、`modules.json`
-- 故事正文：`story-src/*.html`
-- 故事结构：`stories.json`
-- 统一视觉与交互：`assets/`
-
-以下文件由 `build.py` 生成，不应直接修改：
-
-- `home.html`
-- `index.html`
-- `articles/*.html`
-- `stories/index.html`
-- `stories/*.html`
-
-直接修改生成文件，会在下一次构建时被覆盖。
-
-## 如何新增内容
-
-不要默认把新知识点机械追加成 CH25、CH26。先判断它属于哪一种容器：
-
-1. **改变核心能力主线**：更新或新增课程章节。
-2. **需要读者在业务现场做判断**：新增案例故事。
-3. **补充一个可复用方法或定义**：放入 `content/knowledge/`。
-4. **适合短时重复练习**：放入 `content/drills/`。
-5. **时效强、未来可能过期**：放入 `content/updates/`。
-6. **暂时无法判断**：先放入 `content/inbox/`，定期整理。
-
-完整的新增流程、元数据字段和质量标准见 [CONTENT_GUIDE.md](CONTENT_GUIDE.md)。
-
-## 构建与发布
-
-每次修改内容后运行：
+修改完成后运行：
 
 ```bash
 python3 build.py
 ```
 
-构建器只使用 Python 标准库。站点本身为纯静态页面，可直接发布到 GitHub Pages、Netlify、Vercel 或任意静态文件服务器。
+`home.html`、`index.html`、`articles/` 和 `stories/` 中的页面会由构建器统一生成。关于新内容应该写成课程、故事、知识卡还是练习，以及机器学习案例的准入规则，请阅读 [CONTENT_GUIDE.md](CONTENT_GUIDE.md)。
 
-### GitHub Pages
+## 内容原则
 
-1. 将仓库推送到 GitHub。
-2. 进入仓库 **Settings → Pages**。
-3. 选择要发布的分支与根目录。
-4. 等待部署完成后访问 Pages 地址。
-
-发布前建议至少抽查：课程首页、CH01、CH04、CH18、故事库、第一篇故事和最后一篇故事。
-
-## 内容设计原则
-
-- **课程轻沉浸、强结构**：保证学习主线稳定。
-- **案例强沉浸、强判断**：让用户先决策，再看到解释。
-- **复习极简**：只保留框架、90 秒回答与失分点。
-- **视觉必须传递知识**：业务现场图、决策路径图、数据机制图和失败复盘图优先，不使用无关办公配图填充页面。
-- **先证据后结论**：明确区分线索、假设与根因。
-- **维护源，不维护副本**：所有页面通过统一构建器生成。
-- **模型可以被否决**：机器学习内容必须同时呈现规则、实验、预测与不建模方案。
-- **失败也是正式内容**：每个模型主题至少包含一个失败机制、可观察信号、止损动作和修复方案。
+1. **先定义问题，再选择方法。**
+2. **先给证据，再下结论。**
+3. **先做业务判断，再讨论模型分数。**
+4. **成功与失败都应当成为正式教材。**
+5. **视觉必须帮助理解，而不只是让页面更热闹。**
+6. **最终产出应当能被表达、被执行，也能被验证。**
