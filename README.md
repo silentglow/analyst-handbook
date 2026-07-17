@@ -89,6 +89,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - 故事正文：`story-src/`
 - 专题正文：`topics-src/`
 - 课程、故事与专题信息：`chapters.json`、`stories.json`、`topics.json`
+- 场景系统：五个学习阶段的现场、角色与场景色定义在 `modules.json` 的 `scene` 字段;每章"此刻发生什么"的一句在 `chapters.json` 的 `moment` 字段,章节页顶部的现场档案条由构建器据此渲染
 - 样式系统：`assets/css/`(按 `tokens → base → components → page-*` 分层,`tokens.css` 是全站唯一的颜色、字号与身份色来源:课程=蓝、专题=紫、案例=橙)
 - 交互脚本与教学图:`assets/*.js`、`assets/visuals/`
 

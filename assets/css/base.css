@@ -32,7 +32,7 @@ body.toc-open { overflow: hidden; }
 .option:focus-visible,
 .mode-switch button:focus-visible,
 .mode-link:focus-visible,
-.toc-toggle:focus-visible { outline: 2px solid var(--theme); outline-offset: 3px; }
+.toc-toggle:focus-visible { outline: 2px solid var(--stage-accent, var(--brand)); outline-offset: 3px; }
 
 /* Scroll reveal · JS adds .visible; without JS content stays readable.
    build.py 在每个页面 head 里给 <html> 加 js 类。 */

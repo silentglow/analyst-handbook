@@ -125,22 +125,22 @@ html.js .curriculum-stage.is-visible .stage-visual { opacity: 1; transform: none
 .stage-visual-toolbox > strong { color: var(--brand); font-size: 13px; }
 .stage-visual-answer { background: #fff; }
 .answer-clock { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; }
-.answer-clock span { border-radius: 10px; padding: 8px; background: var(--topic-soft); color: #6952a3; font-size: 12px; font-weight: 760; text-align: center; }
+.answer-clock span { border-radius: 10px; padding: 8px; background: #f8ecdf; color: #a34a08; font-size: 12px; font-weight: 760; text-align: center; }
 .answer-stack { margin-top: 14px; border: 1px solid var(--line); border-radius: 15px; padding: 4px 17px; }
 .answer-stack p { display: grid; grid-template-columns: 48px 1fr; gap: 10px; margin: 0; border-bottom: 1px solid var(--line); padding: 12px 0; color: var(--ink-2); font-size: 13px; }
 .answer-stack p:last-child { border-bottom: 0; }
-.answer-stack b { color: #7655c0; }
+.answer-stack b { color: #a34a08; }
 .answer-feedback { display: flex; align-items: center; gap: 10px; margin-top: 15px; color: var(--muted); font-size: 13px; }
-.answer-feedback i { width: 9px; height: 9px; border-radius: 50%; background: #7c5ccc; }
-.stage-visual-simulation { background: #fff8ec; }
-.simulation-timeline { position: absolute; top: 68px; left: 45px; right: 45px; height: 2px; background: #e2c795; }
-.simulation-timeline i { position: relative; display: inline-block; width: 11px; height: 11px; margin-right: calc(33.333% - 15px); border: 2px solid #fff; border-radius: 50%; background: #d18a2d; transform: translateY(-5px); box-shadow: 0 0 0 2px #d18a2d; }
+.answer-feedback i { width: 9px; height: 9px; border-radius: 50%; background: #a34a08; }
+.stage-visual-simulation { background: #eef1f6; }
+.simulation-timeline { position: absolute; top: 68px; left: 45px; right: 45px; height: 2px; background: #c3ccd9; }
+.simulation-timeline i { position: relative; display: inline-block; width: 11px; height: 11px; margin-right: calc(33.333% - 15px); border: 2px solid #fff; border-radius: 50%; background: #475569; transform: translateY(-5px); box-shadow: 0 0 0 2px #475569; }
 .stage-visual-simulation ol { position: relative; display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin: 64px 0 28px; padding: 0; list-style: none; }
 .stage-visual-simulation li { text-align: center; }
-.stage-visual-simulation li b { display: block; color: #a76120; font-size: 12px; }
-.stage-visual-simulation li span { display: block; margin-top: 7px; color: #5f4a32; font-size: 12px; }
-.stage-visual-simulation > p { display: flex; align-items: center; gap: 10px; margin: 0; border-radius: 13px; padding: 14px; background: #fff; color: #7c6245; font-size: 12px; }
-.stage-visual-simulation > p i { height: 7px; flex: 1; border-radius: 99px; background: linear-gradient(90deg,#ecc17e,#db7d4c,#6c87e7); }
+.stage-visual-simulation li b { display: block; color: #334155; font-size: 12px; }
+.stage-visual-simulation li span { display: block; margin-top: 7px; color: #4c5866; font-size: 12px; }
+.stage-visual-simulation > p { display: flex; align-items: center; gap: 10px; margin: 0; border-radius: 13px; padding: 14px; background: #fff; color: #4c5866; font-size: 12px; }
+.stage-visual-simulation > p i { height: 7px; flex: 1; border-radius: 99px; background: linear-gradient(90deg,#c6cfdb,#8494ab,#334155); }
 .stage-visual-simulation > p b { color: #3855ad; }
 .stage-visual-model { display: grid; grid-template-columns: .74fr 1fr; gap: 12px; background: var(--navy); color: #fff; }
 .model-score { display: flex; flex-direction: column; justify-content: center; border: 1px solid rgba(255,255,255,.12); border-radius: 16px; padding: 18px; background: rgba(255,255,255,.05); }
@@ -177,8 +177,8 @@ html.js .curriculum-stage.is-visible .stage-visual { opacity: 1; transform: none
 .stage-business-loop .curriculum-card:first-child .curriculum-io { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; border-top: 0; }
 .stage-business-loop .curriculum-card:first-child .curriculum-io > div { display: block; border: 1px solid var(--line); border-radius: 13px; padding: 13px; }
 .stage-business-loop .curriculum-card:first-child .curriculum-io dd { margin-top: 5px; }
-.stage-interview-output .curriculum-card { border-left: 4px solid #a78bfa; }
-.stage-mock-career .curriculum-card { background: #fffcf6; }
+.stage-interview-output .curriculum-card { border-left: 4px solid var(--stage-theme); }
+.stage-mock-career .curriculum-card { background: #f8f9fb; }
 .stage-ml-decision .curriculum-card { border-color: #d9dfe8; background: #f9fbfd; }
 .course-finish { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; margin-top: 30px; border-radius: 27px; padding: 46px 50px; background: var(--navy); color: #fff; }
 .course-finish p { color: #aabaff; }

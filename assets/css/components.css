@@ -57,12 +57,11 @@
 
 /* Lesson progress hairline */
 .site-progress { position: fixed; top: 0; left: 0; right: 0; z-index: 501; height: 3px; background: transparent; }
-.site-progress span { display: block; width: var(--lesson-progress); height: 100%; background: var(--brand); }
+.site-progress span { display: block; width: var(--lesson-progress); height: 100%; background: var(--stage-accent, var(--brand)); }
 
 /* Shared actions */
 .home-actions { display: flex; flex-wrap: wrap; gap: 11px; }
-.home-actions a,
-.landing-start a {
+.home-actions a {
   display: inline-flex;
   min-height: 50px;
   align-items: center;
@@ -77,8 +76,7 @@
   text-decoration: none;
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
 }
-.home-actions a:hover,
-.landing-start a:hover { transform: translateY(-2px); box-shadow: 0 11px 25px rgba(29, 44, 35, .10); }
+.home-actions a:hover { transform: translateY(-2px); box-shadow: 0 11px 25px rgba(29, 44, 35, .10); }
 .home-actions a.primary { border-color: var(--brand); background: var(--brand); color: #fff; box-shadow: 0 12px 28px rgba(40, 87, 229, .22); }
 .home-actions a.primary:hover { border-color: var(--brand-deep); background: var(--brand-deep); }
 

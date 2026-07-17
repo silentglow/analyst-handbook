@@ -53,4 +53,10 @@
   --theme: var(--brand);
   --theme-rgb: 40, 87, 229;
   --module-theme: var(--brand);
+
+  /* 阶段场景色:build.py 从 modules.json 的 scene 注入;此处为回退值。
+     只用于"场景层"元素(现场档案条/进度条/brief/TOC 阶段卡),正文保持品牌蓝。 */
+  --stage-accent: var(--brand);
+  --stage-accent-rgb: 40, 87, 229;
+  --stage-soft: var(--brand-soft);
 }
