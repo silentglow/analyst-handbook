@@ -1,98 +1,53 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。">
-<title>鲜食记 · 进入场景 · 数据分析面试速通课</title>
-<link rel="stylesheet" href="../assets/style.css">
-<link rel="icon" href="data:,">
-<style>:root { --theme: #fbbf24; --theme-rgb: 251,191,36; --module-theme: #5eead4; }</style>
-<link rel="stylesheet" href="../assets/editorial.css">
-<link rel="stylesheet" href="../assets/experience.css">
-</head>
-<body data-page="lesson" data-default-mode="learn">
-<a class="skip-link" href="#lesson-content">跳到正文</a>
-<div class="site-progress" style="--lesson-progress:33%"><span></span></div>
-<div class="ambient-bg" aria-hidden="true">
-  <div class="orb orb-one" style="background:radial-gradient(circle,rgba(251,191,36,0.12),transparent 70%)"></div>
-  <div class="orb orb-two"></div><div class="orb orb-three"></div>
-</div>
-<div class="grid-bg"></div>
-<nav class="topnav">
-  <a href="../index.html" class="topnav-logo">分析手册</a>
-  <div class="topnav-links"><a class="active" href="../courses.html">系统课程</a><a href="../topics/index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div>
-</nav>
-<main class="page lesson-page" id="lesson-content">
-  <header class="lesson-header">
-    <div class="module-line"><span>阶段 01</span><strong>完成第一场业务分析</strong><em>2/6</em></div>
-    <div class="ch-badge">CH02 / 实战</div>
-    <h1 class="ch-title static-title">进入场景</h1>
-    <p class="ch-subtitle lesson-description">产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。</p>
-    <div class="mode-switch" role="group" aria-label="阅读模式">
-      <button type="button" class="active" data-mode-target="learn"><span>完整学习</span><small>案例、原理与推导</small></button>
-      <button type="button" data-mode-target="review"><span>面试速览</span><small>主线、答案与失分点</small></button>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。"><title>鲜食记 · 进入场景 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="icon" href="data:,"><style>:root { --theme: #fbbf24; --theme-rgb: 251,191,36; --module-theme: #5eead4; }</style><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css?v=20260717-guide3"></head>
+<body data-page="lesson" data-lesson="ch02" data-default-mode="learn"><a class="skip-link" href="#lesson-content">跳到正文</a><div class="site-progress" style="--lesson-progress:33%"><span></span></div><nav class="topnav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a class="active" href="../courses.html">系统课程</a><a href="../topics/index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
+<main class="page lesson-page" id="lesson-content"><header class="lesson-header"><div class="module-line"><span>阶段 01</span><strong>完成第一场业务分析</strong><em>本阶段 2/6</em></div><p class="lesson-series">分析手册 · 系统课程</p><div class="lesson-title-row"><div><div class="ch-badge">CH02 / 实战</div><h1 class="ch-title static-title">进入鲜食记场景</h1></div><span class="lesson-duration">9<small>分钟</small></span></div><p class="ch-subtitle lesson-description">产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。</p><div class="mode-switch" role="group" aria-label="阅读模式"><button type="button" class="active" data-mode-target="learn"><span>完整学习</span><small>案例、图解与推导</small></button><button type="button" data-mode-target="review"><span>面试速览</span><small>主线、答案与失分点</small></button></div></header>
+<div id="learn-mode" class="learning-mode active"><section class="lesson-brief reveal"><div class="lesson-brief-main"><div class="section-eyebrow">本章任务</div><h2>学完后，你要交付什么</h2><ul><li>从模糊需求中识别真正需要回答的问题</li><li>建立分析前的任务边界和交付意识</li></ul></div><div class="lesson-brief-side"><span>9 MIN</span><strong>业务实战</strong></div></section><section class="lesson-visual lesson-visual--briefing reveal" aria-label="任务现场"><header><div><span>任务现场</span><h2>先看懂关系，再进入细节</h2></div><p>这张图展示本章的信息流动，以及最后需要形成的判断。</p></header><div class="route-canvas"><div class="route-question"><small>当前任务</small><strong>进入鲜食记场景</strong></div><ol><li><span>01</span><strong>明确业务目标</strong></li><li><span>02</span><strong>确认指标异常</strong></li><li><span>03</span><strong>列出未知问题</strong></li><li><span>04</span><strong>确定汇报交付</strong></li></ol><div class="route-result"><small>带走</small><strong>确定汇报交付</strong></div></div></section><div class="lesson-body"><section class="scenario-opening reveal">
+  <span>09:18 · 入职第二周</span>
+  <h2>下午两点，产品负责人需要你给出清晰判断。</h2>
+  <p>鲜食记是一款健康饮食 App。用户浏览食谱、设定饮食计划、每日打卡，也可以订阅会员获得个性化推荐。新用户仍在增长，但产品负责人发现留存开始异常。</p>
+</section>
+
+<div class="dialogue reveal">“新用户次日打卡率一直在掉，上周还有 45%，这周只剩 33%。下午两点跟我过数据，你先看看。”</div>
+
+<section class="metric-explorer reveal" data-metric-explorer>
+  <header><div><span>证据面板 · 近 7 天</span><h2>先看数据能说明什么，也要看它不能说明什么。</h2></div><p>点击任意指标，查看它对当前判断的价值。</p></header>
+  <div class="metric-explorer-layout">
+    <div class="metric-list" role="list">
+      <button class="data-row" type="button" data-insight="注册规模稳定，说明问题暂时不像来自新增量骤降；但它不能证明新增用户结构没有变化。" data-question="还要按渠道、地区和日期检查新增用户构成。"><span class="data-label">新用户注册数</span><span class="data-value">2,847 / 天</span></button>
+      <button class="data-row is-alert" type="button" data-insight="次日打卡率从 45% 降到 33%，异常幅度足够大，值得立即排查；但目前只有周均值，尚不知道从哪天开始。" data-question="先拉日趋势，并同时确认口径、埋点与数据延迟。"><span class="data-label">次日打卡率</span><span class="data-value down">33% <small>上周 45%</small></span></button>
+      <button class="data-row" type="button" data-insight="首次课程完成率同步下跌，说明打卡下降可能和首日体验链路有关，是重要的机制线索。" data-question="检查课程曝光、开始、完成各节点，寻找具体断点。"><span class="data-label">首次课程完成率</span><span class="data-value down">18% <small>上周 28%</small></span></button>
+      <button class="data-row" type="button" data-insight="浏览量基本稳定，说明用户仍有探索意愿；问题可能出在从“浏览”进入“课程与打卡”的承接环节。" data-question="对比浏览后进入课程的完整转化路径。"><span class="data-label">食谱浏览数 / 人</span><span class="data-value">6.2</span></button>
+      <button class="data-row" type="button" data-insight="收藏率稳定，代表内容兴趣没有全面崩塌；但收藏和完成课程不是同一行为。" data-question="检查收藏后是否能顺利回访并开始课程。"><span class="data-label">课程收藏率</span><span class="data-value">32%</span></button>
+      <button class="data-row" type="button" data-insight="会员转化暂时稳定，它不是本次留存异常的第一优先级，也不能用来否定体验问题。" data-question="先解决激活链路，再观察会员转化是否出现滞后影响。"><span class="data-label">会员转化率</span><span class="data-value">4.1%</span></button>
+      <button class="data-row" type="button" data-insight="单一渠道占比达到 68%，结构风险很高。若该渠道近期投放人群或素材变化，整体指标会被显著拉动。" data-question="按渠道拆解留存，同时检查小红书内部的素材、批次与落地页。"><span class="data-label">小红书渠道占比</span><span class="data-value">68%</span></button>
     </div>
-  </header>
-
-  <div id="learn-mode" class="learning-mode active">
-
-<section class="lesson-brief reveal">
-  <div class="lesson-brief-main">
-    <div class="section-eyebrow">本章目标</div>
-    <h2>完成这一章，你应该能够</h2>
-    <ul><li>从模糊需求中识别真正需要回答的问题</li><li>建立分析前的任务边界和交付意识</li></ul>
-  </div>
-  <div class="lesson-brief-side">
-    <span>9 MIN</span>
-    <strong>业务实战</strong>
+    <aside class="metric-insight" aria-live="polite">
+      <span>当前证据</span><h3 data-metric-title>请选择一条指标</h3>
+      <p data-metric-insight>这里会解释这条数据如何支持当前判断。</p>
+      <div><strong>下一步应追问</strong><p data-metric-question>点击左侧任意指标开始分析。</p></div>
+    </aside>
   </div>
 </section>
-    <section class="lesson-framework reveal" aria-label="本章判断路径">
-  <div class="lesson-framework__intro"><span>本章判断路径</span><p>先理解顺序，再进入细节。每一步都应该缩小问题，而不是增加术语。</p></div>
-  <ol><li><span>01</span><strong>明确业务目标</strong></li><li><span>02</span><strong>确认指标异常</strong></li><li><span>03</span><strong>列出未知问题</strong></li><li><span>04</span><strong>确定汇报交付</strong></li></ol>
+
+<section class="task-brief reveal">
+  <div><span>14:00 · 你的交付</span><h2>跟产品负责人过数据时，需要回答三个问题。</h2></div>
+  <ol><li><b>01</b><p>这 12 个百分点的下降是真实业务变化，还是口径、埋点或数据延迟造成的假异常？</p></li><li><b>02</b><p>如果异常真实，它从哪天开始，集中在哪个环节、渠道或用户群？</p></li><li><b>03</b><p>现有证据支持哪些假设？还需要什么验证，下一步准备采取什么行动？</p></li></ol>
 </section>
-    <div class="lesson-body">  <p class="p reveal">这是你入职鲜食记的第二周。公司做健康饮食APP——用户在上面浏览食谱、设定饮食计划、每天打卡记录，还可以订阅会员解锁个性化推荐。业务刚起步，新用户增长不错，但产品负责人一直在盯留存数据。</p>
-  <p class="p reveal">今天早上你刚坐到工位，她就走过来了：</p>
 
-  <div class="dialogue reveal">"新用户的次日打卡率一直在掉，上周还有45%，这周只剩33%了。下午两点跟我过一下数据，你先看看。"</div>
-
-  <p class="p reveal">你打开数据看板，面前是这样的：</p>
-
-  <div class="card reveal">
-    <div class="card-label"><span class="dot"></span>新用户核心指标 · 近7天 <span style="color:#ef4444;margin-left:8px">⚠ 异常</span></div>
-    <div class="data-row"><span class="data-label">新用户注册数</span><span class="data-value">2,847/天</span></div>
-    <div class="data-row"><span class="data-label">次日打卡率</span><span class="data-value down">33% ↓ (上周45%)</span></div>
-    <div class="data-row"><span class="data-label">首次课程完成率</span><span class="data-value down">18% ↓ (上周28%)</span></div>
-    <div class="data-row"><span class="data-label">食谱浏览数/人</span><span class="data-value">6.2</span></div>
-    <div class="data-row"><span class="data-label">课程收藏率</span><span class="data-value">32%</span></div>
-    <div class="data-row"><span class="data-label">会员转化率</span><span class="data-value">4.1%</span></div>
-    <div class="data-row"><span class="data-label">小红书渠道占比</span><span class="data-value">68%</span></div>
+<section class="decision-question reveal" data-question>
+  <div class="card-label">先做判断</div>
+  <h2>看到这组数据，你最合理的第一步是什么？</h2>
+  <p>这一步训练你安排验证顺序，并根据新证据调整行动。</p>
+  <div class="option-list">
+    <div class="option" data-correct="false" data-feedback="口径检查非常必要，但只做口径检查还不够。应同时看日趋势，确认异常何时出现、形态如何，再判断是否与数据变更重合。"><span class="option-label">A</span><span class="option-text">只确认“次日打卡率”的计算口径最近有没有改过</span></div>
+    <div class="option" data-correct="false" data-feedback="渠道拆解是重要方向，尤其小红书占比达到 68%。但在确认异常起点与数据质量之前直接下钻，可能把正常结构误判成根因。"><span class="option-label">B</span><span class="option-text">立即按渠道拆开，先认定小红书用户出了问题</span></div>
+    <div class="option" data-correct="true" data-feedback="这是更稳妥的起点：先拉日趋势定位异常起点和形态，同时核对口径、埋点与数据延迟。确认异常真实后，再按渠道和行为路径下钻。"><span class="option-label">C</span><span class="option-text">拉取日趋势定位异常起点，并同步检查口径、埋点与数据延迟</span></div>
+    <div class="option" data-correct="false" data-feedback="课程完成率同步下降是一条强线索，但“同步变化”仍不等于同一根因。需要通过时间、路径和分群证据继续验证。"><span class="option-label">D</span><span class="option-text">因为首次课程完成率也下降，直接判断两者来自同一个原因</span></div>
   </div>
+</section>
 
-  <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>你要做的事</div>
-    <div class="card-body"><p>下午两点跟产品负责人过数据。你需要回答三个问题：</p></div>
-    <div class="step"><span class="step-num">01</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">这12个百分点的下降，是真实业务变化，还是数据本身出了问题？</div></div>
-    <div class="step"><span class="step-num">02</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">如果是真实的，问题出在哪个环节？哪个渠道？哪类用户？</div></div>
-    <div class="step"><span class="step-num">03</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">你能提出什么可验证的解决方案？</div></div>
-  </div>
-
-  <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>先想想</div>
-    <div class="card-title">看到这些数据，你的第一步是什么？</div>
-    <div class="card-body"><p>花30秒想一想，再往下翻。</p></div>
-    <div style="margin-top:16px">
-      <div class="option"><span class="option-label">A</span><span class="option-text">先确认"次日打卡率"的计算口径最近有没有改过</span></div>
-      <div class="option"><span class="option-label">B</span><span class="option-text">按渠道拆开看，是不是小红书来的用户出了问题</span></div>
-      <div class="option"><span class="option-label">C</span><span class="option-text">按时间拉趋势，看是从哪天开始跌的</span></div>
-      <div class="option"><span class="option-label">D</span><span class="option-text">先看首次课程完成率也跌了，可能是同一个原因</span></div>
-    </div>
-  </div>
-
-  <p class="p reveal" style="font-size:14px;color:rgba(255,255,255,0.35)">选好了？在上一章我们讲过，遇到数据异动的第一步永远是——先确认数据本身有没有问题。下一章我们开始排查。</p></div>
-  </div>
-  <div id="review-mode" class="learning-mode">
+<div class="lesson-takeaway reveal"><span>本章先留下一个动作</span><p>先确认异常是否真实，并定位它何时开始；数据质量与趋势形态应并行检查。下一章再把业务目标翻译成一套能指导排查的指标体系。</p></div>
+</div></div><div id="review-mode" class="learning-mode">
 <section class="review-sheet" aria-label="面试速览">
   <div class="review-kicker">INTERVIEW REVIEW · 9 分钟课程 · 2 分钟回顾</div>
   <h2>先记住这条主线</h2>
@@ -100,7 +55,7 @@
   <div class="review-grid">
     <article class="review-card review-card-answer">
       <div class="review-label">90 秒回答核心</div>
-      <p>拿到业务异动时，我不会立即下结论，而会先澄清业务目标、指标口径、影响范围和交付时限，再安排验证顺序。</p>
+      <p>拿到业务异动时，我会先澄清业务目标、指标口径、影响范围和交付时限，再安排验证顺序，最后根据证据形成结论。</p>
     </article>
     <article class="review-card">
       <div class="review-label">本章学习目标</div>
@@ -115,17 +70,6 @@
     <button class="mode-link" type="button" data-mode-target="learn">返回完整学习</button>
     <a class="mode-link secondary" href="../courses.html">查看完整课程地图</a>
   </div>
-</section></div>
-  <nav class="course-bottom-nav"><a class="course-nav-link prev" href="guide.html"><span>上一章</span><strong>← 学习指南</strong></a><a class="course-nav-link next" href="ch03.html"><span>下一章</span><strong>该盯哪些指标 →</strong></a></nav>
-</main>
-<button id="toc-toggle" class="toc-toggle" type="button">课程目录</button>
-<aside id="toc-panel" class="toc-panel" aria-label="课程目录"></aside>
-<div id="toc-overlay" class="toc-overlay"></div>
-<script src="../assets/main.js"></script>
-<script>
-window.TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "href": "guide.html", "module": "business-loop"}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "href": "ch02.html", "module": "business-loop"}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "href": "ch03.html", "module": "business-loop"}, {"num": "04", "title": "排查异动", "slug": "ch04", "href": "ch04.html", "module": "business-loop"}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "href": "ch05.html", "module": "business-loop"}, {"num": "06", "title": "落地策略", "slug": "ch06", "href": "ch06.html", "module": "business-loop"}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "href": "ch07.html", "module": "analysis-toolbox"}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "href": "ch08.html", "module": "analysis-toolbox"}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "href": "ch09.html", "module": "analysis-toolbox"}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "href": "ch10.html", "module": "analysis-toolbox"}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "href": "ch11.html", "module": "analysis-toolbox"}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "href": "ch12.html", "module": "analysis-toolbox"}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "href": "ch13.html", "module": "analysis-toolbox"}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "href": "ch14.html", "module": "analysis-toolbox"}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "href": "ch15.html", "module": "interview-output"}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "href": "ch16.html", "module": "interview-output"}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "href": "ch17.html", "module": "interview-output"}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "href": "ch18.html", "module": "interview-output"}, {"num": "19", "title": "费米估算", "slug": "ch19", "href": "ch19.html", "module": "interview-output"}, {"num": "20", "title": "从零做项目", "slug": "ch20", "href": "ch20.html", "module": "interview-output"}, {"num": "21", "title": "完整模拟面试", "slug": "ch21", "href": "ch21.html", "module": "mock-career"}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "href": "ch22.html", "module": "mock-career"}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "href": "ch23.html", "module": "mock-career"}, {"num": "24", "title": "行业与职业", "slug": "ch24", "href": "ch24.html", "module": "mock-career"}, {"num": "ML01", "title": "先判断，再建模", "slug": "ml01", "href": "ml01.html", "module": "ml-decision"}, {"num": "ML02", "title": "履约风险决策", "slug": "ml02", "href": "ml02.html", "module": "ml-decision"}, {"num": "ML03", "title": "需求预测陷阱", "slug": "ml03", "href": "ml03.html", "module": "ml-decision"}, {"num": "ML04", "title": "模型失败复盘", "slug": "ml04", "href": "ml04.html", "module": "ml-decision"}];
-window.TOC_CURRENT = "ch02";
-window.COURSE_MODULES = [{"id": "business-loop", "num": "01", "title": "完成第一场业务分析", "eyebrow": "主线实战", "description": "以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。", "theme": "#5eead4", "outcome": "完成一段可以在面试中讲清楚的端到端业务项目。"}, {"id": "analysis-toolbox", "num": "02", "title": "高频分析工具箱", "eyebrow": "方法进阶", "description": "掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。", "theme": "#60a5fa", "outcome": "面对不同业务问题，能够选择合适方法并说明使用条件。"}, {"id": "interview-output", "num": "03", "title": "把分析变成面试答案", "eyebrow": "表达训练", "description": "把已有分析能力组织成自我介绍、项目经历和结构化面试回答。", "theme": "#a78bfa", "outcome": "形成30秒、90秒和3分钟三个层次的面试表达。"}, {"id": "mock-career", "num": "04", "title": "模拟面试与职业迁移", "eyebrow": "综合演练", "description": "通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。", "theme": "#fbbf24", "outcome": "在陌生问题中稳定拆解、追问、表达并迁移方法。"}, {"id": "ml-decision", "num": "05", "title": "机器学习：先判断，再建模", "eyebrow": "可选扩展", "description": "不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。", "theme": "#fb7185", "outcome": "能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。"}];
-</script>
-</body>
-</html>
+</section></div><nav class="chapter-handoff" aria-label="章节衔接"><div class="handoff-complete"><span>本章判断已完成</span><p>你已把一句模糊的“留存不太好”，改写成了可分析、可汇报的业务任务。</p></div><div class="handoff-next"><div class="handoff-next-copy"><span>为什么现在进入下一章</span><p>先别急着找原因。下一步要确认该看哪些指标，以及它们之间是什么关系。</p></div><div class="handoff-target"><small>03</small><strong>该盯哪些指标</strong></div></div><div class="handoff-actions"><a class="chapter-back-link" href="guide.html">← 返回 学习指南</a><a class="handoff-primary" href="ch03.html"><span>搭建鲜食记指标树</span><b aria-hidden="true">→</b></a></div></nav></main>
+<button id="toc-toggle" class="toc-toggle" type="button"><span class="toc-toggle-icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="toc-toggle-copy"><small>当前路线</small><strong>02 · 进入鲜食记场景</strong></span></button><aside id="toc-panel" class="toc-panel" aria-label="课程路线"></aside><div id="toc-overlay" class="toc-overlay"></div>
+<script src="../assets/main.js"></script><script>window.TOC_CHAPTERS = [{"num": "01", "title": "学习指南", "slug": "guide", "href": "guide.html", "module": "business-loop", "description": "看清 28 章系统课程、专题课程与业务案例如何共同训练一套完整的业务判断系统。"}, {"num": "02", "title": "进入鲜食记场景", "slug": "ch02", "href": "ch02.html", "module": "business-loop", "description": "产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。"}, {"num": "03", "title": "该盯哪些指标", "slug": "ch03", "href": "ch03.html", "module": "business-loop", "description": "用AARRR框架拆解用户旅程，建立指标体系。先搭体系再找原因。"}, {"num": "04", "title": "排查异动", "slug": "ch04", "href": "ch04.html", "module": "business-loop", "description": "按时间、渠道、用户行为逐步缩小范围，定位到小红书种草内容的根因。"}, {"num": "05", "title": "AB实验设计", "slug": "ch05", "href": "ch05.html", "module": "business-loop", "description": "设计新用户引导流程的AB实验，计算样本量、定义指标、规划实验周期。"}, {"num": "06", "title": "落地策略", "slug": "ch06", "href": "ch06.html", "module": "business-loop", "description": "灰度发布、持续监控、回退方案。从分析到决策到执行的完整闭环。"}, {"num": "07", "title": "用户画像与分层运营", "slug": "ch07", "href": "ch07.html", "module": "analysis-toolbox", "description": "从三层穿透到 RFM，识别不同群体对策略的反应差异。"}, {"num": "08", "title": "留存分析与生命周期", "slug": "ch08", "href": "ch08.html", "module": "analysis-toolbox", "description": "留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。"}, {"num": "09", "title": "数据预测与目标拆解", "slug": "ch09", "href": "ch09.html", "module": "analysis-toolbox", "description": "订阅收入=流量×转化率×客单价。拆解目标，给出多个路径，考虑不确定性。"}, {"num": "10", "title": "辛普森悖论", "slug": "ch10", "href": "ch10.html", "module": "analysis-toolbox", "description": "为什么整体趋势和分组趋势完全相反？拆维度时一定要看各组的占比变化。"}, {"num": "11", "title": "P值与样本量", "slug": "ch11", "href": "ch11.html", "module": "analysis-toolbox", "description": "P值到底是什么？样本量怎么算？常见面试陷阱：偷看P值、多重检验、不显著≠没效果。"}, {"num": "12", "title": "因果推断入门", "slug": "ch12", "href": "ch12.html", "module": "analysis-toolbox", "description": "相关不等于因果。DID、RDD、PSM三种准实验方法的简明介绍和面试回答模板。"}, {"num": "13", "title": "AI辅助数据分析", "slug": "ch13", "href": "ch13.html", "module": "analysis-toolbox", "description": "AI不能替代分析师下结论。四层架构：指标口径→异常检测→归因下钻→AI总结。"}, {"num": "14", "title": "商业模式拆解", "slug": "ch14", "href": "ch14.html", "module": "analysis-toolbox", "description": "广告、订阅、抽成、增值，四种互联网商业模式。鲜食记的订阅模式拆解。"}, {"num": "15", "title": "自我介绍与简历", "slug": "ch15", "href": "ch15.html", "module": "interview-output", "description": "四段式自我介绍模板。简历用可量化成果呈现能力。STAR 法则组织项目经历。"}, {"num": "16", "title": "一面vs二面", "slug": "ch16", "href": "ch16.html", "module": "interview-output", "description": "一面考技术（SQL+统计学+分析思路），二面考业务（方案+落地+跨部门协作）。"}, {"num": "17", "title": "面试真题·指标体系", "slug": "ch17", "href": "ch17.html", "module": "interview-output", "description": "鲜食记直播业务健康度指标体系。OSM模型+反向指标+三级指标分级。"}, {"num": "18", "title": "面试真题·异动分析", "slug": "ch18", "href": "ch18.html", "module": "interview-output", "description": "某内容社区DAU下跌15%怎么分析？四步流程+内容社区的特殊性+加分项。"}, {"num": "19", "title": "费米估算", "slug": "ch19", "href": "ch19.html", "module": "interview-output", "description": "鲜食记首月有多少付费用户？通过拆解、假设、估算与敏感性分析，展示不确定条件下的推理过程。"}, {"num": "20", "title": "从零做项目", "slug": "ch20", "href": "ch20.html", "module": "interview-output", "description": "三步做一个有含金量的项目。STAR法则写进简历。鲜食记案例本身就是你的项目。"}, {"num": "21", "title": "完整模拟面试", "slug": "ch21", "href": "ch21.html", "module": "mock-career", "description": "经历一场从自我介绍、项目深挖到业务案例和反问的完整模拟面试。"}, {"num": "22", "title": "策略评估案例", "slug": "ch22", "href": "ch22.html", "module": "mock-career", "description": "腾讯视频打击账号共享的面试真题拆解。三层分析：算账→看行为→生态影响。"}, {"num": "23", "title": "SQL面试必备", "slug": "ch23", "href": "ch23.html", "module": "mock-career", "description": "留存率计算、JOIN选择、窗口函数。SQL面试中的高频考点和常见错误。"}, {"num": "24", "title": "行业与职业", "slug": "ch24", "href": "ch24.html", "module": "mock-career", "description": "不同行业数据分析师的差异、入行建议、职业发展三大方向。"}, {"num": "ML01", "title": "先判断，再建模", "slug": "ml01", "href": "ml01.html", "module": "ml-decision", "description": "用四类真实需求判断该做分析、规则、实验还是预测；学会拒绝一个定义错误的模型项目。"}, {"num": "ML02", "title": "履约风险决策", "slug": "ml02", "href": "ml02.html", "module": "ml-decision", "description": "在明确预测时点和处理能力后，比较规则、分类模型与人工策略的实际收益。"}, {"num": "ML03", "title": "需求预测陷阱", "slug": "ml03", "href": "ml03.html", "module": "ml-decision", "description": "从门店补货进入时间预测，识别随机切分、缺货截断、促销变化和平均指标掩盖局部失败。"}, {"num": "ML04", "title": "模型失败复盘", "slug": "ml04", "href": "ml04.html", "module": "ml-decision", "description": "拆解泄漏、错目标、行动瓶颈、反馈回路与环境变化，建立模型叫停、修复和降级机制。"}]; window.TOC_CURRENT = "ch02"; window.TOC_CURRENT_MODULE = "business-loop"; window.COURSE_MODULES = [{"id": "business-loop", "num": "01", "title": "完成第一场业务分析", "eyebrow": "主线实战", "description": "以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。", "theme": "#5eead4", "outcome": "完成一段可以在面试中讲清楚的端到端业务项目。"}, {"id": "analysis-toolbox", "num": "02", "title": "高频分析工具箱", "eyebrow": "方法进阶", "description": "掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。", "theme": "#60a5fa", "outcome": "面对不同业务问题，能够选择合适方法并说明使用条件。"}, {"id": "interview-output", "num": "03", "title": "把分析变成面试答案", "eyebrow": "表达训练", "description": "把已有分析能力组织成自我介绍、项目经历和结构化面试回答。", "theme": "#a78bfa", "outcome": "形成30秒、90秒和3分钟三个层次的面试表达。"}, {"id": "mock-career", "num": "04", "title": "模拟面试与职业迁移", "eyebrow": "综合演练", "description": "通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。", "theme": "#fbbf24", "outcome": "在陌生问题中稳定拆解、追问、表达并迁移方法。"}, {"id": "ml-decision", "num": "05", "title": "机器学习：先判断，再建模", "eyebrow": "可选扩展", "description": "不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。", "theme": "#fb7185", "outcome": "能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。"}];</script></body></html>

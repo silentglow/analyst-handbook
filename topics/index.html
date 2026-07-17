@@ -1,34 +1,59 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="围绕业务 SQL、Python 综合分析、机器学习和 A/B 测试组织的专题课程。">
-<title>专题课程 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css"><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css"><link rel="icon" href="data:,"></head>
+<meta name="description" content="围绕业务分析、机器学习、A/B 测试、业务工作坊和分析交付组织的专题课程。">
+<title>专题课程 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css"><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css?v=20260717-guide3"><link rel="icon" href="data:,"></head>
 <body class="topic-body" data-page="topic-index"><nav class="topnav topic-nav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../courses.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
-<main class="topic-index"><header class="topic-index-hero"><div class="topic-index-copy"><p>专题课程</p><h1>看见方法<br>如何发生</h1><div>这里不按软件菜单或算法名堆知识。每一节从一个具体问题开始，用连续演示解释判断过程、实现方法、失败边界和面试表达。</div></div><div class="topic-index-visual" aria-hidden="true"><span class="topic-orbit orbit-one">SQL</span><span class="topic-orbit orbit-two">Python</span><span class="topic-orbit orbit-three">实验</span><span class="topic-orbit orbit-four">ML</span><strong>业务<br>问题</strong><i></i></div></header>
+<main class="topic-index"><header class="topic-index-hero"><div class="topic-index-copy"><p>专题课程</p><h1>看见方法<br>如何发生</h1><div>这里不按软件菜单或算法名堆知识。每一节从一个具体问题开始，用连续演示解释判断过程、实现方法、失败边界和面试表达。</div></div><div class="topic-index-visual" aria-hidden="true"><span class="topic-orbit orbit-one">方法</span><span class="topic-orbit orbit-two">业务</span><span class="topic-orbit orbit-three">实验</span><span class="topic-orbit orbit-four">ML</span><strong>业务<br>问题</strong><i></i></div></header>
 <section class="topic-list" aria-label="专题课程列表">
-<a class="topic-row" href="incident-analysis.html" style="--theme:#0f766e;--theme-rgb:15,118,110">
+<a class="topic-row" href="business-analysis-methods.html" style="--theme:#0f766e;--theme-rgb:15,118,110">
   <span class="topic-row-num">专题 01</span>
-  <div><small>业务分析</small><h2>指标异动：建立有证据的排查顺序</h2><p>不要急着解释原因。先确认数据可信，再从范围、结构和业务链路逐层缩小问题。</p><em>区分数据异常、口径变化与真实业务变化 / 用范围—结构—链路组织排查顺序</em></div>
+  <div><small>业务分析主课</small><h2>业务分析方法：从异动到增长动作</h2><p>把对比、拆解、漏斗、路径、留存、同期群、画像、RFM 与 AARRR 组织成一条可选择、可组合的分析主线。</p><em>根据问题类型选择并组合分析方法 / 组合多种方法形成从证据到行动的闭环</em></div>
+  <strong>55 分钟&nbsp; →</strong>
+</a>
+<a class="topic-row" href="incident-analysis.html" style="--theme:#0f766e;--theme-rgb:15,118,110">
+  <span class="topic-row-num">专题 02</span>
+  <div><small>业务分析</small><h2>指标异动：建立有证据的排查顺序</h2><p>先确认数据可信，再从范围、结构和业务链路逐层缩小问题。</p><em>区分数据异常、口径变化与真实业务变化 / 用范围—结构—链路组织排查顺序</em></div>
   <strong>18 分钟&nbsp; →</strong>
 </a>
-<a class="topic-row" href="sql-grain.html" style="--theme:#2563eb;--theme-rgb:37,99,235">
-  <span class="topic-row-num">专题 02</span>
-  <div><small>业务 SQL</small><h2>SQL 业务建模：先定义粒度，再写 JOIN</h2><p>SQL 语法并不难，真正困难的是先说清一行代表什么，以及结果表准备回答什么问题。</p><em>识别订单表与明细表的不同粒度 / 解释 JOIN 后重复计算的来源</em></div>
-  <strong>22 分钟&nbsp; →</strong>
-</a>
-<a class="topic-row" href="python-customer-value.html" style="--theme:#b45309;--theme-rgb:180,83,9">
+<a class="topic-row" href="ml-zero-to-one.html" style="--theme:#475569;--theme-rgb:71,85,105">
   <span class="topic-row-num">专题 03</span>
-  <div><small>Python 综合案例</small><h2>从订单到策略：识别值得经营的用户</h2><p>用一个完整案例串起数据清洗、用户粒度建模、价值分层、策略设计和结果验证。</p><em>把订单数据转换为用户粒度分析表 / 建立可解释的价值分层，而不是只输出标签</em></div>
-  <strong>32 分钟&nbsp; →</strong>
+  <div><small>机器学习主课</small><h2>机器学习从 0 到 1：算法、评估与上线</h2><p>从业务问题、数据切分和基线开始，系统理解 KNN、线性模型、树模型、集成学习、评估、调优与上线失败边界。</p><em>建立从问题定义到上线监控的完整建模流程 / 理解六类核心算法的假设、参数与适用边界</em></div>
+  <strong>90 分钟&nbsp; →</strong>
+</a>
+<a class="topic-row" href="ml-pipeline-patterns.html" style="--theme:#334155;--theme-rgb:51,65,85">
+  <span class="topic-row-num">专题 04</span>
+  <div><small>机器学习工程</small><h2>通用机器学习流水线：预处理、调参与解释</h2><p>不以用户流失为主线，完整保留字段质量、编码、ColumnTransformer、分箱、Pipeline、网格搜索和模型解释。</p><em>为不同字段选择不会泄漏的预处理流程 / 把模型训练、参数搜索和解释封装成可复现 Pipeline</em></div>
+  <strong>48 分钟&nbsp; →</strong>
 </a>
 <a class="topic-row" href="kmeans.html" style="--theme:#7c3aed;--theme-rgb:124,58,237">
-  <span class="topic-row-num">专题 04</span>
+  <span class="topic-row-num">专题 05</span>
   <div><small>机器学习</small><h2>KMeans：从算法收敛到可用分群</h2><p>看懂中心如何移动，也判断技术上分得开的群组能不能真正支持业务动作。</p><em>解释分配与更新如何交替收敛 / 理解初始化、特征尺度和 K 值的影响</em></div>
   <strong>28 分钟&nbsp; →</strong>
 </a>
 <a class="topic-row" href="ab-test.html" style="--theme:#be123c;--theme-rgb:190,18,60">
-  <span class="topic-row-num">专题 05</span>
-  <div><small>A/B 测试</small><h2>A/B 测试：从假设到上线决策</h2><p>完整走过假设、指标、样本量、随机分流、结果解释和上线判断，而不是只计算一个 P 值。</p><em>把业务想法写成可检验假设 / 区分统计显著、效应大小与业务价值</em></div>
+  <span class="topic-row-num">专题 06</span>
+  <div><small>A/B 测试</small><h2>A/B 测试：从假设到上线决策</h2><p>完整走过假设、指标、样本量、随机分流、结果解释和上线判断，理解 P 值在决策中的位置。</p><em>把业务想法写成可检验假设 / 区分统计显著、效应大小与业务价值</em></div>
   <strong>35 分钟&nbsp; →</strong>
+</a>
+<a class="topic-row" href="game-monetization.html" style="--theme:#7c3aed;--theme-rgb:124,58,237">
+  <span class="topic-row-num">专题 07</span>
+  <div><small>业务工作坊</small><h2>游戏商业化：从玩家体验到两阶段建模</h2><p>从价值链、经营指标、新手友好度和游戏平衡出发，用分类加回归处理零膨胀与长尾。</p><em>建立兼顾变现、留存与公平的游戏经营指标 / 理解分类加回归两阶段模型及其运营边界</em></div>
+  <strong>50 分钟&nbsp; →</strong>
+</a>
+<a class="topic-row" href="anomaly-orders.html" style="--theme:#b45309;--theme-rgb:180,83,9">
+  <span class="topic-row-num">专题 08</span>
+  <div><small>业务工作坊</small><h2>异常订单：从业务定义到人机协同处置</h2><p>先定义平台、商家与用户共同面对的异常，再完成时间回测、特征工程、不均衡评估、阈值与申诉回退。</p><em>用错误成本和标签成熟期定义异常订单 / 把规则、模型、人工复核与申诉连接成决策系统</em></div>
+  <strong>48 分钟&nbsp; →</strong>
+</a>
+<a class="topic-row" href="advertising-channel-quality.html" style="--theme:#0369a1;--theme-rgb:3,105,161">
+  <span class="topic-row-num">专题 09</span>
+  <div><small>业务工作坊</small><h2>广告投放：渠道质量、分群与预算决策</h2><p>从营销本质和指标链出发，拆解渠道量级、用户质量、素材、时长与预算，最后区分归因和真实增量。</p><em>建立从曝光到长期价值的投放指标体系 / 让渠道分群对应可验证的预算与素材动作</em></div>
+  <strong>58 分钟&nbsp; →</strong>
+</a>
+<a class="topic-row" href="analysis-report.html" style="--theme:#be123c;--theme-rgb:190,18,60">
+  <span class="topic-row-num">专题 10</span>
+  <div><small>分析交付主课</small><h2>数据分析报告：从问题到可执行结论</h2><p>系统掌握日报、专题与综合报告的选择，重建标题、目录、背景、正文、结论建议、附录和从 0 到 1 制作流程。</p><em>用业务问题和证据链组织报告 / 把事实升级为结论，并把建议写成可执行动作</em></div>
+  <strong>45 分钟&nbsp; →</strong>
 </a></section>
-<section class="topic-note"><h2>内容怎么读</h2><p>先看过程演示，理解为什么这样判断；再读下方的知识解释和失败案例。动画是正文的一部分，不是装饰，也不会代替完整文字。</p></section>
+<section class="topic-note"><h2>内容怎么读</h2><p>先看过程演示，理解为什么这样判断；再读下方的知识解释和失败案例。动画负责展示过程，正文负责完整解释，两者共同构成课程内容。</p></section>
 </main><script src="../assets/main.js"></script></body></html>

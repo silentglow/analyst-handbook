@@ -1,10 +1,27 @@
 [
   {
+    "id": "business-analysis-methods",
+    "category": "业务分析主课",
+    "title": "业务分析方法：从异动到增长动作",
+    "subtitle": "把对比、拆解、漏斗、路径、留存、同期群、画像、RFM 与 AARRR 组织成一条可选择、可组合的分析主线。",
+    "theme": "#0f766e",
+    "theme_rgb": "15,118,110",
+    "duration": 55,
+    "level": "系统深课",
+    "source": "business-analysis-methods.html",
+    "output": "business-analysis-methods.html",
+    "objectives": [
+      "根据问题类型选择并组合分析方法",
+      "组合多种方法形成从证据到行动的闭环"
+    ],
+    "num": "专题 01"
+  },
+  {
     "id": "incident-analysis",
-    "num": "专题 01",
+    "num": "专题 02",
     "category": "业务分析",
     "title": "指标异动：建立有证据的排查顺序",
-    "subtitle": "不要急着解释原因。先确认数据可信，再从范围、结构和业务链路逐层缩小问题。",
+    "subtitle": "先确认数据可信，再从范围、结构和业务链路逐层缩小问题。",
     "theme": "#0f766e",
     "theme_rgb": "15,118,110",
     "duration": 18,
@@ -18,44 +35,43 @@
     ]
   },
   {
-    "id": "sql-grain",
-    "num": "专题 02",
-    "category": "业务 SQL",
-    "title": "SQL 业务建模：先定义粒度，再写 JOIN",
-    "subtitle": "SQL 语法并不难，真正困难的是先说清一行代表什么，以及结果表准备回答什么问题。",
-    "theme": "#2563eb",
-    "theme_rgb": "37,99,235",
-    "duration": 22,
-    "level": "高频面试",
-    "source": "sql-grain.html",
-    "output": "sql-grain.html",
+    "id": "ml-zero-to-one",
+    "num": "专题 03",
+    "category": "机器学习主课",
+    "title": "机器学习从 0 到 1：算法、评估与上线",
+    "subtitle": "从业务问题、数据切分和基线开始，系统理解 KNN、线性模型、树模型、集成学习、评估、调优与上线失败边界。",
+    "theme": "#475569",
+    "theme_rgb": "71,85,105",
+    "duration": 90,
+    "level": "系统深课",
+    "source": "ml-zero-to-one.html",
+    "output": "ml-zero-to-one.html",
     "objectives": [
-      "识别订单表与明细表的不同粒度",
-      "解释 JOIN 后重复计算的来源",
-      "先设计结果数据结构，再选择查询方法"
+      "建立从问题定义到上线监控的完整建模流程",
+      "理解六类核心算法的假设、参数与适用边界",
+      "用错误成本、容量和业务增量解释模型价值"
     ]
   },
   {
-    "id": "python-customer-value",
-    "num": "专题 03",
-    "category": "Python 综合案例",
-    "title": "从订单到策略：识别值得经营的用户",
-    "subtitle": "用一个完整案例串起数据清洗、用户粒度建模、价值分层、策略设计和结果验证。",
-    "theme": "#b45309",
-    "theme_rgb": "180,83,9",
-    "duration": 32,
-    "level": "综合实战",
-    "source": "python-customer-value.html",
-    "output": "python-customer-value.html",
+    "id": "ml-pipeline-patterns",
+    "category": "机器学习工程",
+    "title": "通用机器学习流水线：预处理、调参与解释",
+    "subtitle": "不以用户流失为主线，完整保留字段质量、编码、ColumnTransformer、分箱、Pipeline、网格搜索和模型解释。",
+    "theme": "#334155",
+    "theme_rgb": "51,65,85",
+    "duration": 48,
+    "level": "完整专题",
+    "source": "ml-pipeline-patterns.html",
+    "output": "ml-pipeline-patterns.html",
     "objectives": [
-      "把订单数据转换为用户粒度分析表",
-      "建立可解释的价值分层，而不是只输出标签",
-      "形成带有限制条件和验证方案的经营建议"
-    ]
+      "为不同字段选择不会泄漏的预处理流程",
+      "把模型训练、参数搜索和解释封装成可复现 Pipeline"
+    ],
+    "num": "专题 04"
   },
   {
     "id": "kmeans",
-    "num": "专题 04",
+    "num": "专题 05",
     "category": "机器学习",
     "title": "KMeans：从算法收敛到可用分群",
     "subtitle": "看懂中心如何移动，也判断技术上分得开的群组能不能真正支持业务动作。",
@@ -73,10 +89,10 @@
   },
   {
     "id": "ab-test",
-    "num": "专题 05",
+    "num": "专题 06",
     "category": "A/B 测试",
     "title": "A/B 测试：从假设到上线决策",
-    "subtitle": "完整走过假设、指标、样本量、随机分流、结果解释和上线判断，而不是只计算一个 P 值。",
+    "subtitle": "完整走过假设、指标、样本量、随机分流、结果解释和上线判断，理解 P 值在决策中的位置。",
     "theme": "#be123c",
     "theme_rgb": "190,18,60",
     "duration": 35,
@@ -88,5 +104,73 @@
       "区分统计显著、效应大小与业务价值",
       "识别污染、提前偷看和护栏缺失等失败原因"
     ]
+  },
+  {
+    "id": "game-monetization",
+    "category": "业务工作坊",
+    "title": "游戏商业化：从玩家体验到两阶段建模",
+    "subtitle": "从价值链、经营指标、新手友好度和游戏平衡出发，用分类加回归处理零膨胀与长尾。",
+    "theme": "#7c3aed",
+    "theme_rgb": "124,58,237",
+    "duration": 50,
+    "level": "综合实战",
+    "source": "game-monetization.html",
+    "output": "game-monetization.html",
+    "objectives": [
+      "建立兼顾变现、留存与公平的游戏经营指标",
+      "理解分类加回归两阶段模型及其运营边界"
+    ],
+    "num": "专题 07"
+  },
+  {
+    "id": "anomaly-orders",
+    "category": "业务工作坊",
+    "title": "异常订单：从业务定义到人机协同处置",
+    "subtitle": "先定义平台、商家与用户共同面对的异常，再完成时间回测、特征工程、不均衡评估、阈值与申诉回退。",
+    "theme": "#b45309",
+    "theme_rgb": "180,83,9",
+    "duration": 48,
+    "level": "综合实战",
+    "source": "anomaly-orders.html",
+    "output": "anomaly-orders.html",
+    "objectives": [
+      "用错误成本和标签成熟期定义异常订单",
+      "把规则、模型、人工复核与申诉连接成决策系统"
+    ],
+    "num": "专题 08"
+  },
+  {
+    "id": "advertising-channel-quality",
+    "category": "业务工作坊",
+    "title": "广告投放：渠道质量、分群与预算决策",
+    "subtitle": "从营销本质和指标链出发，拆解渠道量级、用户质量、素材、时长与预算，最后区分归因和真实增量。",
+    "theme": "#0369a1",
+    "theme_rgb": "3,105,161",
+    "duration": 58,
+    "level": "综合实战",
+    "source": "advertising-channel-quality.html",
+    "output": "advertising-channel-quality.html",
+    "objectives": [
+      "建立从曝光到长期价值的投放指标体系",
+      "让渠道分群对应可验证的预算与素材动作"
+    ],
+    "num": "专题 09"
+  },
+  {
+    "id": "analysis-report",
+    "category": "分析交付主课",
+    "title": "数据分析报告：从问题到可执行结论",
+    "subtitle": "系统掌握日报、专题与综合报告的选择，重建标题、目录、背景、正文、结论建议、附录和从 0 到 1 制作流程。",
+    "theme": "#be123c",
+    "theme_rgb": "190,18,60",
+    "duration": 45,
+    "level": "完整专题",
+    "source": "analysis-report.html",
+    "output": "analysis-report.html",
+    "objectives": [
+      "用业务问题和证据链组织报告",
+      "把事实升级为结论，并把建议写成可执行动作"
+    ],
+    "num": "专题 10"
   }
 ]

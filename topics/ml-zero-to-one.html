@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="从业务问题、数据切分和基线开始，系统理解 KNN、线性模型、树模型、集成学习、评估、调优与上线失败边界。"><title>机器学习从 0 到 1：算法、评估与上线 · 专题课程</title>
+<link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css"><link rel="icon" href="data:,">
+<style>:root{--theme:#475569;--theme-rgb:71,85,105}</style><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css?v=20260717-guide3"></head>
+<body class="topic-body" data-page="topic"><a class="skip-link" href="#topic-content">跳到正文</a>
+<nav class="topnav topic-nav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../courses.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
+<main class="topic-page" id="topic-content"><header class="topic-hero"><div class="topic-breadcrumb"><a href="index.html">专题课程</a><span>/</span><span>机器学习主课</span></div><p class="topic-number">专题 03 · 系统深课 · 90 分钟</p><h1>机器学习从 0 到 1：算法、评估与上线</h1><div class="topic-lead">从业务问题、数据切分和基线开始，系统理解 KNN、线性模型、树模型、集成学习、评估、调优与上线失败边界。</div></header>
+<section class="topic-objectives" aria-labelledby="objectives-title"><h2 id="objectives-title">这一节要解决什么</h2><ol><li>建立从问题定义到上线监控的完整建模流程</li><li>理解六类核心算法的假设、参数与适用边界</li><li>用错误成本、容量和业务增量解释模型价值</li></ol></section>
+<!--
+  SOURCE SCOPE: data_learn documents 86–156 (71 DOCX files).
+  EDITORIAL DECISION: preserve algorithm reasoning, evaluation, tuning and failure boundaries;
+  replace screenshot-led explanation with semantic HTML animation. Coverage remains partial until
+  every source document and its embedded visuals have passed editorial verification.
+-->
+<div class="lesson-player" data-player tabindex="0" aria-label="机器学习从问题到模型决策的连续演示">
+  <div class="player-head"><div><span>过程演示 · 机器学习从 0 到 1</span><strong data-player-label></strong></div><div class="player-counter" data-player-counter></div></div>
+  <div class="player-stage" aria-live="polite">
+    <section class="lesson-scene" data-scene data-label="先把业务问题改写成机器学习任务" data-duration="5600">
+      <div class="scene-layout"><div class="scene-copy"><em>STEP 01 · FRAME</em><h2>先决定要支持什么动作，再选择算法</h2><p>模型需要在明确时间点，对明确对象，支持一个具体动作。先写清决策单元、观察窗、预测窗和动作容量，才能判断分类、回归或聚类是否合适。</p><ul><li>对象：未来 2 小时内待履约订单</li><li>目标：识别需要提前调度的高风险订单</li><li>约束：运营每小时最多干预 300 单</li></ul></div><div class="scene-visual"><div class="visual-title"><span>BUSINESS → ML</span><span>decision first</span></div><div class="flow-stack"><div class="flow-node active"><span>?</span><strong>哪类订单需要提前调度</strong><small>业务决策</small></div><div class="flow-node"><span>Y</span><strong>未来 2 小时是否超时</strong><small>监督学习标签</small></div><div class="flow-node"><span>A</span><strong>按风险与容量生成名单</strong><small>模型之后的动作</small></div></div></div></div>
+    </section>
+    <section class="lesson-scene" data-scene data-label="按时间切分数据并阻断信息泄漏" data-duration="5600" hidden>
+      <div class="scene-layout"><div class="scene-copy"><em>STEP 02 · SPLIT</em><h2>让测试集复现真实上线环境</h2><p>训练集模拟过去，验证集用于选择方案，测试集只做一次最终评估。时间型业务优先按时间切分；填补、标准化、编码和特征选择都必须只在训练集拟合。</p><ul><li>先切分，再拟合预处理器</li><li>交叉验证只发生在训练区间</li><li>测试集不能参与参数选择</li></ul></div><div class="scene-visual"><div class="visual-title"><span>TIME-AWARE SPLIT</span><span>no leakage</span></div><div class="ml-timeline"><div class="train"><span>JAN—APR</span><strong>训练集</strong></div><div class="valid"><span>MAY</span><strong>验证集</strong></div><div class="test"><span>JUN</span><strong>测试集</strong></div></div><div class="decision-grid"><div><span>标准化均值</span><strong>只用训练集</strong></div><div><span>参数选择</span><strong>交叉验证</strong></div><div><span>最终分数</span><strong>测试集一次</strong></div><div><span>未来字段</span><strong class="metric-warn">禁止进入</strong></div></div></div></div>
+    </section>
+    <section class="lesson-scene" data-scene data-label="建立可解释基线，再比较候选算法" data-duration="5800" hidden>
+      <div class="scene-layout"><div class="scene-copy"><em>STEP 03 · BASELINE</em><h2>复杂模型必须赢过一个合理基线</h2><p>KNN 用邻居投票，逻辑回归给出线性概率边界，决策树按条件递归切分。先比较它们的假设、数据要求和错误代价，再根据业务目标选择合适算法。</p><ul><li>规则基线：过去 30 分钟积压量 &gt; 阈值</li><li>可解释基线：逻辑回归</li><li>非线性候选：决策树与集成树</li></ul></div><div class="scene-visual"><div class="visual-title"><span>MODEL LADDER</span><span>complexity earns its place</span></div><div class="model-ladder"><div><span>01</span><strong>业务规则</strong><small>可解释 · 快速上线</small></div><div class="active"><span>02</span><strong>逻辑回归</strong><small>概率基线 · 系数方向</small></div><div><span>03</span><strong>决策树</strong><small>非线性 · 规则路径</small></div><div><span>04</span><strong>GBDT / XGBoost</strong><small>更强拟合 · 更高维护成本</small></div></div></div></div>
+    </section>
+    <section class="lesson-scene" data-scene data-label="用错误代价选择指标与阈值" data-duration="6000" hidden>
+      <div class="scene-layout"><div class="scene-copy"><em>STEP 04 · EVALUATE</em><h2>AUC 不能替你决定干预名单</h2><p>混淆矩阵把错误分成误报和漏报；Precision、Recall、F1 与 ROC/AUC回答不同问题。最终阈值要结合干预容量、单次成本和漏掉高风险订单的损失。</p><ul><li>误报：浪费一次调度资源</li><li>漏报：订单超时并触发赔付</li><li>阈值：根据预期净收益动态确定</li></ul></div><div class="scene-visual"><div class="visual-title"><span>CONFUSION MATRIX</span><span>threshold = 0.68</span></div><div class="confusion-grid"><div class="muted">实际正常</div><div class="muted">实际超时</div><div><span>TN</span><strong>8,420</strong></div><div class="warn"><span>FN</span><strong>180</strong></div><div class="warn"><span>FP</span><strong>290</strong></div><div class="good"><span>TP</span><strong>610</strong></div></div><div class="metric-panel"><div><span>Precision</span><strong>67.8%</strong></div><div><span>Recall</span><strong>77.2%</strong></div><div><span>容量占用</span><strong class="metric-ok">900 单</strong></div></div></div></div>
+    </section>
+    <section class="lesson-scene" data-scene data-label="用调参控制偏差、方差与稳定性" data-duration="5800" hidden>
+      <div class="scene-layout"><div class="scene-copy"><em>STEP 05 · TUNE</em><h2>先看学习曲线，再决定调什么</h2><p>训练和验证都差，优先改善特征或模型表达能力；训练好、验证差，才重点处理过拟合。交叉验证评估稳定性，网格或随机搜索只在有边界的参数空间内比较。</p><ul><li>树深、叶节点样本控制复杂度</li><li>学习率与弱学习器数量相互制约</li><li>正则化约束系数或树的生长</li></ul></div><div class="scene-visual"><div class="visual-title"><span>LEARNING CURVE</span><span>diagnose before tuning</span></div><div class="curve-board"><div class="curve-line train"></div><div class="curve-line valid"></div><i class="gap"></i><span class="curve-label train">训练得分</span><span class="curve-label valid">验证得分</span><strong>间距缩小，验证仍上升 → 继续增加样本可能有效</strong></div></div></div>
+    </section>
+    <section class="lesson-scene" data-scene data-label="把离线分数转换成上线与监控方案" data-duration="6000" hidden>
+      <div class="scene-layout"><div class="scene-copy"><em>STEP 06 · OPERATE</em><h2>模型交付的是一套决策系统</h2><p>最终交付应包括特征口径、版本、阈值、名单容量、回退规则、线上指标和复训触发条件。用随机对照或分阶段灰度验证模型带来的真实增量。</p><ul><li>数据漂移：输入分布是否变化</li><li>概念漂移：相同特征是否仍对应相同风险</li><li>业务结果：干预是否真的减少超时与赔付</li></ul></div><div class="scene-visual"><div class="visual-title"><span>MODEL OPERATING SYSTEM</span><span>offline → online</span></div><div class="pipeline"><div><span>01</span><strong>数据契约</strong></div><i class="pipeline-arrow">→</i><div><span>02</span><strong>风险分数</strong></div><i class="pipeline-arrow">→</i><div><span>03</span><strong>容量阈值</strong></div><i class="pipeline-arrow">→</i><div><span>04</span><strong>干预实验</strong></div></div><div class="decision-grid"><div><span>模型指标</span><strong>AUC / Recall</strong></div><div><span>系统指标</span><strong>延迟 / 缺失</strong></div><div><span>业务指标</span><strong>超时 / 赔付</strong></div><div><span>失败动作</span><strong class="metric-warn">回退规则</strong></div></div></div></div>
+    </section>
+  </div>
+  <div class="player-controls"><button type="button" data-player-prev>上一步</button><button type="button" data-player-play aria-pressed="false">播放</button><button type="button" data-player-next>下一步</button><input class="player-progress" data-player-progress type="range" min="0" value="0" aria-label="动画进度"><label class="speed-label"><span>速度</span><select data-player-speed aria-label="播放速度"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label><button type="button" data-player-restart>重播</button></div>
+</div>
+
+<div class="topic-content">
+  <section class="topic-section"><span>学习主线</span><h2>七十一份算法资料，整理成六段完整学习主线</h2><p>这门主课按照“问题定义—数据—算法—评估—调优—上线”重新组织原始机器学习文档。学习重点包括每类算法的优化目标、依赖假设、失败方式，以及结果进入业务动作的完整路径。</p><div class="course-map">
+    <article><b>01</b><div><strong>建模基础</strong><p>监督与无监督、特征与标签、训练/验证/测试、sklearn 统一接口、Pipeline 与数据泄漏。</p></div><em>来源 86–92</em></article>
+    <article><b>02</b><div><strong>距离与聚类</strong><p>KNN、距离度量、归一化、KMeans、初始化、轮廓系数、异常检测与业务分群。</p></div><em>来源 88–102</em></article>
+    <article><b>03</b><div><strong>树模型与验证</strong><p>CART 的分裂、剪枝与参数；学习曲线、交叉验证和网格搜索。</p></div><em>来源 103–109</em></article>
+    <article><b>04</b><div><strong>回归与分类</strong><p>线性回归、岭回归、LASSO、多项式回归、逻辑回归、样本不均衡和阈值。</p></div><em>来源 110–132</em></article>
+    <article><b>05</b><div><strong>集成学习</strong><p>Bagging 与 Boosting、随机森林、GBDT、损失函数、学习率、早停和袋外数据。</p></div><em>来源 133–148</em></article>
+    <article><b>06</b><div><strong>XGBoost 与模型选择</strong><p>弱学习器、分枝剪枝、随机性、性能参数、超参数优化和模型选择原则。</p></div><em>来源 149–156</em></article>
+  </div></section>
+
+  <section class="topic-section"><span>基础框架</span><h2>机器学习项目是一条受约束的证据链</h2><p>一个可用的机器学习项目至少包含九个对象。漏掉任何一个，离线分数都可能没有业务意义。</p><div class="knowledge-grid">
+    <article class="knowledge-card"><strong>决策单元</strong><p>一行究竟是一位用户、一笔订单、一个商品还是“商品 × 门店 × 日期”？粒度决定特征、标签和动作能否对应。</p></article>
+    <article class="knowledge-card"><strong>观察窗与预测窗</strong><p>观察窗提供当时已知信息，预测窗定义未来结果。二者重叠或使用结果发生后的字段，就会产生泄漏。</p></article>
+    <article class="knowledge-card"><strong>标签</strong><p>标签来自业务结果的可计算定义；需要明确成熟期、缺失、延迟和代理偏差。</p></article>
+    <article class="knowledge-card"><strong>基线</strong><p>多数类、历史均值、简单规则或线性模型都是基线。复杂模型必须在相同切分和相同成本口径下稳定超过它。</p></article>
+    <article class="knowledge-card"><strong>损失与指标</strong><p>模型训练优化的损失函数，不一定等于汇报指标，更不一定等于业务价值。三者需要明确连接。</p></article>
+    <article class="knowledge-card"><strong>阈值与容量</strong><p>概率分数不直接产生动作。阈值应由成本、收益、服务容量和风险偏好共同决定。</p></article>
+    <article class="knowledge-card"><strong>验证设计</strong><p>随机切分、时间切分、分组切分和交叉验证适用于不同数据生成机制；选择方式需要匹配真实的数据生成机制。</p></article>
+    <article class="knowledge-card"><strong>上线契约</strong><p>特征时点、缺失默认值、版本、延迟、回退策略和监控责任人都属于模型的一部分。</p></article>
+  </div></section>
+
+  <section class="topic-section"><span>算法选择</span><h2>每类算法都在做不同的假设交换</h2><p>选择算法时，需要根据数据规模、关系形态、解释要求、延迟预算和错误成本判断可接受的模型假设。</p><div class="algorithm-table" role="table" aria-label="机器学习算法选择对照">
+    <div class="head" role="row"><span>算法</span><span>核心机制</span><span>擅长</span><span>主要风险</span></div>
+    <div role="row"><strong>KNN</strong><span>相似邻居投票或平均</span><span>小数据、局部边界、直观基线</span><span>尺度敏感、预测慢、维度灾难</span></div>
+    <div role="row"><strong>KMeans</strong><span>最小化簇内平方距离</span><span>探索结构、压缩、初步分群</span><span>需指定 K、受异常值和尺度影响</span></div>
+    <div role="row"><strong>线性 / 逻辑回归</strong><span>线性组合与正则化</span><span>稳定基线、方向解释、概率输出</span><span>非线性不足、共线性、系数误读</span></div>
+    <div role="row"><strong>决策树</strong><span>递归选择最优切分</span><span>非线性、交互、规则解释</span><span>高方差、容易过拟合</span></div>
+    <div role="row"><strong>随机森林</strong><span>样本和特征随机化后投票</span><span>稳健非线性基线、抗单树方差</span><span>模型更重、局部解释变弱</span></div>
+    <div role="row"><strong>GBDT / XGBoost</strong><span>逐轮拟合前一轮残差或梯度</span><span>结构化数据、高阶非线性</span><span>参数耦合、泄漏时会“学得更好”</span></div>
+  </div></section>
+
+  <section class="topic-section"><span>评估与阈值</span><h2>模型分数必须翻译成错误、成本与动作</h2><p>分类项目应先画混淆矩阵，再决定 Precision、Recall、F1、PR-AUC 或 ROC-AUC 的优先级。类别极不均衡时，ROC-AUC 可能看起来很好，却掩盖正类名单中大量误报；此时更应观察 PR 曲线、Top-K 命中率和容量范围内的收益。</p><div class="knowledge-grid">
+    <article class="knowledge-card"><strong>Accuracy</strong><p>适合类别较均衡且两类错误代价近似的场景。若正类只有 1%，全部预测为负也有 99% 准确率。</p></article>
+    <article class="knowledge-card"><strong>Precision</strong><p>被模型判为正的对象中有多少是真的。干预很贵、名单容量有限时更重要。</p></article>
+    <article class="knowledge-card"><strong>Recall</strong><p>真实正类中有多少被找出。漏掉风险的损失极高时更重要。</p></article>
+    <article class="knowledge-card"><strong>ROC-AUC</strong><p>衡量随机抽取一对正负样本时，正样本得分更高的概率；反映排序能力，不直接代表某阈值可用。</p></article>
+    <article class="knowledge-card"><strong>回归指标</strong><p>MAE 可解释为平均绝对误差；RMSE 更惩罚大误差；MAPE 在真实值接近 0 时会失真。</p></article>
+    <article class="knowledge-card"><strong>业务指标</strong><p>最终还要看减少的超时、节省的成本、提升的毛利或避免的损失，并通过上线实验验证因果增量。</p></article>
+  </div></section>
+
+  <section class="topic-section"><span>调优逻辑</span><h2>参数控制模型的复杂度、偏差与稳定性</h2><p>调参前先判断欠拟合还是过拟合，再缩小搜索空间。KNN 的 K、树的深度、叶节点样本量、随机森林的树数量和特征采样、Boosting 的学习率与迭代轮数，都对应偏差、方差、训练时间和稳定性的交换。</p><div class="knowledge-grid">
+    <article class="knowledge-card"><strong>K 与距离</strong><p>K 小时边界灵活但对噪声敏感；K 大时更平滑但可能抹掉局部结构。距离模型必须检查特征量纲与无关维度。</p></article>
+    <article class="knowledge-card"><strong>树深与叶节点</strong><p>深树能拟合复杂关系，也容易记住训练噪声。限制深度、叶节点样本和叶节点数量是在约束复杂度。</p></article>
+    <article class="knowledge-card"><strong>正则化</strong><p>岭回归用 L2 收缩系数，LASSO 用 L1 产生稀疏解；它们缓解不稳定，却不能修复错误标签或数据泄漏。</p></article>
+    <article class="knowledge-card"><strong>学习率 × 迭代数</strong><p>较小学习率通常需要更多弱学习器；早停用验证表现决定何时停止，避免继续拟合噪声。</p></article>
+    <article class="knowledge-card"><strong>交叉验证</strong><p>评估方案在不同子样本上的稳定性。时间序列需要保持先后顺序，用户多行数据需要按用户分组。</p></article>
+    <article class="knowledge-card"><strong>搜索策略</strong><p>网格搜索适合少量离散候选；随机搜索更适合大空间。任何搜索都必须包在正确的验证设计中。</p></article>
+  </div></section>
+
+  <section class="topic-section"><span>失败复盘</span><h2>高分模型通常败在数据、评估或上线决策</h2><div class="failure-list">
+    <article class="failure-item"><strong>用未来信息训练过去</strong><p>把赔付完成时间、最终人工结论或预测窗之后的行为放进特征，离线分数异常漂亮。</p><b>错在时间边界，不在模型参数。</b></article>
+    <article class="failure-item"><strong>预处理后再切分</strong><p>先用全量数据计算均值、标准差、缺失填充值或编码，再切训练测试，测试信息已经进入训练过程。</p><b>修复：先切分，并把预处理放进 Pipeline。</b></article>
+    <article class="failure-item"><strong>只看平均 AUC</strong><p>整体排序不错，但在重点城市、新商家或大促期间明显失效，平均值掩盖局部伤害。</p><b>修复：按关键业务切片检查稳定性与最差表现。</b></article>
+    <article class="failure-item"><strong>阈值固定为 0.5</strong><p>名单超过运营容量，真正高风险对象反而来不及处理。</p><b>修复：按 Top-K、成本收益与容量选择阈值。</b></article>
+    <article class="failure-item"><strong>复杂模型没有赢过规则</strong><p>提升很小，却增加延迟、维护和解释成本。</p><b>修复：同一评估设计下与规则、均值和线性模型比较。</b></article>
+    <article class="failure-item"><strong>把预测效果当成干预效果</strong><p>模型能识别风险，不代表给这些对象采取措施就能改变结果。</p><b>修复：用随机对照验证“模型 × 动作”的真实增量。</b></article>
+  </div></section>
+
+  <section class="topic-section"><span>面试问答</span><h2>不只会报算法名，还要能解释选择与失败</h2><div class="question-grid">
+    <article class="question-card"><strong>为什么先做基线模型？</strong><details><summary>展开答案</summary><p>基线提供最低可接受水平，也帮助判断复杂度是否值得。若复杂模型仅提升很小，却显著增加推理延迟、维护成本和解释难度，业务上未必应采用。</p></details></article>
+    <article class="question-card"><strong>训练集很好、测试集很差怎么办？</strong><details><summary>展开答案</summary><p>先排查切分是否符合真实应用、训练测试分布是否漂移和是否存在重复实体；确认是高方差后，再通过简化模型、正则化、限制树复杂度、增加有效样本或改善特征处理。</p></details></article>
+    <article class="question-card"><strong>交叉验证为什么不能修复数据泄漏？</strong><details><summary>展开答案</summary><p>如果泄漏字段已经进入每一折，交叉验证只会稳定地重复错误。必须先从时间、实体和特征生成过程上阻断泄漏，再选择正确的分折方式。</p></details></article>
+    <article class="question-card"><strong>类别不均衡时怎么办？</strong><details><summary>展开答案</summary><p>先确认不均衡是否真实、错误成本和名单容量；再选择合适指标与阈值。类权重、欠采样或过采样可以尝试，但必须只作用于训练折，并用原始分布验证。</p></details></article>
+    <article class="question-card"><strong>随机森林和 GBDT 的区别？</strong><details><summary>展开答案</summary><p>随机森林通过并行训练差异化树并平均来降低方差；GBDT 串行拟合前一轮残差或梯度来降低偏差。前者通常更稳健易用，后者在结构化数据上常有更强拟合力，但参数耦合和过拟合控制更复杂。</p></details></article>
+    <article class="question-card"><strong>模型上线后监控什么？</strong><details><summary>展开答案</summary><p>同时监控数据质量、特征分布、分数分布、线上延迟、缺失率、标签成熟后的模型指标，以及最终业务结果；并为异常设置告警、降级与回退策略。</p></details></article>
+  </div></section>
+</div>
+
+<nav class="topic-pagination" aria-label="专题课程翻页"><a href="incident-analysis.html"><span>上一节</span><strong>← 指标异动：建立有证据的排查顺序</strong></a><a href="ml-pipeline-patterns.html"><span>下一节</span><strong>通用机器学习流水线：预处理、调参与解释 →</strong></a></nav></main>
+<script src="../assets/topic-course.js"></script></body></html>

@@ -1,5 +1,5 @@
   <p class="p reveal">鲜食记的产品负责人找到你，说最近在考虑一个新策略：<strong>"用户邀请好友注册，双方各得7天会员体验。你觉得这个策略值不值得做？"</strong></p>
-  <p class="p reveal">这不是一个简单的"好不好"的问题。你需要量化评估——投入多少激励成本，换来多少真实增量。</p>
+  <p class="p reveal">你需要通过量化评估回答策略是否值得执行——投入多少激励成本，换来多少真实增量。</p>
 
   <div class="card card-accent reveal">
     <div class="card-label"><span class="dot"></span>第一步 · 数据摸底</div>
@@ -20,7 +20,7 @@
       <p>最简单的想法是直接做AB实验。但产品负责人说<strong>"不能随机分流——用户之间不能区别对待，会引发舆论。"</strong></p>
       <p>不能做实验的情况下，怎么评估策略效果？</p>
     </div>
-    <div class="step"><span class="step-num">01</span><div class="step-desc"><strong>用PSM找对照组。</strong> 激励发放不是随机的——拿到激励的用户和没拿到的用户天然不同。用倾向性得分匹配（PSM）：给每个拿了激励的用户，找一个"背景相似但没拿激励"的虚拟对照用户。匹配变量包括：过去30天活跃天数、打卡次数、会员状态、最近邀请行为。</div></div>
+    <div class="step"><span class="step-num">01</span><div class="step-desc"><strong>用PSM找对照组。</strong> 激励发放存在选择偏差：拿到激励的用户和未拿到激励的用户天然不同。用倾向性得分匹配（PSM）：给每个拿了激励的用户，找一个"背景相似但没拿激励"的虚拟对照用户。匹配变量包括：过去30天活跃天数、打卡次数、会员状态、最近邀请行为。</div></div>
     <div class="step"><span class="step-num">02</span><div class="step-desc"><strong>用DID算增量。</strong> 匹配后，比较两组在策略上线前后的邀请行为变化差异。比如：激励组平均每人邀请了1.8人，对照组平均每人邀请了0.6人，但两组在策略上线前的基线分别是0.5和0.4。DID = (1.8-0.5) - (0.6-0.4) = 1.1。这1.1次增量邀请中，才是激励带来的真实效果。</div></div>
     <div class="step"><span class="step-num">03</span><div class="step-desc"><strong>算ROI。</strong> 激励成本 = 两人各7天会员体验（成本约12元/对）× 有效邀请数。增量收入 = 被邀请人LTV × 增量邀请数 × 会员转化率。如果增量收入 > 激励成本，策略值得做。</div></div>
   </div>
@@ -32,7 +32,7 @@
     <div class="data-row"><span class="data-label">高活跃免费用户</span><span class="data-value">激励效果强（有动力缺触发）</span></div>
     <div class="data-row"><span class="data-label">低活跃用户</span><span class="data-value">激励几乎无效（连自己都不用）</span></div>
     <div class="card-body" style="margin-top:12px">
-      <p>结论：<strong>激励应该定向发给高活跃免费用户</strong>，而不是全部用户。</p>
+      <p>结论：<strong>激励应该定向发给高活跃免费用户</strong>，优先覆盖最可能产生增量的人群。</p>
       <p>定向发放后，整体ROI从1.3提升到2.8——翻了2倍多。</p>
     </div>
   </div>
@@ -40,7 +40,7 @@
   <div class="card card-accent reveal">
     <div class="card-label"><span class="dot"></span>第四步 · 落地建议</div>
     <div class="card-body">
-      <p><strong>不是"全部用户推邀请奖励"，而是——</strong></p>
+      <p><strong>最终策略聚焦于——</strong></p>
       <p>① 定向高活跃免费用户发邀请奖励，预计ROI 2.8</p>
       <p>② 对高活跃付费用户不发奖励，靠产品体验驱动自然邀请（省下激励成本）</p>
       <p>③ 低活跃用户先推激活策略，激活后再推邀请（现在推没用）</p>
@@ -49,5 +49,5 @@
   </div>
 
   <div class="glow-box reveal">
-    <p>迁移点拨<br><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.5)">这个"先匹配再差分"的分析框架，不仅能用于邀请激励，还适用于优惠券效果评估、会员权益ROI、广告投放归因——凡是"无法做随机实验的策略效果评估"都可以用这套PSM+DID的方法。</span></p>
+    <p>迁移点拨<br><span style="font-size:16px;font-weight:400">这个"先匹配再差分"的分析框架，不仅能用于邀请激励，还适用于优惠券效果评估、会员权益ROI、广告投放归因——凡是"无法做随机实验的策略效果评估"都可以用这套PSM+DID的方法。</span></p>
   </div>

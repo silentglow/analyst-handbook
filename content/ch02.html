@@ -1,39 +1,46 @@
-  <p class="p reveal">这是你入职鲜食记的第二周。公司做健康饮食APP——用户在上面浏览食谱、设定饮食计划、每天打卡记录，还可以订阅会员解锁个性化推荐。业务刚起步，新用户增长不错，但产品负责人一直在盯留存数据。</p>
-  <p class="p reveal">今天早上你刚坐到工位，她就走过来了：</p>
+<section class="scenario-opening reveal">
+  <span>09:18 · 入职第二周</span>
+  <h2>下午两点，产品负责人需要你给出清晰判断。</h2>
+  <p>鲜食记是一款健康饮食 App。用户浏览食谱、设定饮食计划、每日打卡，也可以订阅会员获得个性化推荐。新用户仍在增长，但产品负责人发现留存开始异常。</p>
+</section>
 
-  <div class="dialogue reveal">"新用户的次日打卡率一直在掉，上周还有45%，这周只剩33%了。下午两点跟我过一下数据，你先看看。"</div>
+<div class="dialogue reveal">“新用户次日打卡率一直在掉，上周还有 45%，这周只剩 33%。下午两点跟我过数据，你先看看。”</div>
 
-  <p class="p reveal">你打开数据看板，面前是这样的：</p>
-
-  <div class="card reveal">
-    <div class="card-label"><span class="dot"></span>新用户核心指标 · 近7天 <span style="color:#ef4444;margin-left:8px">⚠ 异常</span></div>
-    <div class="data-row"><span class="data-label">新用户注册数</span><span class="data-value">2,847/天</span></div>
-    <div class="data-row"><span class="data-label">次日打卡率</span><span class="data-value down">33% ↓ (上周45%)</span></div>
-    <div class="data-row"><span class="data-label">首次课程完成率</span><span class="data-value down">18% ↓ (上周28%)</span></div>
-    <div class="data-row"><span class="data-label">食谱浏览数/人</span><span class="data-value">6.2</span></div>
-    <div class="data-row"><span class="data-label">课程收藏率</span><span class="data-value">32%</span></div>
-    <div class="data-row"><span class="data-label">会员转化率</span><span class="data-value">4.1%</span></div>
-    <div class="data-row"><span class="data-label">小红书渠道占比</span><span class="data-value">68%</span></div>
-  </div>
-
-  <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>你要做的事</div>
-    <div class="card-body"><p>下午两点跟产品负责人过数据。你需要回答三个问题：</p></div>
-    <div class="step"><span class="step-num">01</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">这12个百分点的下降，是真实业务变化，还是数据本身出了问题？</div></div>
-    <div class="step"><span class="step-num">02</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">如果是真实的，问题出在哪个环节？哪个渠道？哪类用户？</div></div>
-    <div class="step"><span class="step-num">03</span><div class="step-desc" style="color:rgba(255,255,255,0.55)">你能提出什么可验证的解决方案？</div></div>
-  </div>
-
-  <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>先想想</div>
-    <div class="card-title">看到这些数据，你的第一步是什么？</div>
-    <div class="card-body"><p>花30秒想一想，再往下翻。</p></div>
-    <div style="margin-top:16px">
-      <div class="option"><span class="option-label">A</span><span class="option-text">先确认"次日打卡率"的计算口径最近有没有改过</span></div>
-      <div class="option"><span class="option-label">B</span><span class="option-text">按渠道拆开看，是不是小红书来的用户出了问题</span></div>
-      <div class="option"><span class="option-label">C</span><span class="option-text">按时间拉趋势，看是从哪天开始跌的</span></div>
-      <div class="option"><span class="option-label">D</span><span class="option-text">先看首次课程完成率也跌了，可能是同一个原因</span></div>
+<section class="metric-explorer reveal" data-metric-explorer>
+  <header><div><span>证据面板 · 近 7 天</span><h2>先看数据能说明什么，也要看它不能说明什么。</h2></div><p>点击任意指标，查看它对当前判断的价值。</p></header>
+  <div class="metric-explorer-layout">
+    <div class="metric-list" role="list">
+      <button class="data-row" type="button" data-insight="注册规模稳定，说明问题暂时不像来自新增量骤降；但它不能证明新增用户结构没有变化。" data-question="还要按渠道、地区和日期检查新增用户构成。"><span class="data-label">新用户注册数</span><span class="data-value">2,847 / 天</span></button>
+      <button class="data-row is-alert" type="button" data-insight="次日打卡率从 45% 降到 33%，异常幅度足够大，值得立即排查；但目前只有周均值，尚不知道从哪天开始。" data-question="先拉日趋势，并同时确认口径、埋点与数据延迟。"><span class="data-label">次日打卡率</span><span class="data-value down">33% <small>上周 45%</small></span></button>
+      <button class="data-row" type="button" data-insight="首次课程完成率同步下跌，说明打卡下降可能和首日体验链路有关，是重要的机制线索。" data-question="检查课程曝光、开始、完成各节点，寻找具体断点。"><span class="data-label">首次课程完成率</span><span class="data-value down">18% <small>上周 28%</small></span></button>
+      <button class="data-row" type="button" data-insight="浏览量基本稳定，说明用户仍有探索意愿；问题可能出在从“浏览”进入“课程与打卡”的承接环节。" data-question="对比浏览后进入课程的完整转化路径。"><span class="data-label">食谱浏览数 / 人</span><span class="data-value">6.2</span></button>
+      <button class="data-row" type="button" data-insight="收藏率稳定，代表内容兴趣没有全面崩塌；但收藏和完成课程不是同一行为。" data-question="检查收藏后是否能顺利回访并开始课程。"><span class="data-label">课程收藏率</span><span class="data-value">32%</span></button>
+      <button class="data-row" type="button" data-insight="会员转化暂时稳定，它不是本次留存异常的第一优先级，也不能用来否定体验问题。" data-question="先解决激活链路，再观察会员转化是否出现滞后影响。"><span class="data-label">会员转化率</span><span class="data-value">4.1%</span></button>
+      <button class="data-row" type="button" data-insight="单一渠道占比达到 68%，结构风险很高。若该渠道近期投放人群或素材变化，整体指标会被显著拉动。" data-question="按渠道拆解留存，同时检查小红书内部的素材、批次与落地页。"><span class="data-label">小红书渠道占比</span><span class="data-value">68%</span></button>
     </div>
+    <aside class="metric-insight" aria-live="polite">
+      <span>当前证据</span><h3 data-metric-title>请选择一条指标</h3>
+      <p data-metric-insight>这里会解释这条数据如何支持当前判断。</p>
+      <div><strong>下一步应追问</strong><p data-metric-question>点击左侧任意指标开始分析。</p></div>
+    </aside>
   </div>
+</section>
 
-  <p class="p reveal" style="font-size:14px;color:rgba(255,255,255,0.35)">选好了？在上一章我们讲过，遇到数据异动的第一步永远是——先确认数据本身有没有问题。下一章我们开始排查。</p>
+<section class="task-brief reveal">
+  <div><span>14:00 · 你的交付</span><h2>跟产品负责人过数据时，需要回答三个问题。</h2></div>
+  <ol><li><b>01</b><p>这 12 个百分点的下降是真实业务变化，还是口径、埋点或数据延迟造成的假异常？</p></li><li><b>02</b><p>如果异常真实，它从哪天开始，集中在哪个环节、渠道或用户群？</p></li><li><b>03</b><p>现有证据支持哪些假设？还需要什么验证，下一步准备采取什么行动？</p></li></ol>
+</section>
+
+<section class="decision-question reveal" data-question>
+  <div class="card-label">先做判断</div>
+  <h2>看到这组数据，你最合理的第一步是什么？</h2>
+  <p>这一步训练你安排验证顺序，并根据新证据调整行动。</p>
+  <div class="option-list">
+    <div class="option" data-correct="false" data-feedback="口径检查非常必要，但只做口径检查还不够。应同时看日趋势，确认异常何时出现、形态如何，再判断是否与数据变更重合。"><span class="option-label">A</span><span class="option-text">只确认“次日打卡率”的计算口径最近有没有改过</span></div>
+    <div class="option" data-correct="false" data-feedback="渠道拆解是重要方向，尤其小红书占比达到 68%。但在确认异常起点与数据质量之前直接下钻，可能把正常结构误判成根因。"><span class="option-label">B</span><span class="option-text">立即按渠道拆开，先认定小红书用户出了问题</span></div>
+    <div class="option" data-correct="true" data-feedback="这是更稳妥的起点：先拉日趋势定位异常起点和形态，同时核对口径、埋点与数据延迟。确认异常真实后，再按渠道和行为路径下钻。"><span class="option-label">C</span><span class="option-text">拉取日趋势定位异常起点，并同步检查口径、埋点与数据延迟</span></div>
+    <div class="option" data-correct="false" data-feedback="课程完成率同步下降是一条强线索，但“同步变化”仍不等于同一根因。需要通过时间、路径和分群证据继续验证。"><span class="option-label">D</span><span class="option-text">因为首次课程完成率也下降，直接判断两者来自同一个原因</span></div>
+  </div>
+</section>
+
+<div class="lesson-takeaway reveal"><span>本章先留下一个动作</span><p>先确认异常是否真实，并定位它何时开始；数据质量与趋势形态应并行检查。下一章再把业务目标翻译成一套能指导排查的指标体系。</p></div>

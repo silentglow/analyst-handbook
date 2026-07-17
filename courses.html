@@ -1,200 +1,421 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="28章系统课程：从业务问题、分析方法到机器学习与面试表达。"><title>系统课程 · 分析手册</title>
-<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/editorial.css"><link rel="stylesheet" href="assets/experience.css"><link rel="icon" href="data:,"></head>
+<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/editorial.css"><link rel="stylesheet" href="assets/experience.css?v=20260717-guide3"><link rel="icon" href="data:,"></head>
 <body data-page="courses"><nav class="topnav"><a href="index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a class="active" href="courses.html">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div></nav>
-<main class="course-index">
-<header class="course-index-hero"><div><p>系统课程 · 28 章</p><h1>先建立一条<br>稳定的判断路径</h1></div><div><p>课程不是 28 篇彼此独立的文章。它从一场业务异常开始，逐步进入方法选择、面试表达和机器学习决策。</p><a href="articles/guide.html">从第 01 章开始 →</a></div></header>
-<nav class="module-grid" aria-label="课程阶段">
-<a class="module-card" href="#module-business-loop" style="--module-card-theme:#5eead4">
-  <div class="module-card-top"><span>阶段 01</span><em>6 章</em></div>
-  <h3>完成第一场业务分析</h3>
-  <p>以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。</p>
-  <strong>完成一段可以在面试中讲清楚的端到端业务项目。</strong>
+<main class="course-system">
+<header class="course-system-hero">
+  <div class="course-system-copy"><p>系统课程 · 28 章 · 5 个能力阶段</p><h1>用 28 章内容，<br><span>建立一套判断系统</span></h1><div class="course-system-lead">从一场真实业务异常出发，学习如何寻找证据、选择方法、形成决策，并把完整判断讲给面试官与业务负责人听。</div><div class="course-system-actions"><a class="primary" href="articles/guide.html">从第一场任务开始 <b>→</b></a><a href="#course-system-map">查看五阶段路线</a></div><dl class="course-system-stats"><div><dt>28</dt><dd>章完整课程</dd></div><div><dt>5</dt><dd>次能力升级</dd></div><div><dt>1</dt><dd>套可迁移系统</dd></div></dl></div>
+  <div class="decision-engine" data-course-engine aria-label="业务问题转化为决策的动态演示">
+    <div class="decision-engine-bar"><span><i></i>判断引擎运行中</span><em>真实业务现场</em></div>
+    <div class="decision-incident"><small>当前任务</small><strong>新用户打卡率突然下跌 18.6%</strong><p>运营希望今天给出原因和上线建议</p></div>
+    <div class="decision-signals"><span><small>新用户量</small><b>+21%</b></span><span class="is-alert"><small>首日完成率</small><b>−18.6%</b></span><span><small>系统报错</small><b>稳定</b></span></div>
+    <div class="decision-pipeline" aria-label="问题、证据、方法、决策、表达">
+      <span class="is-active"><i>01</i><b>问题</b></span><span><i>02</i><b>证据</b></span><span><i>03</i><b>方法</b></span><span><i>04</i><b>决策</b></span><span><i>05</i><b>表达</b></span>
+    </div>
+    <div class="decision-output"><small>最终交付</small><strong>一条可验证、可上线、可解释的判断链</strong></div>
+  </div>
+</header>
+<section class="learning-os" aria-labelledby="learning-os-title">
+  <header><p>学习操作系统</p><h2 id="learning-os-title">每一章都要完成一次<br>输入、判断与输出</h2><div>沉浸感来自持续接收任务、观察证据、做出选择并获得反馈。</div></header>
+  <div class="learning-os-grid">
+    <article class="os-scene"><div class="os-visual"><span>09:42</span><i></i><i></i><b>异常 −18.6%</b></div><small>01 · 进入现场</small><h3>先接收一个不完整的问题</h3><p>知道谁在等结论、为什么现在要判断，以及最后必须交付什么。</p></article>
+    <article class="os-reason"><div class="os-visual"><span>现象</span><i>→</i><span>证据</span><i>→</i><strong>判断</strong></div><small>02 · 看见关系</small><h3>把文字变成可以检查的结构</h3><p>用指标树、实验分流、因果路径和决策门看见推理中间过程。</p></article>
+    <article class="os-output"><div class="os-visual"><span></span><span></span><b>可复用</b><i>✓</i></div><small>03 · 完成产出</small><h3>每次学习都留下业务成果</h3><p>每章都会留下方案、清单、图表、答案或复盘。</p></article>
+  </div>
+</section>
+<section class="course-map-intro" id="course-system-map"><p>完整课程地图</p><h2>五次能力升级，共用一条判断主线</h2><div>滚动页面时，路线会自动告诉你现在位于哪个阶段。你也可以直接选择阶段开始。</div></section>
+<nav class="stage-rail" aria-label="课程阶段">
+<a class="stage-rail-link" href="#module-business-loop" data-stage-link="business-loop">
+  <span class="stage-rail-index">01</span>
+  <span class="stage-rail-copy"><small>主线实战</small><strong>完成第一场业务分析</strong></span>
+  <em>6 章</em>
 </a>
-<a class="module-card" href="#module-analysis-toolbox" style="--module-card-theme:#60a5fa">
-  <div class="module-card-top"><span>阶段 02</span><em>8 章</em></div>
-  <h3>高频分析工具箱</h3>
-  <p>掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。</p>
-  <strong>面对不同业务问题，能够选择合适方法并说明使用条件。</strong>
+<a class="stage-rail-link" href="#module-analysis-toolbox" data-stage-link="analysis-toolbox">
+  <span class="stage-rail-index">02</span>
+  <span class="stage-rail-copy"><small>方法进阶</small><strong>高频分析工具箱</strong></span>
+  <em>8 章</em>
 </a>
-<a class="module-card" href="#module-interview-output" style="--module-card-theme:#a78bfa">
-  <div class="module-card-top"><span>阶段 03</span><em>6 章</em></div>
-  <h3>把分析变成面试答案</h3>
-  <p>把已有分析能力组织成自我介绍、项目经历和结构化面试回答。</p>
-  <strong>形成30秒、90秒和3分钟三个层次的面试表达。</strong>
+<a class="stage-rail-link" href="#module-interview-output" data-stage-link="interview-output">
+  <span class="stage-rail-index">03</span>
+  <span class="stage-rail-copy"><small>表达训练</small><strong>把分析变成面试答案</strong></span>
+  <em>6 章</em>
 </a>
-<a class="module-card" href="#module-mock-career" style="--module-card-theme:#fbbf24">
-  <div class="module-card-top"><span>阶段 04</span><em>4 章</em></div>
-  <h3>模拟面试与职业迁移</h3>
-  <p>通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。</p>
-  <strong>在陌生问题中稳定拆解、追问、表达并迁移方法。</strong>
+<a class="stage-rail-link" href="#module-mock-career" data-stage-link="mock-career">
+  <span class="stage-rail-index">04</span>
+  <span class="stage-rail-copy"><small>综合演练</small><strong>模拟面试与职业迁移</strong></span>
+  <em>4 章</em>
 </a>
-<a class="module-card" href="#module-ml-decision" style="--module-card-theme:#fb7185">
-  <div class="module-card-top"><span>阶段 05</span><em>4 章</em></div>
-  <h3>机器学习：先判断，再建模</h3>
-  <p>不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。</p>
-  <strong>能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。</strong>
+<a class="stage-rail-link" href="#module-ml-decision" data-stage-link="ml-decision">
+  <span class="stage-rail-index">05</span>
+  <span class="stage-rail-copy"><small>可选扩展</small><strong>机器学习：先判断，再建模</strong></span>
+  <em>4 章</em>
 </a></nav>
-
-<section class="course-module" id="module-business-loop">
-  <header><div><span>阶段 01 · 主线实战</span><h2>完成第一场业务分析</h2><p>以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。</p></div><strong>完成一段可以在面试中讲清楚的端到端业务项目。</strong></header>
-  <div class="course-list">
-<a href="articles/guide.html" class="course-card reveal" style="--card-theme:#5eead4">
-  <div class="course-card-num">01</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>指南</span><em>6 分钟</em></div><h3>学习指南</h3><p>面试官到底在考什么？怎么学才有效？建立正确的分析思维。</p><div class="course-card-path" aria-label="5步学习路径"><i title="定义问题"></i><i title="结构化拆解"></i><i title="用数据验证"></i><i title="形成业务决策"></i><i title="清晰表达"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<div class="curriculum-stages">
+<section class="curriculum-stage stage-business-loop" id="module-business-loop" data-course-stage="business-loop" style="--stage-theme:#5eead4">
+  <header class="curriculum-stage-head">
+    <div class="curriculum-stage-copy"><span>阶段 01 · 主线实战</span><h2>完成第一场业务分析</h2><p>以鲜食记新用户打卡率下跌为主线，完成从定义问题、排查异动到实验上线的完整闭环。</p><div class="stage-outcome"><small>阶段成果</small><strong>完成一段可以在面试中讲清楚的端到端业务项目。</strong></div></div>
+    <div class="stage-visual stage-visual-loop" aria-label="从异常到上线的业务闭环图">
+          <div class="loop-alert"><span>业务异常</span><strong>打卡率 −18.6%</strong></div>
+          <div class="loop-track"><i></i><i></i><i></i><i></i></div>
+          <div class="loop-steps"><span>定义问题</span><span>检查证据</span><span>验证假设</span><span>灰度上线</span></div>
+          <div class="loop-result"><small>最终判断</small><b>根因：渠道预期与产品体验错位</b></div>
+        </div>
+  </header>
+  <div class="curriculum-grid">
+<a href="articles/guide.html" class="curriculum-card reveal" style="--card-theme:#5eead4">
+  <div class="curriculum-card-head"><span class="curriculum-num">01</span><span>指南</span><em>6 分钟</em></div>
+  <h3>学习指南</h3>
+  <p class="curriculum-summary">看清 28 章系统课程、专题课程与业务案例如何共同训练一套完整的业务判断系统。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>看清 28 章系统课程、专题课程与业务案例如何共同训练一套完整的业务判断系统</dd></div>
+    <div><dt>判断</dt><dd>定义问题 → 结构化拆解 → 用数据验证 → 形成业务决策 → 清晰表达</dd></div>
+    <div><dt>产出</dt><dd>一张个人学习路线与成果验收表</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch02.html" class="course-card reveal" style="--card-theme:#fbbf24">
-  <div class="course-card-num">02</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>9 分钟</em></div><h3>进入鲜食记场景</h3><p>产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。</p><div class="course-card-path" aria-label="4步学习路径"><i title="明确业务目标"></i><i title="确认指标异常"></i><i title="列出未知问题"></i><i title="确定汇报交付"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch02.html" class="curriculum-card reveal" style="--card-theme:#fbbf24">
+  <div class="curriculum-card-head"><span class="curriculum-num">02</span><span>业务实战</span><em>9 分钟</em></div>
+  <h3>进入鲜食记场景</h3>
+  <p class="curriculum-summary">产品负责人说打卡率崩了。你打开看板，面对真实数据，开始思考。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>产品负责人说打卡率崩了</dd></div>
+    <div><dt>判断</dt><dd>明确业务目标 → 确认指标异常 → 列出未知问题 → 确定汇报交付</dd></div>
+    <div><dt>产出</dt><dd>一份业务问题定义与汇报任务单</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch03.html" class="course-card reveal" style="--card-theme:#5eead4">
-  <div class="course-card-num">03</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>10 分钟</em></div><h3>该盯哪些指标</h3><p>用AARRR框架拆解用户旅程，建立指标体系。先搭体系再找原因。</p><div class="course-card-path" aria-label="4步学习路径"><i title="确认分子分母"></i><i title="确认时间窗口"></i><i title="确认埋点与数据延迟"></i><i title="建立指标树"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch03.html" class="curriculum-card reveal" style="--card-theme:#5eead4">
+  <div class="curriculum-card-head"><span class="curriculum-num">03</span><span>业务实战</span><em>10 分钟</em></div>
+  <h3>该盯哪些指标</h3>
+  <p class="curriculum-summary">用AARRR框架拆解用户旅程，建立指标体系。先搭体系再找原因。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>用AARRR框架拆解用户旅程，建立指标体系</dd></div>
+    <div><dt>判断</dt><dd>确认分子分母 → 确认时间窗口 → 确认埋点与数据延迟 → 建立指标树</dd></div>
+    <div><dt>产出</dt><dd>一棵口径明确、可下钻的指标树</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch04.html" class="course-card reveal" style="--card-theme:#a78bfa">
-  <div class="course-card-num">04</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>13 分钟</em></div><h3>排查异动</h3><p>按时间、渠道、用户行为逐步缩小范围，定位到小红书种草内容的根因。</p><div class="course-card-path" aria-label="5步学习路径"><i title="可信度检查"></i><i title="时间定位"></i><i title="维度下钻"></i><i title="行为验证"></i><i title="形成归因"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch04.html" class="curriculum-card reveal" style="--card-theme:#a78bfa">
+  <div class="curriculum-card-head"><span class="curriculum-num">04</span><span>业务实战</span><em>13 分钟</em></div>
+  <h3>排查异动</h3>
+  <p class="curriculum-summary">按时间、渠道、用户行为逐步缩小范围，定位到小红书种草内容的根因。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>按时间、渠道、用户行为逐步缩小范围，定位到小红书种草内容的根因</dd></div>
+    <div><dt>判断</dt><dd>可信度检查 → 时间定位 → 维度下钻 → 行为验证 → 形成归因</dd></div>
+    <div><dt>产出</dt><dd>一条从异常到根因的完整证据链</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch05.html" class="course-card reveal" style="--card-theme:#60a5fa">
-  <div class="course-card-num">05</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>13 分钟</em></div><h3>AB实验设计</h3><p>设计新用户引导流程的AB实验，计算样本量、定义指标、规划实验周期。</p><div class="course-card-path" aria-label="5步学习路径"><i title="提出假设"></i><i title="确定实验单位"></i><i title="选择主指标与护栏指标"></i><i title="估算样本量"></i><i title="设定停止规则"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch05.html" class="curriculum-card reveal" style="--card-theme:#60a5fa">
+  <div class="curriculum-card-head"><span class="curriculum-num">05</span><span>业务实战</span><em>13 分钟</em></div>
+  <h3>AB实验设计</h3>
+  <p class="curriculum-summary">设计新用户引导流程的AB实验，计算样本量、定义指标、规划实验周期。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>设计新用户引导流程的AB实验，计算样本量、定义指标、规划实验周期</dd></div>
+    <div><dt>判断</dt><dd>提出假设 → 确定实验单位 → 选择主指标与护栏指标 → 估算样本量 → 设定停止规则</dd></div>
+    <div><dt>产出</dt><dd>一份可上线、可回退的实验方案</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch06.html" class="course-card reveal" style="--card-theme:#fbbf24">
-  <div class="course-card-num">06</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>10 分钟</em></div><h3>落地策略</h3><p>灰度发布、持续监控、回退方案。从分析到决策到执行的完整闭环。</p><div class="course-card-path" aria-label="5步学习路径"><i title="确认收益与风险"></i><i title="制定灰度计划"></i><i title="设置监控阈值"></i><i title="准备回退方案"></i><i title="复盘沉淀"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch06.html" class="curriculum-card reveal" style="--card-theme:#fbbf24">
+  <div class="curriculum-card-head"><span class="curriculum-num">06</span><span>业务实战</span><em>10 分钟</em></div>
+  <h3>落地策略</h3>
+  <p class="curriculum-summary">灰度发布、持续监控、回退方案。从分析到决策到执行的完整闭环。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>灰度发布、持续监控、回退方案</dd></div>
+    <div><dt>判断</dt><dd>确认收益与风险 → 制定灰度计划 → 设置监控阈值 → 准备回退方案 → 复盘沉淀</dd></div>
+    <div><dt>产出</dt><dd>一份包含收益、风险与灰度的上线决策</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a></div>
 </section>
-<section class="course-module" id="module-analysis-toolbox">
-  <header><div><span>阶段 02 · 方法进阶</span><h2>高频分析工具箱</h2><p>掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。</p></div><strong>面对不同业务问题，能够选择合适方法并说明使用条件。</strong></header>
-  <div class="course-list">
-<a href="articles/ch07.html" class="course-card reveal" style="--card-theme:#a78bfa">
-  <div class="course-card-num">07</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>11 分钟</em></div><h3>用户画像与分层运营</h3><p>从三层穿透到RFM，不只是给用户贴标签，而是找到不同群体对策略的反应差异。</p><div class="course-card-path" aria-label="4步学习路径"><i title="明确分层目的"></i><i title="选择行为与价值指标"></i><i title="验证组间差异"></i><i title="匹配差异化策略"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<section class="curriculum-stage stage-analysis-toolbox" id="module-analysis-toolbox" data-course-stage="analysis-toolbox" style="--stage-theme:#60a5fa">
+  <header class="curriculum-stage-head">
+    <div class="curriculum-stage-copy"><span>阶段 02 · 方法进阶</span><h2>高频分析工具箱</h2><p>掌握用户、留存、目标、统计、因果和商业模式等高频分析方法。</p><div class="stage-outcome"><small>阶段成果</small><strong>面对不同业务问题，能够选择合适方法并说明使用条件。</strong></div></div>
+    <div class="stage-visual stage-visual-toolbox" aria-label="从业务问题选择分析方法的关系图">
+          <div class="tool-question">这是什么问题？</div>
+          <div class="tool-lines" aria-hidden="true"></div>
+          <div class="tool-grid"><span>人群差异<small>分层 / Cohort</small></span><span>结果异常<small>指标树 / 下钻</small></span><span>策略增量<small>实验 / 因果</small></span><span>经营结果<small>目标 / 商业模式</small></span></div>
+          <strong>先识别问题，再选择工具</strong>
+        </div>
+  </header>
+  <div class="curriculum-grid">
+<a href="articles/ch07.html" class="curriculum-card reveal" style="--card-theme:#a78bfa">
+  <div class="curriculum-card-head"><span class="curriculum-num">07</span><span>方法理解</span><em>11 分钟</em></div>
+  <h3>用户画像与分层运营</h3>
+  <p class="curriculum-summary">从三层穿透到 RFM，识别不同群体对策略的反应差异。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>从三层穿透到 RFM，识别不同群体对策略的反应差异</dd></div>
+    <div><dt>判断</dt><dd>明确分层目的 → 选择行为与价值指标 → 验证组间差异 → 匹配差异化策略</dd></div>
+    <div><dt>产出</dt><dd>一套可执行的用户分层运营方案</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch08.html" class="course-card reveal" style="--card-theme:#5eead4">
-  <div class="course-card-num">08</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>12 分钟</em></div><h3>留存分析与生命周期</h3><p>留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。</p><div class="course-card-path" aria-label="5步学习路径"><i title="定义留存行为"></i><i title="建立Cohort"></i><i title="比较曲线形态"></i><i title="下钻关键行为"></i><i title="制定召回或激活策略"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch08.html" class="curriculum-card reveal" style="--card-theme:#5eead4">
+  <div class="curriculum-card-head"><span class="curriculum-num">08</span><span>方法理解</span><em>12 分钟</em></div>
+  <h3>留存分析与生命周期</h3>
+  <p class="curriculum-summary">留存率比拉新更重要。了解不同产品的留存曲线形态，掌握留存下降的分析框架。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>留存率比拉新更重要</dd></div>
+    <div><dt>判断</dt><dd>定义留存行为 → 建立Cohort → 比较曲线形态 → 下钻关键行为 → 制定召回或激活策略</dd></div>
+    <div><dt>产出</dt><dd>一张 Cohort 留存诊断图与动作建议</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch09.html" class="course-card reveal" style="--card-theme:#fbbf24">
-  <div class="course-card-num">09</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>12 分钟</em></div><h3>数据预测与目标拆解</h3><p>订阅收入=流量×转化率×客单价。拆解目标，给出多个路径，考虑不确定性。</p><div class="course-card-path" aria-label="5步学习路径"><i title="明确北极星目标"></i><i title="建立驱动公式"></i><i title="设定基线与假设"></i><i title="计算多条路径"></i><i title="识别关键约束"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch09.html" class="curriculum-card reveal" style="--card-theme:#fbbf24">
+  <div class="curriculum-card-head"><span class="curriculum-num">09</span><span>方法理解</span><em>12 分钟</em></div>
+  <h3>数据预测与目标拆解</h3>
+  <p class="curriculum-summary">订阅收入=流量×转化率×客单价。拆解目标，给出多个路径，考虑不确定性。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>订阅收入=流量×转化率×客单价</dd></div>
+    <div><dt>判断</dt><dd>明确北极星目标 → 建立驱动公式 → 设定基线与假设 → 计算多条路径 → 识别关键约束</dd></div>
+    <div><dt>产出</dt><dd>一份能够回算的目标拆解表</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch10.html" class="course-card reveal" style="--card-theme:#a78bfa">
-  <div class="course-card-num">10</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>10 分钟</em></div><h3>辛普森悖论</h3><p>为什么整体趋势和分组趋势完全相反？拆维度时一定要看各组的占比变化。</p><div class="course-card-path" aria-label="5步学习路径"><i title="查看整体趋势"></i><i title="按关键变量分组"></i><i title="比较组内趋势"></i><i title="检查结构占比"></i><i title="回到因果机制"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch10.html" class="curriculum-card reveal" style="--card-theme:#a78bfa">
+  <div class="curriculum-card-head"><span class="curriculum-num">10</span><span>方法理解</span><em>10 分钟</em></div>
+  <h3>辛普森悖论</h3>
+  <p class="curriculum-summary">为什么整体趋势和分组趋势完全相反？拆维度时一定要看各组的占比变化。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>为什么整体趋势和分组趋势完全相反？拆维度时一定要看各组的占比变化</dd></div>
+    <div><dt>判断</dt><dd>查看整体趋势 → 按关键变量分组 → 比较组内趋势 → 检查结构占比 → 回到因果机制</dd></div>
+    <div><dt>产出</dt><dd>一份避免汇总误判的分层分析结论</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch11.html" class="course-card reveal" style="--card-theme:#60a5fa">
-  <div class="course-card-num">11</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>15 分钟</em></div><h3>P值与样本量</h3><p>P值到底是什么？样本量怎么算？常见面试陷阱：偷看P值、多重检验、不显著≠没效果。</p><div class="course-card-path" aria-label="5步学习路径"><i title="确定基线与MDE"></i><i title="设定显著性和功效"></i><i title="估算样本量"></i><i title="预先约定分析规则"></i><i title="同时报告效应量与区间"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch11.html" class="curriculum-card reveal" style="--card-theme:#60a5fa">
+  <div class="curriculum-card-head"><span class="curriculum-num">11</span><span>方法理解</span><em>15 分钟</em></div>
+  <h3>P值与样本量</h3>
+  <p class="curriculum-summary">P值到底是什么？样本量怎么算？常见面试陷阱：偷看P值、多重检验、不显著≠没效果。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>P值到底是什么？样本量怎么算？常见面试陷阱：偷看P值、多重检验、不显著≠没效果</dd></div>
+    <div><dt>判断</dt><dd>确定基线与MDE → 设定显著性和功效 → 估算样本量 → 预先约定分析规则 → 同时报告效应量与区间</dd></div>
+    <div><dt>产出</dt><dd>一份显著性、效应量与样本量判断说明</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch12.html" class="course-card reveal" style="--card-theme:#5eead4">
-  <div class="course-card-num">12</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>13 分钟</em></div><h3>因果推断入门</h3><p>相关不等于因果。DID、RDD、PSM三种准实验方法的简明介绍和面试回答模板。</p><div class="course-card-path" aria-label="5步学习路径"><i title="定义处理与结果"></i><i title="识别反事实"></i><i title="检查可用自然实验"></i><i title="验证识别假设"></i><i title="进行稳健性检验"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch12.html" class="curriculum-card reveal" style="--card-theme:#5eead4">
+  <div class="curriculum-card-head"><span class="curriculum-num">12</span><span>方法理解</span><em>13 分钟</em></div>
+  <h3>因果推断入门</h3>
+  <p class="curriculum-summary">相关不等于因果。DID、RDD、PSM三种准实验方法的简明介绍和面试回答模板。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>相关不等于因果</dd></div>
+    <div><dt>判断</dt><dd>定义处理与结果 → 识别反事实 → 检查可用自然实验 → 验证识别假设 → 进行稳健性检验</dd></div>
+    <div><dt>产出</dt><dd>一份说明识别条件与局限的因果方案</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch13.html" class="course-card reveal" style="--card-theme:#a78bfa">
-  <div class="course-card-num">13</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>11 分钟</em></div><h3>AI辅助数据分析</h3><p>AI不能替代分析师下结论。四层架构：指标口径→异常检测→归因下钻→AI总结。</p><div class="course-card-path" aria-label="5步学习路径"><i title="定义口径与权限"></i><i title="让AI辅助查询和探索"></i><i title="人工验证结果"></i><i title="保留证据链"></i><i title="由业务负责人决策"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch13.html" class="curriculum-card reveal" style="--card-theme:#a78bfa">
+  <div class="curriculum-card-head"><span class="curriculum-num">13</span><span>方法理解</span><em>11 分钟</em></div>
+  <h3>AI辅助数据分析</h3>
+  <p class="curriculum-summary">AI不能替代分析师下结论。四层架构：指标口径→异常检测→归因下钻→AI总结。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>AI不能替代分析师下结论</dd></div>
+    <div><dt>判断</dt><dd>定义口径与权限 → 让AI辅助查询和探索 → 人工验证结果 → 保留证据链 → 由业务负责人决策</dd></div>
+    <div><dt>产出</dt><dd>一套有人审、有证据的 AI 分析流程</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch14.html" class="course-card reveal" style="--card-theme:#fbbf24">
-  <div class="course-card-num">14</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>12 分钟</em></div><h3>商业模式拆解</h3><p>广告、订阅、抽成、增值，四种互联网商业模式。鲜食记的订阅模式拆解。</p><div class="course-card-path" aria-label="5步学习路径"><i title="识别客户与价值主张"></i><i title="拆解收入公式"></i><i title="拆解成本结构"></i><i title="定位增长约束"></i><i title="选择健康度指标"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch14.html" class="curriculum-card reveal" style="--card-theme:#fbbf24">
+  <div class="curriculum-card-head"><span class="curriculum-num">14</span><span>方法理解</span><em>12 分钟</em></div>
+  <h3>商业模式拆解</h3>
+  <p class="curriculum-summary">广告、订阅、抽成、增值，四种互联网商业模式。鲜食记的订阅模式拆解。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>广告、订阅、抽成、增值，四种互联网商业模式</dd></div>
+    <div><dt>判断</dt><dd>识别客户与价值主张 → 拆解收入公式 → 拆解成本结构 → 定位增长约束 → 选择健康度指标</dd></div>
+    <div><dt>产出</dt><dd>一张商业模式与关键指标地图</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a></div>
 </section>
-<section class="course-module" id="module-interview-output">
-  <header><div><span>阶段 03 · 表达训练</span><h2>把分析变成面试答案</h2><p>把已有分析能力组织成自我介绍、项目经历和结构化面试回答。</p></div><strong>形成30秒、90秒和3分钟三个层次的面试表达。</strong></header>
-  <div class="course-list">
-<a href="articles/ch15.html" class="course-card reveal" style="--card-theme:#5eead4">
-  <div class="course-card-num">15</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>10 分钟</em></div><h3>自我介绍与简历</h3><p>四段式自我介绍模板。简历不要列职责要写成果。STAR法则描述项目经历。</p><div class="course-card-path" aria-label="5步学习路径"><i title="一句话定位"></i><i title="相关经历"></i><i title="代表项目"></i><i title="量化结果"></i><i title="岗位连接"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<section class="curriculum-stage stage-interview-output" id="module-interview-output" data-course-stage="interview-output" style="--stage-theme:#a78bfa">
+  <header class="curriculum-stage-head">
+    <div class="curriculum-stage-copy"><span>阶段 03 · 表达训练</span><h2>把分析变成面试答案</h2><p>把已有分析能力组织成自我介绍、项目经历和结构化面试回答。</p><div class="stage-outcome"><small>阶段成果</small><strong>形成30秒、90秒和3分钟三个层次的面试表达。</strong></div></div>
+    <div class="stage-visual stage-visual-answer" aria-label="面试答案的三层表达结构">
+          <div class="answer-clock"><span>30s</span><span>90s</span><span>3min</span></div>
+          <div class="answer-stack"><p><b>结论</b>先回答面试官真正问的问题</p><p><b>证据</b>用项目事实支撑判断</p><p><b>取舍</b>说明限制、风险与下一步</p></div>
+          <div class="answer-feedback"><i></i><span>表达训练：压缩判断过程</span></div>
+        </div>
+  </header>
+  <div class="curriculum-grid">
+<a href="articles/ch15.html" class="curriculum-card reveal" style="--card-theme:#5eead4">
+  <div class="curriculum-card-head"><span class="curriculum-num">15</span><span>面试训练</span><em>10 分钟</em></div>
+  <h3>自我介绍与简历</h3>
+  <p class="curriculum-summary">四段式自我介绍模板。简历用可量化成果呈现能力。STAR 法则组织项目经历。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>四段式自我介绍模板</dd></div>
+    <div><dt>判断</dt><dd>一句话定位 → 相关经历 → 代表项目 → 量化结果 → 岗位连接</dd></div>
+    <div><dt>产出</dt><dd>30 秒、90 秒与 3 分钟三个表达版本</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch16.html" class="course-card reveal" style="--card-theme:#a78bfa">
-  <div class="course-card-num">16</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>9 分钟</em></div><h3>一面vs二面</h3><p>一面考技术（SQL+统计学+分析思路），二面考业务（方案+落地+跨部门协作）。</p><div class="course-card-path" aria-label="4步学习路径"><i title="识别面试角色"></i><i title="判断考察目标"></i><i title="调整技术与业务比重"></i><i title="准备对应追问"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch16.html" class="curriculum-card reveal" style="--card-theme:#a78bfa">
+  <div class="curriculum-card-head"><span class="curriculum-num">16</span><span>面试训练</span><em>9 分钟</em></div>
+  <h3>一面vs二面</h3>
+  <p class="curriculum-summary">一面考技术（SQL+统计学+分析思路），二面考业务（方案+落地+跨部门协作）。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>一面考技术（SQL+统计学+分析思路），二面考业务（方案+落地+跨部门协作）</dd></div>
+    <div><dt>判断</dt><dd>识别面试角色 → 判断考察目标 → 调整技术与业务比重 → 准备对应追问</dd></div>
+    <div><dt>产出</dt><dd>一张一面与二面的回答侧重点清单</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch17.html" class="course-card reveal" style="--card-theme:#60a5fa">
-  <div class="course-card-num">17</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>12 分钟</em></div><h3>面试真题·指标体系</h3><p>鲜食记直播业务健康度指标体系。OSM模型+反向指标+三级指标分级。</p><div class="course-card-path" aria-label="5步学习路径"><i title="明确业务阶段与目标"></i><i title="拆用户和业务链路"></i><i title="设置结果指标"></i><i title="设置过程指标"></i><i title="补充护栏与反向指标"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch17.html" class="curriculum-card reveal" style="--card-theme:#60a5fa">
+  <div class="curriculum-card-head"><span class="curriculum-num">17</span><span>面试训练</span><em>12 分钟</em></div>
+  <h3>面试真题·指标体系</h3>
+  <p class="curriculum-summary">鲜食记直播业务健康度指标体系。OSM模型+反向指标+三级指标分级。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>鲜食记直播业务健康度指标体系</dd></div>
+    <div><dt>判断</dt><dd>明确业务阶段与目标 → 拆用户和业务链路 → 设置结果指标 → 设置过程指标 → 补充护栏与反向指标</dd></div>
+    <div><dt>产出</dt><dd>一套包含护栏指标的业务指标体系</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch18.html" class="course-card reveal" style="--card-theme:#fbbf24">
-  <div class="course-card-num">18</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>13 分钟</em></div><h3>面试真题·异动分析</h3><p>某内容社区DAU下跌15%怎么分析？四步流程+内容社区的特殊性+加分项。</p><div class="course-card-path" aria-label="5步学习路径"><i title="确认异常真实"></i><i title="定位时间与范围"></i><i title="按公式和维度下钻"></i><i title="提出并验证假设"></i><i title="给出策略与监控"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch18.html" class="curriculum-card reveal" style="--card-theme:#fbbf24">
+  <div class="curriculum-card-head"><span class="curriculum-num">18</span><span>面试训练</span><em>13 分钟</em></div>
+  <h3>面试真题·异动分析</h3>
+  <p class="curriculum-summary">某内容社区DAU下跌15%怎么分析？四步流程+内容社区的特殊性+加分项。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>某内容社区DAU下跌15%怎么分析？四步流程+内容社区的特殊性+加分项</dd></div>
+    <div><dt>判断</dt><dd>确认异常真实 → 定位时间与范围 → 按公式和维度下钻 → 提出并验证假设 → 给出策略与监控</dd></div>
+    <div><dt>产出</dt><dd>一份 DAU 异动排查的结构化答案</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch19.html" class="course-card reveal" style="--card-theme:#5eead4">
-  <div class="course-card-num">19</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>11 分钟</em></div><h3>费米估算</h3><p>鲜食记首月有多少付费用户？拆解+假设+估算+敏感性分析。费米估算考的是过程不是结果。</p><div class="course-card-path" aria-label="5步学习路径"><i title="明确口径"></i><i title="拆解公式"></i><i title="给出有依据假设"></i><i title="计算量级"></i><i title="做上下界检查"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch19.html" class="curriculum-card reveal" style="--card-theme:#5eead4">
+  <div class="curriculum-card-head"><span class="curriculum-num">19</span><span>面试训练</span><em>11 分钟</em></div>
+  <h3>费米估算</h3>
+  <p class="curriculum-summary">鲜食记首月有多少付费用户？通过拆解、假设、估算与敏感性分析，展示不确定条件下的推理过程。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>鲜食记首月有多少付费用户？通过拆解、假设、估算与敏感性分析，展示不确定条件下的推理过程</dd></div>
+    <div><dt>判断</dt><dd>明确口径 → 拆解公式 → 给出有依据假设 → 计算量级 → 做上下界检查</dd></div>
+    <div><dt>产出</dt><dd>一份包含上下界与敏感性的费米估算</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch20.html" class="course-card reveal" style="--card-theme:#a78bfa">
-  <div class="course-card-num">20</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>10 分钟</em></div><h3>从零做项目</h3><p>三步做一个有含金量的项目。STAR法则写进简历。鲜食记案例本身就是你的项目。</p><div class="course-card-path" aria-label="5步学习路径"><i title="选择真实问题"></i><i title="说明个人职责"></i><i title="展示分析与取舍"></i><i title="量化结果"></i><i title="诚实说明限制"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch20.html" class="curriculum-card reveal" style="--card-theme:#a78bfa">
+  <div class="curriculum-card-head"><span class="curriculum-num">20</span><span>面试训练</span><em>10 分钟</em></div>
+  <h3>从零做项目</h3>
+  <p class="curriculum-summary">三步做一个有含金量的项目。STAR法则写进简历。鲜食记案例本身就是你的项目。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>三步做一个有含金量的项目</dd></div>
+    <div><dt>判断</dt><dd>选择真实问题 → 说明个人职责 → 展示分析与取舍 → 量化结果 → 诚实说明限制</dd></div>
+    <div><dt>产出</dt><dd>一段可追问、可验证的 STAR 项目经历</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a></div>
 </section>
-<section class="course-module" id="module-mock-career">
-  <header><div><span>阶段 04 · 综合演练</span><h2>模拟面试与职业迁移</h2><p>通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。</p></div><strong>在陌生问题中稳定拆解、追问、表达并迁移方法。</strong></header>
-  <div class="course-list">
-<a href="articles/ch21.html" class="course-card reveal" style="--card-theme:#fbbf24">
-  <div class="course-card-num">21</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>15 分钟</em></div><h3>完整模拟面试</h3><p>经历一场从自我介绍、项目深挖到业务案例和反问的完整模拟面试。</p><div class="course-card-path" aria-label="5步学习路径"><i title="开场定位"></i><i title="项目深挖"></i><i title="业务案例"></i><i title="技术追问"></i><i title="复盘与反问"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<section class="curriculum-stage stage-mock-career" id="module-mock-career" data-course-stage="mock-career" style="--stage-theme:#fbbf24">
+  <header class="curriculum-stage-head">
+    <div class="curriculum-stage-copy"><span>阶段 04 · 综合演练</span><h2>模拟面试与职业迁移</h2><p>通过完整模拟、策略评估、SQL表达和行业迁移完成最后冲刺。</p><div class="stage-outcome"><small>阶段成果</small><strong>在陌生问题中稳定拆解、追问、表达并迁移方法。</strong></div></div>
+    <div class="stage-visual stage-visual-simulation" aria-label="完整模拟面试时间线">
+          <div class="simulation-timeline"><i></i><i></i><i></i><i></i></div>
+          <ol><li><b>00:00</b><span>自我定位</span></li><li><b>08:00</b><span>项目深挖</span></li><li><b>22:00</b><span>陌生案例</span></li><li><b>38:00</b><span>反问复盘</span></li></ol>
+          <p><span>压力变化</span><i></i><b>稳定结构</b></p>
+        </div>
+  </header>
+  <div class="curriculum-grid">
+<a href="articles/ch21.html" class="curriculum-card reveal" style="--card-theme:#fbbf24">
+  <div class="curriculum-card-head"><span class="curriculum-num">21</span><span>面试训练</span><em>15 分钟</em></div>
+  <h3>完整模拟面试</h3>
+  <p class="curriculum-summary">经历一场从自我介绍、项目深挖到业务案例和反问的完整模拟面试。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>经历一场从自我介绍、项目深挖到业务案例和反问的完整模拟面试</dd></div>
+    <div><dt>判断</dt><dd>开场定位 → 项目深挖 → 业务案例 → 技术追问 → 复盘与反问</dd></div>
+    <div><dt>产出</dt><dd>一份完整模拟面试记录与复盘</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch22.html" class="course-card reveal" style="--card-theme:#a78bfa">
-  <div class="course-card-num">22</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>14 分钟</em></div><h3>策略评估案例</h3><p>腾讯视频打击账号共享的面试真题拆解。三层分析：算账→看行为→生态影响。</p><div class="course-card-path" aria-label="5步学习路径"><i title="明确策略目标"></i><i title="计算直接收益成本"></i><i title="分析用户行为变化"></i><i title="评估长期生态影响"></i><i title="设计实验或准实验"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch22.html" class="curriculum-card reveal" style="--card-theme:#a78bfa">
+  <div class="curriculum-card-head"><span class="curriculum-num">22</span><span>面试训练</span><em>14 分钟</em></div>
+  <h3>策略评估案例</h3>
+  <p class="curriculum-summary">腾讯视频打击账号共享的面试真题拆解。三层分析：算账→看行为→生态影响。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>腾讯视频打击账号共享的面试真题拆解</dd></div>
+    <div><dt>判断</dt><dd>明确策略目标 → 计算直接收益成本 → 分析用户行为变化 → 评估长期生态影响 → 设计实验或准实验</dd></div>
+    <div><dt>产出</dt><dd>一份收益—行为—生态三层策略评估</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch23.html" class="course-card reveal" style="--card-theme:#5eead4">
-  <div class="course-card-num">23</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>面试训练</span><em>12 分钟</em></div><h3>SQL面试必备</h3><p>留存率计算、JOIN选择、窗口函数。SQL面试中的高频考点和常见错误。</p><div class="course-card-path" aria-label="5步学习路径"><i title="确认数据粒度"></i><i title="定义口径"></i><i title="选择连接关系"></i><i title="处理重复与空值"></i><i title="校验结果"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch23.html" class="curriculum-card reveal" style="--card-theme:#5eead4">
+  <div class="curriculum-card-head"><span class="curriculum-num">23</span><span>面试训练</span><em>12 分钟</em></div>
+  <h3>SQL面试必备</h3>
+  <p class="curriculum-summary">留存率计算、JOIN选择、窗口函数。SQL面试中的高频考点和常见错误。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>留存率计算、JOIN选择、窗口函数</dd></div>
+    <div><dt>判断</dt><dd>确认数据粒度 → 定义口径 → 选择连接关系 → 处理重复与空值 → 校验结果</dd></div>
+    <div><dt>产出</dt><dd>一份能解释数据结构与口径的 SQL 答案</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ch24.html" class="course-card reveal" style="--card-theme:#60a5fa">
-  <div class="course-card-num">24</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>职业迁移</span><em>14 分钟</em></div><h3>行业与职业</h3><p>不同行业数据分析师的差异、入行建议、职业发展三大方向。</p><div class="course-card-path" aria-label="5步学习路径"><i title="判断行业商业模式"></i><i title="识别岗位核心问题"></i><i title="盘点可迁移能力"></i><i title="定位能力缺口"></i><i title="制定90天计划"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ch24.html" class="curriculum-card reveal" style="--card-theme:#60a5fa">
+  <div class="curriculum-card-head"><span class="curriculum-num">24</span><span>职业迁移</span><em>14 分钟</em></div>
+  <h3>行业与职业</h3>
+  <p class="curriculum-summary">不同行业数据分析师的差异、入行建议、职业发展三大方向。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>不同行业数据分析师的差异、入行建议、职业发展三大方向</dd></div>
+    <div><dt>判断</dt><dd>判断行业商业模式 → 识别岗位核心问题 → 盘点可迁移能力 → 定位能力缺口 → 制定90天计划</dd></div>
+    <div><dt>产出</dt><dd>一份与目标岗位对应的 90 天迁移计划</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a></div>
 </section>
-<section class="course-module" id="module-ml-decision">
-  <header><div><span>阶段 05 · 可选扩展</span><h2>机器学习：先判断，再建模</h2><p>不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。</p></div><strong>能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。</strong></header>
-  <div class="course-list">
-<a href="articles/ml01.html" class="course-card reveal" style="--card-theme:#fb7185">
-  <div class="course-card-num">ML01</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>方法理解</span><em>18 分钟</em></div><h3>先判断，再建模</h3><p>用四类真实需求判断该做分析、规则、实验还是预测；学会拒绝一个定义错误的模型项目。</p><div class="course-card-path" aria-label="6步学习路径"><i title="还原决策"></i><i title="固定时点"></i><i title="定义结果"></i><i title="寻找动作"></i><i title="比较替代方案"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<section class="curriculum-stage stage-ml-decision" id="module-ml-decision" data-course-stage="ml-decision" style="--stage-theme:#fb7185">
+  <header class="curriculum-stage-head">
+    <div class="curriculum-stage-copy"><span>阶段 05 · 可选扩展</span><h2>机器学习：先判断，再建模</h2><p>不从算法清单开始，而是用履约、需求、客服和营销场景判断何时建模、何时拒绝，以及模型为什么会失败。</p><div class="stage-outcome"><small>阶段成果</small><strong>能够把业务问题定义成可验证的模型任务，并识别那些分数很好却无法创造价值的方案。</strong></div></div>
+    <div class="stage-visual stage-visual-model" aria-label="机器学习项目的决策门">
+          <div class="model-score"><small>离线 AUC</small><strong>0.94</strong><span>看起来很好</span></div>
+          <div class="model-gate"><i></i><b>叫停</b><p>标签泄漏</p><p>没有行动出口</p></div>
+          <div class="model-route"><span>规则基线</span><i>→</i><span>小流量验证</span><i>→</i><strong>业务净收益</strong></div>
+        </div>
+  </header>
+  <div class="curriculum-grid">
+<a href="articles/ml01.html" class="curriculum-card reveal" style="--card-theme:#fb7185">
+  <div class="curriculum-card-head"><span class="curriculum-num">ML01</span><span>方法理解</span><em>18 分钟</em></div>
+  <h3>先判断，再建模</h3>
+  <p class="curriculum-summary">用四类真实需求判断该做分析、规则、实验还是预测；学会拒绝一个定义错误的模型项目。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>用四类真实需求判断该做分析、规则、实验还是预测</dd></div>
+    <div><dt>判断</dt><dd>还原决策 → 固定时点 → 定义结果 → 寻找动作 → 比较替代方案</dd></div>
+    <div><dt>产出</dt><dd>一张决定做分析、规则、实验还是模型的审查单</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ml02.html" class="course-card reveal" style="--card-theme:#60a5fa">
-  <div class="course-card-num">ML02</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>20 分钟</em></div><h3>履约风险决策</h3><p>在明确预测时点和处理能力后，比较规则、分类模型与人工策略，而不是只追求更高分数。</p><div class="course-card-path" aria-label="6步学习路径"><i title="明确时点"></i><i title="建立规则基线"></i><i title="训练候选模型"></i><i title="按容量选阈值"></i><i title="小流量试运行"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ml02.html" class="curriculum-card reveal" style="--card-theme:#60a5fa">
+  <div class="curriculum-card-head"><span class="curriculum-num">ML02</span><span>业务实战</span><em>20 分钟</em></div>
+  <h3>履约风险决策</h3>
+  <p class="curriculum-summary">在明确预测时点和处理能力后，比较规则、分类模型与人工策略的实际收益。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>在明确预测时点和处理能力后，比较规则、分类模型与人工策略的实际收益</dd></div>
+    <div><dt>判断</dt><dd>明确时点 → 建立规则基线 → 训练候选模型 → 按容量选阈值 → 小流量试运行</dd></div>
+    <div><dt>产出</dt><dd>一份按处理容量排序的风险干预名单</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ml03.html" class="course-card reveal" style="--card-theme:#fbbf24">
-  <div class="course-card-num">ML03</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>20 分钟</em></div><h3>需求预测陷阱</h3><p>从门店补货进入时间预测，识别随机切分、缺货截断、促销变化和平均指标掩盖局部失败。</p><div class="course-card-path" aria-label="6步学习路径"><i title="确认决策周期"></i><i title="建立朴素基线"></i><i title="按时间回测"></i><i title="修正缺货偏差"></i><i title="分群检查误差"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ml03.html" class="curriculum-card reveal" style="--card-theme:#fbbf24">
+  <div class="curriculum-card-head"><span class="curriculum-num">ML03</span><span>业务实战</span><em>20 分钟</em></div>
+  <h3>需求预测陷阱</h3>
+  <p class="curriculum-summary">从门店补货进入时间预测，识别随机切分、缺货截断、促销变化和平均指标掩盖局部失败。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>从门店补货进入时间预测，识别随机切分、缺货截断、促销变化和平均指标掩盖局部失败</dd></div>
+    <div><dt>判断</dt><dd>确认决策周期 → 建立朴素基线 → 按时间回测 → 修正缺货偏差 → 分群检查误差</dd></div>
+    <div><dt>产出</dt><dd>一套按时间回测、可转成补货动作的预测方案</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a>
-<a href="articles/ml04.html" class="course-card reveal" style="--card-theme:#a78bfa">
-  <div class="course-card-num">ML04</div>
-  <div class="course-card-content"><div class="course-card-meta"><span>业务实战</span><em>22 分钟</em></div><h3>模型失败复盘</h3><p>拆解泄漏、错目标、行动瓶颈、反馈回路与环境变化，建立模型叫停、修复和降级机制。</p><div class="course-card-path" aria-label="6步学习路径"><i title="确认失败现象"></i><i title="定位失败层级"></i><i title="阻断继续损失"></i><i title="回到业务基线"></i><i title="修复并重测"></i></div></div>
-  <span class="course-card-arrow">→</span>
+<a href="articles/ml04.html" class="curriculum-card reveal" style="--card-theme:#a78bfa">
+  <div class="curriculum-card-head"><span class="curriculum-num">ML04</span><span>业务实战</span><em>22 分钟</em></div>
+  <h3>模型失败复盘</h3>
+  <p class="curriculum-summary">拆解泄漏、错目标、行动瓶颈、反馈回路与环境变化，建立模型叫停、修复和降级机制。</p>
+  <dl class="curriculum-io">
+    <div><dt>输入</dt><dd>拆解泄漏、错目标、行动瓶颈、反馈回路与环境变化，建立模型叫停、修复和降级机制</dd></div>
+    <div><dt>判断</dt><dd>确认失败现象 → 定位失败层级 → 阻断继续损失 → 回到业务基线 → 修复并重测</dd></div>
+    <div><dt>产出</dt><dd>一份模型叫停、降级、修复与重测预案</dd></div>
+  </dl>
+  <div class="curriculum-enter"><span>进入本章</span><b aria-hidden="true">↗</b></div>
 </a></div>
-</section>
-</main><footer class="site-footer"><span>系统课程</span><p>问题 → 证据 → 方法 → 决策 → 表达</p></footer><script src="assets/main.js"></script></body></html>
+</section></div>
+<section class="course-finish"><div><p>课程最终目标</p><h2>在陌生问题里，稳定地把判断做完</h2></div><a href="articles/guide.html">开始第一章 <span>→</span></a></section>
+</main><footer class="site-footer"><span>系统课程</span><p>问题 → 证据 → 方法 → 决策 → 表达</p></footer><script src="assets/main.js"></script><script src="assets/course-index.js"></script></body></html>

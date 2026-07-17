@@ -982,7 +982,7 @@ pre {
       <div class="callout callout-quote">
         <span class="callout-label">&#9670; 运营总监</span>
         <div class="callout-content">
-          <p>"不能只看消费金额，有些用户虽然金额高，但很久没来了。我们想要的是真正有价值的用户。"</p>
+          <p>"消费金额需要结合最近一次消费与购买频率一起判断。我们要识别真正有持续价值的用户。"</p>
         </div>
       </div>
     </div>
@@ -1736,7 +1736,7 @@ df[<span class="code-string">'M_level'</span>] <span class="code-operator">=</sp
           <ol style="padding-left:20px;">
             <li><strong>打分标准要合理</strong>：根据业务特点调整阈值</li>
             <li><strong>定期更新</strong>：用户价值会变化，需要定期重新分层</li>
-            <li><strong>结合业务理解</strong>：不要只看数据，要结合业务场景</li>
+            <li><strong>结合业务理解</strong>：结合数据证据与业务场景</li>
             <li><strong>验证效果</strong>：分层后要验证运营效果</li>
           </ol>
         </div>
@@ -1934,7 +1934,8 @@ const rfmColors = {
 // CHART 2: RFM 3D Scatter
 // ============================================================
 (function() {
-  const chart = echarts.init(document.getElementById('chart-rfm-3d'));
+  const chartElement = document.getElementById('chart-rfm-3d');
+  let chart = null;
 
   // Generate sample data for 8 user types
   function genData(rRange, fRange, mRange, count) {
@@ -1943,7 +1944,7 @@ const rfmColors = {
       const r = rRange[0] + Math.random() * (rRange[1] - rRange[0]);
       const f = fRange[0] + Math.random() * (fRange[1] - fRange[0]);
       const m = mRange[0] + Math.random() * (mRange[1] - mRange[0]);
-      data.push([r.toFixed(1), f.toFixed(1), m.toFixed(1)]);
+      data.push([Number(r.toFixed(1)), Number(f.toFixed(1)), Number(m.toFixed(1))]);
     }
     return data;
   }
@@ -2029,10 +2030,14 @@ const rfmColors = {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/echarts-gl@2.0.9/dist/echarts-gl.min.js';
     script.onload = function() {
+      // ECharts captures its processing pipeline when an instance is created.
+      // Initialize only after ECharts GL has registered the 3D layout handlers.
+      chart = echarts.init(chartElement);
       chart.setOption(option);
     };
     script.onerror = function() {
       // Fallback: 2D scatter
+      chart = echarts.init(chartElement);
       const flatData = [];
       types.forEach(t => {
         genData(t.r, t.f, t.m, t.n).forEach(d => {
@@ -2061,7 +2066,7 @@ const rfmColors = {
     };
     document.head.appendChild(script);
   }
-  window.addEventListener('resize', () => chart.resize());
+  window.addEventListener('resize', () => chart && chart.resize());
 })();
 
 // ============================================================

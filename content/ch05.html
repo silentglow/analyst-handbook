@@ -1,63 +1,40 @@
-  <p class="p reveal">上一章我们定位到了根因：小红书新种草内容带来的用户，对产品有错误预期。他们期望的是健身教程，拿到的是饮食记录。</p>
-  <p class="p reveal">市场团队说可以调整种草内容的方向，但产品负责人更关心：<strong>能不能在APP里做点什么，把这批用户留住？</strong></p>
+<section class="ab-story-intro reveal">
+  <div><span>上一章结论</span><strong>问题来自小红书用户预期与产品体验错位</strong></div><p>市场团队会调整种草内容；产品负责人还想知道：<b>能不能在 APP 内增加“7 天饮食挑战”，让这批新用户更快体验核心价值？</b></p>
+</section>
 
-  <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>你的方案</div>
-    <div class="card-title">优化新用户引导流程</div>
-    <div class="card-body">
-      <p>你提出一个假设：如果在新用户注册后，增加一个"7天饮食挑战"的引导流程——让用户先完成一个简单的3天饮食记录任务，体验到产品的核心价值，再逐步解锁高级功能——留存率可能会提升。</p>
-      <p>产品负责人说：<strong>听起来有道理，但你怎么证明这个方案真的有效？</strong></p>
-    </div>
-  </div>
+<section class="ab-hypothesis reveal">
+  <div class="content-kicker">01 · 把建议改写成可证伪假设</div><h2>写清实验对象、具体改动与预期变化。</h2>
+  <div class="hypothesis-equation"><span>小红书新用户</span><b>＋</b><span>7 天饮食挑战</span><b>→</b><span>次日打卡率<br><strong>28% → 35%</strong></span></div>
+  <aside><span>关键约束</span><p>如果没有提前写下 35% 这个最小期望效果，实验结束后就很容易把任何微小上涨解释成“有效”。</p></aside>
+</section>
 
-  <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>AB实验设计</div>
-    <div class="card-title">用AB实验验证</div>
-    <div style="margin-top:16px">
-      <div class="step"><span class="step-num">假设</span><div class="step-desc">新版引导流程能把小红书渠道新用户的次日打卡率从28%提升到35%</div></div>
-    </div>
-    <div style="margin-top:20px">
-      <p class="card-title" style="font-size:15px">指标设计</p>
-      <div class="step"><span class="step-num" style="color:#5eead4">北极星</span><div class="step-desc">小红书新用户次日打卡率</div></div>
-      <div class="step"><span class="step-num" style="color:#fbbf24">辅助</span><div class="step-desc">首次课程完成率、食谱浏览数、3日留存率</div></div>
-      <div class="step"><span class="step-num" style="color:#ef4444">护栏</span><div class="step-desc">会员转化率、页面加载时长、卸载率</div></div>
-    </div>
-    <div style="margin-top:20px">
-      <p class="card-title" style="font-size:15px">分流设计</p>
-      <div class="data-row"><span class="data-label">实验对象</span><span class="data-value">小红书渠道新注册用户</span></div>
-      <div class="data-row"><span class="data-label">分流方式</span><span class="data-value">按用户ID哈希</span></div>
-      <div class="data-row"><span class="data-label">分流比例</span><span class="data-value">50%对照 / 50%实验</span></div>
-      <div class="data-row"><span class="data-label">对照组</span><span class="data-value">原有引导流程</span></div>
-      <div class="data-row"><span class="data-label">实验组</span><span class="data-value">新增7天饮食挑战引导</span></div>
-    </div>
+<section class="ab-lab reveal" aria-labelledby="ab-lab-title">
+  <header><div><div class="content-kicker">02 · 分流设计</div><h2 id="ab-lab-title">两组只允许一个关键差异。</h2></div><p>实验对象只包含小红书渠道新注册用户，按用户 ID 稳定哈希，避免同一个人在两组之间跳动。</p></header>
+  <div class="ab-flow">
+    <div class="ab-population"><small>每天约 1,900 人</small><strong>符合条件的新用户</strong><i></i></div>
+    <div class="ab-split"><span>50%</span><span>50%</span></div>
+    <div class="ab-lanes"><article><span>A · 对照组</span><strong>原有引导流程</strong><p>950 人 / 天</p><i class="lane-a"></i></article><article><span>B · 实验组</span><strong>新增饮食挑战</strong><p>950 人 / 天</p><i class="lane-b"></i></article></div>
+    <div class="ab-compare"><span>同一时间窗 · 同一口径</span><strong>比较行为差异</strong></div>
   </div>
+</section>
 
-  <div class="card card-purple reveal">
-    <div class="card-label"><span class="dot"></span>样本量计算</div>
-    <div class="card-title">需要多少用户才能得出结论？</div>
-    <div class="data-row"><span class="data-label">基线（当前次日打卡率）</span><span class="data-value">28%</span></div>
-    <div class="data-row"><span class="data-label">期望检测的最小效果MDE</span><span class="data-value">28% → 35%</span></div>
-    <div class="data-row"><span class="data-label">显著性水平 α</span><span class="data-value">0.05</span></div>
-    <div class="data-row"><span class="data-label">检验功效 1-β</span><span class="data-value">0.80</span></div>
-    <div class="data-row"><span class="data-label">每组所需样本量</span><span class="data-value">约2,450人</span></div>
-    <div class="data-row"><span class="data-label">两组合计</span><span class="data-value">约4,900人</span></div>
-    <div class="card-body" style="margin-top:12px"><p>小红书渠道每天新注册约1,900人，50/50分流后每组每天950人。理论上约3天就能达到样本量，但建议至少跑满7天，覆盖完整的星期周期。完整实验周期：7天入组 + 1天观察 = 8天。</p></div>
+<section class="ab-metric-system reveal">
+  <header><div class="content-kicker">03 · 为指标分配三种职责</div><h2>一个指标决定是否上线，另外两组指标负责解释和刹车。</h2></header>
+  <div class="metric-orbit">
+    <article class="metric-primary"><span>决策指标</span><strong>次日打卡率</strong><p>回答方案是否创造了核心价值</p></article>
+    <article class="metric-explain"><span>解释指标</span><strong>首次课程完成率<br>食谱浏览数 · 3 日留存</strong><p>解释变化通过哪条行为路径发生</p></article>
+    <article class="metric-guard"><span>护栏指标</span><strong>会员转化率<br>加载时长 · 卸载率</strong><p>防止局部变好、整体受损</p></article>
   </div>
+</section>
 
-  <div class="card card-amber reveal">
-    <div class="card-label"><span class="dot"></span>上线后盯什么</div>
-    <div class="card-body">
-      <p><strong>SRM检查</strong> — 两组人数比例是否接近50/50。如果偏差太大，说明分流有问题。</p>
-      <p><strong>护栏指标</strong> — 会员转化率有没有跌？页面加载有没有变慢？卸载率有没有涨？</p>
-      <p><strong>不要偷看</strong> — 不要每天去看P值，看到显著就提前停止。按预设周期跑完再看结论。</p>
-    </div>
-  </div>
+<section class="ab-sample reveal">
+  <div class="ab-sample-copy"><div class="content-kicker">04 · 样本量与时间</div><h2>“三天够样本”不等于“三天就能停”。</h2><dl><div><dt>基线</dt><dd>28%</dd></div><div><dt>最小效果 MDE</dt><dd>+7pp</dd></div><div><dt>显著性 α</dt><dd>0.05</dd></div><div><dt>检验功效</dt><dd>80%</dd></div><div><dt>每组样本</dt><dd>≈ 2,450</dd></div></dl></div>
+  <div class="ab-timeline" aria-label="实验周期八天"><div class="timeline-axis"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="observe"></i></div><div class="timeline-labels"><span>DAY 1<br><b>开始入组</b></span><span>DAY 3<br><b>达到样本量</b></span><span>DAY 7<br><b>覆盖星期周期</b></span><span>DAY 8<br><b>完成观察</b></span></div><p>至少跑满 7 天，避免工作日与周末的行为结构差异；再留 1 天观察次日结果。</p></div>
+</section>
 
-  <div class="card card-accent reveal">
-    <div class="card-label"><span class="dot"></span>面试考点</div>
-    <div class="card-title">面试官问你怎么设计AB实验</div>
-    <div class="step"><span class="step-num" style="color:#5eead4">第一步</span><div class="step-desc"><strong>明确假设。</strong> 我要验证什么？预期效果是多少？</div></div>
-    <div class="step"><span class="step-num" style="color:#fbbf24">第二步</span><div class="step-desc"><strong>设计指标体系。</strong> 北极星指标负责决策，辅助指标解释路径，护栏指标防止副作用。</div></div>
-    <div class="step"><span class="step-num" style="color:#a78bfa">第三步</span><div class="step-desc"><strong>计算样本量。</strong> 根据基线、MDE、显著性水平和检验功效，算出需要多少用户、跑多久。</div></div>
-    <div class="step"><span class="step-num">第四步</span><div class="step-desc"><strong>上线监控。</strong> 检查SRM、盯护栏指标、不要偷看P值。按预设周期跑完再做决策。</div></div>
-  </div>
+<section class="ab-stop-room reveal">
+  <header><div class="content-kicker">05 · 上线前写好停止规则</div><h2>实验期间最大的风险是看到理想结果后提前停止。</h2></header>
+  <div class="stop-dashboard"><article><span>分流健康</span><strong>SRM 检查</strong><p>两组人数是否接近 50 / 50？</p><b>异常则暂停</b></article><article><span>业务安全</span><strong>护栏指标</strong><p>转化、性能或卸载是否恶化？</p><b>越阈值则回退</b></article><article><span>统计纪律</span><strong>不偷看 P 值</strong><p>按预设周期与分析规则做结论。</p><b>不提前宣布胜利</b></article></div>
+</section>
+
+<section class="lesson-takeaway reveal"><span>面试回答主线</span><p><strong>假设 → 分流 → 指标 → 样本 → 监控 → 决策。</strong>真正完整的 A/B 实验设计，不只证明方案是否有效，还要预先说明在什么情况下停止、回退或拒绝上线。</p></section>

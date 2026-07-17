@@ -155,37 +155,83 @@ function initTOC() {
 
   const chapters = Array.isArray(window.TOC_CHAPTERS) ? window.TOC_CHAPTERS : [];
   const modules = Array.isArray(window.COURSE_MODULES) ? window.COURSE_MODULES : [];
-  const current = window.TOC_CURRENT;
-  const moduleNames = new Map(modules.map(module => [module.id, `模块 ${module.num} · ${module.title}`]));
+  const currentSlug = window.TOC_CURRENT;
+  const currentChapter = chapters.find(chapter => chapter.slug === currentSlug);
+  const currentModuleId = currentChapter?.module || window.TOC_CURRENT_MODULE;
+  const currentModule = modules.find(module => module.id === currentModuleId);
 
-  if (chapters.length) {
-    const fragment = document.createDocumentFragment();
-    const heading = document.createElement('h3');
-    heading.textContent = '课程目录';
-    fragment.appendChild(heading);
+  const make = (tag, className, text) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = text;
+    return element;
+  };
 
-    let activeModule = null;
-    chapters.forEach(chapter => {
-      if (chapter.module !== activeModule) {
-        activeModule = chapter.module;
-        const label = document.createElement('div');
-        label.className = 'toc-module-label';
-        label.textContent = moduleNames.get(activeModule) || activeModule;
-        fragment.appendChild(label);
-      }
+  const closeButton = make('button', 'toc-close', '关闭');
+  closeButton.type = 'button';
+  closeButton.setAttribute('aria-label', '关闭课程路线');
 
+  const panelHeader = make('header', 'toc-header');
+  const headerTop = make('div', 'toc-header-top');
+  const headingCopy = make('div', 'toc-heading-copy');
+  headingCopy.append(make('span', '', 'COURSE ROUTE'), make('h2', '', '只看此刻要走的路'));
+  headerTop.append(headingCopy, closeButton);
+
+  const stageChapters = chapters.filter(chapter => chapter.module === currentModuleId);
+  const stageIndex = Math.max(0, stageChapters.findIndex(chapter => chapter.slug === currentSlug));
+  const progress = make('div', 'toc-stage-progress');
+  const progressCopy = make('div', 'toc-stage-progress-copy');
+  progressCopy.append(make('span', '', `阶段 ${currentModule?.num || ''}`), make('strong', '', currentModule?.title || '当前学习阶段'));
+  const progressCount = make('b', '', `${stageIndex + 1} / ${stageChapters.length}`);
+  const progressTrack = make('div', 'toc-progress-track');
+  const progressFill = make('i');
+  progressFill.style.width = `${stageChapters.length ? ((stageIndex + 1) / stageChapters.length) * 100 : 0}%`;
+  progressTrack.append(progressFill);
+  progress.append(progressCopy, progressCount, progressTrack);
+  panelHeader.append(headerTop, progress);
+
+  const route = make('div', 'toc-route');
+  route.append(make('p', 'toc-route-label', '本阶段路线'));
+  stageChapters.forEach((chapter, index) => {
+    const link = document.createElement('a');
+    link.href = chapter.href;
+    const isCurrent = chapter.slug === currentSlug;
+    const isDone = index < stageIndex;
+    link.className = `toc-route-item${isCurrent ? ' active' : ''}${isDone ? ' done' : ''}`;
+    if (isCurrent) link.setAttribute('aria-current', 'page');
+    const marker = make('span', 'toc-route-marker', isDone ? '✓' : chapter.num);
+    const copy = make('span', 'toc-route-item-copy');
+    copy.append(make('strong', '', chapter.title), make('small', '', isCurrent ? '正在学习' : (isDone ? '已经过' : '接下来')));
+    link.append(marker, copy);
+    route.append(link);
+  });
+
+  const otherStages = make('div', 'toc-other-stages');
+  otherStages.append(make('p', 'toc-route-label', '完整课程地图'));
+  modules.forEach(module => {
+    if (module.id === currentModuleId) return;
+    const details = make('details', 'toc-stage-group');
+    const summary = document.createElement('summary');
+    const title = make('span', 'toc-stage-title');
+    title.append(make('small', '', `阶段 ${module.num}`), make('strong', '', module.title));
+    const moduleItems = chapters.filter(chapter => chapter.module === module.id);
+    summary.append(title, make('b', '', `${moduleItems.length} 章`));
+    const links = make('div', 'toc-stage-links');
+    moduleItems.forEach(chapter => {
       const link = document.createElement('a');
       link.href = chapter.href;
-      link.className = `toc-item${current === chapter.slug ? ' active' : ''}`;
-      if (current === chapter.slug) link.setAttribute('aria-current', 'page');
-      const number = document.createElement('span');
-      number.className = 'toc-num';
-      number.textContent = chapter.num;
-      link.append(number, document.createTextNode(chapter.title));
-      fragment.appendChild(link);
+      link.append(make('span', '', chapter.num), make('strong', '', chapter.title));
+      links.append(link);
     });
-    panel.replaceChildren(fragment);
-  }
+    details.append(summary, links);
+    otherStages.append(details);
+  });
+
+  const fullMap = document.createElement('a');
+  fullMap.className = 'toc-full-map';
+  fullMap.href = window.location.pathname.includes('/articles/') ? '../courses.html' : 'courses.html';
+  fullMap.textContent = '打开完整课程地图 →';
+  panel.replaceChildren(panelHeader, route, otherStages, fullMap);
 
   toggle.setAttribute('aria-controls', panel.id);
   toggle.setAttribute('aria-expanded', 'false');
@@ -195,7 +241,7 @@ function initTOC() {
     overlay.classList.add('open');
     toggle.setAttribute('aria-expanded', 'true');
     document.body.classList.add('toc-open');
-    panel.querySelector('a')?.focus();
+    closeButton.focus();
   }
 
   function close(returnFocus = false) {
@@ -207,18 +253,45 @@ function initTOC() {
   }
 
   toggle.addEventListener('click', () => panel.classList.contains('open') ? close() : open());
+  closeButton.addEventListener('click', () => close(true));
   overlay.addEventListener('click', () => close());
-  panel.addEventListener('click', event => {
-    if (event.target.closest('a')) close();
-  });
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && panel.classList.contains('open')) close(true);
+  panel.addEventListener('click', event => { if (event.target.closest('a')) close(); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && panel.classList.contains('open')) close(true); });
+}
+
+function initMetricExplorer() {
+  document.querySelectorAll('[data-metric-explorer]').forEach(explorer => {
+    const rows = Array.from(explorer.querySelectorAll('.data-row[data-insight]'));
+    const title = explorer.querySelector('[data-metric-title]');
+    const insight = explorer.querySelector('[data-metric-insight]');
+    const question = explorer.querySelector('[data-metric-question]');
+    if (!rows.length || !title || !insight || !question) return;
+
+    const select = row => {
+      rows.forEach(item => {
+        const active = item === row;
+        item.classList.toggle('is-selected', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      title.textContent = row.querySelector('.data-label')?.textContent?.trim() || '当前指标';
+      insight.textContent = row.dataset.insight || '';
+      question.textContent = row.dataset.question || '';
+      const panel = explorer.querySelector('.metric-insight');
+      panel?.classList.remove('has-update');
+      window.requestAnimationFrame(() => panel?.classList.add('has-update'));
+    };
+
+    rows.forEach(row => {
+      row.setAttribute('aria-pressed', 'false');
+      row.addEventListener('click', () => select(row));
+    });
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   initReveal();
   initOptions();
+  initMetricExplorer();
   initReadingMode();
   initTOC();
 });

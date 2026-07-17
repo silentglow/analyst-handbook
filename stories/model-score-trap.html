@@ -25,7 +25,7 @@
   <div class="mls-time">10:23 · 第一份证据</div><h2>所有人都在看那张漂亮的模型报告</h2>
   <div class="mls-metrics"><div><span>离线 AUC</span><strong>0.94</strong></div><div><span>召回率</span><strong>81%</strong></div><div><span>每日名单</span><strong>9,200</strong></div><div><span>运营容量</span><strong>800</strong></div></div>
   <figure class="mls-visual">
-    <div class="mls-visual-prompt"><span>LIVE VIEW</span>先不要看 AUC，观察名单容量与业务结果是否同向。</div>
+    <div class="mls-visual-prompt"><span>LIVE VIEW</span>先观察名单容量与业务结果，再回看 AUC。</div>
     <img src="../assets/visuals/story-26-incident-console.svg" alt="模型事故控制台显示离线 AUC 0.94，但每天九千二百条名单远超八百条运营容量，同时超时未改善且投诉上升" loading="lazy" decoding="async">
     <figcaption><strong>现场信号</strong> 模型分数仍然漂亮，但容量缺口和投诉曲线已经说明系统没有产生业务价值。</figcaption>
   </figure>
@@ -48,7 +48,7 @@
     <div class="mls-row danger"><span>首次揽收扫描距支付时长</span><span>数小时后</span><span>#1</span></div>
     <div class="mls-row danger"><span>用户是否发起催单</span><span>次日</span><span>#2</span></div>
   </div>
-  <div class="mls-reveal"><div class="mark">FAILURE 01 · DATA LEAKAGE</div><h3>模型不是预测得准，而是偷看了结果正在发生的过程</h3><p>训练脚本把订单最终形成的完整记录直接拼到样本中。离线模型拥有未来信息，线上只能用缺失值代替，因此 0.94 从来不是线上可达到的能力。</p></div>
+  <div class="mls-reveal"><div class="mark">FAILURE 01 · DATA LEAKAGE</div><h3>离线高分来自对结果过程的提前读取</h3><p>训练脚本把订单最终形成的完整记录直接拼到样本中。离线模型拥有未来信息，线上只能用缺失值代替，因此线上环境无法复现 0.94 的离线表现。</p></div>
 </section>
 
 <section class="mls-section">
@@ -58,22 +58,22 @@
     <article><span>预测正确但不可行动</span><h3>偏远地区预售订单</h3><p>确实容易超时，但当天催办无法改变仓配线路。模型命中不等于业务可挽救。</p></article>
     <article><span>值得行动却被淹没</span><h3>仓库可加急订单</h3><p>风险分数略低，但一次升级即可避免超时；在九千条名单中没有被优先展示。</p></article>
   </div>
-  <div class="mls-reveal"><div class="mark">FAILURE 02 · ACTION BOTTLENECK</div><h3>模型优化的是风险概率，业务需要的是有限资源下的可挽救损失</h3><p>如果运营只能处理 800 笔，评价就应该关注前 800 笔的命中、可干预比例、处理成本和最终减少的超时，而不是把全量召回率当成交付。</p></div>
+  <div class="mls-reveal"><div class="mark">FAILURE 02 · ACTION BOTTLENECK</div><h3>模型优化的是风险概率，业务需要的是有限资源下的可挽救损失</h3><p>如果运营只能处理 800 笔，评价就应该关注前 800 笔的命中、可干预比例、处理成本和最终减少的超时，全量召回率无法代表这项任务的业务交付。</p></div>
 </section>
 
 <section class="mls-section">
   <div class="mls-time">10:48 · 最后一项选择</div><h2>事故会的结论应该是什么？</h2>
   <div class="mls-choice" data-choice><h3>选择一个可以执行的方案</h3>
     <button data-result="bad" data-text="删除字段只修复了泄漏，没有解决名单容量、可干预性与效果验证。"><span>A</span>删除两个未来字段，明天全量重新上线</button>
-    <button data-result="good" data-text="正确。先止损，再按真实时点重建；保留规则基线和对照，验证的是超时减少而不是名单看起来有多准。"><span>B</span>下线当前版本，恢复规则；重建样本并用800笔容量小流量验证</button>
+    <button data-result="good" data-text="正确。先止损，再按真实时点重建；保留规则基线和对照，核心验证指标是超时减少量，并同时记录名单命中表现。"><span>B</span>下线当前版本，恢复规则；重建样本并用800笔容量小流量验证</button>
     <button data-result="bad" data-text="更复杂的算法仍会学习泄漏信息，也不会自动理解运营容量。"><span>C</span>换成更复杂的深度学习模型</button>
     <div class="mls-feedback" aria-live="polite"></div>
   </div>
 </section>
 
 <section class="mls-verdict">
-  <span>INCIDENT VERDICT</span><h2>问题不是模型不够复杂，而是项目从定义和验证开始就错了</h2>
-  <p>这次失败同时包含两个层级：离线数据穿越了真实预测时点；模型输出也没有进入一个可执行的业务流程。正确修复不是调参，而是回到决策、时点、容量、行动和对照。</p>
+  <span>INCIDENT VERDICT</span><h2>项目在任务定义与验证环节已经偏离真实决策</h2>
+  <p>这次失败同时包含两个层级：离线数据穿越了真实预测时点；模型输出也没有进入一个可执行的业务流程。正确修复需要回到决策、时点、容量、行动和对照。</p>
   <a class="mls-next" href="../articles/ml04.html">回到 ML04 · 模型失败复盘 →</a>
 </section>
 </main>
