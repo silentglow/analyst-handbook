@@ -89,7 +89,10 @@ python3 -m http.server 8765 --bind 127.0.0.1
 - 故事正文：`story-src/`
 - 专题正文：`topics-src/`
 - 课程、故事与专题信息：`chapters.json`、`stories.json`、`topics.json`
-- 视觉与交互：`assets/`
+- 样式系统：`assets/css/`(按 `tokens → base → components → page-*` 分层,`tokens.css` 是全站唯一的颜色、字号与身份色来源:课程=蓝、专题=紫、案例=橙)
+- 交互脚本与教学图:`assets/*.js`、`assets/visuals/`
+
+`assets/app.css` 与 `assets/story.css` 由构建器打包生成(链接中的 `?v=` 为内容 hash),请勿手工编辑。
 
 修改完成后运行：
 
@@ -97,7 +100,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 python3 build.py
 ```
 
-`index.html`、`home.html`、`courses.html`、`articles/`、`topics/` 和 `stories/` 中的页面会由构建器统一生成。关于新内容应该写成课程、故事、知识卡还是练习，以及机器学习案例的准入规则，请阅读 [CONTENT_GUIDE.md](CONTENT_GUIDE.md)。
+`index.html`、`home.html`、`courses.html`、`articles/`、`topics/`、`stories/` 中的页面以及 `assets/app.css`、`assets/story.css` 两个样式包会由构建器统一生成。关于新内容应该写成课程、故事、知识卡还是练习，以及机器学习案例的准入规则，请阅读 [CONTENT_GUIDE.md](CONTENT_GUIDE.md)。
 
 ## 内容原则
 

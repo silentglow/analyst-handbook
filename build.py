@@ -9,15 +9,18 @@
 - content/*.html: 课程正文
 - story-src/*.html: 原始沉浸式故事
 - topics.json / topics-src/*.html: 专题课程
+- assets/css/*.css: 分层样式源(tokens/base/components/page-*)
 
 输出：
 - index.html / articles/*.html
 - home.html
 - stories/index.html / stories/*.html
 - topics/index.html / topics/*.html
+- assets/app.css / assets/story.css(打包产物,?v= 为内容 hash)
 """
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -27,6 +30,35 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parent
 
 SITE_ICON = '<link rel="icon" href="data:,">'
+# 有 JS 时才隐藏 .reveal 初始状态;无 JS 环境正文保持可见。
+JS_FLAG = '<script>document.documentElement.classList.add("js")</script>'
+
+CSS_DIR = BASE / "assets" / "css"
+APP_CSS_SOURCES = [
+    "tokens.css", "base.css", "components.css",
+    "page-landing.css", "page-courses.css", "page-lesson.css",
+    "page-topics.css", "page-stories.css",
+]
+# 故事页刻意不引入全站 tokens:旧版案例在内联样式里定义了同名 :root 变量
+# (--bg/--radius/--shadow 等),注入令牌会覆盖它们的取值。
+STORY_CSS_SOURCES = ["story-pages.css"]
+# build() 打包后填入 {"app": hash, "story": hash}
+ASSETS: dict[str, str] = {}
+
+
+def bundle_css(sources: list[str], output_name: str) -> str:
+    """Concatenate layered CSS sources into one bundle; return content hash."""
+    parts = []
+    for name in sources:
+        text = (CSS_DIR / name).read_text(encoding="utf-8").strip()
+        parts.append(f"/* ==================== {name} ==================== */\n{text}\n")
+    bundle = "\n".join(parts)
+    (BASE / "assets" / output_name).write_text(bundle, encoding="utf-8")
+    return hashlib.md5(bundle.encode("utf-8")).hexdigest()[:10]
+
+
+def app_css_link(asset_path: str) -> str:
+    return f'<link rel="stylesheet" href="{asset_path}app.css?v={ASSETS["app"]}">'
 
 
 def load_json(name: str):
@@ -169,7 +201,7 @@ def build_chapter_page(ch: dict, idx: int, chapters: list[dict], modules_by_id: 
     module_progress = round(module_pos / len(module_chapters) * 100)
     lesson_body_class = "lesson-body lesson-body--guide" if ch["slug"] == "guide" else "lesson-body"
 
-    return f'''<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="{esc(ch['description'])}"><title>{esc(ch['title'])} · 分析手册</title><link rel="stylesheet" href="{asset_path}style.css">{SITE_ICON}<style>:root {{ --theme: {esc(ch['theme'])}; --theme-rgb: {esc(ch['theme_rgb'])}; --module-theme: {esc(module['theme'])}; }}</style><link rel="stylesheet" href="{asset_path}editorial.css"><link rel="stylesheet" href="{asset_path}experience.css?v=20260717-guide3"></head>
+    return f'''<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="{esc(ch['description'])}"><title>{esc(ch['title'])} · 分析手册</title>{SITE_ICON}{JS_FLAG}<style>:root {{ --theme: {esc(ch['theme'])}; --theme-rgb: {esc(ch['theme_rgb'])}; --module-theme: {esc(module['theme'])}; }}</style>{app_css_link(asset_path)}</head>
 <body data-page="lesson" data-lesson="{esc(ch['slug'])}" data-default-mode="learn"><a class="skip-link" href="#lesson-content">跳到正文</a><div class="site-progress" style="--lesson-progress:{module_progress}%"><span></span></div><nav class="topnav"><a href="{home_link}" class="topnav-logo">分析手册</a><div class="topnav-links"><a class="active" href="{courses_link}">系统课程</a><a href="{'../topics/index.html' if from_article else 'topics/index.html'}">专题课程</a><a href="{stories_link}">业务案例</a></div></nav>
 <main class="page lesson-page" id="lesson-content"><header class="lesson-header"><div class="module-line"><span>阶段 {esc(module['num'])}</span><strong>{esc(module['title'])}</strong><em>本阶段 {module_pos}/{len(module_chapters)}</em></div><p class="lesson-series">分析手册 · 系统课程</p><div class="lesson-title-row"><div><div class="ch-badge">{esc(ch['badge'])}</div><h1 class="ch-title static-title">{esc(ch['short_title'])}</h1></div><span class="lesson-duration">{esc(ch.get('duration', 10))}<small>分钟</small></span></div><p class="ch-subtitle lesson-description">{esc(ch['description'])}</p><div class="mode-switch" role="group" aria-label="阅读模式"><button type="button" class="active" data-mode-target="learn"><span>完整学习</span><small>案例、图解与推导</small></button><button type="button" data-mode-target="review"><span>面试速览</span><small>主线、答案与失分点</small></button></div></header>
 <div id="learn-mode" class="learning-mode active">{learning_intro}{chapter_visual}<div class="{lesson_body_class}">{content}</div></div><div id="review-mode" class="learning-mode">{review_html}</div>{course_nav}</main>
@@ -324,7 +356,7 @@ def build_landing(chapters: list[dict], modules: list[dict], stories: list[dict]
     return f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="在真实业务问题中练习定义、验证、决策与表达。"><title>分析手册 · 练习在不确定中做判断</title>
-<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/editorial.css"><link rel="stylesheet" href="assets/experience.css?v=20260717-guide3">{SITE_ICON}</head>
+{app_css_link('assets/')}{SITE_ICON}{JS_FLAG}</head>
 <body data-page="landing"><a class="skip-link" href="#main">跳到正文</a>
 <nav class="topnav"><a href="index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="courses.html">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div></nav>
 <main class="landing" id="main">
@@ -364,7 +396,7 @@ def build_course_index(chapters: list[dict], modules: list[dict], stories: list[
     return f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="28章系统课程：从业务问题、分析方法到机器学习与面试表达。"><title>系统课程 · 分析手册</title>
-<link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/editorial.css"><link rel="stylesheet" href="assets/experience.css?v=20260717-guide3">{SITE_ICON}</head>
+{app_css_link('assets/')}{SITE_ICON}{JS_FLAG}</head>
 <body data-page="courses"><nav class="topnav"><a href="index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a class="active" href="courses.html">系统课程</a><a href="topics/index.html">专题课程</a><a href="stories/index.html">业务案例</a></div></nav>
 <main class="course-system">
 <header class="course-system-hero">
@@ -403,8 +435,8 @@ def build_story_index(stories: list[dict]) -> str:
     return f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="{story_count}个沉浸式业务案例，覆盖指标、用户、商品、活动、经营诊断与机器学习决策。">
-<title>业务案例 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/story-library.css"><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css?v=20260717-guide3">{SITE_ICON}</head>
-<body data-page="story-library"><div class="ambient-bg" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div></div><div class="grid-bg"></div>
+<title>业务案例 · 分析手册</title>{app_css_link('../assets/')}{SITE_ICON}{JS_FLAG}</head>
+<body data-page="story-library">
 <nav class="topnav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../courses.html">系统课程</a><a href="../topics/index.html">专题课程</a><a class="active" href="index.html">业务案例</a></div></nav>
 <main class="story-library-page">
   <header class="story-library-hero"><div class="story-hero-copy"><div class="home-kicker">业务案例</div><h1>信息并不完整，<br><span>你仍然要做判断</span></h1><p>先接收任务，再观察证据、选择方向、验证假设。案例让你完整经历一次业务分析。</p><div class="home-actions"><a class="primary" href="{esc(stories[0]['output'])}">进入第一个案例</a><a href="#story-catalog">浏览全部案例</a></div></div><div class="case-preview" aria-label="案例任务示意"><div class="case-preview-head"><span>CASE 01</span><em>限时决策</em></div><h2>大促 GMV 上升，<br>为什么利润反而下降？</h2><div class="case-clues"><span>客单价 <b>+12%</b></span><span>毛利率 <b>−8.4%</b></span><span>退款率 <b>+5.7%</b></span></div><div class="case-preview-action"><i></i><span>还有 3 条证据尚未查看</span><b>→</b></div></div></header>
@@ -427,7 +459,7 @@ def build_topic_index(topics: list[dict]) -> str:
     return f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="围绕业务分析、机器学习、A/B 测试、业务工作坊和分析交付组织的专题课程。">
-<title>专题课程 · 分析手册</title><link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css"><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css?v=20260717-guide3">{SITE_ICON}</head>
+<title>专题课程 · 分析手册</title>{app_css_link('../assets/')}{SITE_ICON}{JS_FLAG}</head>
 <body class="topic-body" data-page="topic-index"><nav class="topnav topic-nav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../courses.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
 <main class="topic-index"><header class="topic-index-hero"><div class="topic-index-copy"><p>专题课程</p><h1>看见方法<br>如何发生</h1><div>这里不按软件菜单或算法名堆知识。每一节从一个具体问题开始，用连续演示解释判断过程、实现方法、失败边界和面试表达。</div></div><div class="topic-index-visual" aria-hidden="true"><span class="topic-orbit orbit-one">方法</span><span class="topic-orbit orbit-two">业务</span><span class="topic-orbit orbit-three">实验</span><span class="topic-orbit orbit-four">ML</span><strong>业务<br>问题</strong><i></i></div></header>
 <section class="topic-list" aria-label="专题课程列表">{''.join(rows)}</section>
@@ -452,8 +484,8 @@ def build_topic_page(topic: dict, idx: int, topics: list[dict]) -> str:
     return f'''<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="{esc(topic['subtitle'])}"><title>{esc(topic['title'])} · 专题课程</title>
-<link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="../assets/topic-course.css">{SITE_ICON}
-<style>:root{{--theme:{esc(topic['theme'])};--theme-rgb:{esc(topic['theme_rgb'])}}}</style><link rel="stylesheet" href="../assets/editorial.css"><link rel="stylesheet" href="../assets/experience.css?v=20260717-guide3"></head>
+{SITE_ICON}{JS_FLAG}
+<style>:root{{--theme:{esc(topic['theme'])};--theme-rgb:{esc(topic['theme_rgb'])}}}</style>{app_css_link('../assets/')}</head>
 <body class="topic-body" data-page="topic"><a class="skip-link" href="#topic-content">跳到正文</a>
 <nav class="topnav topic-nav"><a href="../index.html" class="topnav-logo">分析手册</a><div class="topnav-links"><a href="../courses.html">系统课程</a><a class="active" href="index.html">专题课程</a><a href="../stories/index.html">业务案例</a></div></nav>
 <main class="topic-page" id="topic-content"><header class="topic-hero"><div class="topic-breadcrumb"><a href="index.html">专题课程</a><span>/</span><span>{esc(topic['category'])}</span></div><p class="topic-number">{esc(topic['num'])} · {esc(topic['level'])} · {esc(topic['duration'])} 分钟</p><h1>{esc(topic['title'])}</h1><div class="topic-lead">{esc(topic['subtitle'])}</div></header>
@@ -463,7 +495,7 @@ def build_topic_page(topic: dict, idx: int, topics: list[dict]) -> str:
 <script src="../assets/topic-course.js"></script></body></html>'''
 
 def inject_story_shell(source: str, story: dict, prev_story: dict | None, next_story: dict | None, story_count: int) -> str:
-    head_extra = '<link rel="icon" href="data:,">\n<link rel="stylesheet" href="../assets/story-shell.css">\n<link rel="stylesheet" href="../assets/experience-story.css">\n'
+    head_extra = f'<link rel="icon" href="data:,">\n<link rel="stylesheet" href="../assets/story.css?v={ASSETS["story"]}">\n'
     if "</head>" in source:
         source = source.replace("</head>", head_extra + "</head>", 1)
     if "<body>" in source:
@@ -492,6 +524,10 @@ def build():
     stories = load_json("stories.json")
     topics = load_json("topics.json")
     modules_by_id = {m["id"]: m for m in modules}
+
+    ASSETS["app"] = bundle_css(APP_CSS_SOURCES, "app.css")
+    ASSETS["story"] = bundle_css(STORY_CSS_SOURCES, "story.css")
+    print(f"  CSS    app.css?v={ASSETS['app']} · story.css?v={ASSETS['story']}")
 
     (BASE / "articles").mkdir(exist_ok=True)
     (BASE / "stories").mkdir(exist_ok=True)

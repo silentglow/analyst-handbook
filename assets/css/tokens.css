@@ -1,0 +1,56 @@
+/* ============================================================
+   Analyst Handbook · Design tokens (single source of truth)
+   全站唯一令牌源。三条内容线的身份色:
+   课程 = 蓝 / 专题 = 紫 / 案例 = 橙。
+   ============================================================ */
+:root {
+  /* Neutrals */
+  --bg: #f3f6f2;            /* page canvas */
+  --paper: #ffffff;         /* cards and surfaces */
+  --paper-soft: #f8faf7;
+  --ink: #111814;           /* primary text */
+  --ink-2: #3f4b44;         /* secondary text */
+  --muted: #6f7b74;         /* captions and labels */
+  --line: #dce3dd;          /* hairline borders */
+  --line-strong: #c7d1c9;
+  --dark: #111b17;          /* dark editorial surfaces */
+  --navy: #17223a;          /* dark data-visual surfaces */
+
+  /* Brand and content-line identities */
+  --brand: #2857e5;         /* course line + primary actions */
+  --brand-deep: #173db4;
+  --brand-soft: #e9efff;
+  --topic: #7552d8;         /* topic line */
+  --topic-soft: #f0ebff;
+  --case: #f06445;          /* case line + warnings */
+  --case-soft: #fff0ea;
+
+  /* Supporting semantics */
+  --green: #277456;
+  --green-soft: #e8f4ed;
+  --lime: #dff6a8;
+
+  /* Shape and elevation */
+  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-lg: 28px;
+  --shadow: 0 18px 55px rgba(31, 48, 38, .10);
+  --shadow-hover: 0 24px 65px rgba(31, 48, 38, .15);
+
+  /* Layout */
+  --max: 1180px;
+  --reading: 820px;
+
+  /* Type scale (px values shared across components) */
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-md: 17px;
+  --text-lg: 19px;
+
+  /* Per-page accent injected by build.py (chapters.json / topics.json).
+     Defaults to the brand so components can rely on it. */
+  --theme: var(--brand);
+  --theme-rgb: 40, 87, 229;
+  --module-theme: var(--brand);
+}
